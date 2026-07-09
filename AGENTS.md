@@ -144,9 +144,12 @@ When a coherent checklist/task phase is complete and validations pass, make a lo
 
 The user may ask ChatGPT, not Codex, to generate a single future test file. Keep `chatgpt-sources/<language-id>/` self-contained enough for that workflow:
 
+- `chatgpt-sources/project-instructions.md`: global generation rules intended for ChatGPT Project Instructions.
 - `project-contract.md`: project rules and language runner conventions for future test-file generation.
 - `task-template.md`: fill-in prompt using the language's `tools/<language>_render_task.py`.
 - `example-test-file.*`: compact style reference.
+
+The global project instructions are the highest-level generation boundary for ChatGPT handoff: `cases` drive test structure, `covers` constrain API usage, and `protocols` authorize custom protocol examples. Do not let generated examples drift into edge-case matrices or one-test-per-API output unless the rendered task explicitly asks for that.
 
 Codex should maintain these source files and the runner. ChatGPT can generate individual test files from rendered tasks when test writing resumes.
 

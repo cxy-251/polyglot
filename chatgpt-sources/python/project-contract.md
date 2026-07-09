@@ -34,12 +34,14 @@ ChatGPT handoff is used only when the user wants one complete future `_test.py` 
 ## Style
 
 - Prefer plain `assert`.
-- Use `pytest.mark.parametrize` for multiple examples of one API.
-- Use `pytest.raises` for documented exceptions.
+- Use `pytest.mark.parametrize` only when multiple examples of the same behavior become clearer.
+- Use `pytest.raises` only when the rendered task asks for an exception path or the exception is the central contract being demonstrated.
 - Use `tmp_path` for filesystem tests.
 - Use `monkeypatch` for environment/stdin/stdout/global-hook tests.
 - Keep each test focused on one API, method family, or protocol rule.
-- Include custom classes when a builtin dispatches to a data model method.
+- Include custom classes only when the rendered task's `protocols` or `cases` ask for data model dispatch.
+- Let rendered `cases` drive the test structure; do not create one standalone test for every `covers` entry.
+- Prefer normal workflow examples over edge-case matrices.
 - Do not use network access, real home-directory writes, sleeps, random flaky behavior, or third-party packages.
 
 ## Output

@@ -7,9 +7,14 @@ Use this template when asking ChatGPT to generate one complete future C++ test f
 Attach or paste these project files:
 
 ```text
+chatgpt-sources/project-instructions.md
 chatgpt-sources/cpp/project-contract.md
 chatgpt-sources/cpp/example-test-file.cpp
 ```
+
+If `chatgpt-sources/project-instructions.md` is already installed as ChatGPT
+Project Instructions, do not paste it again; use it as the controlling global
+generation rule.
 
 Then generate a focused task document with one of:
 

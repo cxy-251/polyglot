@@ -7,5 +7,6 @@ python3 tools/nodejs_render_task.py <target>
 ```
 
 2. Use the rendered task to create one complete Node.js test file.
-3. Follow `chatgpt-sources/nodejs/project-contract.md`.
-4. Use `chatgpt-sources/nodejs/example-test-file.mjs` as the style reference.
+3. Follow the global rules in `chatgpt-sources/project-instructions.md`.
+4. Follow `chatgpt-sources/nodejs/project-contract.md`.
+5. Use `chatgpt-sources/nodejs/example-test-file.mjs` as the style reference.

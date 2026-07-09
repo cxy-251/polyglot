@@ -338,6 +338,8 @@ python3 tools/cpp_stdlib_audit.py refresh-checklist
 - `task-template.md`
 - 一个对应语言的 `example-test-file.*`
 
+`chatgpt-sources/project-instructions.md` 是全局生成规则，建议复制到 ChatGPT Project Instructions。它约束生成边界：以 rendered task 的 `cases` 为主线，`covers` 是允许/期望 API 面，不要机械展开成一 API 一测试；没有 `protocols` 时不要发明自定义协议类；不要主动加异常矩阵或边界条件题。
+
 Codex 维护 checklist、task、审计脚本、渲染脚本和这些 handoff 源文件。ChatGPT 应用只在需要时生成一个完整测试文件。
 
 未来测试约定：Python 使用 pytest；C++ 使用 GoogleTest；Node.js 使用 `node:test`；Julia 使用 `Test` stdlib；R 先使用 base `stopifnot()`；Go 使用 `testing`；Rust 使用 `#[test]` / `cargo test`。
