@@ -1,0 +1,130 @@
+{
+  "kind": "go-stdlib-tasks",
+  "schema_version": 1,
+  "language": "go",
+  "coverage_note": "Single curated stdlib task file. Keep this compact and learning-oriented; do not split by module.",
+  "task_count": 6,
+  "tasks": [
+    {
+      "id": "fmt.strings_output",
+      "target": "fmt",
+      "title": "Format values and build strings",
+      "covers": [
+        "fmt.Sprintf",
+        "fmt.Println",
+        "strings.Builder",
+        "strings.Builder.WriteString",
+        "strings.Builder.String"
+      ],
+      "cases": [
+        "Sprintf formats without writing to stdout",
+        "Builder accumulates strings efficiently"
+      ],
+      "suggested_test_files": [
+        "languages/go/stdlib/fmt_strings_test.go"
+      ],
+      "status": "todo",
+      "test_files": []
+    },
+    {
+      "id": "json.struct_round_trip",
+      "target": "encoding/json",
+      "title": "Marshal and unmarshal structs as JSON",
+      "covers": [
+        "encoding/json.Marshal",
+        "encoding/json.Unmarshal",
+        "encoding/json.Marshaler"
+      ],
+      "cases": [
+        "marshal a struct with json tags",
+        "unmarshal into a fresh value and compare fields"
+      ],
+      "suggested_test_files": [
+        "languages/go/stdlib/json_test.go"
+      ],
+      "status": "todo",
+      "test_files": []
+    },
+    {
+      "id": "time.duration_arithmetic",
+      "target": "time",
+      "title": "Use Time and Duration for deterministic arithmetic",
+      "covers": [
+        "time.Time",
+        "time.Date",
+        "time.Duration",
+        "time.Time.Add",
+        "time.Time.Sub"
+      ],
+      "cases": [
+        "construct a fixed time in UTC",
+        "add a duration and compute the difference"
+      ],
+      "suggested_test_files": [
+        "languages/go/stdlib/time_test.go"
+      ],
+      "status": "todo",
+      "test_files": []
+    },
+    {
+      "id": "context.cancellation",
+      "target": "context",
+      "title": "Cancel work with context",
+      "covers": [
+        "context.Context",
+        "context.WithCancel",
+        "context.Canceled",
+        "context.Background"
+      ],
+      "cases": [
+        "derive a cancelable context",
+        "observe cancellation without sleeping"
+      ],
+      "suggested_test_files": [
+        "languages/go/stdlib/context_test.go"
+      ],
+      "status": "todo",
+      "test_files": []
+    },
+    {
+      "id": "os.file_temp",
+      "target": "os",
+      "title": "Use temporary files through os helpers",
+      "covers": [
+        "os.CreateTemp",
+        "os.WriteFile",
+        "os.ReadFile",
+        "os.Remove"
+      ],
+      "cases": [
+        "create a temp file",
+        "write/read bytes and clean up"
+      ],
+      "suggested_test_files": [
+        "languages/go/stdlib/os_file_test.go"
+      ],
+      "status": "todo",
+      "test_files": []
+    },
+    {
+      "id": "slices.maps_helpers",
+      "target": "slices",
+      "title": "Use slices and maps helpers",
+      "covers": [
+        "slices.Sort",
+        "slices.Contains",
+        "maps.Clone",
+        "maps.Equal"
+      ],
+      "cases": [
+        "sort a slice in place",
+        "clone a map before mutation"
+      ],
+      "suggested_test_files": [
+        "languages/go/stdlib/slices_maps_test.go"
+      ],
+      "status": "todo",
+      "test_files": []
+    }
+  ]
+}

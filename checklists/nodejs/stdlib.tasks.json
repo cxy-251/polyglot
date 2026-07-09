@@ -1,0 +1,131 @@
+{
+  "kind": "nodejs-stdlib-tasks",
+  "schema_version": 1,
+  "language": "nodejs",
+  "coverage_note": "Single curated stdlib task file. Keep this compact and learning-oriented; do not split by module.",
+  "task_count": 6,
+  "tasks": [
+    {
+      "id": "assert.deep_equality",
+      "target": "assert",
+      "title": "Use assert for strict runtime checks",
+      "covers": [
+        "node:assert",
+        "assert.deepStrictEqual",
+        "assert.throws"
+      ],
+      "cases": [
+        "deepStrictEqual compares nested objects by value",
+        "throws checks the expected error path"
+      ],
+      "suggested_test_files": [
+        "languages/nodejs/stdlib/assert.test.mjs"
+      ],
+      "status": "todo",
+      "test_files": []
+    },
+    {
+      "id": "buffer.text_binary",
+      "target": "buffer",
+      "title": "Convert between text and binary data with Buffer",
+      "covers": [
+        "node:buffer",
+        "Buffer",
+        "Buffer.from",
+        "Buffer.byteLength"
+      ],
+      "cases": [
+        "Buffer.from encodes text with utf8 by default",
+        "byteLength measures encoded bytes, not JavaScript string length"
+      ],
+      "suggested_test_files": [
+        "languages/nodejs/stdlib/buffer.test.mjs"
+      ],
+      "status": "todo",
+      "test_files": []
+    },
+    {
+      "id": "path.portable_joining",
+      "target": "path",
+      "title": "Build and inspect paths without string concatenation",
+      "covers": [
+        "node:path",
+        "path.join",
+        "path.resolve",
+        "path.basename"
+      ],
+      "cases": [
+        "join normalizes separators",
+        "basename extracts the final path component"
+      ],
+      "suggested_test_files": [
+        "languages/nodejs/stdlib/path.test.mjs"
+      ],
+      "status": "todo",
+      "test_files": []
+    },
+    {
+      "id": "url.search_params",
+      "target": "url",
+      "title": "Parse URLs and manipulate query parameters",
+      "covers": [
+        "node:url",
+        "URL",
+        "URLSearchParams",
+        "url.fileURLToPath"
+      ],
+      "cases": [
+        "URL exposes pathname and searchParams",
+        "URLSearchParams round-trips repeated keys"
+      ],
+      "suggested_test_files": [
+        "languages/nodejs/stdlib/url.test.mjs"
+      ],
+      "status": "todo",
+      "test_files": []
+    },
+    {
+      "id": "events.emitter_workflow",
+      "target": "events",
+      "title": "Register and emit EventEmitter listeners",
+      "covers": [
+        "node:events",
+        "EventEmitter",
+        "emitter.on",
+        "emitter.emit",
+        "emitter.once"
+      ],
+      "cases": [
+        "listeners receive emitted payloads",
+        "once listeners run only one time"
+      ],
+      "suggested_test_files": [
+        "languages/nodejs/stdlib/events.test.mjs"
+      ],
+      "status": "todo",
+      "test_files": []
+    },
+    {
+      "id": "fs.temp_file_promises",
+      "target": "fs",
+      "title": "Use fs promises with a temporary file",
+      "covers": [
+        "node:fs",
+        "fsPromises.mkdtemp",
+        "fsPromises.writeFile",
+        "fsPromises.readFile",
+        "fsPromises.rm"
+      ],
+      "cases": [
+        "create a temporary directory under os.tmpdir",
+        "write and read utf8 content",
+        "clean up with rm recursive/force"
+      ],
+      "suggested_test_files": [
+        "languages/nodejs/stdlib/fs.test.mjs"
+      ],
+      "status": "todo",
+      "test_files": []
+    }
+  ]
+}

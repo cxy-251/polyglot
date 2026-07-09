@@ -5,8 +5,8 @@ This project is a checklist-first standard-library example atlas.
 ## Current Phase
 
 - The current objective is to build auditable language checklists and task data.
-- Python and C++ are active checklists.
-- Node.js, Julia, R, Go, and Rust are placeholder checklist directories for now.
+- Python, C++, Node.js, Julia, R, Go, and Rust are active checklists.
+- Node.js, Julia, R, Go, and Rust are Dash-backed first-pass checklist models; test writing is still paused.
 - `languages/` may be empty until test writing resumes.
 - Keep only the root `README.md`; do not add README files under subdirectories.
 - Do not delete empty directories under `checklists/`.
@@ -18,7 +18,7 @@ This project is a checklist-first standard-library example atlas.
 - Keep task records compact and learning-oriented.
 - Put official documentation URLs in source metadata or task/module sections; do not repeat links unnecessarily.
 - Prefer runnable examples over exhaustive edge-case testing when test writing resumes.
-- The APIs being demonstrated should come from the language standard library. Test frameworks are explicit exceptions: Python uses pytest and C++ uses GoogleTest.
+- The APIs being demonstrated should come from the language standard library. Test frameworks are explicit exceptions and must match catalog/handoff contracts: Python pytest, C++ GoogleTest, Node.js node:test, Julia Test, R base stopifnot, Go testing, Rust cargo test.
 - Do not add package-manager dependencies just to write checklist tooling or examples.
 - Route host execution through `./tools/run.sh`, which uses `docker exec ohdev` when outside the container.
 - Put generated binaries, caches, and temporary state under `/tmp/polyglot-*` or the tool default temp location.
@@ -49,11 +49,22 @@ C++ checklist data lives in `checklists/cpp/`:
 
 Do not treat C++ `stdlib.checklist.json` as the long-term manual editing surface. Do not split C++ stdlib tasks into multiple files. C++ `covers` must exist in `stdlib.objects.json` object names. Keep the baseline/objects/checklist comprehensive; keep common/teachable judgment in `stdlib.tasks.json`. `baseline-fallback` means the symbol came from the broad baseline because Dash/tag did not provide a matching object.
 
+Node.js, Julia, R, Go, and Rust checklist data lives in `checklists/<language-id>/` with the same six-file layout:
+
+- `schema.json`: schema and status enums.
+- `language.checklist.json`: human-maintained language core.
+- `stdlib.baseline.json`: Dash-generated module/package/category baseline.
+- `stdlib.objects.json`: Dash-generated object index.
+- `stdlib.checklist.json`: generated/auditable stdlib classification skeleton.
+- `stdlib.tasks.json`: the single curated human-maintained stdlib task file.
+
+For these Dash-backed languages, do not hand-edit baseline/objects/checklist. Refresh them with `python3 tools/<language>_stdlib_audit.py refresh-all`. Do not split tasks by module/package.
+
 ## Task First Workflow
 
 1. Find the target in `checklists/<language>/`.
-2. For Python or C++ stdlib work, add or refine tasks in the language's single `stdlib.tasks.json` file.
-3. Use `covers` to link a task to known API names: Python uses `stdlib.objects.json`; C++ uses `stdlib.objects.json` object names.
+2. For stdlib work, add or refine tasks in the language's single `stdlib.tasks.json` file.
+3. Use `covers` to link a task to known API names in that language's `stdlib.objects.json` object names.
 4. Use `cases` to describe the usage scenarios the future runnable test should teach.
 5. Run only the lightweight validation that matches the change before marking the cleanup or data change done.
 
@@ -70,6 +81,21 @@ Language-specific tools should be named with the language prefix:
 - `tools/cpp_checklist_status.py`
 - `tools/cpp_stdlib_audit.py`
 - `tools/cpp_render_task.py`
+- `tools/nodejs_checklist_status.py`
+- `tools/nodejs_stdlib_audit.py`
+- `tools/nodejs_render_task.py`
+- `tools/julia_checklist_status.py`
+- `tools/julia_stdlib_audit.py`
+- `tools/julia_render_task.py`
+- `tools/r_checklist_status.py`
+- `tools/r_stdlib_audit.py`
+- `tools/r_render_task.py`
+- `tools/go_checklist_status.py`
+- `tools/go_stdlib_audit.py`
+- `tools/go_render_task.py`
+- `tools/rust_checklist_status.py`
+- `tools/rust_stdlib_audit.py`
+- `tools/rust_render_task.py`
 
 Common shell entry points may keep generic names:
 
@@ -79,10 +105,12 @@ Common shell entry points may keep generic names:
 Internal shared helpers may have generic names when they are not user-facing language tools:
 
 - `tools/dash_docset.py`
+- `tools/dash_language_configs.py`
+- `tools/dash_stdlib_common.py`
 
 Validation should stay proportional. There are no runnable tests yet, so data-only edits should not trigger a full toolchain sweep.
 
-For Python `stdlib.tasks.json`-only changes, check that JSON parses and that new `covers` exist in `stdlib.objects.json`. For C++ `stdlib.tasks.json`-only changes, check that JSON parses and that new `covers` exist in `stdlib.objects.json` object names. For C++ baseline/object/checklist changes, update the generator first, run the matching `refresh-*` command, then run `python3 tools/cpp_stdlib_audit.py audit`. For renderer or tool changes, run syntax checks and one representative command.
+For any `stdlib.tasks.json`-only change, check that JSON parses and that new `covers` exist in that language's `stdlib.objects.json` object names. For C++ baseline/object/checklist changes, update the generator first, run the matching `refresh-*` command, then run `python3 tools/cpp_stdlib_audit.py audit`. For Dash-backed baseline/object/checklist changes, update the config/common reader first, run `python3 tools/<language>_stdlib_audit.py refresh-all`, then run its audit. For renderer or tool changes, run syntax checks and one representative command.
 
 Useful commands:
 
@@ -93,10 +121,20 @@ python3 tools/cpp_stdlib_audit.py refresh-objects
 python3 tools/cpp_stdlib_audit.py refresh-objects --dash-docset "/path/to/C++.docset"
 python3 tools/cpp_stdlib_audit.py refresh-checklist
 python3 tools/cpp_render_task.py vector --limit 1
+python3 tools/go_stdlib_audit.py audit
+python3 tools/go_render_task.py strings --limit 1
+python3 tools/julia_stdlib_audit.py audit
+python3 tools/julia_render_task.py Base.Dict --limit 1
+python3 tools/nodejs_stdlib_audit.py audit
+python3 tools/nodejs_render_task.py path --limit 1
 python3 tools/python_checklist_status.py python
 python3 tools/python_stdlib_audit.py audit
 python3 tools/python_stdlib_audit.py audit --objects heapq pathlib json list dict str
 python3 tools/python_render_task.py heapq --limit 1
+python3 tools/r_stdlib_audit.py audit
+python3 tools/r_render_task.py base --limit 1
+python3 tools/rust_stdlib_audit.py audit
+python3 tools/rust_render_task.py std::vec --limit 1
 ```
 
 Do not run Docker entry points or full pytest unless the user explicitly asks, runner code changed, or test files have intentionally been restored.
@@ -104,22 +142,21 @@ When a coherent checklist/task phase is complete and validations pass, make a lo
 
 ## ChatGPT App Handoff
 
-The user may ask ChatGPT, not Codex, to generate a single future test file. Keep `chatgpt-sources/python/` and `chatgpt-sources/cpp/` self-contained enough for that workflow:
+The user may ask ChatGPT, not Codex, to generate a single future test file. Keep `chatgpt-sources/<language-id>/` self-contained enough for that workflow:
 
 - `project-contract.md`: project rules and language runner conventions for future test-file generation.
-- `task-template.md`: fill-in prompt using `tools/python_render_task.py` or `tools/cpp_render_task.py`.
-- `example-test-file.py` / `example-test-file.cpp`: compact style references.
+- `task-template.md`: fill-in prompt using the language's `tools/<language>_render_task.py`.
+- `example-test-file.*`: compact style reference.
 
 Codex should maintain these source files and the runner. ChatGPT can generate individual test files from rendered tasks when test writing resumes.
 
-Python future tests use pytest. C++ future tests use GoogleTest: generated files should include `#include <gtest/gtest.h>`, use `TEST` / `EXPECT_*` / `ASSERT_*`, and should not define `main`.
+Future test conventions: Python uses pytest. C++ uses GoogleTest: generated files should include `#include <gtest/gtest.h>`, use `TEST` / `EXPECT_*` / `ASSERT_*`, and should not define `main`. Node.js uses `node:test`; Julia uses `Test`; R uses base `stopifnot()` for now; Go uses `testing`; Rust uses `#[test]` / `cargo test`.
 
 ## Naming
 
 - Language checklist folders live under `checklists/<language-id>/`.
 - Future test folders should live under `languages/<language-id>/`.
-- Python tools use the `python_` prefix.
-- C++ tools use the `cpp_` prefix.
+- Language tools use the language prefix, for example `python_`, `cpp_`, `nodejs_`, `julia_`, `r_`, `go_`, and `rust_`.
 - Future test files should be readable before they are clever.
 - Prefer names like `test_json_round_trips_dict` or `test_vector_push_back_and_index`.
 

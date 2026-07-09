@@ -1,0 +1,108 @@
+{
+  "kind": "r-stdlib-tasks",
+  "schema_version": 1,
+  "language": "r",
+  "coverage_note": "Single curated stdlib task file. Keep this compact and learning-oriented; do not split by module.",
+  "task_count": 5,
+  "tasks": [
+    {
+      "id": "base.vector_apply",
+      "target": "base",
+      "title": "Use vectorized helpers and lapply",
+      "covers": [
+        "base::c",
+        "base::lapply",
+        "base::unlist",
+        "base::seq"
+      ],
+      "cases": [
+        "create a numeric vector",
+        "map a function across values and simplify deliberately"
+      ],
+      "suggested_test_files": [
+        "languages/r/stdlib/base_vector_test.R"
+      ],
+      "status": "todo",
+      "test_files": []
+    },
+    {
+      "id": "base.data_frame",
+      "target": "base::data.frame",
+      "title": "Create and inspect data frames",
+      "covers": [
+        "base::data.frame",
+        "base::names",
+        "base::nrow",
+        "base::subset"
+      ],
+      "cases": [
+        "construct a data frame from named vectors",
+        "subset rows by a logical condition"
+      ],
+      "suggested_test_files": [
+        "languages/r/stdlib/data_frame_test.R"
+      ],
+      "status": "todo",
+      "test_files": []
+    },
+    {
+      "id": "base.string_helpers",
+      "target": "base::paste",
+      "title": "Compose and split strings",
+      "covers": [
+        "base::paste",
+        "base::paste0",
+        "base::strsplit",
+        "base::grepl"
+      ],
+      "cases": [
+        "paste joins values with a separator",
+        "strsplit returns a list of character vectors"
+      ],
+      "suggested_test_files": [
+        "languages/r/stdlib/string_test.R"
+      ],
+      "status": "todo",
+      "test_files": []
+    },
+    {
+      "id": "stats.linear_model",
+      "target": "stats::lm",
+      "title": "Fit and inspect a small linear model",
+      "covers": [
+        "stats::lm",
+        "stats::coef",
+        "stats::predict",
+        "stats::formula"
+      ],
+      "cases": [
+        "fit lm on an in-memory data frame",
+        "predict for a new row without external files"
+      ],
+      "suggested_test_files": [
+        "languages/r/stdlib/lm_test.R"
+      ],
+      "status": "todo",
+      "test_files": []
+    },
+    {
+      "id": "utils.csv_round_trip",
+      "target": "utils",
+      "title": "Read and write CSV through a temporary file",
+      "covers": [
+        "utils::write.table",
+        "utils::read.table",
+        "utils::head"
+      ],
+      "cases": [
+        "write a data frame to a temp file",
+        "read it back with column names intact"
+      ],
+      "suggested_test_files": [
+        "languages/r/stdlib/csv_test.R"
+      ],
+      "status": "todo",
+      "test_files": []
+    }
+  ]
+}

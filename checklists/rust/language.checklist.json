@@ -1,0 +1,84 @@
+{
+  "kind": "rust-language-checklist",
+  "schema_version": 1,
+  "language": "rust",
+  "coverage_note": "Human-maintained language-core checklist seed. Keep protocol and idiom judgment here, not in generated stdlib files.",
+  "entries": [
+    {
+      "id": "language.ownership",
+      "title": "Use ownership, borrowing, and moves",
+      "covers": [
+        "move",
+        "borrow",
+        "Copy",
+        "Clone"
+      ],
+      "cases": [
+        "move a value into a collection",
+        "borrow without extending lifetime unnecessarily"
+      ],
+      "status": "todo",
+      "test_files": []
+    },
+    {
+      "id": "language.patterns",
+      "title": "Use pattern matching and destructuring",
+      "covers": [
+        "match",
+        "if let",
+        "while let"
+      ],
+      "cases": [
+        "match enum variants",
+        "extract data with patterns"
+      ],
+      "status": "todo",
+      "test_files": []
+    },
+    {
+      "id": "language.traits",
+      "title": "Use traits, impls, and generics",
+      "covers": [
+        "trait",
+        "impl",
+        "where"
+      ],
+      "cases": [
+        "implement a trait",
+        "call generic code through bounds"
+      ],
+      "status": "todo",
+      "test_files": []
+    },
+    {
+      "id": "language.errors",
+      "title": "Use Option, Result, and the question-mark operator",
+      "covers": [
+        "Option",
+        "Result",
+        "?"
+      ],
+      "cases": [
+        "propagate an error",
+        "map optional values without panics"
+      ],
+      "status": "todo",
+      "test_files": []
+    },
+    {
+      "id": "language.iterators",
+      "title": "Use iterator adapters and ownership-aware loops",
+      "covers": [
+        "Iterator",
+        "IntoIterator",
+        "collect"
+      ],
+      "cases": [
+        "chain adapters",
+        "collect into a concrete collection"
+      ],
+      "status": "todo",
+      "test_files": []
+    }
+  ]
+}

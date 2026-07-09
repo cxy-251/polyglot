@@ -6,8 +6,16 @@
     "defaultRoot": "/home/polyglot"
   },
   "languageScope": {
-    "activeChecklist": ["python", "cpp"],
-    "placeholderChecklists": ["nodejs", "julia", "r", "go", "rust"],
+    "activeChecklist": [
+      "python",
+      "cpp",
+      "nodejs",
+      "julia",
+      "r",
+      "go",
+      "rust"
+    ],
+    "placeholderChecklists": [],
     "outOfScope": "All languages not listed above should stay out of this project."
   },
   "languages": [
@@ -21,7 +29,18 @@
       "auditRunner": "python3 tools/python_stdlib_audit.py audit",
       "futureTestRoot": "languages/python",
       "futureTestFramework": "pytest",
-      "stdlibAreas": ["builtins", "built-in types", "data model", "text", "collections", "files", "json", "csv", "datetime", "regex"]
+      "stdlibAreas": [
+        "builtins",
+        "built-in types",
+        "data model",
+        "text",
+        "collections",
+        "files",
+        "json",
+        "csv",
+        "datetime",
+        "regex"
+      ]
     },
     {
       "id": "cpp",
@@ -33,47 +52,133 @@
       "auditRunner": "python3 tools/cpp_stdlib_audit.py audit",
       "futureTestRoot": "languages/cpp",
       "futureTestFramework": "GoogleTest",
-      "stdlibAreas": ["language support", "concepts", "diagnostics", "memory", "metaprogramming", "utilities", "containers", "iterators", "ranges", "algorithms", "strings", "text", "numerics", "time", "io", "concurrency"]
+      "stdlibAreas": [
+        "language support",
+        "concepts",
+        "diagnostics",
+        "memory",
+        "metaprogramming",
+        "utilities",
+        "containers",
+        "iterators",
+        "ranges",
+        "algorithms",
+        "strings",
+        "text",
+        "numerics",
+        "time",
+        "io",
+        "concurrency"
+      ]
     },
     {
       "id": "nodejs",
       "name": "Node.js",
-      "status": "placeholder-checklist",
+      "status": "active-checklist",
       "checklist": "checklists/nodejs",
       "futureTestRoot": "languages/nodejs",
-      "stdlibAreas": ["assert", "buffer", "events", "fs", "path", "stream", "url", "util", "timers", "node:test"]
+      "stdlibAreas": [
+        "assert",
+        "buffer",
+        "events",
+        "fs",
+        "path",
+        "stream",
+        "url",
+        "util",
+        "timers",
+        "node:test"
+      ],
+      "checklistRunner": "python3 tools/nodejs_checklist_status.py",
+      "taskRenderer": "python3 tools/nodejs_render_task.py <target>",
+      "auditRunner": "python3 tools/nodejs_stdlib_audit.py audit",
+      "futureTestFramework": "node:test"
     },
     {
       "id": "julia",
       "name": "Julia",
-      "status": "placeholder-checklist",
+      "status": "active-checklist",
       "checklist": "checklists/julia",
       "futureTestRoot": "languages/julia",
-      "stdlibAreas": ["Base", "Core", "Dates", "DelimitedFiles", "LinearAlgebra", "Random", "Statistics", "Test"]
+      "stdlibAreas": [
+        "Base",
+        "Core",
+        "Dates",
+        "DelimitedFiles",
+        "LinearAlgebra",
+        "Random",
+        "Statistics",
+        "Test"
+      ],
+      "checklistRunner": "python3 tools/julia_checklist_status.py",
+      "taskRenderer": "python3 tools/julia_render_task.py <target>",
+      "auditRunner": "python3 tools/julia_stdlib_audit.py audit",
+      "futureTestFramework": "Test stdlib"
     },
     {
       "id": "r",
       "name": "R",
-      "status": "placeholder-checklist",
+      "status": "active-checklist",
       "checklist": "checklists/r",
       "futureTestRoot": "languages/r",
-      "stdlibAreas": ["base", "utils", "stats", "graphics", "grDevices", "methods", "datasets"]
+      "stdlibAreas": [
+        "base",
+        "utils",
+        "stats",
+        "graphics",
+        "grDevices",
+        "methods",
+        "datasets"
+      ],
+      "checklistRunner": "python3 tools/r_checklist_status.py",
+      "taskRenderer": "python3 tools/r_render_task.py <target>",
+      "auditRunner": "python3 tools/r_stdlib_audit.py audit",
+      "futureTestFramework": "base stopifnot"
     },
     {
       "id": "go",
       "name": "Go",
-      "status": "placeholder-checklist",
+      "status": "active-checklist",
       "checklist": "checklists/go",
       "futureTestRoot": "languages/go",
-      "stdlibAreas": ["builtin", "strings", "slices", "maps", "time", "encoding/json", "os", "path/filepath", "context", "testing"]
+      "stdlibAreas": [
+        "builtin",
+        "strings",
+        "slices",
+        "maps",
+        "time",
+        "encoding/json",
+        "os",
+        "path/filepath",
+        "context",
+        "testing"
+      ],
+      "checklistRunner": "python3 tools/go_checklist_status.py",
+      "taskRenderer": "python3 tools/go_render_task.py <target>",
+      "auditRunner": "python3 tools/go_stdlib_audit.py audit",
+      "futureTestFramework": "testing"
     },
     {
       "id": "rust",
       "name": "Rust",
-      "status": "placeholder-checklist",
+      "status": "active-checklist",
       "checklist": "checklists/rust",
       "futureTestRoot": "languages/rust",
-      "stdlibAreas": ["std::option", "std::result", "std::vec", "std::string", "std::collections", "std::iter", "std::path", "std::fs", "std::time"]
+      "stdlibAreas": [
+        "std::option",
+        "std::result",
+        "std::vec",
+        "std::string",
+        "std::collections",
+        "std::iter",
+        "std::path",
+        "std::fs",
+        "std::time"
+      ],
+      "checklistRunner": "python3 tools/rust_checklist_status.py",
+      "taskRenderer": "python3 tools/rust_render_task.py <target>",
+      "auditRunner": "python3 tools/rust_stdlib_audit.py audit",
+      "futureTestFramework": "cargo test"
     }
   ]
 }

@@ -1,0 +1,86 @@
+{
+  "kind": "julia-language-checklist",
+  "schema_version": 1,
+  "language": "julia",
+  "coverage_note": "Human-maintained language-core checklist seed. Keep protocol and idiom judgment here, not in generated stdlib files.",
+  "entries": [
+    {
+      "id": "language.dispatch",
+      "title": "Use multiple dispatch and methods",
+      "covers": [
+        "function",
+        "method",
+        "::"
+      ],
+      "cases": [
+        "define methods by argument type",
+        "inspect behavior through concrete examples"
+      ],
+      "status": "todo",
+      "test_files": []
+    },
+    {
+      "id": "language.types",
+      "title": "Work with concrete, abstract, and parametric types",
+      "covers": [
+        "struct",
+        "abstract type",
+        "where"
+      ],
+      "cases": [
+        "construct immutable and mutable data",
+        "show parametric containers"
+      ],
+      "status": "todo",
+      "test_files": []
+    },
+    {
+      "id": "language.collections",
+      "title": "Use array and dictionary protocols",
+      "covers": [
+        "getindex",
+        "setindex!",
+        "iterate",
+        "keys",
+        "values"
+      ],
+      "cases": [
+        "index arrays and dictionaries",
+        "iterate without exposing implementation"
+      ],
+      "status": "todo",
+      "test_files": []
+    },
+    {
+      "id": "language.macros",
+      "title": "Recognize macros and broadcasting",
+      "covers": [
+        "@time",
+        "@views",
+        "."
+      ],
+      "cases": [
+        "distinguish function calls from macro expansion",
+        "use dot broadcasting for elementwise work"
+      ],
+      "status": "todo",
+      "test_files": []
+    },
+    {
+      "id": "language.errors",
+      "title": "Use exceptions and do blocks",
+      "covers": [
+        "try",
+        "catch",
+        "finally",
+        "do"
+      ],
+      "cases": [
+        "handle a thrown exception",
+        "use do-block resource style"
+      ],
+      "status": "todo",
+      "test_files": []
+    }
+  ]
+}

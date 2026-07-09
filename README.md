@@ -2,7 +2,7 @@
 
 这是一个用“可运行示例测试”学习主流编程语言标准库的项目。
 
-当前阶段先暂停写测试，重点构建各语言 checklist 的数据模型、来源基线、轻量审计脚本和任务渲染流程。Python 和 C++ 是当前 active checklist；其他语言先保留空 checklist 目录作为规划占位。
+当前阶段先暂停写测试，重点构建各语言 checklist 的数据模型、来源基线、轻量审计脚本和任务渲染流程。Python、C++、Node.js、Julia、R、Go、Rust 都是 active checklist；其中 Python/C++ 的模型更细，其他语言先采用 Dash-backed 初版。
 
 ## 当前范围
 
@@ -10,11 +10,11 @@
 
 - Python: active checklist
 - C++: active checklist
-- Node.js: placeholder checklist
-- Julia: placeholder checklist
-- R: placeholder checklist
-- Go: placeholder checklist
-- Rust: placeholder checklist
+- Node.js: active checklist
+- Julia: active checklist
+- R: active checklist
+- Go: active checklist
+- Rust: active checklist
 
 其他语言暂时不进入项目。根目录只保留这一个 `README.md`，不要在子目录散落 README。
 
@@ -38,28 +38,56 @@ checklists/
     stdlib.checklist.json
     stdlib.tasks.json
   nodejs/
+    schema.json
+    language.checklist.json
+    stdlib.baseline.json
+    stdlib.objects.json
+    stdlib.checklist.json
+    stdlib.tasks.json
+  julia/   (same six JSON files)
+  r/       (same six JSON files)
+  go/      (same six JSON files)
+  rust/    (same six JSON files)
+chatgpt-sources/
+  python/
+  cpp/
+  nodejs/
   julia/
   r/
   go/
   rust/
-chatgpt-sources/
-  python/
-  cpp/
 tools/
   run.sh
   run-in-container.sh
   cpp_checklist_status.py
   cpp_stdlib_audit.py
   cpp_render_task.py
+  dash_language_configs.py
   dash_docset.py
+  dash_stdlib_common.py
+  go_checklist_status.py
+  go_stdlib_audit.py
+  go_render_task.py
+  julia_checklist_status.py
+  julia_stdlib_audit.py
+  julia_render_task.py
+  nodejs_checklist_status.py
+  nodejs_stdlib_audit.py
+  nodejs_render_task.py
   python_checklist_status.py
   python_stdlib_audit.py
   python_render_task.py
   python_api_inventory.py
+  r_checklist_status.py
+  r_stdlib_audit.py
+  r_render_task.py
+  rust_checklist_status.py
+  rust_stdlib_audit.py
+  rust_render_task.py
 languages/
 ```
 
-`languages/` 当前可以为空；未来恢复写测试时再按 `languages/<language-id>/` 建立测试文件。`checklists/` 下的空语言目录先保留，不用 README 填充。
+`languages/` 当前可以为空；未来恢复写测试时再按 `languages/<language-id>/` 建立测试文件。不要用子目录 README 填充结构说明。
 
 ## Python 数据源
 
@@ -176,6 +204,41 @@ C++ task 形状示例：
 
 C++ `covers` 必须能对应到 `checklists/cpp/stdlib.objects.json` 的 object `name`；baseline fallback 会保证 baseline symbols 也进入 objects。和 Python 一样，不要把 C++ stdlib tasks 拆成多个文件。
 
+## Dash-backed 语言
+
+Node.js、Julia、R、Go、Rust 当前采用同一套 Dash-backed 初版模型。每个语言在 `checklists/<language-id>/` 下都有 6 个 JSON 文件：
+
+- `schema.json`
+- `language.checklist.json`
+- `stdlib.baseline.json`
+- `stdlib.objects.json`
+- `stdlib.checklist.json`
+- `stdlib.tasks.json`
+
+`stdlib.baseline.json`、`stdlib.objects.json`、`stdlib.checklist.json` 由本机 Dash docset 生成，是机器事实层和审计层；`stdlib.tasks.json` 是唯一的人工 stdlib 学习任务文件。不要把这些语言的 tasks 拆成多个文件。
+
+默认 Dash 来源：
+
+| 语言 | Dash docset | 对象范围 |
+| --- | --- | --- |
+| Node.js | `NodeJS.docset` | Node API page 里的 module/class/function/property/event/error。 |
+| Julia | `Julia.docset` | Base/Core 和 stdlib 文档对象。 |
+| R | `R.docset` | R distribution/recommended packages 里的 package/function。 |
+| Go | `Go.docset` | public Go standard packages，排除 internal/vendor。 |
+| Rust | `Rust.docset` | `std::` / `/std/` API 对象。 |
+
+刷新模式：
+
+```bash
+python3 tools/nodejs_stdlib_audit.py refresh-all
+python3 tools/julia_stdlib_audit.py refresh-all
+python3 tools/r_stdlib_audit.py refresh-all
+python3 tools/go_stdlib_audit.py refresh-all
+python3 tools/rust_stdlib_audit.py refresh-all
+```
+
+这些命令不访问网络；它们读取 `~/Library/Application Support/Dash/DocSets`。`refresh-all` 只重写机器层 baseline/objects/checklist，不重写人工维护的 `stdlib.tasks.json`。
+
 ## 工具
 
 宿主机入口仍然是 `./tools/run.sh`，它会通过 Docker `exec` 进入 `ohdev`：
@@ -184,12 +247,17 @@ C++ `covers` 必须能对应到 `checklists/cpp/stdlib.objects.json` 的 object 
 ./tools/run.sh list
 ./tools/run.sh checklist python
 ./tools/run.sh checklist cpp
+./tools/run.sh checklist nodejs
+./tools/run.sh checklist julia
+./tools/run.sh checklist r
+./tools/run.sh checklist go
+./tools/run.sh checklist rust
 ./tools/run.sh python
 ./tools/run.sh cpp
 ./tools/run.sh all-checklists
 ```
 
-当前 `python` 和 `cpp` 入口等价于对应 checklist 状态检查，不跑 pytest 或编译器。
+当前各语言入口等价于对应 checklist 状态检查，不跑 pytest、编译器或语言测试。
 
 语言专用工具都以语言前缀开头：
 
@@ -204,12 +272,27 @@ python3 tools/cpp_stdlib_audit.py refresh-objects --no-dash
 python3 tools/cpp_stdlib_audit.py refresh-checklist
 python3 tools/cpp_render_task.py vector
 python3 tools/cpp_render_task.py std::vector::push_back
+python3 tools/go_checklist_status.py
+python3 tools/go_stdlib_audit.py audit
+python3 tools/go_render_task.py strings
+python3 tools/julia_checklist_status.py
+python3 tools/julia_stdlib_audit.py audit
+python3 tools/julia_render_task.py Base.Dict
+python3 tools/nodejs_checklist_status.py
+python3 tools/nodejs_stdlib_audit.py audit
+python3 tools/nodejs_render_task.py path
 python3 tools/python_checklist_status.py python
 python3 tools/python_stdlib_audit.py audit
 python3 tools/python_stdlib_audit.py audit --objects heapq pathlib json list dict str
 python3 tools/python_render_task.py heapq
 python3 tools/python_render_task.py list.sort
 python3 tools/python_api_inventory.py list dict str
+python3 tools/r_checklist_status.py
+python3 tools/r_stdlib_audit.py audit
+python3 tools/r_render_task.py base
+python3 tools/rust_checklist_status.py
+python3 tools/rust_stdlib_audit.py audit
+python3 tools/rust_render_task.py std::vec
 ```
 
 刷新官方快照会访问 `docs.python.org` 并重写机器生成文件：
@@ -242,21 +325,22 @@ python3 tools/cpp_stdlib_audit.py refresh-checklist
 
 - 只改 `stdlib.tasks.json`：确认 JSON 能解析，且新增 `covers` 都存在于 `stdlib.objects.json`。
 - C++ 只改 `stdlib.tasks.json`：确认 JSON 能解析，且新增 `covers` 都存在于 `stdlib.objects.json` 的 `objects[].name`，或运行 `python3 tools/cpp_stdlib_audit.py audit`。
+- Dash-backed 语言只改 `stdlib.tasks.json`：确认 JSON 能解析，且运行对应 `python3 tools/<language>_stdlib_audit.py audit`。
 - 改官方快照或 audit 分类：再跑对应的 audit。
 - 改渲染或工具脚本：再跑脚本语法检查和一个代表性 render。
 - 不默认跑 Docker 入口或 pytest；只有改 runner、容器入口、测试文件时才需要。
 
 ## ChatGPT Handoff
 
-`chatgpt-sources/python/` 和 `chatgpt-sources/cpp/` 保留给“让 ChatGPT 应用生成单个测试文件”的未来流程：
+`chatgpt-sources/<language-id>/` 保留给“让 ChatGPT 应用生成单个测试文件”的未来流程：
 
 - `project-contract.md`
 - `task-template.md`
-- `example-test-file.py` 或 `example-test-file.cpp`
+- 一个对应语言的 `example-test-file.*`
 
-Codex 维护 checklist、task、审计脚本、渲染脚本和这些 handoff 源文件。ChatGPT 应用只在需要时生成一个完整 `_test.py` 或 `_test.cpp` 文件。
+Codex 维护 checklist、task、审计脚本、渲染脚本和这些 handoff 源文件。ChatGPT 应用只在需要时生成一个完整测试文件。
 
-Python 未来测试使用 pytest；C++ 未来测试使用 GoogleTest，生成的 C++ 文件应包含 `#include <gtest/gtest.h>`，使用 `TEST` / `EXPECT_*` / `ASSERT_*`，不自己定义 `main`。
+未来测试约定：Python 使用 pytest；C++ 使用 GoogleTest；Node.js 使用 `node:test`；Julia 使用 `Test` stdlib；R 先使用 base `stopifnot()`；Go 使用 `testing`；Rust 使用 `#[test]` / `cargo test`。
 
 ## 编写原则
 
@@ -264,8 +348,13 @@ Python 未来测试使用 pytest；C++ 未来测试使用 GoogleTest，生成的
 - 优先官方文档、标准条款结构和可审计的来源基线；有机器对象索引时才使用机器对象索引。
 - Python builtins 要体现 data model / magic method / protocol dispatch，例如 `__abs__`、`__index__`、`__iter__`、`__format__`、descriptor、context manager、async protocol。
 - C++ 标准库 task 要体现语言语义：RAII、值语义、move-only ownership、iterator/range 协议、templates、lambdas、异常边界和 const-correctness。
+- Node.js task 要体现 callback/promise/event/stream/buffer/path/url 等运行时协议。
+- Julia task 要体现 multiple dispatch、类型、集合、广播、stdlib module 的惯用法。
+- R task 要体现 vectorization、data frame、formula/modeling、apply family 和 base/recommended packages。
+- Go task 要体现 value/pointer、interface、slice/map、context、testing-friendly stdlib usage。
+- Rust task 要体现 ownership/borrowing、Option/Result、traits、iterators、collections、path/fs/time。
 - 标准库 task 要小而完整：一个 API、一个协议或一个惯用法一组示例。
-- 被学习和演示的 API 只使用标准库；测试框架例外是 Python 的 pytest 和 C++ 的 GoogleTest。
+- 被学习和演示的 API 只使用标准库；测试框架例外必须在 handoff contract 和 catalog 中明示。
 - 生成文件、缓存和临时状态放在 `/tmp/polyglot-*` 或工具默认临时目录。
 
 ## Definition Of Done
@@ -273,7 +362,7 @@ Python 未来测试使用 pytest；C++ 未来测试使用 GoogleTest，生成的
 当前阶段的完成标准：
 
 - JSON 能被解析。
-- task `covers` 没有未知对象名：Python 对 `stdlib.objects.json`，C++ 对 `stdlib.objects.json` 的 `objects[].name`。
+- task `covers` 没有未知对象名：所有语言都对 `stdlib.objects.json` 的 `objects[].name`。
 - 如果改了脚本，对应脚本能做一次代表性运行。
 - 如果只改 task 数据，不要求跑 Docker、pytest 或全量工具链验证。
 

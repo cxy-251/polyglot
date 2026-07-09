@@ -1,0 +1,129 @@
+{
+  "kind": "julia-stdlib-tasks",
+  "schema_version": 1,
+  "language": "julia",
+  "coverage_note": "Single curated stdlib task file. Keep this compact and learning-oriented; do not split by module.",
+  "task_count": 6,
+  "tasks": [
+    {
+      "id": "base.vector_mutation",
+      "target": "Base.Vector",
+      "title": "Build and mutate vectors",
+      "covers": [
+        "Base.Vector",
+        "Base.push!",
+        "Base.pop!",
+        "Base.length"
+      ],
+      "cases": [
+        "push! appends in place",
+        "pop! returns the removed element"
+      ],
+      "suggested_test_files": [
+        "languages/julia/stdlib/vector_test.jl"
+      ],
+      "status": "todo",
+      "test_files": []
+    },
+    {
+      "id": "base.dict_lookup",
+      "target": "Base.Dict",
+      "title": "Use Dict for keyed lookup",
+      "covers": [
+        "Base.Dict",
+        "Base.haskey",
+        "Base.get",
+        "Base.keys",
+        "Base.values"
+      ],
+      "cases": [
+        "construct a Dict from pairs",
+        "use get for a default without insertion"
+      ],
+      "suggested_test_files": [
+        "languages/julia/stdlib/dict_test.jl"
+      ],
+      "status": "todo",
+      "test_files": []
+    },
+    {
+      "id": "base.string_processing",
+      "target": "Base.String",
+      "title": "Process strings with split/join/replace",
+      "covers": [
+        "Base.SubString",
+        "Base.split",
+        "Base.join",
+        "Base.replace",
+        "Base.startswith"
+      ],
+      "cases": [
+        "split text into fields",
+        "replace a substring and check prefix"
+      ],
+      "suggested_test_files": [
+        "languages/julia/stdlib/string_test.jl"
+      ],
+      "status": "todo",
+      "test_files": []
+    },
+    {
+      "id": "dates.date_arithmetic",
+      "target": "Dates",
+      "title": "Create and format dates",
+      "covers": [
+        "Dates.Date",
+        "Dates.Day",
+        "Dates.format",
+        "Dates.today"
+      ],
+      "cases": [
+        "add a Day period to a Date",
+        "format a date deterministically"
+      ],
+      "suggested_test_files": [
+        "languages/julia/stdlib/dates_test.jl"
+      ],
+      "status": "todo",
+      "test_files": []
+    },
+    {
+      "id": "random.seeded_values",
+      "target": "Random",
+      "title": "Use seeded randomness for reproducible examples",
+      "covers": [
+        "Random.seed!",
+        "Base.rand",
+        "Random.shuffle"
+      ],
+      "cases": [
+        "seed! makes rand deterministic in a local example",
+        "shuffle returns a permutation of the input"
+      ],
+      "suggested_test_files": [
+        "languages/julia/stdlib/random_test.jl"
+      ],
+      "status": "todo",
+      "test_files": []
+    },
+    {
+      "id": "linear_algebra_vectors",
+      "target": "LinearAlgebra",
+      "title": "Compute simple vector and matrix operations",
+      "covers": [
+        "LinearAlgebra.dot",
+        "LinearAlgebra.norm",
+        "LinearAlgebra.I"
+      ],
+      "cases": [
+        "dot computes an inner product",
+        "norm measures vector magnitude"
+      ],
+      "suggested_test_files": [
+        "languages/julia/stdlib/linear_algebra_test.jl"
+      ],
+      "status": "todo",
+      "test_files": []
+    }
+  ]
+}

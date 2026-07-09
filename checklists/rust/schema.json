@@ -1,0 +1,121 @@
+{
+  "$id": "https://example.invalid/polyglot/rust-checklist.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "definitions": {
+    "status": {
+      "enum": [
+        "todo",
+        "done",
+        "gated",
+        "omitted"
+      ]
+    },
+    "language_entry": {
+      "type": "object",
+      "required": [
+        "id",
+        "title",
+        "covers",
+        "cases",
+        "status",
+        "test_files"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "covers": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "cases": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "status": {
+          "$ref": "#/definitions/status"
+        },
+        "test_files": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "suggested_test_files": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "doc_url": {
+          "type": "string"
+        }
+      }
+    },
+    "stdlib_task": {
+      "type": "object",
+      "required": [
+        "id",
+        "title",
+        "covers",
+        "cases",
+        "status",
+        "test_files"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "target": {
+          "type": "string"
+        },
+        "module": {
+          "type": "string"
+        },
+        "package": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "covers": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "cases": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "status": {
+          "$ref": "#/definitions/status"
+        },
+        "test_files": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "suggested_test_files": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "doc_url": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}
