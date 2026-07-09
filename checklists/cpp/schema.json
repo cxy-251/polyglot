@@ -10,6 +10,15 @@
         "omitted"
       ]
     },
+    "baseline_availability": {
+      "enum": [
+        "active",
+        "compatibility",
+        "deprecated",
+        "gated",
+        "removed"
+      ]
+    },
     "language_entry": {
       "properties": {
         "cases": {
@@ -70,7 +79,19 @@
         "header": {
           "type": "string"
         },
+        "availability": {
+          "$ref": "#/definitions/baseline_availability"
+        },
         "id": {
+          "type": "string"
+        },
+        "notes": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "since": {
           "type": "string"
         },
         "symbols": {

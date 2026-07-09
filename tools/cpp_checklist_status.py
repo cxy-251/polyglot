@@ -37,6 +37,9 @@ def summarize() -> int:
     task_statuses: Counter[str] = Counter(
         task.get("status", "unknown") for task in tasks.get("tasks", [])
     )
+    header_availability: Counter[str] = Counter(
+        header.get("availability", "active") for header in baseline.get("headers", [])
+    )
 
     task_covers = [
         cover
@@ -50,6 +53,8 @@ def summarize() -> int:
     for status, count in sorted(language_statuses.items()):
         print(f"  {status}: {count}")
     print(f"stdlib headers: {len(baseline.get('headers', []))}")
+    for status, count in sorted(header_availability.items()):
+        print(f"  {status}: {count}")
     print(f"baseline symbols: {len(baseline_symbols)}")
     print(f"tasks: {len(tasks.get('tasks', []))}")
     for status, count in sorted(task_statuses.items()):

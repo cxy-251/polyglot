@@ -116,16 +116,28 @@ task 形状示例：
 
 ## C++ 数据源
 
-`checklists/cpp/` 采用同样的 checklist-first 思路，但 C++ 没有 Python `objects.inv` 这种官方 Sphinx 对象索引，所以 C++ 先用 curated baseline：
+`checklists/cpp/` 采用同样的 checklist-first 思路，但 C++ 没有 Python `objects.inv` 这种官方 Sphinx 对象索引，所以 C++ baseline 使用 cppreference 的标准库 header 组织作为可导航参考，生成一个尽量全面的 header + symbol 事实索引：
 
 | 文件 | 职责 | 是否手改 |
 | --- | --- | --- |
 | `schema.json` | C++ checklist/task 数据结构和状态枚举。 | 改数据模型时才改。 |
 | `language.checklist.json` | C++ 语言核心：RAII、值/引用/move 语义、模板、迭代器、lambda、异常边界。 | 可以人工维护。 |
-| `stdlib.baseline.json` | curated 标准库 header + symbol baseline，用来约束 task `covers`。 | 可以人工维护；保持小而常用。 |
+| `stdlib.baseline.json` | 标准库 header + symbol baseline，用来约束 task `covers`。包含 active、compatibility、deprecated、removed、gated 等可用性状态。 | 不逐行人工维护，用 `tools/cpp_stdlib_audit.py refresh-baseline` 重写。 |
 | `stdlib.tasks.json` | 唯一的 C++ stdlib 人工任务文件；覆盖普遍需要掌握的标准库 API。 | 可以人工维护，是 C++ stdlib 长期重点。 |
 
-当前 C++ baseline 不是全量标准库索引。它先覆盖常用学习面：字符串、容器、算法、迭代器、ranges、智能指针、vocabulary types、filesystem、chrono、IO、format、regex、random、并发、type traits/concepts、错误处理、数学和 bit 工具。
+C++ baseline 和 Python 一样是“事实层”，不是学习计划。它按 cppreference 的标准库 header 页组织，当前覆盖 C++23 baseline，并把 C++26 library facilities 标成 `gated`。overload set 会折叠成稳定 API 名；exposition-only 细节通常不进 baseline。常用性筛选只发生在 `stdlib.tasks.json`。
+
+来源关系：
+
+```text
+https://en.cppreference.com/w/cpp/header
+https://en.cppreference.com/w/cpp/standard_library
+https://en.cppreference.com/w/cpp/symbol_index
+        -> tools/cpp_stdlib_audit.py refresh-baseline
+        -> checklists/cpp/stdlib.baseline.json
+
+checklists/cpp/stdlib.tasks.json -> curated runnable-example tasks
+```
 
 C++ task 形状示例：
 
@@ -165,6 +177,8 @@ C++ `covers` 必须能对应到 `checklists/cpp/stdlib.baseline.json` 的 `symbo
 
 ```bash
 python3 tools/cpp_checklist_status.py
+python3 tools/cpp_stdlib_audit.py audit
+python3 tools/cpp_stdlib_audit.py refresh-baseline
 python3 tools/python_checklist_status.py python
 python3 tools/python_stdlib_audit.py audit
 python3 tools/python_stdlib_audit.py audit --objects heapq pathlib json list dict str
@@ -180,12 +194,18 @@ python3 tools/python_stdlib_audit.py refresh-baseline
 python3 tools/python_stdlib_audit.py refresh-objects
 ```
 
+刷新 C++ baseline 不访问网络；它使用 `tools/cpp_stdlib_audit.py` 中固化的 cppreference-sourced header/symbol inventory 重写 JSON：
+
+```bash
+python3 tools/cpp_stdlib_audit.py refresh-baseline
+```
+
 正常维护 checklist/task 不需要网络。
 
 当前还没有写 runnable tests，所以不要把 checklist/task 数据变更当成代码测试来处理。默认验证保持轻量：
 
 - 只改 `stdlib.tasks.json`：确认 JSON 能解析，且新增 `covers` 都存在于 `stdlib.objects.json`。
-- C++ 只改 `stdlib.tasks.json`：确认 JSON 能解析，且新增 `covers` 都存在于 `stdlib.baseline.json` 的 `symbols`。
+- C++ 只改 `stdlib.tasks.json`：确认 JSON 能解析，且新增 `covers` 都存在于 `stdlib.baseline.json` 的 `symbols`，或运行 `python3 tools/cpp_stdlib_audit.py audit`。
 - 改官方快照或 audit 分类：再跑对应的 audit。
 - 改渲染或工具脚本：再跑脚本语法检查和一个代表性 render。
 - 不默认跑 Docker 入口或 pytest；只有改 runner、容器入口、测试文件时才需要。

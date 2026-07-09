@@ -29,9 +29,10 @@
       "status": "active-checklist",
       "checklist": "checklists/cpp",
       "checklistRunner": "python3 tools/cpp_checklist_status.py",
+      "auditRunner": "python3 tools/cpp_stdlib_audit.py audit",
       "futureTestRoot": "languages/cpp",
       "futureTestFramework": "assert-based executable examples",
-      "stdlibAreas": ["string", "vector", "map", "set", "algorithm", "optional", "variant", "filesystem", "chrono"]
+      "stdlibAreas": ["language support", "concepts", "diagnostics", "memory", "metaprogramming", "utilities", "containers", "iterators", "ranges", "algorithms", "strings", "text", "numerics", "time", "io", "concurrency"]
     },
     {
       "id": "nodejs",
