@@ -29,7 +29,7 @@ Prefer targets that resolve to `checklists/cpp/stdlib.tasks.json`; generated che
 
 ## Output Instruction
 
-Generate the complete content of the requested `languages/cpp/..._test.cpp` file.
+Generate the complete content of the requested GoogleTest `languages/cpp/..._test.cpp` file.
 
 Return only the file content. Do not return explanations, Markdown fences, or partial patches unless explicitly requested.
 

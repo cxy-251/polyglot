@@ -89,10 +89,12 @@ def find_checklist_target(query: str) -> tuple[dict[str, Any], dict[str, Any] | 
 def print_project_contract() -> None:
     print("## Project Contract")
     print()
-    print("- Write one complete future C++ example test file under `languages/cpp/` when test generation resumes.")
-    print("- Use only the C++ standard library and assert-based executable examples; do not add third-party test frameworks.")
+    print("- Write one complete future GoogleTest C++ test file under `languages/cpp/` when test generation resumes.")
+    print("- Include `#include <gtest/gtest.h>` and do not define `main`; the runner should link `gtest_main`.")
+    print("- Use only the C++ standard library plus project-provided GoogleTest; do not add extra third-party packages.")
     print("- Prefer C++20 unless the task says `requires_standard`; guard newer library features explicitly.")
-    print("- Keep examples small and readable: one API family, protocol, ownership rule, or idiom per test function.")
+    print("- Keep examples small and readable: one API family, protocol, ownership rule, or idiom per `TEST`.")
+    print("- Use `EXPECT_*`, `ASSERT_*`, and `EXPECT_THROW` where they make intent clear.")
     print("- Avoid public network access, real home-directory writes, sleeps, randomness without a fixed seed, and persistent output files.")
     print("- Use RAII, value semantics, iterator/range protocols, const-correctness, and exception boundaries when they are relevant.")
     print()
@@ -117,7 +119,7 @@ def print_curated_tasks(query: str, tasks: list[dict[str, Any]], limit: int) -> 
     print("## Goal")
     print()
     print(
-        "Create one runnable C++ example file that demonstrates normal usage of this standard library area. "
+        "Create one runnable GoogleTest C++ file that demonstrates normal usage of this standard library area. "
         "These are learning examples, not puzzle fill-ins and not edge-case hunts."
     )
     print()
@@ -189,7 +191,7 @@ def print_checklist_task(entry: dict[str, Any], selected_item: dict[str, Any] | 
     print()
     print("## Goal")
     print()
-    print("Create one runnable C++ example file for this generated checklist target.")
+    print("Create one runnable GoogleTest C++ file for this generated checklist target.")
     print()
     print("## Checklist Source")
     print()

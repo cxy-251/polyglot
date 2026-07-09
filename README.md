@@ -249,6 +249,8 @@ python3 tools/cpp_stdlib_audit.py refresh-checklist
 
 Codex 维护 checklist、task、审计脚本、渲染脚本和这些 handoff 源文件。ChatGPT 应用只在需要时生成一个完整 `_test.py` 或 `_test.cpp` 文件。
 
+Python 未来测试使用 pytest；C++ 未来测试使用 GoogleTest，生成的 C++ 文件应包含 `#include <gtest/gtest.h>`，使用 `TEST` / `EXPECT_*` / `ASSERT_*`，不自己定义 `main`。
+
 ## 编写原则
 
 - checklist 服务于“学习一门语言”，不是只列 API 名字。
@@ -256,7 +258,7 @@ Codex 维护 checklist、task、审计脚本、渲染脚本和这些 handoff 源
 - Python builtins 要体现 data model / magic method / protocol dispatch，例如 `__abs__`、`__index__`、`__iter__`、`__format__`、descriptor、context manager、async protocol。
 - C++ 标准库 task 要体现语言语义：RAII、值语义、move-only ownership、iterator/range 协议、templates、lambdas、异常边界和 const-correctness。
 - 标准库 task 要小而完整：一个 API、一个协议或一个惯用法一组示例。
-- 只使用标准库和 runtime-bundled tools。
+- 被学习和演示的 API 只使用标准库；测试框架例外是 Python 的 pytest 和 C++ 的 GoogleTest。
 - 生成文件、缓存和临时状态放在 `/tmp/polyglot-*` 或工具默认临时目录。
 
 ## Definition Of Done

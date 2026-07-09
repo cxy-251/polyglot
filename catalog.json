@@ -32,7 +32,7 @@
       "taskRenderer": "python3 tools/cpp_render_task.py <target>",
       "auditRunner": "python3 tools/cpp_stdlib_audit.py audit",
       "futureTestRoot": "languages/cpp",
-      "futureTestFramework": "assert-based executable examples",
+      "futureTestFramework": "GoogleTest",
       "stdlibAreas": ["language support", "concepts", "diagnostics", "memory", "metaprogramming", "utilities", "containers", "iterators", "ranges", "algorithms", "strings", "text", "numerics", "time", "io", "concurrency"]
     },
     {

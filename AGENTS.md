@@ -18,7 +18,7 @@ This project is a checklist-first standard-library example atlas.
 - Keep task records compact and learning-oriented.
 - Put official documentation URLs in source metadata or task/module sections; do not repeat links unnecessarily.
 - Prefer runnable examples over exhaustive edge-case testing when test writing resumes.
-- Use only standard libraries and runtime-bundled tools.
+- The APIs being demonstrated should come from the language standard library. Test frameworks are explicit exceptions: Python uses pytest and C++ uses GoogleTest.
 - Do not add package-manager dependencies just to write checklist tooling or examples.
 - Route host execution through `./tools/run.sh`, which uses `docker exec ohdev` when outside the container.
 - Put generated binaries, caches, and temporary state under `/tmp/polyglot-*` or the tool default temp location.
@@ -105,6 +105,8 @@ The user may ask ChatGPT, not Codex, to generate a single future test file. Keep
 - `example-test-file.py` / `example-test-file.cpp`: compact style references.
 
 Codex should maintain these source files and the runner. ChatGPT can generate individual test files from rendered tasks when test writing resumes.
+
+Python future tests use pytest. C++ future tests use GoogleTest: generated files should include `#include <gtest/gtest.h>`, use `TEST` / `EXPECT_*` / `ASSERT_*`, and should not define `main`.
 
 ## Naming
 

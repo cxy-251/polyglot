@@ -24,18 +24,20 @@ ChatGPT handoff is used only when the user wants one complete future `.cpp` file
 - Future host entry point: `./tools/run.sh cpp`
 - Future C++ files live under `languages/cpp/`
 - File names should end with `_test.cpp`
-- Use only the C++ standard library
-- Use assert-based executable examples unless the project later adds a local C++ test framework
+- Test framework: GoogleTest
+- Include GoogleTest with `#include <gtest/gtest.h>`
+- Do not define `main`; the future project runner should provide/link `gtest_main`
+- Use only the C++ standard library plus project-provided GoogleTest
 - Checklist and task data lives in `checklists/cpp/*.json`
 - Single-file tasks are rendered by `python3 tools/cpp_render_task.py <target>`
 
 ## Style
 
-- Prefer small helper functions named like `test_vector_push_back_and_checked_access`.
-- Use `assert` for normal expectations.
-- Use `try`/`catch` for documented exception examples.
+- Use `TEST(SuiteName, TestName)` with suite names that match the API area.
+- Use `EXPECT_*` for ordinary observations and `ASSERT_*` when later checks depend on the condition.
+- Use `EXPECT_THROW` or `ASSERT_THROW` for documented exception examples.
 - Use temporary paths under the process temp directory for filesystem examples.
-- Avoid public network access, real home-directory writes, sleeps, random flaky behavior, and third-party packages.
+- Avoid public network access, real home-directory writes, sleeps, random flaky behavior, and extra third-party packages.
 - Keep each function focused on one API, method family, protocol rule, or idiom.
 - Include comments only when they clarify an important C++ rule.
 
