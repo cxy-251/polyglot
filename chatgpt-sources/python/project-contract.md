@@ -41,6 +41,7 @@ ChatGPT handoff is used only when the user wants one complete future `_test.py` 
 - Keep each test focused on one API, method family, or protocol rule.
 - Include custom classes only when the rendered task's `protocols` or `cases` ask for data model dispatch.
 - Let rendered `cases` drive the test structure; do not create one standalone test for every `covers` entry.
+- Do not add comments that merely restate the API docs; use comments only for protocol intent or non-obvious behavior.
 - Prefer normal workflow examples over edge-case matrices.
 - Do not use network access, real home-directory writes, sleeps, random flaky behavior, or third-party packages.
 

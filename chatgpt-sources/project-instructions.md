@@ -36,6 +36,9 @@ when asked.
   boundary-condition hunts.
 - Do not assert implementation details unless the language documentation
   promises them.
+- Do not add comments that merely paraphrase the API documentation. Use
+  comments only to clarify why an assertion demonstrates a protocol or
+  non-obvious behavior.
 - For mutating APIs, prefer alias checks such as `same = values` and
   `assert same is values` over raw `id()` comparisons.
 - Use short, concrete data. Avoid elaborate helper classes, lambdas, factories,
