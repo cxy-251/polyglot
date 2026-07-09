@@ -43,7 +43,7 @@ Do not treat `stdlib.checklist.json` as the long-term manual editing surface. Ne
 2. For Python stdlib work, add or refine tasks in the single `stdlib.tasks.json` file.
 3. Use `covers` to link a task to official API object names from `stdlib.objects.json`.
 4. Use `cases` to describe the usage scenarios the future runnable test should teach.
-5. Run the relevant non-pytest validations before marking the cleanup or data change done.
+5. Run only the lightweight validation that matches the change before marking the cleanup or data change done.
 
 For Python, do not stop at beginner examples. Builtins often dispatch to data-model protocols, so include protocol-level targets such as `__abs__`, `__index__`, `__iter__`, `__format__`, descriptors, attribute hooks, context managers, and async protocols.
 
@@ -61,17 +61,20 @@ Common shell entry points may keep generic names:
 - `tools/run.sh`
 - `tools/run-in-container.sh`
 
-Useful validation commands:
+Validation should stay proportional. There are no runnable tests yet, so data-only edits should not trigger a full toolchain sweep.
+
+For `stdlib.tasks.json`-only changes, check that JSON parses and that new `covers` exist in `stdlib.objects.json`. For snapshot or audit changes, run the relevant audit. For renderer or tool changes, run syntax checks and one representative command.
+
+Useful commands:
 
 ```bash
 python3 tools/python_checklist_status.py python
 python3 tools/python_stdlib_audit.py audit
 python3 tools/python_stdlib_audit.py audit --objects heapq pathlib json list dict str
 python3 tools/python_render_task.py heapq --limit 1
-./tools/run.sh checklist python
 ```
 
-Do not run full pytest unless the user explicitly asks or test files have intentionally been restored.
+Do not run Docker entry points or full pytest unless the user explicitly asks, runner code changed, or test files have intentionally been restored.
 When a coherent checklist/task phase is complete and validations pass, make a local git commit without waiting for an extra prompt.
 
 ## ChatGPT App Handoff

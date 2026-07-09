@@ -142,6 +142,13 @@ python3 tools/python_stdlib_audit.py refresh-objects
 
 正常维护 checklist/task 不需要网络。
 
+当前还没有写 runnable tests，所以不要把 checklist/task 数据变更当成代码测试来处理。默认验证保持轻量：
+
+- 只改 `stdlib.tasks.json`：确认 JSON 能解析，且新增 `covers` 都存在于 `stdlib.objects.json`。
+- 改官方快照或 audit 分类：再跑对应的 audit。
+- 改渲染或工具脚本：再跑脚本语法检查和一个代表性 render。
+- 不默认跑 Docker 入口或 pytest；只有改 runner、容器入口、测试文件时才需要。
+
 ## ChatGPT Handoff
 
 `chatgpt-sources/python/` 保留给“让 ChatGPT 应用生成单个测试文件”的未来流程：
@@ -166,9 +173,8 @@ Codex 维护 checklist、task、审计脚本、渲染脚本和这些 handoff 源
 当前阶段的完成标准：
 
 - JSON 能被解析。
-- Python checklist 状态脚本能运行。
-- baseline audit missing 为 0。
-- objects audit missing 为 0，且 task `covers` 没有未知官方对象名。
-- `python_render_task.py` 对 task 和旧 checklist item 都能渲染。
+- task `covers` 没有未知官方对象名。
+- 如果改了脚本，对应脚本能做一次代表性运行。
+- 如果只改 task 数据，不要求跑 Docker、pytest 或全量工具链验证。
 
 恢复写测试后，task 或 item 只有在对应 runnable test 存在并通过 `./tools/run.sh <language>` 后，才可以标为 `done` 并写入 `test_files`。
