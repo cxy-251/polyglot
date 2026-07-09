@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import xml.etree.ElementTree as ET
 from collections import Counter
 from datetime import date
 from pathlib import Path
@@ -19,7 +20,10 @@ from typing import Any, Iterable
 ROOT = Path(__file__).resolve().parents[1]
 CPP_ROOT = ROOT / "checklists" / "cpp"
 BASELINE_PATH = CPP_ROOT / "stdlib.baseline.json"
+OBJECTS_PATH = CPP_ROOT / "stdlib.objects.json"
+CHECKLIST_PATH = CPP_ROOT / "stdlib.checklist.json"
 TASKS_PATH = CPP_ROOT / "stdlib.tasks.json"
+CPPREF_WEB_BASE = "https://en.cppreference.com/w/"
 
 
 def uniq(items: Iterable[str]) -> list[str]:
@@ -2711,6 +2715,286 @@ def load_json(path: Path) -> dict[str, Any]:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
+def write_json(path: Path, value: dict[str, Any]) -> None:
+    path.write_text(json.dumps(value, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+
+
+def load_optional_json(path: Path) -> dict[str, Any]:
+    if not path.exists():
+        return {}
+    return load_json(path)
+
+
+def build_symbol_index(baseline: dict[str, Any]) -> dict[str, dict[str, Any]]:
+    symbol_index: dict[str, dict[str, Any]] = {}
+    for header_item in baseline.get("headers", []):
+        for symbol in header_item.get("symbols", []):
+            symbol_index.setdefault(
+                symbol,
+                {
+                    "header": header_item.get("header"),
+                    "area": header_item.get("area"),
+                    "availability": header_item.get("availability", "active"),
+                    "since": header_item.get("since"),
+                    "doc_url": header_item.get("doc_url"),
+                    "header_id": header_item.get("id"),
+                },
+            )
+    return symbol_index
+
+
+def cppreference_url(path: str | None, anchor: str | None = None) -> str | None:
+    if not path:
+        return None
+    normalized = path.replace("\\", "/").lstrip("/")
+    if normalized.endswith(".html"):
+        normalized = normalized[:-5]
+    url = CPPREF_WEB_BASE + normalized
+    if anchor:
+        url += "#" + anchor
+    return url
+
+
+def classify_symbol(name: str, header_item: dict[str, Any] | None, known_symbols: set[str]) -> str:
+    if not name.startswith("std::"):
+        if name.startswith("__cpp") or name.isupper() or name in {"assert", "offsetof", "setjmp", "va_arg", "va_copy", "va_end", "va_start"}:
+            return "macro"
+        return "c_symbol"
+
+    area = (header_item or {}).get("area")
+    header_name = (header_item or {}).get("header")
+    parent = parent_name(name)
+    leaf = name.rsplit("::", 1)[-1]
+    if parent and parent in known_symbols:
+        if leaf.startswith("operator"):
+            return "member_operator"
+        return "member_function" if leaf[:1].islower() or "_" in leaf else "member"
+    if any(symbol.startswith(name + "::") for symbol in known_symbols):
+        return "type"
+    if area == "concepts":
+        return "concept"
+    if header_name == "<type_traits>" and (leaf.startswith("is_") or leaf.endswith("_t") or leaf.endswith("_v")):
+        return "type_trait"
+    if leaf.startswith("operator"):
+        return "operator"
+    if leaf[:1].islower() or "_" in leaf:
+        return "function"
+    return "type"
+
+
+def parent_name(name: str) -> str | None:
+    if "::" not in name:
+        return None
+    parent = name.rsplit("::", 1)[0]
+    return parent if parent != "std" else None
+
+
+def object_from_symbol(symbol: str, header_item: dict[str, Any], known_symbols: set[str], source: str) -> dict[str, Any]:
+    kind = classify_symbol(symbol, header_item, known_symbols)
+    return {
+        "id": f"{symbol}#{header_item.get('id', 'baseline')}",
+        "name": symbol,
+        "kind": kind,
+        "header": header_item.get("header"),
+        "area": header_item.get("area"),
+        "parent": parent_name(symbol),
+        "availability": header_item.get("availability", "active"),
+        "since": header_item.get("since"),
+        "doc_url": header_item.get("doc_url"),
+        "source": source,
+    }
+
+
+def build_baseline_objects(baseline: dict[str, Any], source: str = "baseline-fallback") -> list[dict[str, Any]]:
+    known_symbols = {symbol for header_item in baseline.get("headers", []) for symbol in header_item.get("symbols", [])}
+    objects: list[dict[str, Any]] = []
+    for header_item in baseline.get("headers", []):
+        for symbol in header_item.get("symbols", []):
+            objects.append(object_from_symbol(symbol, header_item, known_symbols, source))
+    return objects
+
+
+def find_cppreference_tag(source_dir: Path | None, tag_file: Path | None) -> Path | None:
+    if tag_file:
+        return tag_file
+    if source_dir is None:
+        return None
+    preferred = [
+        source_dir / "cppreference-doxygen-web.tag.xml",
+        source_dir / "cppreference-doxygen-local.tag.xml",
+    ]
+    for candidate in preferred:
+        if candidate.exists():
+            return candidate
+    matches = sorted(source_dir.rglob("cppreference-doxygen-*.tag.xml"))
+    if matches:
+        return matches[0]
+    matches = sorted(source_dir.rglob("*.tag.xml"))
+    return matches[0] if matches else None
+
+
+def parse_tag_objects(tag_path: Path, baseline: dict[str, Any]) -> list[dict[str, Any]]:
+    symbol_index = build_symbol_index(baseline)
+    known_symbols = set(symbol_index)
+    result: list[dict[str, Any]] = []
+    root = ET.parse(tag_path).getroot()
+
+    for compound in root.findall("compound"):
+        compound_name = (compound.findtext("name") or "").strip()
+        compound_kind = compound.get("kind") or "compound"
+        filename = (compound.findtext("filename") or "").strip()
+        if compound_name.startswith("std::"):
+            meta = symbol_index.get(compound_name, {})
+            result.append(
+                {
+                    "id": f"{compound_name}#{filename or compound_kind}",
+                    "name": compound_name,
+                    "kind": compound_kind,
+                    "header": meta.get("header"),
+                    "area": meta.get("area"),
+                    "parent": parent_name(compound_name),
+                    "availability": meta.get("availability", "active"),
+                    "since": meta.get("since"),
+                    "doc_url": cppreference_url(filename) or meta.get("doc_url"),
+                    "source": "cppreference-doxygen-tag",
+                }
+            )
+
+        for member in compound.findall("member"):
+            member_name = (member.findtext("name") or "").strip()
+            if not member_name:
+                continue
+            full_name = member_name if member_name.startswith("std::") else f"{compound_name}::{member_name}"
+            if not full_name.startswith("std::"):
+                continue
+            anchorfile = (member.findtext("anchorfile") or filename).strip()
+            anchor = (member.findtext("anchor") or "").strip() or None
+            meta = symbol_index.get(full_name) or symbol_index.get(compound_name) or {}
+            result.append(
+                {
+                    "id": f"{full_name}#{anchorfile or filename}#{anchor or member.get('kind', 'member')}",
+                    "name": full_name,
+                    "kind": member.get("kind") or classify_symbol(full_name, meta, known_symbols),
+                    "header": meta.get("header"),
+                    "area": meta.get("area"),
+                    "parent": compound_name if compound_name.startswith("std::") else parent_name(full_name),
+                    "availability": meta.get("availability", "active"),
+                    "since": meta.get("since"),
+                    "doc_url": cppreference_url(anchorfile, anchor) or meta.get("doc_url"),
+                    "source": "cppreference-doxygen-tag",
+                }
+            )
+
+    return result
+
+
+def merge_objects(tag_objects: list[dict[str, Any]], fallback_objects: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    merged: dict[str, dict[str, Any]] = {}
+    for obj in tag_objects:
+        key = obj["name"]
+        existing = merged.get(key)
+        if existing is None or existing.get("source") == "baseline-fallback":
+            merged[key] = obj
+    for obj in fallback_objects:
+        merged.setdefault(obj["name"], obj)
+    return sorted(merged.values(), key=lambda item: (item.get("header") or "", item["name"], item.get("kind") or ""))
+
+
+def build_objects(source_dir: Path | None = None, tag_file: Path | None = None) -> dict[str, Any]:
+    baseline = load_json(BASELINE_PATH)
+    fallback_objects = build_baseline_objects(baseline)
+    resolved_tag = find_cppreference_tag(source_dir, tag_file)
+    tag_objects = parse_tag_objects(resolved_tag, baseline) if resolved_tag else []
+    objects = merge_objects(tag_objects, fallback_objects)
+    source_counts = Counter(obj.get("source", "unknown") for obj in objects)
+    return {
+        "kind": "cpp-stdlib-objects",
+        "schema_version": 1,
+        "standard": baseline.get("standard"),
+        "source_baseline": "stdlib.baseline.json",
+        "source_kind": "cppreference-doxygen-tag" if resolved_tag else "baseline-fallback",
+        "source_path": str(resolved_tag) if resolved_tag else None,
+        "source_urls": [
+            "https://en.cppreference.com/w/Cppreference:Archives",
+            "https://en.cppreference.com/w/cpp/header",
+            "https://en.cppreference.com/w/cpp/symbol_index",
+        ],
+        "coverage_note": (
+            "Objects are imported from a cppreference Doxygen tag file when one is supplied. "
+            "Baseline symbols are always added as fallback objects so task covers remain auditable."
+        ),
+        "generated_by": "python3 tools/cpp_stdlib_audit.py refresh-objects",
+        "updated_at": date.today().isoformat(),
+        "object_count": len(objects),
+        "source_counts": dict(sorted(source_counts.items())),
+        "objects": objects,
+    }
+
+
+def object_lookup(objects_data: dict[str, Any]) -> dict[str, dict[str, Any]]:
+    return {obj["name"]: obj for obj in objects_data.get("objects", [])}
+
+
+def status_for_availability(availability: str) -> str:
+    if availability == "gated":
+        return "gated"
+    if availability in {"removed", "deprecated"}:
+        return "omitted"
+    return "todo"
+
+
+def build_checklist() -> dict[str, Any]:
+    baseline = load_json(BASELINE_PATH)
+    objects_data = load_optional_json(OBJECTS_PATH)
+    if not objects_data:
+        objects_data = build_objects()
+    objects_by_name = object_lookup(objects_data)
+    entries: list[dict[str, Any]] = []
+    for header_item in baseline.get("headers", []):
+        availability = header_item.get("availability", "active")
+        items = []
+        for symbol in header_item.get("symbols", []):
+            obj = objects_by_name.get(symbol) or object_from_symbol(symbol, header_item, set(), "baseline-fallback")
+            items.append(
+                {
+                    "id": symbol,
+                    "title": symbol,
+                    "kind": obj.get("kind", "api"),
+                    "source": obj.get("source", "stdlib.objects.json"),
+                    "availability": obj.get("availability", availability),
+                    "doc_url": obj.get("doc_url") or header_item.get("doc_url"),
+                    "status": status_for_availability(obj.get("availability", availability)),
+                    "test_files": [],
+                }
+            )
+        entries.append(
+            {
+                "id": header_item["id"],
+                "baseline_id": header_item["id"],
+                "header": header_item["header"],
+                "title": header_item["title"],
+                "area": header_item["area"],
+                "availability": availability,
+                "doc_url": header_item.get("doc_url"),
+                "status": status_for_availability(availability),
+                "items": items,
+            }
+        )
+    return {
+        "kind": "cpp-stdlib-checklist",
+        "schema_version": 1,
+        "source_baseline": "stdlib.baseline.json",
+        "source_objects": "stdlib.objects.json",
+        "coverage_note": (
+            "Generated audit skeleton. Do not refine this file by hand; put learning judgment "
+            "in stdlib.tasks.json."
+        ),
+        "generated_by": "python3 tools/cpp_stdlib_audit.py refresh-checklist",
+        "updated_at": date.today().isoformat(),
+        "entries": entries,
+    }
+
+
 def collect_baseline_symbols() -> set[str]:
     baseline = load_json(BASELINE_PATH)
     return {symbol for header_item in baseline.get("headers", []) for symbol in header_item.get("symbols", [])}
@@ -2726,15 +3010,38 @@ def audit() -> int:
     tasks = load_json(TASKS_PATH)
     baseline_symbols = collect_baseline_symbols()
     task_covers = collect_task_covers()
-    unknown_covers = sorted(set(task_covers) - baseline_symbols)
+    objects_data = load_optional_json(OBJECTS_PATH)
+    checklist_data = load_optional_json(CHECKLIST_PATH)
+    object_names = {obj["name"] for obj in objects_data.get("objects", [])}
+    checklist_items = {
+        item["id"]
+        for entry in checklist_data.get("entries", [])
+        for item in entry.get("items", [])
+    }
+    cover_reference_names = object_names or baseline_symbols
+    unknown_covers = sorted(set(task_covers) - cover_reference_names)
+    baseline_missing_objects = sorted(baseline_symbols - object_names) if objects_data else []
+    objects_missing_checklist = sorted(object_names - checklist_items) if checklist_data else []
     header_availability = Counter(header.get("availability", "active") for header in baseline.get("headers", []))
     task_statuses = Counter(task.get("status", "unknown") for task in tasks.get("tasks", []))
+    object_sources = Counter(obj.get("source", "unknown") for obj in objects_data.get("objects", []))
+    checklist_statuses = Counter(
+        entry.get("status", "unknown")
+        for entry in checklist_data.get("entries", [])
+    )
 
     print("C++ stdlib audit")
     print(f"headers: {len(baseline.get('headers', []))}")
     for status, count in sorted(header_availability.items()):
         print(f"  {status}: {count}")
     print(f"baseline symbols: {len(baseline_symbols)}")
+    print(f"objects: {len(object_names)}")
+    for source, count in sorted(object_sources.items()):
+        print(f"  {source}: {count}")
+    print(f"checklist entries: {len(checklist_data.get('entries', []))}")
+    for status, count in sorted(checklist_statuses.items()):
+        print(f"  {status}: {count}")
+    print(f"checklist items: {len(checklist_items)}")
     print(f"tasks: {len(tasks.get('tasks', []))}")
     for status, count in sorted(task_statuses.items()):
         print(f"  {status}: {count}")
@@ -2743,15 +3050,43 @@ def audit() -> int:
     print(f"unknown task covers: {len(unknown_covers)}")
     for cover in unknown_covers[:50]:
         print(f"  - {cover}")
-    return 1 if unknown_covers else 0
+    print(f"baseline symbols missing from objects: {len(baseline_missing_objects)}")
+    for symbol in baseline_missing_objects[:50]:
+        print(f"  - {symbol}")
+    print(f"objects missing from checklist: {len(objects_missing_checklist)}")
+    for symbol in objects_missing_checklist[:50]:
+        print(f"  - {symbol}")
+    return 1 if unknown_covers or baseline_missing_objects or objects_missing_checklist else 0
 
 
 def refresh_baseline() -> int:
     baseline = build_baseline()
-    BASELINE_PATH.write_text(json.dumps(baseline, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    write_json(BASELINE_PATH, baseline)
     print(f"wrote {BASELINE_PATH.relative_to(ROOT)}")
     print(f"headers: {baseline['header_count']}")
     print(f"symbols: {baseline['symbol_count']}")
+    return 0
+
+
+def refresh_objects(source_dir: Path | None = None, tag_file: Path | None = None) -> int:
+    objects = build_objects(source_dir=source_dir, tag_file=tag_file)
+    write_json(OBJECTS_PATH, objects)
+    print(f"wrote {OBJECTS_PATH.relative_to(ROOT)}")
+    print(f"objects: {objects['object_count']}")
+    for source, count in objects.get("source_counts", {}).items():
+        print(f"  {source}: {count}")
+    if objects.get("source_kind") == "baseline-fallback":
+        print("note: no cppreference tag file was supplied; generated baseline-fallback objects")
+    return 0
+
+
+def refresh_checklist() -> int:
+    checklist = build_checklist()
+    write_json(CHECKLIST_PATH, checklist)
+    item_count = sum(len(entry.get("items", [])) for entry in checklist.get("entries", []))
+    print(f"wrote {CHECKLIST_PATH.relative_to(ROOT)}")
+    print(f"entries: {len(checklist['entries'])}")
+    print(f"items: {item_count}")
     return 0
 
 
@@ -2760,10 +3095,18 @@ def main(argv: list[str] | None = None) -> int:
     subparsers = parser.add_subparsers(dest="command")
     subparsers.add_parser("audit", help="check C++ task covers against stdlib.baseline.json")
     subparsers.add_parser("refresh-baseline", help="rewrite checklists/cpp/stdlib.baseline.json")
+    objects_parser = subparsers.add_parser("refresh-objects", help="rewrite checklists/cpp/stdlib.objects.json")
+    objects_parser.add_argument("--source-dir", type=Path, help="directory containing cppreference-doxygen-*.tag.xml")
+    objects_parser.add_argument("--tag-file", type=Path, help="explicit cppreference Doxygen tag XML file")
+    subparsers.add_parser("refresh-checklist", help="rewrite checklists/cpp/stdlib.checklist.json")
     args = parser.parse_args(argv)
 
     if args.command == "refresh-baseline":
         return refresh_baseline()
+    if args.command == "refresh-objects":
+        return refresh_objects(source_dir=args.source_dir, tag_file=args.tag_file)
+    if args.command == "refresh-checklist":
+        return refresh_checklist()
     if args.command in {None, "audit"}:
         return audit()
     raise AssertionError(args.command)

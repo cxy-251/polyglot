@@ -113,6 +113,146 @@
       ],
       "type": "object"
     },
+    "stdlib_object": {
+      "properties": {
+        "area": {
+          "type": "string"
+        },
+        "availability": {
+          "$ref": "#/definitions/baseline_availability"
+        },
+        "doc_url": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "header": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "id": {
+          "type": "string"
+        },
+        "kind": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "parent": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "since": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "source": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "kind",
+        "source"
+      ],
+      "type": "object"
+    },
+    "stdlib_item": {
+      "properties": {
+        "availability": {
+          "$ref": "#/definitions/baseline_availability"
+        },
+        "doc_url": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "id": {
+          "type": "string"
+        },
+        "kind": {
+          "type": "string"
+        },
+        "source": {
+          "type": "string"
+        },
+        "status": {
+          "$ref": "#/definitions/status"
+        },
+        "test_files": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "title": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "title",
+        "kind",
+        "source",
+        "status",
+        "test_files"
+      ],
+      "type": "object"
+    },
+    "stdlib_entry": {
+      "properties": {
+        "area": {
+          "type": "string"
+        },
+        "availability": {
+          "$ref": "#/definitions/baseline_availability"
+        },
+        "baseline_id": {
+          "type": "string"
+        },
+        "doc_url": {
+          "type": "string"
+        },
+        "header": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "items": {
+          "items": {
+            "$ref": "#/definitions/stdlib_item"
+          },
+          "type": "array"
+        },
+        "status": {
+          "$ref": "#/definitions/status"
+        },
+        "title": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "baseline_id",
+        "header",
+        "title",
+        "area",
+        "status",
+        "items"
+      ],
+      "type": "object"
+    },
     "task": {
       "properties": {
         "cases": {
