@@ -5,8 +5,8 @@ This project is a checklist-first standard-library example atlas.
 ## Current Phase
 
 - The current objective is to build auditable language checklists and task data.
-- Python is the active checklist.
-- C++, Node.js, Julia, R, Go, and Rust are placeholder checklist directories for now.
+- Python and C++ are active checklists.
+- Node.js, Julia, R, Go, and Rust are placeholder checklist directories for now.
 - `languages/` may be empty until test writing resumes.
 - Keep only the root `README.md`; do not add README files under subdirectories.
 - Do not delete empty directories under `checklists/`.
@@ -24,7 +24,7 @@ This project is a checklist-first standard-library example atlas.
 - Put generated binaries, caches, and temporary state under `/tmp/polyglot-*` or the tool default temp location.
 - Project language scope is intentionally limited to Python, C++, Node.js, Julia, R, Go, and Rust.
 
-## Python Data Model
+## Active Data Models
 
 Python checklist data lives in `checklists/python/`:
 
@@ -37,11 +37,20 @@ Python checklist data lives in `checklists/python/`:
 
 Do not treat `stdlib.checklist.json` as the long-term manual editing surface. New stdlib judgment should usually go into `stdlib.tasks.json`. Do not split Python stdlib tasks into multiple files.
 
+C++ checklist data lives in `checklists/cpp/`:
+
+- `schema.json`: schema and status enums.
+- `language.checklist.json`: C++ language core, including RAII, value/reference/move semantics, templates, iterators, lambdas, and exception boundaries.
+- `stdlib.baseline.json`: curated standard header + symbol baseline. C++ has no Python-style official objects inventory in this project.
+- `stdlib.tasks.json`: the single curated human-maintained C++ stdlib task file.
+
+Do not split C++ stdlib tasks into multiple files. C++ `covers` must exist in `stdlib.baseline.json` symbols.
+
 ## Task First Workflow
 
 1. Find the target in `checklists/<language>/`.
-2. For Python stdlib work, add or refine tasks in the single `stdlib.tasks.json` file.
-3. Use `covers` to link a task to official API object names from `stdlib.objects.json`.
+2. For Python or C++ stdlib work, add or refine tasks in the language's single `stdlib.tasks.json` file.
+3. Use `covers` to link a task to known API names: Python uses `stdlib.objects.json`; C++ uses `stdlib.baseline.json` symbols.
 4. Use `cases` to describe the usage scenarios the future runnable test should teach.
 5. Run only the lightweight validation that matches the change before marking the cleanup or data change done.
 
@@ -55,6 +64,7 @@ Language-specific tools should be named with the language prefix:
 - `tools/python_stdlib_audit.py`
 - `tools/python_render_task.py`
 - `tools/python_api_inventory.py`
+- `tools/cpp_checklist_status.py`
 
 Common shell entry points may keep generic names:
 
@@ -63,11 +73,12 @@ Common shell entry points may keep generic names:
 
 Validation should stay proportional. There are no runnable tests yet, so data-only edits should not trigger a full toolchain sweep.
 
-For `stdlib.tasks.json`-only changes, check that JSON parses and that new `covers` exist in `stdlib.objects.json`. For snapshot or audit changes, run the relevant audit. For renderer or tool changes, run syntax checks and one representative command.
+For Python `stdlib.tasks.json`-only changes, check that JSON parses and that new `covers` exist in `stdlib.objects.json`. For C++ `stdlib.tasks.json`-only changes, check that JSON parses and that new `covers` exist in `stdlib.baseline.json` symbols. For snapshot or audit changes, run the relevant audit/status command. For renderer or tool changes, run syntax checks and one representative command.
 
 Useful commands:
 
 ```bash
+python3 tools/cpp_checklist_status.py
 python3 tools/python_checklist_status.py python
 python3 tools/python_stdlib_audit.py audit
 python3 tools/python_stdlib_audit.py audit --objects heapq pathlib json list dict str
@@ -92,6 +103,7 @@ Codex should maintain these source files and the runner. ChatGPT can generate in
 - Language checklist folders live under `checklists/<language-id>/`.
 - Future test folders should live under `languages/<language-id>/`.
 - Python tools use the `python_` prefix.
+- C++ tools use the `cpp_` prefix.
 - Future test files should be readable before they are clever.
 - Prefer names like `test_json_round_trips_dict` or `test_vector_push_back_and_index`.
 

@@ -2,14 +2,14 @@
 
 这是一个用“可运行示例测试”学习主流编程语言标准库的项目。
 
-当前阶段先暂停写测试，重点构建各语言 checklist 的数据模型、官方来源快照、审计脚本和任务渲染流程。Python 是当前唯一 active checklist；其他语言先保留空 checklist 目录作为规划占位。
+当前阶段先暂停写测试，重点构建各语言 checklist 的数据模型、来源基线、轻量审计脚本和任务渲染流程。Python 和 C++ 是当前 active checklist；其他语言先保留空 checklist 目录作为规划占位。
 
 ## 当前范围
 
 项目语言范围固定为：
 
 - Python: active checklist
-- C++: placeholder checklist
+- C++: active checklist
 - Node.js: placeholder checklist
 - Julia: placeholder checklist
 - R: placeholder checklist
@@ -31,6 +31,10 @@ checklists/
     stdlib.checklist.json
     stdlib.tasks.json
   cpp/
+    schema.json
+    language.checklist.json
+    stdlib.baseline.json
+    stdlib.tasks.json
   nodejs/
   julia/
   r/
@@ -41,6 +45,7 @@ chatgpt-sources/
 tools/
   run.sh
   run-in-container.sh
+  cpp_checklist_status.py
   python_checklist_status.py
   python_stdlib_audit.py
   python_render_task.py
@@ -109,6 +114,38 @@ task 形状示例：
 
 `covers` 必须能对应到 `stdlib.objects.json` 里的官方对象名。`cases` 写学习场景，不写边界题清单。
 
+## C++ 数据源
+
+`checklists/cpp/` 采用同样的 checklist-first 思路，但 C++ 没有 Python `objects.inv` 这种官方 Sphinx 对象索引，所以 C++ 先用 curated baseline：
+
+| 文件 | 职责 | 是否手改 |
+| --- | --- | --- |
+| `schema.json` | C++ checklist/task 数据结构和状态枚举。 | 改数据模型时才改。 |
+| `language.checklist.json` | C++ 语言核心：RAII、值/引用/move 语义、模板、迭代器、lambda、异常边界。 | 可以人工维护。 |
+| `stdlib.baseline.json` | curated 标准库 header + symbol baseline，用来约束 task `covers`。 | 可以人工维护；保持小而常用。 |
+| `stdlib.tasks.json` | 唯一的 C++ stdlib 人工任务文件；覆盖普遍需要掌握的标准库 API。 | 可以人工维护，是 C++ stdlib 长期重点。 |
+
+当前 C++ baseline 不是全量标准库索引。它先覆盖常用学习面：字符串、容器、算法、迭代器、ranges、智能指针、vocabulary types、filesystem、chrono、IO、format、regex、random、并发、type traits/concepts、错误处理、数学和 bit 工具。
+
+C++ task 形状示例：
+
+```json
+{
+  "id": "containers.vector_sequence",
+  "title": "Use std::vector as the default sequence container",
+  "headers": ["<vector>"],
+  "covers": ["std::vector", "std::vector::push_back", "std::vector::at"],
+  "cases": [
+    "push_back and emplace_back grow a contiguous sequence",
+    "at performs checked access while operator[] is unchecked"
+  ],
+  "status": "todo",
+  "test_files": []
+}
+```
+
+C++ `covers` 必须能对应到 `checklists/cpp/stdlib.baseline.json` 的 `symbols`。和 Python 一样，不要把 C++ stdlib tasks 拆成多个文件。
+
 ## 工具
 
 宿主机入口仍然是 `./tools/run.sh`，它会通过 Docker `exec` 进入 `ohdev`：
@@ -116,15 +153,18 @@ task 形状示例：
 ```bash
 ./tools/run.sh list
 ./tools/run.sh checklist python
+./tools/run.sh checklist cpp
 ./tools/run.sh python
+./tools/run.sh cpp
 ./tools/run.sh all-checklists
 ```
 
-当前 `python` 入口等价于 Python checklist 状态检查，不跑 pytest。
+当前 `python` 和 `cpp` 入口等价于对应 checklist 状态检查，不跑 pytest 或编译器。
 
-Python 专用工具都以 `python_` 开头：
+语言专用工具都以语言前缀开头：
 
 ```bash
+python3 tools/cpp_checklist_status.py
 python3 tools/python_checklist_status.py python
 python3 tools/python_stdlib_audit.py audit
 python3 tools/python_stdlib_audit.py audit --objects heapq pathlib json list dict str
@@ -145,6 +185,7 @@ python3 tools/python_stdlib_audit.py refresh-objects
 当前还没有写 runnable tests，所以不要把 checklist/task 数据变更当成代码测试来处理。默认验证保持轻量：
 
 - 只改 `stdlib.tasks.json`：确认 JSON 能解析，且新增 `covers` 都存在于 `stdlib.objects.json`。
+- C++ 只改 `stdlib.tasks.json`：确认 JSON 能解析，且新增 `covers` 都存在于 `stdlib.baseline.json` 的 `symbols`。
 - 改官方快照或 audit 分类：再跑对应的 audit。
 - 改渲染或工具脚本：再跑脚本语法检查和一个代表性 render。
 - 不默认跑 Docker 入口或 pytest；只有改 runner、容器入口、测试文件时才需要。
@@ -162,8 +203,9 @@ Codex 维护 checklist、task、审计脚本、渲染脚本和这些 handoff 源
 ## 编写原则
 
 - checklist 服务于“学习一门语言”，不是只列 API 名字。
-- 优先官方文档和官方对象索引，脚本产物要可审计。
+- 优先官方文档、标准条款结构和可审计的来源基线；有机器对象索引时才使用机器对象索引。
 - Python builtins 要体现 data model / magic method / protocol dispatch，例如 `__abs__`、`__index__`、`__iter__`、`__format__`、descriptor、context manager、async protocol。
+- C++ 标准库 task 要体现语言语义：RAII、值语义、move-only ownership、iterator/range 协议、templates、lambdas、异常边界和 const-correctness。
 - 标准库 task 要小而完整：一个 API、一个协议或一个惯用法一组示例。
 - 只使用标准库和 runtime-bundled tools。
 - 生成文件、缓存和临时状态放在 `/tmp/polyglot-*` 或工具默认临时目录。
@@ -173,7 +215,7 @@ Codex 维护 checklist、task、审计脚本、渲染脚本和这些 handoff 源
 当前阶段的完成标准：
 
 - JSON 能被解析。
-- task `covers` 没有未知官方对象名。
+- task `covers` 没有未知对象名：Python 对 `stdlib.objects.json`，C++ 对 `stdlib.baseline.json` 的 `symbols`。
 - 如果改了脚本，对应脚本能做一次代表性运行。
 - 如果只改 task 数据，不要求跑 Docker、pytest 或全量工具链验证。
 

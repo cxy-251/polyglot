@@ -4,8 +4,8 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT"
 
-ACTIVE_CHECKLISTS=(python)
-PLANNED_CHECKLISTS=(cpp nodejs julia r go rust)
+ACTIVE_CHECKLISTS=(python cpp)
+PLANNED_CHECKLISTS=(nodejs julia r go rust)
 
 usage() {
   cat <<'EOF'
@@ -16,10 +16,10 @@ Usage:
   ./tools/run-in-container.sh <language>
 
 Active checklist:
-  python
+  python cpp
 
 Planned checklist placeholders:
-  cpp nodejs julia r go rust
+  nodejs julia r go rust
 EOF
 }
 
@@ -32,15 +32,14 @@ need_cmd() {
   fi
 }
 
-run_checklist() {
-  need_cmd python3
-  shift || true
-  python3 tools/python_checklist_status.py "$@"
-}
-
 run_python_checklist() {
   need_cmd python3
   python3 tools/python_checklist_status.py python
+}
+
+run_cpp_checklist() {
+  need_cmd python3
+  python3 tools/cpp_checklist_status.py
 }
 
 planned() {
@@ -53,7 +52,7 @@ run_one() {
   local lang="$1"
   case "$lang" in
     py|python) run_python_checklist ;;
-    c++|cpp) planned cpp ;;
+    c++|cpp) run_cpp_checklist ;;
     js|javascript|node|nodejs) planned nodejs ;;
     julia|jl) planned julia ;;
     r|R) planned r ;;
@@ -72,7 +71,18 @@ main() {
       printf 'planned checklist placeholders: %s\n' "${PLANNED_CHECKLISTS[*]}"
       ;;
     checklist)
-      run_checklist "$@"
+      shift || true
+      case "${1:-all}" in
+        ""|all|all-checklists)
+          for lang in "${ACTIVE_CHECKLISTS[@]}"; do
+            printf '\n==> %s\n' "$lang"
+            run_one "$lang"
+          done
+          ;;
+        py|python) run_python_checklist ;;
+        c++|cpp) run_cpp_checklist ;;
+        *) planned "$1" ;;
+      esac
       ;;
     all|all-checklists)
       for lang in "${ACTIVE_CHECKLISTS[@]}"; do

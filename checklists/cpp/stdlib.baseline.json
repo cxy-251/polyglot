@@ -1,0 +1,633 @@
+{
+  "kind": "cpp-stdlib-baseline",
+  "schema_version": 1,
+  "standard": "C++20 baseline with selected C++23 library facilities",
+  "source_note": "C++ does not provide a Python-style official objects inventory. This is a curated checklist baseline organized by standard library headers; doc_url values point to cppreference pages for navigable reference while the intended authority is the ISO C++ standard/library clauses.",
+  "updated_at": "2026-07-09",
+  "headers": [
+    {
+      "id": "header:string",
+      "header": "<string>",
+      "title": "Strings and conversions",
+      "area": "text",
+      "doc_url": "https://en.cppreference.com/w/cpp/string/basic_string",
+      "symbols": [
+        "std::string",
+        "std::string::append",
+        "std::string::empty",
+        "std::string::ends_with",
+        "std::string::find",
+        "std::string::replace",
+        "std::string::size",
+        "std::string::starts_with",
+        "std::string::substr",
+        "std::stoi",
+        "std::to_string"
+      ]
+    },
+    {
+      "id": "header:string_view",
+      "header": "<string_view>",
+      "title": "Non-owning string views",
+      "area": "text",
+      "doc_url": "https://en.cppreference.com/w/cpp/string/basic_string_view",
+      "symbols": [
+        "std::string_view",
+        "std::string_view::find",
+        "std::string_view::remove_prefix",
+        "std::string_view::remove_suffix",
+        "std::string_view::substr"
+      ]
+    },
+    {
+      "id": "header:vector",
+      "header": "<vector>",
+      "title": "Vector sequence container",
+      "area": "containers",
+      "doc_url": "https://en.cppreference.com/w/cpp/container/vector",
+      "symbols": [
+        "std::vector",
+        "std::vector::at",
+        "std::vector::capacity",
+        "std::vector::clear",
+        "std::vector::emplace_back",
+        "std::vector::operator[]",
+        "std::vector::push_back",
+        "std::vector::reserve",
+        "std::vector::size"
+      ]
+    },
+    {
+      "id": "header:array",
+      "header": "<array>",
+      "title": "Fixed-size arrays",
+      "area": "containers",
+      "doc_url": "https://en.cppreference.com/w/cpp/container/array",
+      "symbols": [
+        "std::array",
+        "std::array::at",
+        "std::array::size"
+      ]
+    },
+    {
+      "id": "header:span",
+      "header": "<span>",
+      "title": "Non-owning contiguous views",
+      "area": "containers",
+      "doc_url": "https://en.cppreference.com/w/cpp/container/span",
+      "symbols": [
+        "std::span",
+        "std::span::size",
+        "std::span::subspan"
+      ]
+    },
+    {
+      "id": "header:deque",
+      "header": "<deque>",
+      "title": "Double-ended queue",
+      "area": "containers",
+      "doc_url": "https://en.cppreference.com/w/cpp/container/deque",
+      "symbols": [
+        "std::deque",
+        "std::deque::pop_back",
+        "std::deque::pop_front",
+        "std::deque::push_back",
+        "std::deque::push_front"
+      ]
+    },
+    {
+      "id": "header:list",
+      "header": "<list>",
+      "title": "Linked list container",
+      "area": "containers",
+      "doc_url": "https://en.cppreference.com/w/cpp/container/list",
+      "symbols": [
+        "std::list",
+        "std::list::remove_if",
+        "std::list::sort",
+        "std::list::splice"
+      ]
+    },
+    {
+      "id": "header:map",
+      "header": "<map>",
+      "title": "Ordered associative maps",
+      "area": "containers",
+      "doc_url": "https://en.cppreference.com/w/cpp/container/map",
+      "symbols": [
+        "std::map",
+        "std::map::contains",
+        "std::map::find",
+        "std::map::insert_or_assign",
+        "std::map::lower_bound",
+        "std::map::operator[]"
+      ]
+    },
+    {
+      "id": "header:set",
+      "header": "<set>",
+      "title": "Ordered associative sets",
+      "area": "containers",
+      "doc_url": "https://en.cppreference.com/w/cpp/container/set",
+      "symbols": [
+        "std::set",
+        "std::set::insert",
+        "std::set::lower_bound"
+      ]
+    },
+    {
+      "id": "header:unordered_map",
+      "header": "<unordered_map>",
+      "title": "Hash maps",
+      "area": "containers",
+      "doc_url": "https://en.cppreference.com/w/cpp/container/unordered_map",
+      "symbols": [
+        "std::unordered_map",
+        "std::unordered_map::contains",
+        "std::unordered_map::find",
+        "std::unordered_map::insert_or_assign",
+        "std::unordered_map::operator[]",
+        "std::unordered_map::reserve"
+      ]
+    },
+    {
+      "id": "header:unordered_set",
+      "header": "<unordered_set>",
+      "title": "Hash sets",
+      "area": "containers",
+      "doc_url": "https://en.cppreference.com/w/cpp/container/unordered_set",
+      "symbols": [
+        "std::unordered_set",
+        "std::unordered_set::contains",
+        "std::unordered_set::insert"
+      ]
+    },
+    {
+      "id": "header:algorithm",
+      "header": "<algorithm>",
+      "title": "Core algorithms",
+      "area": "algorithms",
+      "doc_url": "https://en.cppreference.com/w/cpp/algorithm",
+      "symbols": [
+        "std::all_of",
+        "std::any_of",
+        "std::binary_search",
+        "std::clamp",
+        "std::copy",
+        "std::copy_if",
+        "std::count",
+        "std::count_if",
+        "std::equal_range",
+        "std::find",
+        "std::find_if",
+        "std::is_sorted",
+        "std::lower_bound",
+        "std::max",
+        "std::min",
+        "std::minmax",
+        "std::none_of",
+        "std::partition",
+        "std::remove",
+        "std::remove_if",
+        "std::sort",
+        "std::stable_partition",
+        "std::stable_sort",
+        "std::transform",
+        "std::unique",
+        "std::upper_bound"
+      ]
+    },
+    {
+      "id": "header:numeric",
+      "header": "<numeric>",
+      "title": "Numeric algorithms",
+      "area": "algorithms",
+      "doc_url": "https://en.cppreference.com/w/cpp/numeric",
+      "symbols": [
+        "std::accumulate",
+        "std::exclusive_scan",
+        "std::inclusive_scan",
+        "std::partial_sum",
+        "std::reduce",
+        "std::transform_reduce"
+      ]
+    },
+    {
+      "id": "header:iterator",
+      "header": "<iterator>",
+      "title": "Iterator utilities",
+      "area": "iterators",
+      "doc_url": "https://en.cppreference.com/w/cpp/iterator",
+      "symbols": [
+        "std::back_inserter",
+        "std::begin",
+        "std::distance",
+        "std::end",
+        "std::next",
+        "std::ostream_iterator",
+        "std::prev"
+      ]
+    },
+    {
+      "id": "header:ranges",
+      "header": "<ranges>",
+      "title": "Ranges and views",
+      "area": "ranges",
+      "doc_url": "https://en.cppreference.com/w/cpp/ranges",
+      "symbols": [
+        "std::ranges::find",
+        "std::ranges::range",
+        "std::ranges::sort",
+        "std::views::drop",
+        "std::views::filter",
+        "std::views::take",
+        "std::views::transform"
+      ]
+    },
+    {
+      "id": "header:memory",
+      "header": "<memory>",
+      "title": "Smart pointers and ownership",
+      "area": "memory",
+      "doc_url": "https://en.cppreference.com/w/cpp/memory",
+      "symbols": [
+        "std::enable_shared_from_this",
+        "std::make_shared",
+        "std::make_unique",
+        "std::shared_ptr",
+        "std::shared_ptr::use_count",
+        "std::unique_ptr",
+        "std::unique_ptr::get",
+        "std::unique_ptr::release",
+        "std::unique_ptr::reset",
+        "std::weak_ptr",
+        "std::weak_ptr::lock"
+      ]
+    },
+    {
+      "id": "header:utility",
+      "header": "<utility>",
+      "title": "Utility functions and pairs",
+      "area": "vocabulary",
+      "doc_url": "https://en.cppreference.com/w/cpp/utility",
+      "symbols": [
+        "std::as_const",
+        "std::exchange",
+        "std::forward",
+        "std::move",
+        "std::pair",
+        "std::swap"
+      ]
+    },
+    {
+      "id": "header:tuple",
+      "header": "<tuple>",
+      "title": "Tuples and structured values",
+      "area": "vocabulary",
+      "doc_url": "https://en.cppreference.com/w/cpp/utility/tuple",
+      "symbols": [
+        "std::apply",
+        "std::get",
+        "std::make_tuple",
+        "std::tie",
+        "std::tuple"
+      ]
+    },
+    {
+      "id": "header:optional",
+      "header": "<optional>",
+      "title": "Optional values",
+      "area": "vocabulary",
+      "doc_url": "https://en.cppreference.com/w/cpp/utility/optional",
+      "symbols": [
+        "std::nullopt",
+        "std::optional",
+        "std::optional::value_or"
+      ]
+    },
+    {
+      "id": "header:variant",
+      "header": "<variant>",
+      "title": "Variant values",
+      "area": "vocabulary",
+      "doc_url": "https://en.cppreference.com/w/cpp/utility/variant",
+      "symbols": [
+        "std::get",
+        "std::variant",
+        "std::visit"
+      ]
+    },
+    {
+      "id": "header:any",
+      "header": "<any>",
+      "title": "Type-erased values",
+      "area": "vocabulary",
+      "doc_url": "https://en.cppreference.com/w/cpp/utility/any",
+      "symbols": [
+        "std::any",
+        "std::any_cast"
+      ]
+    },
+    {
+      "id": "header:expected",
+      "header": "<expected>",
+      "title": "Expected values",
+      "area": "vocabulary",
+      "doc_url": "https://en.cppreference.com/w/cpp/utility/expected",
+      "symbols": [
+        "std::expected",
+        "std::expected::error",
+        "std::expected::value",
+        "std::unexpected"
+      ]
+    },
+    {
+      "id": "header:functional",
+      "header": "<functional>",
+      "title": "Callable wrappers and invocation",
+      "area": "callables",
+      "doc_url": "https://en.cppreference.com/w/cpp/utility/functional",
+      "symbols": [
+        "std::bind_front",
+        "std::function",
+        "std::invoke",
+        "std::mem_fn",
+        "std::not_fn",
+        "std::reference_wrapper"
+      ]
+    },
+    {
+      "id": "header:filesystem",
+      "header": "<filesystem>",
+      "title": "Filesystem paths and directory operations",
+      "area": "filesystem",
+      "doc_url": "https://en.cppreference.com/w/cpp/filesystem",
+      "symbols": [
+        "std::filesystem::copy_file",
+        "std::filesystem::create_directories",
+        "std::filesystem::directory_iterator",
+        "std::filesystem::exists",
+        "std::filesystem::file_size",
+        "std::filesystem::path",
+        "std::filesystem::path::extension",
+        "std::filesystem::path::filename",
+        "std::filesystem::path::operator/",
+        "std::filesystem::path::parent_path",
+        "std::filesystem::path::string",
+        "std::filesystem::recursive_directory_iterator",
+        "std::filesystem::remove",
+        "std::filesystem::status"
+      ]
+    },
+    {
+      "id": "header:chrono",
+      "header": "<chrono>",
+      "title": "Durations, clocks, and calendar types",
+      "area": "time",
+      "doc_url": "https://en.cppreference.com/w/cpp/chrono",
+      "symbols": [
+        "std::chrono::duration",
+        "std::chrono::milliseconds",
+        "std::chrono::seconds",
+        "std::chrono::steady_clock",
+        "std::chrono::sys_days",
+        "std::chrono::system_clock",
+        "std::chrono::time_point_cast",
+        "std::chrono::weekday",
+        "std::chrono::year_month_day"
+      ]
+    },
+    {
+      "id": "header:iostream",
+      "header": "<iostream>",
+      "title": "Standard streams",
+      "area": "io",
+      "doc_url": "https://en.cppreference.com/w/cpp/io",
+      "symbols": [
+        "std::cin",
+        "std::cout"
+      ]
+    },
+    {
+      "id": "header:sstream",
+      "header": "<sstream>",
+      "title": "String streams",
+      "area": "io",
+      "doc_url": "https://en.cppreference.com/w/cpp/io/basic_stringstream",
+      "symbols": [
+        "std::istringstream",
+        "std::ostringstream"
+      ]
+    },
+    {
+      "id": "header:fstream",
+      "header": "<fstream>",
+      "title": "File streams",
+      "area": "io",
+      "doc_url": "https://en.cppreference.com/w/cpp/io/basic_fstream",
+      "symbols": [
+        "std::fstream",
+        "std::ifstream",
+        "std::ofstream"
+      ]
+    },
+    {
+      "id": "header:iomanip",
+      "header": "<iomanip>",
+      "title": "Stream manipulators",
+      "area": "io",
+      "doc_url": "https://en.cppreference.com/w/cpp/io/manip",
+      "symbols": [
+        "std::boolalpha",
+        "std::setprecision",
+        "std::setw"
+      ]
+    },
+    {
+      "id": "header:format",
+      "header": "<format>",
+      "title": "Modern formatting",
+      "area": "text",
+      "doc_url": "https://en.cppreference.com/w/cpp/utility/format",
+      "symbols": [
+        "std::format",
+        "std::format_to",
+        "std::formatter",
+        "std::vformat"
+      ]
+    },
+    {
+      "id": "header:regex",
+      "header": "<regex>",
+      "title": "Regular expressions",
+      "area": "text",
+      "doc_url": "https://en.cppreference.com/w/cpp/regex",
+      "symbols": [
+        "std::regex",
+        "std::regex_match",
+        "std::regex_replace",
+        "std::regex_search",
+        "std::smatch"
+      ]
+    },
+    {
+      "id": "header:random",
+      "header": "<random>",
+      "title": "Random engines and distributions",
+      "area": "random",
+      "doc_url": "https://en.cppreference.com/w/cpp/numeric/random",
+      "symbols": [
+        "std::mt19937",
+        "std::normal_distribution",
+        "std::random_device",
+        "std::seed_seq",
+        "std::uniform_int_distribution",
+        "std::uniform_real_distribution"
+      ]
+    },
+    {
+      "id": "header:thread",
+      "header": "<thread>",
+      "title": "Threads",
+      "area": "concurrency",
+      "doc_url": "https://en.cppreference.com/w/cpp/thread",
+      "symbols": [
+        "std::jthread",
+        "std::thread"
+      ]
+    },
+    {
+      "id": "header:mutex",
+      "header": "<mutex>",
+      "title": "Mutexes and locks",
+      "area": "concurrency",
+      "doc_url": "https://en.cppreference.com/w/cpp/thread/mutex",
+      "symbols": [
+        "std::lock_guard",
+        "std::mutex",
+        "std::scoped_lock",
+        "std::unique_lock"
+      ]
+    },
+    {
+      "id": "header:future",
+      "header": "<future>",
+      "title": "Futures and asynchronous work",
+      "area": "concurrency",
+      "doc_url": "https://en.cppreference.com/w/cpp/thread/future",
+      "symbols": [
+        "std::async",
+        "std::future",
+        "std::launch",
+        "std::packaged_task",
+        "std::promise"
+      ]
+    },
+    {
+      "id": "header:atomic",
+      "header": "<atomic>",
+      "title": "Atomic operations",
+      "area": "concurrency",
+      "doc_url": "https://en.cppreference.com/w/cpp/atomic",
+      "symbols": [
+        "std::atomic",
+        "std::atomic::compare_exchange_strong",
+        "std::atomic::fetch_add",
+        "std::atomic::load",
+        "std::atomic::store"
+      ]
+    },
+    {
+      "id": "header:type_traits",
+      "header": "<type_traits>",
+      "title": "Type traits",
+      "area": "templates",
+      "doc_url": "https://en.cppreference.com/w/cpp/header/type_traits",
+      "symbols": [
+        "std::common_type_t",
+        "std::enable_if_t",
+        "std::is_integral_v",
+        "std::is_same_v",
+        "std::remove_cvref_t",
+        "std::type_identity"
+      ]
+    },
+    {
+      "id": "header:concepts",
+      "header": "<concepts>",
+      "title": "Concepts",
+      "area": "templates",
+      "doc_url": "https://en.cppreference.com/w/cpp/concepts",
+      "symbols": [
+        "std::floating_point",
+        "std::integral",
+        "std::invocable",
+        "std::regular",
+        "std::same_as"
+      ]
+    },
+    {
+      "id": "header:stdexcept",
+      "header": "<stdexcept>",
+      "title": "Standard exception types",
+      "area": "errors",
+      "doc_url": "https://en.cppreference.com/w/cpp/error/exception",
+      "symbols": [
+        "std::invalid_argument",
+        "std::out_of_range",
+        "std::runtime_error"
+      ]
+    },
+    {
+      "id": "header:system_error",
+      "header": "<system_error>",
+      "title": "Error codes and system errors",
+      "area": "errors",
+      "doc_url": "https://en.cppreference.com/w/cpp/error/system_error",
+      "symbols": [
+        "std::error_code",
+        "std::system_error"
+      ]
+    },
+    {
+      "id": "header:cmath",
+      "header": "<cmath>",
+      "title": "Mathematical functions",
+      "area": "math",
+      "doc_url": "https://en.cppreference.com/w/cpp/numeric/math",
+      "symbols": [
+        "std::cos",
+        "std::isfinite",
+        "std::isnan",
+        "std::pow",
+        "std::sin",
+        "std::sqrt"
+      ]
+    },
+    {
+      "id": "header:bitset",
+      "header": "<bitset>",
+      "title": "Fixed-size bit sequences",
+      "area": "bits",
+      "doc_url": "https://en.cppreference.com/w/cpp/utility/bitset",
+      "symbols": [
+        "std::bitset",
+        "std::bitset::count",
+        "std::bitset::reset",
+        "std::bitset::set",
+        "std::bitset::test"
+      ]
+    },
+    {
+      "id": "header:bit",
+      "header": "<bit>",
+      "title": "Bit operations",
+      "area": "bits",
+      "doc_url": "https://en.cppreference.com/w/cpp/numeric/bit",
+      "symbols": [
+        "std::has_single_bit",
+        "std::popcount"
+      ]
+    }
+  ]
+}

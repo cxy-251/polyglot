@@ -1,0 +1,157 @@
+{
+  "$id": "https://example.invalid/polyglot/cpp-checklist.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "definitions": {
+    "status": {
+      "enum": [
+        "todo",
+        "done",
+        "gated",
+        "omitted"
+      ]
+    },
+    "language_entry": {
+      "properties": {
+        "cases": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "covers": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "doc_url": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "status": {
+          "$ref": "#/definitions/status"
+        },
+        "suggested_test_files": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "test_files": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "title": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "title",
+        "covers",
+        "cases",
+        "status",
+        "test_files"
+      ],
+      "type": "object"
+    },
+    "stdlib_header": {
+      "properties": {
+        "area": {
+          "type": "string"
+        },
+        "doc_url": {
+          "type": "string"
+        },
+        "header": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "symbols": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "title": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "header",
+        "title",
+        "area",
+        "symbols"
+      ],
+      "type": "object"
+    },
+    "task": {
+      "properties": {
+        "cases": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "covers": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "doc_url": {
+          "type": "string"
+        },
+        "headers": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "id": {
+          "type": "string"
+        },
+        "requires_standard": {
+          "type": "string"
+        },
+        "status": {
+          "$ref": "#/definitions/status"
+        },
+        "suggested_test_files": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "test_files": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "title": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "title",
+        "headers",
+        "covers",
+        "cases",
+        "status",
+        "test_files"
+      ],
+      "type": "object"
+    }
+  },
+  "title": "Polyglot C++ checklist data",
+  "type": "object"
+}

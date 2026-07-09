@@ -1,0 +1,990 @@
+{
+  "kind": "cpp-stdlib-tasks",
+  "schema_version": 1,
+  "source_baseline": "stdlib.baseline.json",
+  "updated_at": "2026-07-09",
+  "tasks": [
+    {
+      "id": "string.owning_text_workflow",
+      "title": "Work with owning std::string values",
+      "headers": [
+        "<string>"
+      ],
+      "doc_url": "https://en.cppreference.com/w/cpp/string/basic_string",
+      "covers": [
+        "std::string",
+        "std::string::size",
+        "std::string::empty",
+        "std::string::substr",
+        "std::string::find",
+        "std::string::starts_with",
+        "std::string::ends_with",
+        "std::string::append",
+        "std::string::replace"
+      ],
+      "cases": [
+        "construct and inspect an owning text value",
+        "find and slice substrings without manual character loops",
+        "append and replace text while preserving value semantics"
+      ],
+      "status": "todo",
+      "test_files": [],
+      "suggested_test_files": [
+        "languages/cpp/stdlib/string_test.cpp"
+      ]
+    },
+    {
+      "id": "string.view_and_conversion",
+      "title": "Use non-owning string views and numeric conversions",
+      "headers": [
+        "<string>",
+        "<string_view>"
+      ],
+      "doc_url": "https://en.cppreference.com/w/cpp/string/basic_string_view",
+      "covers": [
+        "std::string_view",
+        "std::string_view::remove_prefix",
+        "std::string_view::remove_suffix",
+        "std::string_view::substr",
+        "std::string_view::find",
+        "std::stoi",
+        "std::to_string"
+      ],
+      "cases": [
+        "string_view observes existing text without owning storage",
+        "remove_prefix and remove_suffix narrow a view without copying",
+        "stoi and to_string bridge text and numeric values"
+      ],
+      "status": "todo",
+      "test_files": [],
+      "suggested_test_files": [
+        "languages/cpp/stdlib/string_view_test.cpp"
+      ]
+    },
+    {
+      "id": "containers.vector_sequence",
+      "title": "Use std::vector as the default sequence container",
+      "headers": [
+        "<vector>"
+      ],
+      "doc_url": "https://en.cppreference.com/w/cpp/container/vector",
+      "covers": [
+        "std::vector",
+        "std::vector::push_back",
+        "std::vector::emplace_back",
+        "std::vector::at",
+        "std::vector::operator[]",
+        "std::vector::size",
+        "std::vector::capacity",
+        "std::vector::reserve",
+        "std::vector::clear"
+      ],
+      "cases": [
+        "push_back and emplace_back grow a contiguous sequence",
+        "at performs checked access while operator[] is unchecked",
+        "reserve changes capacity without changing size"
+      ],
+      "status": "todo",
+      "test_files": [],
+      "suggested_test_files": [
+        "languages/cpp/stdlib/vector_test.cpp"
+      ]
+    },
+    {
+      "id": "containers.array_and_span",
+      "title": "Use fixed arrays and non-owning spans",
+      "headers": [
+        "<array>",
+        "<span>"
+      ],
+      "doc_url": "https://en.cppreference.com/w/cpp/container/span",
+      "covers": [
+        "std::array",
+        "std::array::at",
+        "std::array::size",
+        "std::span",
+        "std::span::size",
+        "std::span::subspan"
+      ],
+      "cases": [
+        "array stores a fixed-size value sequence",
+        "span passes a contiguous view without copying",
+        "subspan focuses an algorithm on part of an existing buffer"
+      ],
+      "status": "todo",
+      "test_files": [],
+      "suggested_test_files": [
+        "languages/cpp/stdlib/array_span_test.cpp"
+      ]
+    },
+    {
+      "id": "containers.deque_and_list",
+      "title": "Choose deque or list for non-vector sequence needs",
+      "headers": [
+        "<deque>",
+        "<list>"
+      ],
+      "doc_url": "https://en.cppreference.com/w/cpp/container/deque",
+      "covers": [
+        "std::deque",
+        "std::deque::push_front",
+        "std::deque::push_back",
+        "std::deque::pop_front",
+        "std::deque::pop_back",
+        "std::list",
+        "std::list::splice",
+        "std::list::remove_if",
+        "std::list::sort"
+      ],
+      "cases": [
+        "deque models efficient work at both ends",
+        "list splice moves nodes between lists without copying values",
+        "list remove_if and sort are member algorithms because iterators are not random access"
+      ],
+      "status": "todo",
+      "test_files": [],
+      "suggested_test_files": [
+        "languages/cpp/stdlib/deque_list_test.cpp"
+      ]
+    },
+    {
+      "id": "associative.ordered_maps_sets",
+      "title": "Use ordered maps and sets",
+      "headers": [
+        "<map>",
+        "<set>"
+      ],
+      "doc_url": "https://en.cppreference.com/w/cpp/container/map",
+      "covers": [
+        "std::map",
+        "std::map::operator[]",
+        "std::map::insert_or_assign",
+        "std::map::find",
+        "std::map::contains",
+        "std::map::lower_bound",
+        "std::set",
+        "std::set::insert",
+        "std::set::lower_bound"
+      ],
+      "cases": [
+        "map operator[] creates a missing value while find does not",
+        "insert_or_assign records whether an insertion or replacement happened",
+        "ordered containers provide lower_bound based on key ordering"
+      ],
+      "status": "todo",
+      "test_files": [],
+      "suggested_test_files": [
+        "languages/cpp/stdlib/ordered_associative_test.cpp"
+      ]
+    },
+    {
+      "id": "associative.unordered_maps_sets",
+      "title": "Use hash maps and sets",
+      "headers": [
+        "<unordered_map>",
+        "<unordered_set>"
+      ],
+      "doc_url": "https://en.cppreference.com/w/cpp/container/unordered_map",
+      "covers": [
+        "std::unordered_map",
+        "std::unordered_map::operator[]",
+        "std::unordered_map::insert_or_assign",
+        "std::unordered_map::find",
+        "std::unordered_map::contains",
+        "std::unordered_map::reserve",
+        "std::unordered_set",
+        "std::unordered_set::insert",
+        "std::unordered_set::contains"
+      ],
+      "cases": [
+        "unordered containers optimize lookup by hash instead of order",
+        "reserve prepares buckets when many insertions are expected",
+        "unordered_set represents membership without associated values"
+      ],
+      "status": "todo",
+      "test_files": [],
+      "suggested_test_files": [
+        "languages/cpp/stdlib/unordered_associative_test.cpp"
+      ]
+    },
+    {
+      "id": "algorithm.search_count_predicates",
+      "title": "Search and count with iterator algorithms",
+      "headers": [
+        "<algorithm>"
+      ],
+      "doc_url": "https://en.cppreference.com/w/cpp/algorithm/find",
+      "covers": [
+        "std::find",
+        "std::find_if",
+        "std::count",
+        "std::count_if",
+        "std::all_of",
+        "std::any_of",
+        "std::none_of"
+      ],
+      "cases": [
+        "find returns an iterator to the first matching value",
+        "predicate algorithms accept lambdas for custom tests",
+        "all_of, any_of, and none_of express collection-level boolean checks"
+      ],
+      "status": "todo",
+      "test_files": [],
+      "suggested_test_files": [
+        "languages/cpp/stdlib/algorithm_search_test.cpp"
+      ]
+    },
+    {
+      "id": "algorithm.sort_partition",
+      "title": "Sort and partition ranges",
+      "headers": [
+        "<algorithm>"
+      ],
+      "doc_url": "https://en.cppreference.com/w/cpp/algorithm/sort",
+      "covers": [
+        "std::sort",
+        "std::stable_sort",
+        "std::partition",
+        "std::stable_partition",
+        "std::is_sorted"
+      ],
+      "cases": [
+        "sort orders random-access ranges in place",
+        "stable_sort preserves equivalent-element order",
+        "partition groups elements by predicate without fully sorting"
+      ],
+      "status": "todo",
+      "test_files": [],
+      "suggested_test_files": [
+        "languages/cpp/stdlib/algorithm_ordering_test.cpp"
+      ]
+    },
+    {
+      "id": "algorithm.copy_transform_remove",
+      "title": "Copy, transform, and compact ranges",
+      "headers": [
+        "<algorithm>",
+        "<iterator>"
+      ],
+      "doc_url": "https://en.cppreference.com/w/cpp/algorithm/transform",
+      "covers": [
+        "std::copy",
+        "std::copy_if",
+        "std::transform",
+        "std::remove",
+        "std::remove_if",
+        "std::unique",
+        "std::back_inserter"
+      ],
+      "cases": [
+        "copy and copy_if write into an output iterator",
+        "transform maps input values to output values",
+        "remove_if and unique return a new logical end before erase"
+      ],
+      "status": "todo",
+      "test_files": [],
+      "suggested_test_files": [
+        "languages/cpp/stdlib/algorithm_transform_test.cpp"
+      ]
+    },
+    {
+      "id": "algorithm.binary_minmax",
+      "title": "Use binary-search and min/max helpers",
+      "headers": [
+        "<algorithm>"
+      ],
+      "doc_url": "https://en.cppreference.com/w/cpp/algorithm/lower_bound",
+      "covers": [
+        "std::lower_bound",
+        "std::upper_bound",
+        "std::binary_search",
+        "std::equal_range",
+        "std::min",
+        "std::max",
+        "std::minmax",
+        "std::clamp"
+      ],
+      "cases": [
+        "binary-search algorithms require sorted input",
+        "lower_bound and upper_bound return insertion positions",
+        "clamp constrains values to an inclusive range"
+      ],
+      "status": "todo",
+      "test_files": [],
+      "suggested_test_files": [
+        "languages/cpp/stdlib/algorithm_binary_test.cpp"
+      ]
+    },
+    {
+      "id": "numeric.accumulate_reduce_scan",
+      "title": "Accumulate, reduce, and scan numeric ranges",
+      "headers": [
+        "<numeric>"
+      ],
+      "doc_url": "https://en.cppreference.com/w/cpp/algorithm/accumulate",
+      "covers": [
+        "std::accumulate",
+        "std::reduce",
+        "std::transform_reduce",
+        "std::partial_sum",
+        "std::exclusive_scan",
+        "std::inclusive_scan"
+      ],
+      "cases": [
+        "accumulate folds left in iterator order",
+        "reduce communicates that an operation can be reordered",
+        "scan algorithms emit every intermediate total"
+      ],
+      "status": "todo",
+      "test_files": [],
+      "suggested_test_files": [
+        "languages/cpp/stdlib/numeric_algorithms_test.cpp"
+      ]
+    },
+    {
+      "id": "iterators.adaptors_and_distances",
+      "title": "Use iterator helpers and output adaptors",
+      "headers": [
+        "<iterator>"
+      ],
+      "doc_url": "https://en.cppreference.com/w/cpp/iterator",
+      "covers": [
+        "std::begin",
+        "std::end",
+        "std::next",
+        "std::prev",
+        "std::distance",
+        "std::back_inserter",
+        "std::ostream_iterator"
+      ],
+      "cases": [
+        "begin and end expose the iterator range for containers and arrays",
+        "next, prev, and distance express movement without manual loops",
+        "back_inserter and ostream_iterator adapt algorithms to output destinations"
+      ],
+      "status": "todo",
+      "test_files": [],
+      "suggested_test_files": [
+        "languages/cpp/stdlib/iterator_test.cpp"
+      ]
+    },
+    {
+      "id": "ranges.algorithms_and_views",
+      "title": "Use C++20 ranges algorithms and lazy views",
+      "headers": [
+        "<ranges>",
+        "<algorithm>"
+      ],
+      "doc_url": "https://en.cppreference.com/w/cpp/ranges",
+      "covers": [
+        "std::ranges::sort",
+        "std::ranges::find",
+        "std::views::filter",
+        "std::views::transform",
+        "std::views::take",
+        "std::views::drop"
+      ],
+      "cases": [
+        "ranges algorithms accept whole ranges instead of iterator pairs",
+        "views compose lazy transformations without owning storage",
+        "take and drop bound examples that would otherwise keep flowing"
+      ],
+      "requires_standard": "C++20",
+      "status": "todo",
+      "test_files": [],
+      "suggested_test_files": [
+        "languages/cpp/stdlib/ranges_test.cpp"
+      ]
+    },
+    {
+      "id": "memory.unique_ptr_ownership",
+      "title": "Represent exclusive ownership with unique_ptr",
+      "headers": [
+        "<memory>",
+        "<utility>"
+      ],
+      "doc_url": "https://en.cppreference.com/w/cpp/memory/unique_ptr",
+      "covers": [
+        "std::unique_ptr",
+        "std::make_unique",
+        "std::unique_ptr::get",
+        "std::unique_ptr::release",
+        "std::unique_ptr::reset",
+        "std::move"
+      ],
+      "cases": [
+        "make_unique constructs an owned object without raw new",
+        "moving transfers exclusive ownership",
+        "release and reset show how ownership can leave or replace the pointer"
+      ],
+      "status": "todo",
+      "test_files": [],
+      "suggested_test_files": [
+        "languages/cpp/stdlib/memory_unique_ptr_test.cpp"
+      ]
+    },
+    {
+      "id": "memory.shared_weak_ownership",
+      "title": "Share ownership with shared_ptr and observe it with weak_ptr",
+      "headers": [
+        "<memory>"
+      ],
+      "doc_url": "https://en.cppreference.com/w/cpp/memory/shared_ptr",
+      "covers": [
+        "std::shared_ptr",
+        "std::make_shared",
+        "std::shared_ptr::use_count",
+        "std::weak_ptr",
+        "std::weak_ptr::lock",
+        "std::enable_shared_from_this"
+      ],
+      "cases": [
+        "make_shared creates shared ownership for an object",
+        "weak_ptr observes an object without extending lifetime",
+        "enable_shared_from_this returns shared ownership from inside an object"
+      ],
+      "status": "todo",
+      "test_files": [],
+      "suggested_test_files": [
+        "languages/cpp/stdlib/memory_shared_ptr_test.cpp"
+      ]
+    },
+    {
+      "id": "vocabulary.optional_variant_any",
+      "title": "Model optional, variant, and type-erased values",
+      "headers": [
+        "<optional>",
+        "<variant>",
+        "<any>"
+      ],
+      "doc_url": "https://en.cppreference.com/w/cpp/utility/optional",
+      "covers": [
+        "std::optional",
+        "std::nullopt",
+        "std::optional::value_or",
+        "std::variant",
+        "std::get",
+        "std::visit",
+        "std::any",
+        "std::any_cast"
+      ],
+      "cases": [
+        "optional distinguishes absence from a default value",
+        "variant stores one value from a fixed set of types",
+        "any stores a type-erased value and requires checked extraction"
+      ],
+      "status": "todo",
+      "test_files": [],
+      "suggested_test_files": [
+        "languages/cpp/stdlib/vocabulary_types_test.cpp"
+      ]
+    },
+    {
+      "id": "vocabulary.expected_result",
+      "title": "Return either a value or an error with expected",
+      "headers": [
+        "<expected>"
+      ],
+      "doc_url": "https://en.cppreference.com/w/cpp/utility/expected",
+      "covers": [
+        "std::expected",
+        "std::unexpected",
+        "std::expected::value",
+        "std::expected::error"
+      ],
+      "cases": [
+        "expected returns a value without throwing on success",
+        "unexpected carries error information in the same return channel",
+        "value and error accessors make the active state explicit"
+      ],
+      "requires_standard": "C++23",
+      "status": "todo",
+      "test_files": [],
+      "suggested_test_files": [
+        "languages/cpp/stdlib/expected_test.cpp"
+      ]
+    },
+    {
+      "id": "utility.pair_tuple_structured_values",
+      "title": "Use pair and tuple for small structured values",
+      "headers": [
+        "<utility>",
+        "<tuple>"
+      ],
+      "doc_url": "https://en.cppreference.com/w/cpp/utility/tuple",
+      "covers": [
+        "std::pair",
+        "std::tuple",
+        "std::make_tuple",
+        "std::tie",
+        "std::get",
+        "std::apply"
+      ],
+      "cases": [
+        "pair names a simple two-value result",
+        "tuple groups heterogeneous values by position",
+        "apply expands tuple values into a callable"
+      ],
+      "status": "todo",
+      "test_files": [],
+      "suggested_test_files": [
+        "languages/cpp/stdlib/tuple_pair_test.cpp"
+      ]
+    },
+    {
+      "id": "utility.move_forward_swap",
+      "title": "Use move, forward, exchange, swap, and as_const",
+      "headers": [
+        "<utility>"
+      ],
+      "doc_url": "https://en.cppreference.com/w/cpp/utility",
+      "covers": [
+        "std::move",
+        "std::forward",
+        "std::exchange",
+        "std::swap",
+        "std::as_const"
+      ],
+      "cases": [
+        "move casts a named value into an rvalue for transfer",
+        "forward preserves value category in forwarding functions",
+        "exchange and swap express common state replacement patterns"
+      ],
+      "status": "todo",
+      "test_files": [],
+      "suggested_test_files": [
+        "languages/cpp/stdlib/utility_test.cpp"
+      ]
+    },
+    {
+      "id": "functional.callable_adapters",
+      "title": "Adapt and store callable objects",
+      "headers": [
+        "<functional>"
+      ],
+      "doc_url": "https://en.cppreference.com/w/cpp/utility/functional",
+      "covers": [
+        "std::function",
+        "std::invoke",
+        "std::bind_front",
+        "std::not_fn",
+        "std::reference_wrapper",
+        "std::mem_fn"
+      ],
+      "cases": [
+        "function stores a callable with a fixed signature",
+        "invoke calls functions, lambdas, and member pointers uniformly",
+        "bind_front and not_fn create small callable adapters"
+      ],
+      "status": "todo",
+      "test_files": [],
+      "suggested_test_files": [
+        "languages/cpp/stdlib/functional_test.cpp"
+      ]
+    },
+    {
+      "id": "filesystem.path_workflow",
+      "title": "Manipulate filesystem paths",
+      "headers": [
+        "<filesystem>"
+      ],
+      "doc_url": "https://en.cppreference.com/w/cpp/filesystem/path",
+      "covers": [
+        "std::filesystem::path",
+        "std::filesystem::path::operator/",
+        "std::filesystem::path::filename",
+        "std::filesystem::path::extension",
+        "std::filesystem::path::parent_path",
+        "std::filesystem::path::string",
+        "std::filesystem::exists"
+      ],
+      "cases": [
+        "path joins segments without manual separators",
+        "filename, extension, and parent_path inspect path structure",
+        "exists checks a tmp_path-created file without depending on user directories"
+      ],
+      "status": "todo",
+      "test_files": [],
+      "suggested_test_files": [
+        "languages/cpp/stdlib/filesystem_path_test.cpp"
+      ]
+    },
+    {
+      "id": "filesystem.directory_operations",
+      "title": "Create, inspect, and iterate directories",
+      "headers": [
+        "<filesystem>"
+      ],
+      "doc_url": "https://en.cppreference.com/w/cpp/filesystem",
+      "covers": [
+        "std::filesystem::create_directories",
+        "std::filesystem::directory_iterator",
+        "std::filesystem::recursive_directory_iterator",
+        "std::filesystem::copy_file",
+        "std::filesystem::remove",
+        "std::filesystem::status",
+        "std::filesystem::file_size"
+      ],
+      "cases": [
+        "create_directories prepares isolated test directories",
+        "directory_iterator and recursive_directory_iterator discover created files",
+        "copy_file, status, file_size, and remove model common file maintenance"
+      ],
+      "status": "todo",
+      "test_files": [],
+      "suggested_test_files": [
+        "languages/cpp/stdlib/filesystem_directory_test.cpp"
+      ]
+    },
+    {
+      "id": "chrono.durations_and_clocks",
+      "title": "Use durations, time points, and clocks",
+      "headers": [
+        "<chrono>"
+      ],
+      "doc_url": "https://en.cppreference.com/w/cpp/chrono",
+      "covers": [
+        "std::chrono::duration",
+        "std::chrono::milliseconds",
+        "std::chrono::seconds",
+        "std::chrono::steady_clock",
+        "std::chrono::system_clock",
+        "std::chrono::time_point_cast"
+      ],
+      "cases": [
+        "duration stores typed time units instead of raw numbers",
+        "steady_clock is appropriate for elapsed-time measurement",
+        "time_point_cast changes precision explicitly"
+      ],
+      "status": "todo",
+      "test_files": [],
+      "suggested_test_files": [
+        "languages/cpp/stdlib/chrono_test.cpp"
+      ]
+    },
+    {
+      "id": "chrono.calendar_types",
+      "title": "Represent calendar dates with chrono calendar types",
+      "headers": [
+        "<chrono>"
+      ],
+      "doc_url": "https://en.cppreference.com/w/cpp/chrono/year_month_day",
+      "covers": [
+        "std::chrono::year_month_day",
+        "std::chrono::sys_days",
+        "std::chrono::weekday"
+      ],
+      "cases": [
+        "year_month_day represents a civil calendar date",
+        "sys_days converts a date to a day-precision time point",
+        "weekday derives a day-of-week from a date"
+      ],
+      "requires_standard": "C++20",
+      "status": "todo",
+      "test_files": [],
+      "suggested_test_files": [
+        "languages/cpp/stdlib/chrono_calendar_test.cpp"
+      ]
+    },
+    {
+      "id": "io.string_and_file_streams",
+      "title": "Use string streams and file streams",
+      "headers": [
+        "<sstream>",
+        "<fstream>",
+        "<iomanip>"
+      ],
+      "doc_url": "https://en.cppreference.com/w/cpp/io",
+      "covers": [
+        "std::ostringstream",
+        "std::istringstream",
+        "std::ifstream",
+        "std::ofstream",
+        "std::fstream",
+        "std::setw",
+        "std::setprecision",
+        "std::boolalpha"
+      ],
+      "cases": [
+        "ostringstream builds formatted text without writing to stdout",
+        "istringstream parses a stable in-memory input",
+        "file streams read and write files under an isolated temp directory"
+      ],
+      "status": "todo",
+      "test_files": [],
+      "suggested_test_files": [
+        "languages/cpp/stdlib/io_streams_test.cpp"
+      ]
+    },
+    {
+      "id": "format.modern_formatting",
+      "title": "Format text with std::format",
+      "headers": [
+        "<format>"
+      ],
+      "doc_url": "https://en.cppreference.com/w/cpp/utility/format",
+      "covers": [
+        "std::format",
+        "std::format_to",
+        "std::vformat",
+        "std::formatter"
+      ],
+      "cases": [
+        "format combines values with a checked format string",
+        "format_to writes formatted output through an iterator",
+        "formatter specialization is the customization point for user-defined types"
+      ],
+      "requires_standard": "C++20",
+      "status": "todo",
+      "test_files": [],
+      "suggested_test_files": [
+        "languages/cpp/stdlib/format_test.cpp"
+      ]
+    },
+    {
+      "id": "regex.match_search_replace",
+      "title": "Match, search, and replace with regular expressions",
+      "headers": [
+        "<regex>"
+      ],
+      "doc_url": "https://en.cppreference.com/w/cpp/regex",
+      "covers": [
+        "std::regex",
+        "std::regex_match",
+        "std::regex_search",
+        "std::regex_replace",
+        "std::smatch"
+      ],
+      "cases": [
+        "regex_match requires the whole string to match",
+        "regex_search finds a pattern inside larger text",
+        "regex_replace performs structured substitution"
+      ],
+      "status": "todo",
+      "test_files": [],
+      "suggested_test_files": [
+        "languages/cpp/stdlib/regex_test.cpp"
+      ]
+    },
+    {
+      "id": "random.engines_and_distributions",
+      "title": "Generate reproducible random values",
+      "headers": [
+        "<random>"
+      ],
+      "doc_url": "https://en.cppreference.com/w/cpp/numeric/random",
+      "covers": [
+        "std::mt19937",
+        "std::random_device",
+        "std::seed_seq",
+        "std::uniform_int_distribution",
+        "std::uniform_real_distribution",
+        "std::normal_distribution"
+      ],
+      "cases": [
+        "mt19937 with a fixed seed makes examples deterministic",
+        "distributions transform engine output into useful value ranges",
+        "random_device is treated as nondeterministic input and not asserted exactly"
+      ],
+      "status": "todo",
+      "test_files": [],
+      "suggested_test_files": [
+        "languages/cpp/stdlib/random_test.cpp"
+      ]
+    },
+    {
+      "id": "concurrency.thread_mutex_lock",
+      "title": "Coordinate threads with mutex-backed locks",
+      "headers": [
+        "<thread>",
+        "<mutex>"
+      ],
+      "doc_url": "https://en.cppreference.com/w/cpp/thread",
+      "covers": [
+        "std::thread",
+        "std::jthread",
+        "std::mutex",
+        "std::lock_guard",
+        "std::scoped_lock",
+        "std::unique_lock"
+      ],
+      "cases": [
+        "thread and jthread run callable work on another thread",
+        "lock_guard and scoped_lock use RAII to release mutexes",
+        "unique_lock supports deferred locking workflows"
+      ],
+      "requires_standard": "C++20 for std::jthread",
+      "status": "todo",
+      "test_files": [],
+      "suggested_test_files": [
+        "languages/cpp/stdlib/thread_mutex_test.cpp"
+      ]
+    },
+    {
+      "id": "concurrency.future_async",
+      "title": "Represent asynchronous results with futures",
+      "headers": [
+        "<future>"
+      ],
+      "doc_url": "https://en.cppreference.com/w/cpp/thread/future",
+      "covers": [
+        "std::async",
+        "std::future",
+        "std::promise",
+        "std::packaged_task",
+        "std::launch"
+      ],
+      "cases": [
+        "async returns a future for a callable result",
+        "promise and future split result production from result consumption",
+        "packaged_task turns a callable into a future-producing task"
+      ],
+      "status": "todo",
+      "test_files": [],
+      "suggested_test_files": [
+        "languages/cpp/stdlib/future_test.cpp"
+      ]
+    },
+    {
+      "id": "concurrency.atomic_basics",
+      "title": "Use atomic values for simple shared state",
+      "headers": [
+        "<atomic>"
+      ],
+      "doc_url": "https://en.cppreference.com/w/cpp/atomic/atomic",
+      "covers": [
+        "std::atomic",
+        "std::atomic::load",
+        "std::atomic::store",
+        "std::atomic::fetch_add",
+        "std::atomic::compare_exchange_strong"
+      ],
+      "cases": [
+        "load and store access an atomic value explicitly",
+        "fetch_add performs a read-modify-write operation",
+        "compare_exchange_strong models conditional state transitions"
+      ],
+      "status": "todo",
+      "test_files": [],
+      "suggested_test_files": [
+        "languages/cpp/stdlib/atomic_test.cpp"
+      ]
+    },
+    {
+      "id": "templates.type_traits",
+      "title": "Use type traits in template code",
+      "headers": [
+        "<type_traits>"
+      ],
+      "doc_url": "https://en.cppreference.com/w/cpp/header/type_traits",
+      "covers": [
+        "std::is_same_v",
+        "std::is_integral_v",
+        "std::remove_cvref_t",
+        "std::enable_if_t",
+        "std::common_type_t",
+        "std::type_identity"
+      ],
+      "cases": [
+        "type traits express compile-time facts about types",
+        "remove_cvref_t normalizes forwarding-reference inputs",
+        "common_type_t and enable_if_t shape generic APIs"
+      ],
+      "status": "todo",
+      "test_files": [],
+      "suggested_test_files": [
+        "languages/cpp/stdlib/type_traits_test.cpp"
+      ]
+    },
+    {
+      "id": "templates.concepts",
+      "title": "Constrain templates with standard concepts",
+      "headers": [
+        "<concepts>",
+        "<ranges>"
+      ],
+      "doc_url": "https://en.cppreference.com/w/cpp/concepts",
+      "covers": [
+        "std::same_as",
+        "std::integral",
+        "std::floating_point",
+        "std::invocable",
+        "std::regular",
+        "std::ranges::range"
+      ],
+      "cases": [
+        "concepts document and enforce template requirements",
+        "integral and floating_point select numeric categories",
+        "invocable and ranges::range describe callable and range protocols"
+      ],
+      "requires_standard": "C++20",
+      "status": "todo",
+      "test_files": [],
+      "suggested_test_files": [
+        "languages/cpp/stdlib/concepts_test.cpp"
+      ]
+    },
+    {
+      "id": "errors.exceptions_and_error_codes",
+      "title": "Use standard exceptions and error codes",
+      "headers": [
+        "<stdexcept>",
+        "<system_error>"
+      ],
+      "doc_url": "https://en.cppreference.com/w/cpp/error/exception",
+      "covers": [
+        "std::runtime_error",
+        "std::invalid_argument",
+        "std::out_of_range",
+        "std::error_code",
+        "std::system_error"
+      ],
+      "cases": [
+        "standard exceptions carry diagnostic text through what()",
+        "out_of_range models checked access failure",
+        "error_code represents non-throwing system-style errors"
+      ],
+      "status": "todo",
+      "test_files": [],
+      "suggested_test_files": [
+        "languages/cpp/stdlib/errors_test.cpp"
+      ]
+    },
+    {
+      "id": "math.cmath_and_bits",
+      "title": "Use math and bit utilities",
+      "headers": [
+        "<cmath>",
+        "<bit>",
+        "<bitset>"
+      ],
+      "doc_url": "https://en.cppreference.com/w/cpp/numeric/math",
+      "covers": [
+        "std::sqrt",
+        "std::pow",
+        "std::sin",
+        "std::cos",
+        "std::isnan",
+        "std::isfinite",
+        "std::bitset",
+        "std::bitset::set",
+        "std::bitset::reset",
+        "std::bitset::test",
+        "std::bitset::count",
+        "std::popcount",
+        "std::has_single_bit"
+      ],
+      "cases": [
+        "cmath functions demonstrate stable numeric calculations",
+        "isnan and isfinite classify floating-point values",
+        "bitset and bit operations model fixed-width flag sets"
+      ],
+      "requires_standard": "C++20 for <bit> helpers",
+      "status": "todo",
+      "test_files": [],
+      "suggested_test_files": [
+        "languages/cpp/stdlib/math_bits_test.cpp"
+      ]
+    }
+  ]
+}

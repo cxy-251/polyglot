@@ -6,8 +6,8 @@
     "defaultRoot": "/home/polyglot"
   },
   "languageScope": {
-    "activeChecklist": ["python"],
-    "placeholderChecklists": ["cpp", "nodejs", "julia", "r", "go", "rust"],
+    "activeChecklist": ["python", "cpp"],
+    "placeholderChecklists": ["nodejs", "julia", "r", "go", "rust"],
     "outOfScope": "All languages not listed above should stay out of this project."
   },
   "languages": [
@@ -26,9 +26,11 @@
     {
       "id": "cpp",
       "name": "C++",
-      "status": "placeholder-checklist",
+      "status": "active-checklist",
       "checklist": "checklists/cpp",
+      "checklistRunner": "python3 tools/cpp_checklist_status.py",
       "futureTestRoot": "languages/cpp",
+      "futureTestFramework": "assert-based executable examples",
       "stdlibAreas": ["string", "vector", "map", "set", "algorithm", "optional", "variant", "filesystem", "chrono"]
     },
     {
