@@ -10,11 +10,14 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import xml.etree.ElementTree as ET
 from collections import Counter
 from datetime import date
 from pathlib import Path
 from typing import Any, Iterable
+
+from dash_docset import DashToken, find_docset, read_docset_tokens
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -24,6 +27,39 @@ OBJECTS_PATH = CPP_ROOT / "stdlib.objects.json"
 CHECKLIST_PATH = CPP_ROOT / "stdlib.checklist.json"
 TASKS_PATH = CPP_ROOT / "stdlib.tasks.json"
 CPPREF_WEB_BASE = "https://en.cppreference.com/w/"
+CPPREF_DASH_SOURCE = "cppreference-dash-docset"
+TYPE_TRAIT_PREFIXES = (
+    "add_",
+    "alignment_of",
+    "common_",
+    "conditional",
+    "conjunction",
+    "decay",
+    "disjunction",
+    "enable_",
+    "extent",
+    "has_",
+    "invoke_",
+    "is_",
+    "make_",
+    "negation",
+    "rank",
+    "remove_",
+    "result_of",
+    "type_identity",
+    "underlying_",
+    "void_t",
+)
+STANDARD_VALUE_OBJECTS = {
+    "std::adopt_lock",
+    "std::allocator_arg",
+    "std::defer_lock",
+    "std::ignore",
+    "std::nothrow",
+    "std::nullopt",
+    "std::piecewise_construct",
+    "std::try_to_lock",
+}
 
 
 def uniq(items: Iterable[str]) -> list[str]:
@@ -2725,6 +2761,16 @@ def load_optional_json(path: Path) -> dict[str, Any]:
     return load_json(path)
 
 
+def display_path(path: Path | None) -> str | None:
+    if path is None:
+        return None
+    expanded = path.expanduser()
+    try:
+        return "~/" + str(expanded.relative_to(Path.home()))
+    except ValueError:
+        return str(expanded)
+
+
 def build_symbol_index(baseline: dict[str, Any]) -> dict[str, dict[str, Any]]:
     symbol_index: dict[str, dict[str, Any]] = {}
     for header_item in baseline.get("headers", []):
@@ -2773,7 +2819,11 @@ def classify_symbol(name: str, header_item: dict[str, Any] | None, known_symbols
         return "type"
     if area == "concepts":
         return "concept"
-    if header_name == "<type_traits>" and (leaf.startswith("is_") or leaf.endswith("_t") or leaf.endswith("_v")):
+    if name in STANDARD_VALUE_OBJECTS or leaf.endswith("_v"):
+        return "constant"
+    if leaf.endswith("_t"):
+        return "type_alias"
+    if header_name == "<type_traits>" and (leaf.endswith(TYPE_TRAIT_PREFIXES) or leaf.startswith(TYPE_TRAIT_PREFIXES)):
         return "type_trait"
     if leaf.startswith("operator"):
         return "operator"
@@ -2888,9 +2938,197 @@ def parse_tag_objects(tag_path: Path, baseline: dict[str, Any]) -> list[dict[str
     return result
 
 
-def merge_objects(tag_objects: list[dict[str, Any]], fallback_objects: list[dict[str, Any]]) -> list[dict[str, Any]]:
+OPERATOR_PLACEHOLDERS = [
+    ("operator<=>", "__CPP_OPERATOR_SPACESHIP__"),
+    ("operator<<=", "__CPP_OPERATOR_LSHIFT_ASSIGN__"),
+    ("operator>>=", "__CPP_OPERATOR_RSHIFT_ASSIGN__"),
+    ("operator<<", "__CPP_OPERATOR_LSHIFT__"),
+    ("operator>>", "__CPP_OPERATOR_RSHIFT__"),
+    ("operator<=", "__CPP_OPERATOR_LE__"),
+    ("operator>=", "__CPP_OPERATOR_GE__"),
+    ("operator<", "__CPP_OPERATOR_LT__"),
+    ("operator>", "__CPP_OPERATOR_GT__"),
+    ("operator()", "__CPP_OPERATOR_CALL__"),
+    ("operator[]", "__CPP_OPERATOR_INDEX__"),
+]
+
+
+def protect_operator_tokens(value: str) -> str:
+    protected = value
+    for operator_token, placeholder in OPERATOR_PLACEHOLDERS:
+        protected = protected.replace(operator_token, placeholder)
+    return protected
+
+
+def restore_operator_tokens(value: str) -> str:
+    restored = value
+    for operator_token, placeholder in reversed(OPERATOR_PLACEHOLDERS):
+        restored = restored.replace(placeholder, operator_token)
+    return restored
+
+
+def split_cpp_token_names(raw_name: str) -> list[str]:
+    protected = protect_operator_tokens(raw_name)
+    parts: list[str] = []
+    current: list[str] = []
+    angle_depth = 0
+    paren_depth = 0
+    for char in protected:
+        if char == "<":
+            angle_depth += 1
+        elif char == ">" and angle_depth:
+            angle_depth -= 1
+        elif char == "(":
+            paren_depth += 1
+        elif char == ")" and paren_depth:
+            paren_depth -= 1
+        if char == "," and angle_depth == 0 and paren_depth == 0:
+            part = restore_operator_tokens("".join(current)).strip()
+            if part:
+                parts.append(part)
+            current = []
+            continue
+        current.append(char)
+    part = restore_operator_tokens("".join(current)).strip()
+    if part:
+        parts.append(part)
+    return parts
+
+
+def strip_template_arguments(name: str) -> str:
+    protected = protect_operator_tokens(name)
+    result: list[str] = []
+    depth = 0
+    for char in protected:
+        if char == "<":
+            depth += 1
+            continue
+        if char == ">" and depth:
+            depth -= 1
+            continue
+        if depth == 0:
+            result.append(char)
+    return restore_operator_tokens("".join(result))
+
+
+def strip_function_parameters(name: str) -> str:
+    protected = protect_operator_tokens(name)
+    paren_index = protected.find("(")
+    if paren_index != -1:
+        protected = protected[:paren_index]
+    return restore_operator_tokens(protected.rstrip())
+
+
+def canonical_dash_names(raw_name: str) -> list[str]:
+    result: list[str] = []
+    last_parent: str | None = None
+    for part in split_cpp_token_names(raw_name):
+        canonical = strip_function_parameters(strip_template_arguments(part))
+        canonical = re.sub(r"\s+", " ", canonical).strip()
+        canonical = canonical.replace(" ::", "::").replace(":: ", "::")
+        if "::" not in canonical and last_parent:
+            canonical = f"{last_parent}::{canonical}"
+        if "::" in canonical:
+            last_parent = canonical.rsplit("::", 1)[0]
+        if canonical:
+            result.append(canonical)
+    return uniq(result)
+
+
+def dash_kind_to_object_kind(token: DashToken, name: str, meta: dict[str, Any], known_symbols: set[str]) -> str:
+    token_kind = token.kind
+    leaf = name.rsplit("::", 1)[-1]
+    parent = parent_name(name)
+    if token_kind in {"cl", "Struct"}:
+        if token_kind == "cl" and not parent and meta.get("header") in {"<algorithm>", "<numeric>"}:
+            return classify_symbol(name, meta, known_symbols)
+        return "type"
+    if token_kind == "Enum":
+        return "enum"
+    if token_kind == "clm":
+        return "member_operator" if leaf.startswith("operator") else "member_function"
+    if token_kind == "Operator":
+        return "member_operator" if parent and parent in known_symbols else "operator"
+    if token_kind == "func":
+        return "function"
+    if token_kind == "macro":
+        return "macro"
+    if token_kind == "tdef":
+        return "type_alias"
+    if token_kind == "clconst":
+        return "constant"
+    if token_kind == "Guide":
+        return "deduction_guide"
+    return classify_symbol(name, meta, known_symbols)
+
+
+def cppreference_dash_url(path: str | None, anchor: str | None = None) -> str | None:
+    if not path:
+        return None
+    normalized = path.replace("\\", "/")
+    for prefix in ("https://en.cppreference.com/", "http://en.cppreference.com/", "en.cppreference.com/"):
+        if normalized.startswith(prefix):
+            suffix = normalized[len(prefix):]
+            if not suffix.startswith("w/"):
+                suffix = "w/" + suffix
+            hash_anchor = ""
+            if "#" in suffix:
+                suffix, hash_anchor = suffix.split("#", 1)
+            if suffix.endswith(".html"):
+                suffix = suffix[:-5]
+            url = "https://en.cppreference.com/" + suffix
+            if hash_anchor:
+                url += "#" + hash_anchor
+            elif anchor:
+                url += "#" + anchor
+            return url
+    return None
+
+
+def parse_dash_objects(docset_path: Path, baseline: dict[str, Any]) -> list[dict[str, Any]]:
+    symbol_index = build_symbol_index(baseline)
+    known_symbols = set(symbol_index)
+    by_name: dict[str, dict[str, Any]] = {}
+    for token in read_docset_tokens(docset_path):
+        for name in canonical_dash_names(token.name):
+            if name not in symbol_index:
+                continue
+            meta = symbol_index[name]
+            obj = {
+                "id": f"{name}#{token.path or token.kind or 'dash'}",
+                "name": name,
+                "kind": dash_kind_to_object_kind(token, name, meta, known_symbols),
+                "header": meta.get("header"),
+                "area": meta.get("area"),
+                "parent": parent_name(name),
+                "availability": meta.get("availability", "active"),
+                "since": meta.get("since"),
+                "doc_url": cppreference_dash_url(token.path, token.anchor) or token.doc_url or meta.get("doc_url"),
+                "doc_path": token.path,
+                "source_name": token.name,
+                "source": CPPREF_DASH_SOURCE,
+            }
+            existing = by_name.get(name)
+            if existing is None or (not existing.get("doc_url") and obj.get("doc_url")):
+                by_name[name] = obj
+    return sorted(by_name.values(), key=lambda item: item["name"])
+
+
+def find_cppreference_dash_docset(dash_docset: Path | None, docsets_root: Path | None) -> Path | None:
+    if dash_docset:
+        path = dash_docset.expanduser()
+        if not path.exists():
+            raise FileNotFoundError(f"Dash docset path does not exist: {path}")
+        return path
+    try:
+        return find_docset("C++", docsets_root.expanduser() if docsets_root else None)
+    except FileNotFoundError:
+        return None
+
+
+def merge_objects(primary_objects: list[dict[str, Any]], fallback_objects: list[dict[str, Any]]) -> list[dict[str, Any]]:
     merged: dict[str, dict[str, Any]] = {}
-    for obj in tag_objects:
+    for obj in primary_objects:
         key = obj["name"]
         existing = merged.get(key)
         if existing is None or existing.get("source") == "baseline-fallback":
@@ -2900,28 +3138,47 @@ def merge_objects(tag_objects: list[dict[str, Any]], fallback_objects: list[dict
     return sorted(merged.values(), key=lambda item: (item.get("header") or "", item["name"], item.get("kind") or ""))
 
 
-def build_objects(source_dir: Path | None = None, tag_file: Path | None = None) -> dict[str, Any]:
+def build_objects(
+    source_dir: Path | None = None,
+    tag_file: Path | None = None,
+    dash_docset: Path | None = None,
+    docsets_root: Path | None = None,
+    no_dash: bool = False,
+) -> dict[str, Any]:
     baseline = load_json(BASELINE_PATH)
     fallback_objects = build_baseline_objects(baseline)
     resolved_tag = find_cppreference_tag(source_dir, tag_file)
+    resolved_dash = None if resolved_tag or no_dash else find_cppreference_dash_docset(dash_docset, docsets_root)
     tag_objects = parse_tag_objects(resolved_tag, baseline) if resolved_tag else []
-    objects = merge_objects(tag_objects, fallback_objects)
+    dash_objects = parse_dash_objects(resolved_dash, baseline) if resolved_dash else []
+    primary_objects = tag_objects or dash_objects
+    objects = merge_objects(primary_objects, fallback_objects)
     source_counts = Counter(obj.get("source", "unknown") for obj in objects)
+    source_kind = "baseline-fallback"
+    source_path = None
+    if resolved_tag:
+        source_kind = "cppreference-doxygen-tag"
+        source_path = display_path(resolved_tag)
+    elif resolved_dash:
+        source_kind = CPPREF_DASH_SOURCE
+        source_path = display_path(resolved_dash)
     return {
         "kind": "cpp-stdlib-objects",
         "schema_version": 1,
         "standard": baseline.get("standard"),
         "source_baseline": "stdlib.baseline.json",
-        "source_kind": "cppreference-doxygen-tag" if resolved_tag else "baseline-fallback",
-        "source_path": str(resolved_tag) if resolved_tag else None,
+        "source_kind": source_kind,
+        "source_path": source_path,
         "source_urls": [
+            "https://kapeli.com/dash",
             "https://en.cppreference.com/w/Cppreference:Archives",
             "https://en.cppreference.com/w/cpp/header",
             "https://en.cppreference.com/w/cpp/symbol_index",
         ],
         "coverage_note": (
-            "Objects are imported from a cppreference Doxygen tag file when one is supplied. "
-            "Baseline symbols are always added as fallback objects so task covers remain auditable."
+            "Objects are imported from a cppreference Doxygen tag file when one is supplied; "
+            "otherwise the local Dash C++.docset is used when present. Baseline symbols are "
+            "always added as fallback objects so task covers remain auditable."
         ),
         "generated_by": "python3 tools/cpp_stdlib_audit.py refresh-objects",
         "updated_at": date.today().isoformat(),
@@ -3068,15 +3325,27 @@ def refresh_baseline() -> int:
     return 0
 
 
-def refresh_objects(source_dir: Path | None = None, tag_file: Path | None = None) -> int:
-    objects = build_objects(source_dir=source_dir, tag_file=tag_file)
+def refresh_objects(
+    source_dir: Path | None = None,
+    tag_file: Path | None = None,
+    dash_docset: Path | None = None,
+    docsets_root: Path | None = None,
+    no_dash: bool = False,
+) -> int:
+    objects = build_objects(
+        source_dir=source_dir,
+        tag_file=tag_file,
+        dash_docset=dash_docset,
+        docsets_root=docsets_root,
+        no_dash=no_dash,
+    )
     write_json(OBJECTS_PATH, objects)
     print(f"wrote {OBJECTS_PATH.relative_to(ROOT)}")
     print(f"objects: {objects['object_count']}")
     for source, count in objects.get("source_counts", {}).items():
         print(f"  {source}: {count}")
     if objects.get("source_kind") == "baseline-fallback":
-        print("note: no cppreference tag file was supplied; generated baseline-fallback objects")
+        print("note: no cppreference tag file or Dash C++.docset was available; generated baseline-fallback objects")
     return 0
 
 
@@ -3098,13 +3367,22 @@ def main(argv: list[str] | None = None) -> int:
     objects_parser = subparsers.add_parser("refresh-objects", help="rewrite checklists/cpp/stdlib.objects.json")
     objects_parser.add_argument("--source-dir", type=Path, help="directory containing cppreference-doxygen-*.tag.xml")
     objects_parser.add_argument("--tag-file", type=Path, help="explicit cppreference Doxygen tag XML file")
+    objects_parser.add_argument("--dash-docset", type=Path, help="explicit path to C++.docset")
+    objects_parser.add_argument("--docsets-root", type=Path, help="Dash DocSets root, defaults to ~/Library/Application Support/Dash/DocSets")
+    objects_parser.add_argument("--no-dash", action="store_true", help="skip automatic Dash C++.docset import and use baseline fallback unless a tag file is supplied")
     subparsers.add_parser("refresh-checklist", help="rewrite checklists/cpp/stdlib.checklist.json")
     args = parser.parse_args(argv)
 
     if args.command == "refresh-baseline":
         return refresh_baseline()
     if args.command == "refresh-objects":
-        return refresh_objects(source_dir=args.source_dir, tag_file=args.tag_file)
+        return refresh_objects(
+            source_dir=args.source_dir,
+            tag_file=args.tag_file,
+            dash_docset=args.dash_docset,
+            docsets_root=args.docsets_root,
+            no_dash=args.no_dash,
+        )
     if args.command == "refresh-checklist":
         return refresh_checklist()
     if args.command in {None, "audit"}:

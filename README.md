@@ -51,6 +51,7 @@ tools/
   cpp_checklist_status.py
   cpp_stdlib_audit.py
   cpp_render_task.py
+  dash_docset.py
   python_checklist_status.py
   python_stdlib_audit.py
   python_render_task.py
@@ -121,18 +122,18 @@ task 形状示例：
 
 ## C++ 数据源
 
-`checklists/cpp/` 采用同样的 checklist-first 思路。C++ 没有 Python `objects.inv` 这种官方 Sphinx 对象索引，所以本项目使用 cppreference 的标准库 header 组织和 Doxygen tag archive 作为可导航参考，生成 header/symbol baseline、objects 索引和派生 checklist 骨架：
+`checklists/cpp/` 采用同样的 checklist-first 思路。C++ 没有 Python `objects.inv` 这种官方 Sphinx 对象索引，所以本项目使用 cppreference 的标准库 header 组织和本机 Dash C++.docset 作为离线可导航参考，生成 header/symbol baseline、objects 索引和派生 checklist 骨架：
 
 | 文件 | 职责 | 是否手改 |
 | --- | --- | --- |
 | `schema.json` | C++ checklist/task 数据结构和状态枚举。 | 改数据模型时才改。 |
 | `language.checklist.json` | C++ 语言核心：RAII、值/引用/move 语义、模板、迭代器、lambda、异常边界。 | 可以人工维护。 |
 | `stdlib.baseline.json` | 标准库 header + symbol baseline，用来约束 task `covers`。包含 active、compatibility、deprecated、removed、gated 等可用性状态。 | 不逐行人工维护，用 `tools/cpp_stdlib_audit.py refresh-baseline` 重写。 |
-| `stdlib.objects.json` | C++ API object 索引；有 cppreference Doxygen tag XML 时从 dump 导入，没有时由 baseline fallback 生成。 | 不手改，用脚本刷新。 |
+| `stdlib.objects.json` | C++ API object 索引；优先从本机 Dash C++.docset 导入，可显式使用 cppreference Doxygen tag XML，缺失 symbol 由 baseline fallback 补洞。 | 不手改，用脚本刷新。 |
 | `stdlib.checklist.json` | 由 baseline + objects 派生的完整 stdlib 分类骨架。 | 不逐行人工精炼。 |
 | `stdlib.tasks.json` | 唯一的 C++ stdlib 人工任务文件；覆盖普遍需要掌握的标准库 API。 | 可以人工维护，是 C++ stdlib 长期重点。 |
 
-C++ baseline、objects 和 checklist 都是“事实/审计层”，不是学习计划。baseline 按 cppreference 的标准库 header 页组织，当前覆盖 C++23 baseline，并把 C++26 library facilities 标成 `gated`。objects 优先从 cppreference HTML book archive 里的 `cppreference-doxygen-web.tag.xml` 或 `cppreference-doxygen-local.tag.xml` 导入；没有 dump 时用 baseline fallback 保证可审计。常用性筛选只发生在 `stdlib.tasks.json`。
+C++ baseline、objects 和 checklist 都是“事实/审计层”，不是学习计划。baseline 按 cppreference 的标准库 header 页组织，当前覆盖 C++23 baseline，并把 C++26 library facilities 标成 `gated`。objects 默认读取 `~/Library/Application Support/Dash/DocSets/C++/C++.docset`；如果显式提供 cppreference HTML book archive 里的 `cppreference-doxygen-web.tag.xml` 或 `cppreference-doxygen-local.tag.xml`，则使用 tag XML。Dash/tag 都没有覆盖到的 baseline symbol 会标成 `baseline-fallback`，保证 task covers 仍然可审计。常用性筛选只发生在 `stdlib.tasks.json`。
 
 来源关系：
 
@@ -143,8 +144,8 @@ https://en.cppreference.com/w/cpp/symbol_index
         -> tools/cpp_stdlib_audit.py refresh-baseline
         -> checklists/cpp/stdlib.baseline.json
 
-cppreference HTML book archive / Doxygen tag XML
-        -> tools/cpp_stdlib_audit.py refresh-objects --source-dir <archive-root>
+local Dash C++.docset or cppreference HTML book archive / Doxygen tag XML
+        -> tools/cpp_stdlib_audit.py refresh-objects
         -> checklists/cpp/stdlib.objects.json
 
 stdlib.baseline.json + stdlib.objects.json
@@ -197,7 +198,9 @@ python3 tools/cpp_checklist_status.py
 python3 tools/cpp_stdlib_audit.py audit
 python3 tools/cpp_stdlib_audit.py refresh-baseline
 python3 tools/cpp_stdlib_audit.py refresh-objects
+python3 tools/cpp_stdlib_audit.py refresh-objects --dash-docset "/path/to/C++.docset"
 python3 tools/cpp_stdlib_audit.py refresh-objects --source-dir /path/to/cppreference-html-book
+python3 tools/cpp_stdlib_audit.py refresh-objects --no-dash
 python3 tools/cpp_stdlib_audit.py refresh-checklist
 python3 tools/cpp_render_task.py vector
 python3 tools/cpp_render_task.py std::vector::push_back
@@ -222,14 +225,18 @@ python3 tools/python_stdlib_audit.py refresh-objects
 python3 tools/cpp_stdlib_audit.py refresh-baseline
 ```
 
-刷新 C++ objects 可以读取 cppreference offline HTML book archive 中的 Doxygen tag XML；没有 archive 时会生成 baseline fallback objects：
+刷新 C++ objects 默认读取本机 Dash 的 C++.docset；也可以显式读取 cppreference offline HTML book archive 中的 Doxygen tag XML。Dash/tag 缺失的 symbol 会生成 baseline fallback objects：
 
 ```bash
+python3 tools/cpp_stdlib_audit.py refresh-objects
+python3 tools/cpp_stdlib_audit.py refresh-objects --dash-docset "/path/to/C++.docset"
 python3 tools/cpp_stdlib_audit.py refresh-objects --source-dir /path/to/cppreference-html-book
 python3 tools/cpp_stdlib_audit.py refresh-checklist
 ```
 
 正常维护 checklist/task 不需要网络。
+
+`tools/dash_docset.py` 是内部读取库，不是语言入口工具。它支持 Dash 新版 CoreData 索引和旧版 `searchIndex` 表，后续 Node.js、Julia、R、Go、Rust 的 docset 导入会复用这条路径。
 
 当前还没有写 runnable tests，所以不要把 checklist/task 数据变更当成代码测试来处理。默认验证保持轻量：
 
