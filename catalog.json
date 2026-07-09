@@ -1,0 +1,75 @@
+{
+  "project": "polyglot-stdlib-by-example",
+  "currentPhase": "checklist-first",
+  "container": {
+    "defaultName": "ohdev",
+    "defaultRoot": "/home/polyglot"
+  },
+  "languageScope": {
+    "activeChecklist": ["python"],
+    "placeholderChecklists": ["cpp", "nodejs", "julia", "r", "go", "rust"],
+    "outOfScope": "All languages not listed above should stay out of this project."
+  },
+  "languages": [
+    {
+      "id": "python",
+      "name": "Python",
+      "status": "active-checklist",
+      "checklist": "checklists/python",
+      "checklistRunner": "./tools/run.sh checklist python",
+      "taskRenderer": "python3 tools/python_render_task.py <target>",
+      "auditRunner": "python3 tools/python_stdlib_audit.py audit",
+      "futureTestRoot": "languages/python",
+      "futureTestFramework": "pytest",
+      "stdlibAreas": ["builtins", "built-in types", "data model", "text", "collections", "files", "json", "csv", "datetime", "regex"]
+    },
+    {
+      "id": "cpp",
+      "name": "C++",
+      "status": "placeholder-checklist",
+      "checklist": "checklists/cpp",
+      "futureTestRoot": "languages/cpp",
+      "stdlibAreas": ["string", "vector", "map", "set", "algorithm", "optional", "variant", "filesystem", "chrono"]
+    },
+    {
+      "id": "nodejs",
+      "name": "Node.js",
+      "status": "placeholder-checklist",
+      "checklist": "checklists/nodejs",
+      "futureTestRoot": "languages/nodejs",
+      "stdlibAreas": ["assert", "buffer", "events", "fs", "path", "stream", "url", "util", "timers", "node:test"]
+    },
+    {
+      "id": "julia",
+      "name": "Julia",
+      "status": "placeholder-checklist",
+      "checklist": "checklists/julia",
+      "futureTestRoot": "languages/julia",
+      "stdlibAreas": ["Base", "Core", "Dates", "DelimitedFiles", "LinearAlgebra", "Random", "Statistics", "Test"]
+    },
+    {
+      "id": "r",
+      "name": "R",
+      "status": "placeholder-checklist",
+      "checklist": "checklists/r",
+      "futureTestRoot": "languages/r",
+      "stdlibAreas": ["base", "utils", "stats", "graphics", "grDevices", "methods", "datasets"]
+    },
+    {
+      "id": "go",
+      "name": "Go",
+      "status": "placeholder-checklist",
+      "checklist": "checklists/go",
+      "futureTestRoot": "languages/go",
+      "stdlibAreas": ["builtin", "strings", "slices", "maps", "time", "encoding/json", "os", "path/filepath", "context", "testing"]
+    },
+    {
+      "id": "rust",
+      "name": "Rust",
+      "status": "placeholder-checklist",
+      "checklist": "checklists/rust",
+      "futureTestRoot": "languages/rust",
+      "stdlibAreas": ["std::option", "std::result", "std::vec", "std::string", "std::collections", "std::iter", "std::path", "std::fs", "std::time"]
+    }
+  ]
+}

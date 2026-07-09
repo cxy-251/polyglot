@@ -1,0 +1,212 @@
+{
+  "$id": "https://example.invalid/polyglot/python-checklist.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "definitions": {
+    "entry": {
+      "properties": {
+        "baseline_id": {
+          "type": "string"
+        },
+        "doc_url": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "items": {
+          "items": {
+            "$ref": "#/definitions/item"
+          },
+          "type": "array"
+        },
+        "kind": {
+          "type": "string"
+        },
+        "name": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "reason": {
+          "type": "string"
+        },
+        "status": {
+          "$ref": "#/definitions/module_status"
+        },
+        "suggested_test_files": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "title": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "title",
+        "kind",
+        "status",
+        "items"
+      ],
+      "type": "object"
+    },
+    "item": {
+      "properties": {
+        "doc_url": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "kind": {
+          "type": "string"
+        },
+        "protocol_refs": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "reason": {
+          "type": "string"
+        },
+        "requires_python": {
+          "type": "string"
+        },
+        "source": {
+          "type": "string"
+        },
+        "status": {
+          "$ref": "#/definitions/item_status"
+        },
+        "test_files": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "title": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "title",
+        "kind",
+        "source",
+        "status",
+        "test_files"
+      ],
+      "type": "object"
+    },
+    "item_status": {
+      "enum": [
+        "todo",
+        "done",
+        "gated",
+        "omitted"
+      ]
+    },
+    "module_status": {
+      "enum": [
+        "todo",
+        "in-progress",
+        "done",
+        "gated-platform",
+        "gated-terminal",
+        "gated-gui",
+        "gated-network",
+        "subprocess-only",
+        "docs-only",
+        "internal-avoid",
+        "delegated-language"
+      ]
+    },
+    "task": {
+      "properties": {
+        "cases": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "covers": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "doc_url": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "module": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "protocols": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "reason": {
+          "type": "string"
+        },
+        "requires_python": {
+          "type": "string"
+        },
+        "status": {
+          "$ref": "#/definitions/task_status"
+        },
+        "suggested_test_files": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "target": {
+          "type": "string"
+        },
+        "test_files": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "title": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "target",
+        "module",
+        "title",
+        "covers",
+        "cases",
+        "protocols",
+        "status",
+        "test_files"
+      ],
+      "type": "object"
+    },
+    "task_status": {
+      "enum": [
+        "todo",
+        "done",
+        "gated",
+        "omitted"
+      ]
+    }
+  },
+  "title": "Polyglot Python checklist data",
+  "type": "object"
+}

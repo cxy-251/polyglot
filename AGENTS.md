@@ -1,0 +1,101 @@
+# Agent Notes
+
+This project is a checklist-first standard-library example atlas.
+
+## Current Phase
+
+- The current objective is to build auditable language checklists and task data.
+- Python is the active checklist.
+- C++, Node.js, Julia, R, Go, and Rust are placeholder checklist directories for now.
+- `languages/` may be empty until test writing resumes.
+- Keep only the root `README.md`; do not add README files under subdirectories.
+- Do not delete empty directories under `checklists/`.
+
+## Contract
+
+- Checklist/task data is the planning source of truth.
+- Use JSON data sources for Python checklist work, not Markdown checkbox files.
+- Keep task records compact and learning-oriented.
+- Put official documentation URLs in source metadata or task/module sections; do not repeat links unnecessarily.
+- Prefer runnable examples over exhaustive edge-case testing when test writing resumes.
+- Use only standard libraries and runtime-bundled tools.
+- Do not add package-manager dependencies just to write checklist tooling or examples.
+- Route host execution through `./tools/run.sh`, which uses `docker exec ohdev` when outside the container.
+- Put generated binaries, caches, and temporary state under `/tmp/polyglot-*` or the tool default temp location.
+- Project language scope is intentionally limited to Python, C++, Node.js, Julia, R, Go, and Rust.
+
+## Python Data Model
+
+Python checklist data lives in `checklists/python/`:
+
+- `schema.json`: schema and status enums.
+- `language.checklist.json`: Python language core, including builtins, built-in types, data model, magic methods, and protocol dispatch.
+- `stdlib.baseline.json`: machine snapshot from `https://docs.python.org/3/library/index.html`.
+- `stdlib.objects.json`: machine snapshot from `https://docs.python.org/3/objects.inv`.
+- `stdlib.checklist.json`: generated/auditable stdlib classification skeleton.
+- `stdlib.tasks.json`: the single curated human-maintained Python stdlib task file.
+
+Do not treat `stdlib.checklist.json` as the long-term manual editing surface. New stdlib judgment should usually go into `stdlib.tasks.json`. Do not split Python stdlib tasks into multiple files.
+
+## Task First Workflow
+
+1. Find the target in `checklists/<language>/`.
+2. For Python stdlib work, add or refine tasks in the single `stdlib.tasks.json` file.
+3. Use `covers` to link a task to official API object names from `stdlib.objects.json`.
+4. Use `cases` to describe the usage scenarios the future runnable test should teach.
+5. Run the relevant non-pytest validations before marking the cleanup or data change done.
+
+For Python, do not stop at beginner examples. Builtins often dispatch to data-model protocols, so include protocol-level targets such as `__abs__`, `__index__`, `__iter__`, `__format__`, descriptors, attribute hooks, context managers, and async protocols.
+
+## Tools
+
+Language-specific tools should be named with the language prefix:
+
+- `tools/python_checklist_status.py`
+- `tools/python_stdlib_audit.py`
+- `tools/python_render_task.py`
+- `tools/python_api_inventory.py`
+
+Common shell entry points may keep generic names:
+
+- `tools/run.sh`
+- `tools/run-in-container.sh`
+
+Useful validation commands:
+
+```bash
+python3 tools/python_checklist_status.py python
+python3 tools/python_stdlib_audit.py audit
+python3 tools/python_stdlib_audit.py audit --objects heapq pathlib json list dict str
+python3 tools/python_render_task.py heapq --limit 1
+./tools/run.sh checklist python
+```
+
+Do not run full pytest unless the user explicitly asks or test files have intentionally been restored.
+When a coherent checklist/task phase is complete and validations pass, make a local git commit without waiting for an extra prompt.
+
+## ChatGPT App Handoff
+
+The user may ask ChatGPT, not Codex, to generate a single future test file. Keep `chatgpt-sources/python/` self-contained enough for that workflow:
+
+- `project-contract.md`: project rules and pytest conventions for future test-file generation.
+- `task-template.md`: fill-in prompt using `tools/python_render_task.py`.
+- `example-test-file.py`: compact style reference.
+
+Codex should maintain these source files and the runner. ChatGPT can generate individual test files from rendered tasks when test writing resumes.
+
+## Naming
+
+- Language checklist folders live under `checklists/<language-id>/`.
+- Future test folders should live under `languages/<language-id>/`.
+- Python tools use the `python_` prefix.
+- Future test files should be readable before they are clever.
+- Prefer names like `test_json_round_trips_dict` or `test_vector_push_back_and_index`.
+
+## Adding A Language Checklist
+
+1. Keep the language entry in `catalog.json`.
+2. Use `checklists/<language-id>/` for its checklist data.
+3. Do not add subdirectory README files.
+4. Add language-prefixed tools only when there is real checklist logic to run.
+5. If a runtime is missing in `ohdev`, make the runner report that clearly instead of silently skipping it.

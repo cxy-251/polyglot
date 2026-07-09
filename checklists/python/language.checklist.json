@@ -1,0 +1,4483 @@
+{
+  "covered_baseline_ids": [
+    "language:functions",
+    "language:constants",
+    "language:site",
+    "language:stdtypes",
+    "language:stdtypes-truth-value-testing",
+    "language:and",
+    "language:stdtypes-comparisons",
+    "language:int",
+    "language:bool",
+    "language:stdtypes-iterator-types",
+    "language:list",
+    "language:stdtypes-text-and-binary-sequence-type-methods-summary",
+    "language:str",
+    "language:bytes",
+    "language:set",
+    "language:dict",
+    "language:stdtypes-context-manager-types",
+    "language:stdtypes-type-annotation-types-generic-alias-union",
+    "language:stdtypes-other-built-in-types",
+    "language:stdtypes-special-attributes",
+    "language:stdtypes-integer-string-conversion-length-limitation",
+    "language:exceptions",
+    "language:exceptions-exception-context",
+    "language:exceptions-inheriting-from-built-in-exceptions",
+    "language:exceptions-base-classes",
+    "language:exceptions-concrete-exceptions",
+    "language:exceptions-warnings",
+    "language:exceptions-exception-groups",
+    "language:exceptions-exception-hierarchy",
+    "language:threadsafety",
+    "language:threadsafety-thread-safety-levels",
+    "language:threadsafety-thread-safety-for-list-objects",
+    "language:threadsafety-thread-safety-for-dict-objects",
+    "language:threadsafety-thread-safety-for-set-objects",
+    "language:threadsafety-thread-safety-for-bytearray-objects",
+    "language:threadsafety-thread-safety-for-memoryview-objects"
+  ],
+  "entries": [
+    {
+      "doc_url": "https://docs.python.org/3/library/functions.html",
+      "id": "builtins.functions",
+      "items": [
+        {
+          "doc_url": "https://docs.python.org/3/library/functions.html#import__",
+          "id": "__import__",
+          "kind": "function",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "__import__"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/functions.html#abs",
+          "id": "abs",
+          "kind": "function",
+          "protocol_refs": [
+            "__abs__"
+          ],
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "abs"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/functions.html#aiter",
+          "id": "aiter",
+          "kind": "function",
+          "protocol_refs": [
+            "__aiter__"
+          ],
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "aiter"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/functions.html#all",
+          "id": "all",
+          "kind": "function",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "all"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/functions.html#anext",
+          "id": "anext",
+          "kind": "function",
+          "protocol_refs": [
+            "__anext__"
+          ],
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "anext"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/functions.html#any",
+          "id": "any",
+          "kind": "function",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "any"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/functions.html#ascii",
+          "id": "ascii",
+          "kind": "function",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "ascii"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/functions.html#bin",
+          "id": "bin",
+          "kind": "function",
+          "protocol_refs": [
+            "__index__"
+          ],
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "bin"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/functions.html#breakpoint",
+          "id": "breakpoint",
+          "kind": "function",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "breakpoint"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/functions.html#callable",
+          "id": "callable",
+          "kind": "function",
+          "protocol_refs": [
+            "__call__"
+          ],
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "callable"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/functions.html#chr",
+          "id": "chr",
+          "kind": "function",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "chr"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/functions.html#classmethod",
+          "id": "classmethod",
+          "kind": "function",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "classmethod"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/functions.html#compile",
+          "id": "compile",
+          "kind": "function",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "compile"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/functions.html#delattr",
+          "id": "delattr",
+          "kind": "function",
+          "protocol_refs": [
+            "__delattr__"
+          ],
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "delattr"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/functions.html#dir",
+          "id": "dir",
+          "kind": "function",
+          "protocol_refs": [
+            "__dir__"
+          ],
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "dir"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/functions.html#divmod",
+          "id": "divmod",
+          "kind": "function",
+          "protocol_refs": [
+            "__divmod__",
+            "__rdivmod__"
+          ],
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "divmod"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/functions.html#enumerate",
+          "id": "enumerate",
+          "kind": "function",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "enumerate"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/functions.html#eval",
+          "id": "eval",
+          "kind": "function",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "eval"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/functions.html#exec",
+          "id": "exec",
+          "kind": "function",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "exec"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/functions.html#filter",
+          "id": "filter",
+          "kind": "function",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "filter"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/functions.html#format",
+          "id": "format",
+          "kind": "function",
+          "protocol_refs": [
+            "type(value).__format__"
+          ],
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "format"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/functions.html#getattr",
+          "id": "getattr",
+          "kind": "function",
+          "protocol_refs": [
+            "__getattribute__",
+            "__getattr__"
+          ],
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "getattr"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/functions.html#globals",
+          "id": "globals",
+          "kind": "function",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "globals"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/functions.html#hasattr",
+          "id": "hasattr",
+          "kind": "function",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "hasattr"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/functions.html#hash",
+          "id": "hash",
+          "kind": "function",
+          "protocol_refs": [
+            "__hash__"
+          ],
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "hash"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/functions.html#help",
+          "id": "help",
+          "kind": "function",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "help"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/functions.html#hex",
+          "id": "hex",
+          "kind": "function",
+          "protocol_refs": [
+            "__index__"
+          ],
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "hex"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/functions.html#id",
+          "id": "id",
+          "kind": "function",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "id"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/functions.html#input",
+          "id": "input",
+          "kind": "function",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "input"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/functions.html#isinstance",
+          "id": "isinstance",
+          "kind": "function",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "isinstance"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/functions.html#issubclass",
+          "id": "issubclass",
+          "kind": "function",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "issubclass"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/functions.html#iter",
+          "id": "iter",
+          "kind": "function",
+          "protocol_refs": [
+            "__iter__",
+            "__next__",
+            "__getitem__",
+            "sentinel callable form"
+          ],
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "iter"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/functions.html#len",
+          "id": "len",
+          "kind": "function",
+          "protocol_refs": [
+            "__len__"
+          ],
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "len"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/functions.html#locals",
+          "id": "locals",
+          "kind": "function",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "locals"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/functions.html#map",
+          "id": "map",
+          "kind": "function",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "map"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/functions.html#max",
+          "id": "max",
+          "kind": "function",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "max"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/functions.html#min",
+          "id": "min",
+          "kind": "function",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "min"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/functions.html#next",
+          "id": "next",
+          "kind": "function",
+          "protocol_refs": [
+            "__next__"
+          ],
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "next"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/functions.html#oct",
+          "id": "oct",
+          "kind": "function",
+          "protocol_refs": [
+            "__index__"
+          ],
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "oct"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/functions.html#open",
+          "id": "open",
+          "kind": "function",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "open"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/functions.html#ord",
+          "id": "ord",
+          "kind": "function",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "ord"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/functions.html#pow",
+          "id": "pow",
+          "kind": "function",
+          "protocol_refs": [
+            "__pow__",
+            "__rpow__",
+            "__ipow__"
+          ],
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "pow"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/functions.html#print",
+          "id": "print",
+          "kind": "function",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "print"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/functions.html#property.deleter",
+          "id": "property.deleter",
+          "kind": "function",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "property.deleter"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/functions.html#property.getter",
+          "id": "property.getter",
+          "kind": "function",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "property.getter"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/functions.html#property.setter",
+          "id": "property.setter",
+          "kind": "function",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "property.setter"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/functions.html#repr",
+          "id": "repr",
+          "kind": "function",
+          "protocol_refs": [
+            "__repr__"
+          ],
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "repr"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/functions.html#reversed",
+          "id": "reversed",
+          "kind": "function",
+          "protocol_refs": [
+            "__reversed__",
+            "__len__",
+            "__getitem__"
+          ],
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "reversed"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/functions.html#round",
+          "id": "round",
+          "kind": "function",
+          "protocol_refs": [
+            "__round__"
+          ],
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "round"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/functions.html#setattr",
+          "id": "setattr",
+          "kind": "function",
+          "protocol_refs": [
+            "__setattr__"
+          ],
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "setattr"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/functions.html#sorted",
+          "id": "sorted",
+          "kind": "function",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "sorted"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/functions.html#staticmethod",
+          "id": "staticmethod",
+          "kind": "function",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "staticmethod"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/functions.html#sum",
+          "id": "sum",
+          "kind": "function",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "sum"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/functions.html#vars",
+          "id": "vars",
+          "kind": "function",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "vars"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/functions.html#zip",
+          "id": "zip",
+          "kind": "function",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "zip"
+        }
+      ],
+      "kind": "builtin-group",
+      "status": "todo",
+      "suggested_test_files": [
+        "languages/python/builtins/functions_test.py"
+      ],
+      "title": "Built-in functions and their data model protocol hooks"
+    },
+    {
+      "doc_url": "https://docs.python.org/3/library/constants.html",
+      "id": "builtins.constants",
+      "items": [
+        {
+          "doc_url": "https://docs.python.org/3/library/constants.html#Ellipsis",
+          "id": "Ellipsis",
+          "kind": "data",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "Ellipsis"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/constants.html#False",
+          "id": "False",
+          "kind": "data",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "False"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/constants.html#None",
+          "id": "None",
+          "kind": "data",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "None"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/constants.html#NotImplemented",
+          "id": "NotImplemented",
+          "kind": "data",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "NotImplemented"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/constants.html#True",
+          "id": "True",
+          "kind": "data",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "True"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/constants.html#debug__",
+          "id": "__debug__",
+          "kind": "data",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "__debug__"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/constants.html#copyright",
+          "id": "copyright",
+          "kind": "data",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "copyright"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/constants.html#credits",
+          "id": "credits",
+          "kind": "data",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "credits"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/constants.html#exit",
+          "id": "exit",
+          "kind": "data",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "exit"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/constants.html#license",
+          "id": "license",
+          "kind": "data",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "license"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/constants.html#quit",
+          "id": "quit",
+          "kind": "data",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "quit"
+        }
+      ],
+      "kind": "builtin-group",
+      "status": "todo",
+      "suggested_test_files": [
+        "languages/python/builtins/constants_test.py"
+      ],
+      "title": "Built-in constants"
+    },
+    {
+      "doc_url": "https://docs.python.org/3/library/exceptions.html",
+      "id": "builtins.exceptions",
+      "items": [
+        {
+          "doc_url": "https://docs.python.org/3/library/exceptions.html#ArithmeticError",
+          "id": "ArithmeticError",
+          "kind": "exception",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "ArithmeticError"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/exceptions.html#AssertionError",
+          "id": "AssertionError",
+          "kind": "exception",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "AssertionError"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/exceptions.html#AttributeError",
+          "id": "AttributeError",
+          "kind": "exception",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "AttributeError"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/exceptions.html#AttributeError.name",
+          "id": "AttributeError.name",
+          "kind": "attribute",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "AttributeError.name"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/exceptions.html#AttributeError.obj",
+          "id": "AttributeError.obj",
+          "kind": "attribute",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "AttributeError.obj"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/exceptions.html#BaseException",
+          "id": "BaseException",
+          "kind": "exception",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "BaseException"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/exceptions.html#BaseException.__cause__",
+          "id": "BaseException.__cause__",
+          "kind": "attribute",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "BaseException.__cause__"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/exceptions.html#BaseException.__context__",
+          "id": "BaseException.__context__",
+          "kind": "attribute",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "BaseException.__context__"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/exceptions.html#BaseException.__notes__",
+          "id": "BaseException.__notes__",
+          "kind": "attribute",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "BaseException.__notes__"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/exceptions.html#BaseException.__suppress_context__",
+          "id": "BaseException.__suppress_context__",
+          "kind": "attribute",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "BaseException.__suppress_context__"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/exceptions.html#BaseException.__traceback__",
+          "id": "BaseException.__traceback__",
+          "kind": "attribute",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "BaseException.__traceback__"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/exceptions.html#BaseException.add_note",
+          "id": "BaseException.add_note",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "BaseException.add_note"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/exceptions.html#BaseException.args",
+          "id": "BaseException.args",
+          "kind": "attribute",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "BaseException.args"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/exceptions.html#BaseException.with_traceback",
+          "id": "BaseException.with_traceback",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "BaseException.with_traceback"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/exceptions.html#BaseExceptionGroup",
+          "id": "BaseExceptionGroup",
+          "kind": "exception",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "BaseExceptionGroup"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/exceptions.html#BaseExceptionGroup.derive",
+          "id": "BaseExceptionGroup.derive",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "BaseExceptionGroup.derive"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/exceptions.html#BaseExceptionGroup.exceptions",
+          "id": "BaseExceptionGroup.exceptions",
+          "kind": "attribute",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "BaseExceptionGroup.exceptions"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/exceptions.html#BaseExceptionGroup.message",
+          "id": "BaseExceptionGroup.message",
+          "kind": "attribute",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "BaseExceptionGroup.message"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/exceptions.html#BaseExceptionGroup.split",
+          "id": "BaseExceptionGroup.split",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "BaseExceptionGroup.split"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/exceptions.html#BaseExceptionGroup.subgroup",
+          "id": "BaseExceptionGroup.subgroup",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "BaseExceptionGroup.subgroup"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/exceptions.html#BlockingIOError",
+          "id": "BlockingIOError",
+          "kind": "exception",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "BlockingIOError"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/exceptions.html#BlockingIOError.characters_written",
+          "id": "BlockingIOError.characters_written",
+          "kind": "attribute",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "BlockingIOError.characters_written"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/exceptions.html#BrokenPipeError",
+          "id": "BrokenPipeError",
+          "kind": "exception",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "BrokenPipeError"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/exceptions.html#BufferError",
+          "id": "BufferError",
+          "kind": "exception",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "BufferError"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/exceptions.html#BytesWarning",
+          "id": "BytesWarning",
+          "kind": "exception",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "BytesWarning"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/exceptions.html#ChildProcessError",
+          "id": "ChildProcessError",
+          "kind": "exception",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "ChildProcessError"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/exceptions.html#ConnectionAbortedError",
+          "id": "ConnectionAbortedError",
+          "kind": "exception",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "ConnectionAbortedError"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/exceptions.html#ConnectionError",
+          "id": "ConnectionError",
+          "kind": "exception",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "ConnectionError"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/exceptions.html#ConnectionRefusedError",
+          "id": "ConnectionRefusedError",
+          "kind": "exception",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "ConnectionRefusedError"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/exceptions.html#ConnectionResetError",
+          "id": "ConnectionResetError",
+          "kind": "exception",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "ConnectionResetError"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/exceptions.html#DeprecationWarning",
+          "id": "DeprecationWarning",
+          "kind": "exception",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "DeprecationWarning"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/exceptions.html#EOFError",
+          "id": "EOFError",
+          "kind": "exception",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "EOFError"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/exceptions.html#EncodingWarning",
+          "id": "EncodingWarning",
+          "kind": "exception",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "EncodingWarning"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/exceptions.html#EnvironmentError",
+          "id": "EnvironmentError",
+          "kind": "exception",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "EnvironmentError"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/exceptions.html#Exception",
+          "id": "Exception",
+          "kind": "exception",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "Exception"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/exceptions.html#ExceptionGroup",
+          "id": "ExceptionGroup",
+          "kind": "exception",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "ExceptionGroup"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/exceptions.html#FileExistsError",
+          "id": "FileExistsError",
+          "kind": "exception",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "FileExistsError"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/exceptions.html#FileNotFoundError",
+          "id": "FileNotFoundError",
+          "kind": "exception",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "FileNotFoundError"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/exceptions.html#FloatingPointError",
+          "id": "FloatingPointError",
+          "kind": "exception",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "FloatingPointError"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/exceptions.html#FutureWarning",
+          "id": "FutureWarning",
+          "kind": "exception",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "FutureWarning"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/exceptions.html#GeneratorExit",
+          "id": "GeneratorExit",
+          "kind": "exception",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "GeneratorExit"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/exceptions.html#IOError",
+          "id": "IOError",
+          "kind": "exception",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "IOError"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/exceptions.html#ImportError",
+          "id": "ImportError",
+          "kind": "exception",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "ImportError"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/exceptions.html#ImportError.name",
+          "id": "ImportError.name",
+          "kind": "attribute",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "ImportError.name"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/exceptions.html#ImportError.path",
+          "id": "ImportError.path",
+          "kind": "attribute",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "ImportError.path"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/exceptions.html#ImportWarning",
+          "id": "ImportWarning",
+          "kind": "exception",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "ImportWarning"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/exceptions.html#IndentationError",
+          "id": "IndentationError",
+          "kind": "exception",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "IndentationError"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/exceptions.html#IndexError",
+          "id": "IndexError",
+          "kind": "exception",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "IndexError"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/exceptions.html#InterruptedError",
+          "id": "InterruptedError",
+          "kind": "exception",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "InterruptedError"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/exceptions.html#IsADirectoryError",
+          "id": "IsADirectoryError",
+          "kind": "exception",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "IsADirectoryError"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/exceptions.html#KeyError",
+          "id": "KeyError",
+          "kind": "exception",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "KeyError"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/exceptions.html#KeyboardInterrupt",
+          "id": "KeyboardInterrupt",
+          "kind": "exception",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "KeyboardInterrupt"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/exceptions.html#LookupError",
+          "id": "LookupError",
+          "kind": "exception",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "LookupError"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/exceptions.html#MemoryError",
+          "id": "MemoryError",
+          "kind": "exception",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "MemoryError"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/exceptions.html#ModuleNotFoundError",
+          "id": "ModuleNotFoundError",
+          "kind": "exception",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "ModuleNotFoundError"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/exceptions.html#NameError",
+          "id": "NameError",
+          "kind": "exception",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "NameError"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/exceptions.html#NameError.name",
+          "id": "NameError.name",
+          "kind": "attribute",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "NameError.name"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/exceptions.html#NotADirectoryError",
+          "id": "NotADirectoryError",
+          "kind": "exception",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "NotADirectoryError"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/exceptions.html#NotImplementedError",
+          "id": "NotImplementedError",
+          "kind": "exception",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "NotImplementedError"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/exceptions.html#OSError",
+          "id": "OSError",
+          "kind": "exception",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "OSError"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/exceptions.html#OSError.errno",
+          "id": "OSError.errno",
+          "kind": "attribute",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "OSError.errno"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/exceptions.html#OSError.filename",
+          "id": "OSError.filename",
+          "kind": "attribute",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "OSError.filename"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/exceptions.html#OSError.filename2",
+          "id": "OSError.filename2",
+          "kind": "attribute",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "OSError.filename2"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/exceptions.html#OSError.strerror",
+          "id": "OSError.strerror",
+          "kind": "attribute",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "OSError.strerror"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/exceptions.html#OSError.winerror",
+          "id": "OSError.winerror",
+          "kind": "attribute",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "OSError.winerror"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/exceptions.html#OverflowError",
+          "id": "OverflowError",
+          "kind": "exception",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "OverflowError"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/exceptions.html#PendingDeprecationWarning",
+          "id": "PendingDeprecationWarning",
+          "kind": "exception",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "PendingDeprecationWarning"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/exceptions.html#PermissionError",
+          "id": "PermissionError",
+          "kind": "exception",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "PermissionError"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/exceptions.html#ProcessLookupError",
+          "id": "ProcessLookupError",
+          "kind": "exception",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "ProcessLookupError"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/exceptions.html#PythonFinalizationError",
+          "id": "PythonFinalizationError",
+          "kind": "exception",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "PythonFinalizationError"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/exceptions.html#RecursionError",
+          "id": "RecursionError",
+          "kind": "exception",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "RecursionError"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/exceptions.html#ReferenceError",
+          "id": "ReferenceError",
+          "kind": "exception",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "ReferenceError"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/exceptions.html#ResourceWarning",
+          "id": "ResourceWarning",
+          "kind": "exception",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "ResourceWarning"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/exceptions.html#RuntimeError",
+          "id": "RuntimeError",
+          "kind": "exception",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "RuntimeError"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/exceptions.html#RuntimeWarning",
+          "id": "RuntimeWarning",
+          "kind": "exception",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "RuntimeWarning"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/exceptions.html#StopAsyncIteration",
+          "id": "StopAsyncIteration",
+          "kind": "exception",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "StopAsyncIteration"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/exceptions.html#StopIteration",
+          "id": "StopIteration",
+          "kind": "exception",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "StopIteration"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/exceptions.html#StopIteration.value",
+          "id": "StopIteration.value",
+          "kind": "attribute",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "StopIteration.value"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/exceptions.html#SyntaxError",
+          "id": "SyntaxError",
+          "kind": "exception",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "SyntaxError"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/exceptions.html#SyntaxError.end_lineno",
+          "id": "SyntaxError.end_lineno",
+          "kind": "attribute",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "SyntaxError.end_lineno"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/exceptions.html#SyntaxError.end_offset",
+          "id": "SyntaxError.end_offset",
+          "kind": "attribute",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "SyntaxError.end_offset"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/exceptions.html#SyntaxError.filename",
+          "id": "SyntaxError.filename",
+          "kind": "attribute",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "SyntaxError.filename"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/exceptions.html#SyntaxError.lineno",
+          "id": "SyntaxError.lineno",
+          "kind": "attribute",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "SyntaxError.lineno"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/exceptions.html#SyntaxError.offset",
+          "id": "SyntaxError.offset",
+          "kind": "attribute",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "SyntaxError.offset"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/exceptions.html#SyntaxError.text",
+          "id": "SyntaxError.text",
+          "kind": "attribute",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "SyntaxError.text"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/exceptions.html#SyntaxWarning",
+          "id": "SyntaxWarning",
+          "kind": "exception",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "SyntaxWarning"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/exceptions.html#SystemError",
+          "id": "SystemError",
+          "kind": "exception",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "SystemError"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/exceptions.html#SystemExit",
+          "id": "SystemExit",
+          "kind": "exception",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "SystemExit"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/exceptions.html#SystemExit.code",
+          "id": "SystemExit.code",
+          "kind": "attribute",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "SystemExit.code"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/exceptions.html#TabError",
+          "id": "TabError",
+          "kind": "exception",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "TabError"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/exceptions.html#TimeoutError",
+          "id": "TimeoutError",
+          "kind": "exception",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "TimeoutError"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/exceptions.html#TypeError",
+          "id": "TypeError",
+          "kind": "exception",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "TypeError"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/exceptions.html#UnboundLocalError",
+          "id": "UnboundLocalError",
+          "kind": "exception",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "UnboundLocalError"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/exceptions.html#UnicodeDecodeError",
+          "id": "UnicodeDecodeError",
+          "kind": "exception",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "UnicodeDecodeError"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/exceptions.html#UnicodeEncodeError",
+          "id": "UnicodeEncodeError",
+          "kind": "exception",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "UnicodeEncodeError"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/exceptions.html#UnicodeError",
+          "id": "UnicodeError",
+          "kind": "exception",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "UnicodeError"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/exceptions.html#UnicodeError.encoding",
+          "id": "UnicodeError.encoding",
+          "kind": "attribute",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "UnicodeError.encoding"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/exceptions.html#UnicodeError.end",
+          "id": "UnicodeError.end",
+          "kind": "attribute",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "UnicodeError.end"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/exceptions.html#UnicodeError.object",
+          "id": "UnicodeError.object",
+          "kind": "attribute",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "UnicodeError.object"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/exceptions.html#UnicodeError.reason",
+          "id": "UnicodeError.reason",
+          "kind": "attribute",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "UnicodeError.reason"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/exceptions.html#UnicodeError.start",
+          "id": "UnicodeError.start",
+          "kind": "attribute",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "UnicodeError.start"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/exceptions.html#UnicodeTranslateError",
+          "id": "UnicodeTranslateError",
+          "kind": "exception",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "UnicodeTranslateError"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/exceptions.html#UnicodeWarning",
+          "id": "UnicodeWarning",
+          "kind": "exception",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "UnicodeWarning"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/exceptions.html#UserWarning",
+          "id": "UserWarning",
+          "kind": "exception",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "UserWarning"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/exceptions.html#ValueError",
+          "id": "ValueError",
+          "kind": "exception",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "ValueError"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/exceptions.html#Warning",
+          "id": "Warning",
+          "kind": "exception",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "Warning"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/exceptions.html#WindowsError",
+          "id": "WindowsError",
+          "kind": "exception",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "WindowsError"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/exceptions.html#ZeroDivisionError",
+          "id": "ZeroDivisionError",
+          "kind": "exception",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "ZeroDivisionError"
+        }
+      ],
+      "kind": "builtin-group",
+      "status": "todo",
+      "suggested_test_files": [
+        "languages/python/builtins/exceptions_test.py"
+      ],
+      "title": "Built-in exceptions"
+    },
+    {
+      "doc_url": "https://docs.python.org/3/library/stdtypes.html",
+      "id": "types.shared",
+      "items": [
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#container.__iter__",
+          "id": "container.__iter__",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "container.__iter__"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#contextmanager.__enter__",
+          "id": "contextmanager.__enter__",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "contextmanager.__enter__"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#contextmanager.__exit__",
+          "id": "contextmanager.__exit__",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "contextmanager.__exit__"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#definition.__doc__",
+          "id": "definition.__doc__",
+          "kind": "attribute",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "definition.__doc__"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#definition.__module__",
+          "id": "definition.__module__",
+          "kind": "attribute",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "definition.__module__"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#definition.__name__",
+          "id": "definition.__name__",
+          "kind": "attribute",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "definition.__name__"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#definition.__qualname__",
+          "id": "definition.__qualname__",
+          "kind": "attribute",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "definition.__qualname__"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#definition.__type_params__",
+          "id": "definition.__type_params__",
+          "kind": "attribute",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "definition.__type_params__"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#genericalias.__args__",
+          "id": "genericalias.__args__",
+          "kind": "attribute",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "genericalias.__args__"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#genericalias.__origin__",
+          "id": "genericalias.__origin__",
+          "kind": "attribute",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "genericalias.__origin__"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#genericalias.__parameters__",
+          "id": "genericalias.__parameters__",
+          "kind": "attribute",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "genericalias.__parameters__"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#genericalias.__unpacked__",
+          "id": "genericalias.__unpacked__",
+          "kind": "attribute",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "genericalias.__unpacked__"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#sequence.append",
+          "id": "sequence.append",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "sequence.append"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#sequence.clear",
+          "id": "sequence.clear",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "sequence.clear"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#sequence.copy",
+          "id": "sequence.copy",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "sequence.copy"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#sequence.count",
+          "id": "sequence.count",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "sequence.count"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#sequence.extend",
+          "id": "sequence.extend",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "sequence.extend"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#sequence.index",
+          "id": "sequence.index",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "sequence.index"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#sequence.insert",
+          "id": "sequence.insert",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "sequence.insert"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#sequence.pop",
+          "id": "sequence.pop",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "sequence.pop"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#sequence.remove",
+          "id": "sequence.remove",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "sequence.remove"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#sequence.reverse",
+          "id": "sequence.reverse",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "sequence.reverse"
+        }
+      ],
+      "kind": "builtin-type",
+      "status": "todo",
+      "suggested_test_files": [
+        "languages/python/types/shared_protocols_test.py"
+      ],
+      "title": "Shared built-in type operations and protocol sections"
+    },
+    {
+      "doc_url": "https://docs.python.org/3/library/stdtypes.html",
+      "id": "types.object",
+      "items": [
+        {
+          "doc_url": "https://docs.python.org/3/library/functions.html#object",
+          "id": "object",
+          "kind": "class",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "object"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/copy.html#object.__copy__",
+          "id": "object.__copy__",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "object.__copy__"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/copy.html#object.__deepcopy__",
+          "id": "object.__deepcopy__",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "object.__deepcopy__"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/pickle.html#object.__getnewargs__",
+          "id": "object.__getnewargs__",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "object.__getnewargs__"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/pickle.html#object.__getnewargs_ex__",
+          "id": "object.__getnewargs_ex__",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "object.__getnewargs_ex__"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/pickle.html#object.__getstate__",
+          "id": "object.__getstate__",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "object.__getstate__"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/pickle.html#object.__reduce__",
+          "id": "object.__reduce__",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "object.__reduce__"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/pickle.html#object.__reduce_ex__",
+          "id": "object.__reduce_ex__",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "object.__reduce_ex__"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/copy.html#object.__replace__",
+          "id": "object.__replace__",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "object.__replace__"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/pickle.html#object.__setstate__",
+          "id": "object.__setstate__",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "object.__setstate__"
+        }
+      ],
+      "kind": "builtin-type",
+      "status": "todo",
+      "suggested_test_files": [
+        "languages/python/types/object_test.py"
+      ],
+      "title": "`object` built-in type"
+    },
+    {
+      "doc_url": "https://docs.python.org/3/library/stdtypes.html",
+      "id": "types.bool",
+      "items": [
+        {
+          "doc_url": "https://docs.python.org/3/library/functions.html#bool",
+          "id": "bool",
+          "kind": "class",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "bool"
+        }
+      ],
+      "kind": "builtin-type",
+      "status": "todo",
+      "suggested_test_files": [
+        "languages/python/types/bool_test.py"
+      ],
+      "title": "`bool` built-in type"
+    },
+    {
+      "doc_url": "https://docs.python.org/3/library/stdtypes.html",
+      "id": "types.int",
+      "items": [
+        {
+          "doc_url": "https://docs.python.org/3/library/functions.html#int",
+          "id": "int",
+          "kind": "class",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "int"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#int.as_integer_ratio",
+          "id": "int.as_integer_ratio",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "int.as_integer_ratio"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#int.bit_count",
+          "id": "int.bit_count",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "int.bit_count"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#int.bit_length",
+          "id": "int.bit_length",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "int.bit_length"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#int.from_bytes",
+          "id": "int.from_bytes",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "int.from_bytes"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#int.is_integer",
+          "id": "int.is_integer",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "int.is_integer"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#int.to_bytes",
+          "id": "int.to_bytes",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "int.to_bytes"
+        }
+      ],
+      "kind": "builtin-type",
+      "status": "todo",
+      "suggested_test_files": [
+        "languages/python/types/int_test.py"
+      ],
+      "title": "`int` built-in type"
+    },
+    {
+      "doc_url": "https://docs.python.org/3/library/stdtypes.html",
+      "id": "types.float",
+      "items": [
+        {
+          "doc_url": "https://docs.python.org/3/library/functions.html#float",
+          "id": "float",
+          "kind": "class",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "float"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#float.as_integer_ratio",
+          "id": "float.as_integer_ratio",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "float.as_integer_ratio"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#float.from_number",
+          "id": "float.from_number",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "float.from_number"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#float.fromhex",
+          "id": "float.fromhex",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "float.fromhex"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#float.hex",
+          "id": "float.hex",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "float.hex"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#float.is_integer",
+          "id": "float.is_integer",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "float.is_integer"
+        }
+      ],
+      "kind": "builtin-type",
+      "status": "todo",
+      "suggested_test_files": [
+        "languages/python/types/float_test.py"
+      ],
+      "title": "`float` built-in type"
+    },
+    {
+      "doc_url": "https://docs.python.org/3/library/stdtypes.html",
+      "id": "types.complex",
+      "items": [
+        {
+          "doc_url": "https://docs.python.org/3/library/functions.html#complex",
+          "id": "complex",
+          "kind": "class",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "complex"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#complex.from_number",
+          "id": "complex.from_number",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "complex.from_number"
+        }
+      ],
+      "kind": "builtin-type",
+      "status": "todo",
+      "suggested_test_files": [
+        "languages/python/types/complex_test.py"
+      ],
+      "title": "`complex` built-in type"
+    },
+    {
+      "doc_url": "https://docs.python.org/3/library/stdtypes.html",
+      "id": "types.list",
+      "items": [
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#list",
+          "id": "list",
+          "kind": "class",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "list"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#list.append",
+          "id": "list.append",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "list.append"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#list.clear",
+          "id": "list.clear",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "list.clear"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#list.copy",
+          "id": "list.copy",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "list.copy"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#list.count",
+          "id": "list.count",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "list.count"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#list.extend",
+          "id": "list.extend",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "list.extend"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#list.index",
+          "id": "list.index",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "list.index"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#list.insert",
+          "id": "list.insert",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "list.insert"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#list.pop",
+          "id": "list.pop",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "list.pop"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#list.remove",
+          "id": "list.remove",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "list.remove"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#list.reverse",
+          "id": "list.reverse",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "list.reverse"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#list.sort",
+          "id": "list.sort",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "list.sort"
+        }
+      ],
+      "kind": "builtin-type",
+      "status": "todo",
+      "suggested_test_files": [
+        "languages/python/types/list_test.py"
+      ],
+      "title": "`list` built-in type"
+    },
+    {
+      "doc_url": "https://docs.python.org/3/library/stdtypes.html",
+      "id": "types.tuple",
+      "items": [
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#tuple",
+          "id": "tuple",
+          "kind": "class",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "tuple"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#tuple.count",
+          "id": "tuple.count",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "tuple.count"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#tuple.index",
+          "id": "tuple.index",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "tuple.index"
+        }
+      ],
+      "kind": "builtin-type",
+      "status": "todo",
+      "suggested_test_files": [
+        "languages/python/types/tuple_test.py"
+      ],
+      "title": "`tuple` built-in type"
+    },
+    {
+      "doc_url": "https://docs.python.org/3/library/stdtypes.html",
+      "id": "types.range",
+      "items": [
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#range",
+          "id": "range",
+          "kind": "class",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "range"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#range.count",
+          "id": "range.count",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "range.count"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#range.index",
+          "id": "range.index",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "range.index"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#range.start",
+          "id": "range.start",
+          "kind": "attribute",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "range.start"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#range.step",
+          "id": "range.step",
+          "kind": "attribute",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "range.step"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#range.stop",
+          "id": "range.stop",
+          "kind": "attribute",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "range.stop"
+        }
+      ],
+      "kind": "builtin-type",
+      "status": "todo",
+      "suggested_test_files": [
+        "languages/python/types/range_test.py"
+      ],
+      "title": "`range` built-in type"
+    },
+    {
+      "doc_url": "https://docs.python.org/3/library/stdtypes.html",
+      "id": "types.str",
+      "items": [
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#str",
+          "id": "str",
+          "kind": "class",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "str"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#str.capitalize",
+          "id": "str.capitalize",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "str.capitalize"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#str.casefold",
+          "id": "str.casefold",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "str.casefold"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#str.center",
+          "id": "str.center",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "str.center"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#str.count",
+          "id": "str.count",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "str.count"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#str.encode",
+          "id": "str.encode",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "str.encode"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#str.endswith",
+          "id": "str.endswith",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "str.endswith"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#str.expandtabs",
+          "id": "str.expandtabs",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "str.expandtabs"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#str.find",
+          "id": "str.find",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "str.find"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#str.format",
+          "id": "str.format",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "str.format"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#str.format_map",
+          "id": "str.format_map",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "str.format_map"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#str.index",
+          "id": "str.index",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "str.index"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#str.isalnum",
+          "id": "str.isalnum",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "str.isalnum"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#str.isalpha",
+          "id": "str.isalpha",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "str.isalpha"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#str.isascii",
+          "id": "str.isascii",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "str.isascii"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#str.isdecimal",
+          "id": "str.isdecimal",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "str.isdecimal"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#str.isdigit",
+          "id": "str.isdigit",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "str.isdigit"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#str.isidentifier",
+          "id": "str.isidentifier",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "str.isidentifier"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#str.islower",
+          "id": "str.islower",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "str.islower"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#str.isnumeric",
+          "id": "str.isnumeric",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "str.isnumeric"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#str.isprintable",
+          "id": "str.isprintable",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "str.isprintable"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#str.isspace",
+          "id": "str.isspace",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "str.isspace"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#str.istitle",
+          "id": "str.istitle",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "str.istitle"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#str.isupper",
+          "id": "str.isupper",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "str.isupper"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#str.join",
+          "id": "str.join",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "str.join"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#str.ljust",
+          "id": "str.ljust",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "str.ljust"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#str.lower",
+          "id": "str.lower",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "str.lower"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#str.lstrip",
+          "id": "str.lstrip",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "str.lstrip"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#str.maketrans",
+          "id": "str.maketrans",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "str.maketrans"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#str.partition",
+          "id": "str.partition",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "str.partition"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#str.removeprefix",
+          "id": "str.removeprefix",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "str.removeprefix"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#str.removesuffix",
+          "id": "str.removesuffix",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "str.removesuffix"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#str.replace",
+          "id": "str.replace",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "str.replace"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#str.rfind",
+          "id": "str.rfind",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "str.rfind"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#str.rindex",
+          "id": "str.rindex",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "str.rindex"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#str.rjust",
+          "id": "str.rjust",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "str.rjust"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#str.rpartition",
+          "id": "str.rpartition",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "str.rpartition"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#str.rsplit",
+          "id": "str.rsplit",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "str.rsplit"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#str.rstrip",
+          "id": "str.rstrip",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "str.rstrip"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#str.split",
+          "id": "str.split",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "str.split"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#str.splitlines",
+          "id": "str.splitlines",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "str.splitlines"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#str.startswith",
+          "id": "str.startswith",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "str.startswith"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#str.strip",
+          "id": "str.strip",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "str.strip"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#str.swapcase",
+          "id": "str.swapcase",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "str.swapcase"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#str.title",
+          "id": "str.title",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "str.title"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#str.translate",
+          "id": "str.translate",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "str.translate"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#str.upper",
+          "id": "str.upper",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "str.upper"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#str.zfill",
+          "id": "str.zfill",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "str.zfill"
+        }
+      ],
+      "kind": "builtin-type",
+      "status": "todo",
+      "suggested_test_files": [
+        "languages/python/types/str_test.py"
+      ],
+      "title": "`str` built-in type"
+    },
+    {
+      "doc_url": "https://docs.python.org/3/library/stdtypes.html",
+      "id": "types.bytes",
+      "items": [
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#bytes",
+          "id": "bytes",
+          "kind": "class",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "bytes"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#bytes.capitalize",
+          "id": "bytes.capitalize",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "bytes.capitalize"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#bytes.center",
+          "id": "bytes.center",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "bytes.center"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#bytes.count",
+          "id": "bytes.count",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "bytes.count"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#bytes.decode",
+          "id": "bytes.decode",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "bytes.decode"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#bytes.endswith",
+          "id": "bytes.endswith",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "bytes.endswith"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#bytes.expandtabs",
+          "id": "bytes.expandtabs",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "bytes.expandtabs"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#bytes.find",
+          "id": "bytes.find",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "bytes.find"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#bytes.fromhex",
+          "id": "bytes.fromhex",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "bytes.fromhex"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#bytes.hex",
+          "id": "bytes.hex",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "bytes.hex"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#bytes.index",
+          "id": "bytes.index",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "bytes.index"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#bytes.isalnum",
+          "id": "bytes.isalnum",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "bytes.isalnum"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#bytes.isalpha",
+          "id": "bytes.isalpha",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "bytes.isalpha"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#bytes.isascii",
+          "id": "bytes.isascii",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "bytes.isascii"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#bytes.isdigit",
+          "id": "bytes.isdigit",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "bytes.isdigit"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#bytes.islower",
+          "id": "bytes.islower",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "bytes.islower"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#bytes.isspace",
+          "id": "bytes.isspace",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "bytes.isspace"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#bytes.istitle",
+          "id": "bytes.istitle",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "bytes.istitle"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#bytes.isupper",
+          "id": "bytes.isupper",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "bytes.isupper"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#bytes.join",
+          "id": "bytes.join",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "bytes.join"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#bytes.ljust",
+          "id": "bytes.ljust",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "bytes.ljust"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#bytes.lower",
+          "id": "bytes.lower",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "bytes.lower"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#bytes.lstrip",
+          "id": "bytes.lstrip",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "bytes.lstrip"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#bytes.maketrans",
+          "id": "bytes.maketrans",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "bytes.maketrans"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#bytes.partition",
+          "id": "bytes.partition",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "bytes.partition"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#bytes.removeprefix",
+          "id": "bytes.removeprefix",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "bytes.removeprefix"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#bytes.removesuffix",
+          "id": "bytes.removesuffix",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "bytes.removesuffix"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#bytes.replace",
+          "id": "bytes.replace",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "bytes.replace"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#bytes.rfind",
+          "id": "bytes.rfind",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "bytes.rfind"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#bytes.rindex",
+          "id": "bytes.rindex",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "bytes.rindex"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#bytes.rjust",
+          "id": "bytes.rjust",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "bytes.rjust"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#bytes.rpartition",
+          "id": "bytes.rpartition",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "bytes.rpartition"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#bytes.rsplit",
+          "id": "bytes.rsplit",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "bytes.rsplit"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#bytes.rstrip",
+          "id": "bytes.rstrip",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "bytes.rstrip"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#bytes.split",
+          "id": "bytes.split",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "bytes.split"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#bytes.splitlines",
+          "id": "bytes.splitlines",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "bytes.splitlines"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#bytes.startswith",
+          "id": "bytes.startswith",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "bytes.startswith"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#bytes.strip",
+          "id": "bytes.strip",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "bytes.strip"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#bytes.swapcase",
+          "id": "bytes.swapcase",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "bytes.swapcase"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#bytes.title",
+          "id": "bytes.title",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "bytes.title"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#bytes.translate",
+          "id": "bytes.translate",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "bytes.translate"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#bytes.upper",
+          "id": "bytes.upper",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "bytes.upper"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#bytes.zfill",
+          "id": "bytes.zfill",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "bytes.zfill"
+        }
+      ],
+      "kind": "builtin-type",
+      "status": "todo",
+      "suggested_test_files": [
+        "languages/python/types/bytes_test.py"
+      ],
+      "title": "`bytes` built-in type"
+    },
+    {
+      "doc_url": "https://docs.python.org/3/library/stdtypes.html",
+      "id": "types.bytearray",
+      "items": [
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#bytearray",
+          "id": "bytearray",
+          "kind": "class",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "bytearray"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#bytearray.append",
+          "id": "bytearray.append",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "bytearray.append"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#bytearray.capitalize",
+          "id": "bytearray.capitalize",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "bytearray.capitalize"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#bytearray.center",
+          "id": "bytearray.center",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "bytearray.center"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#bytearray.clear",
+          "id": "bytearray.clear",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "bytearray.clear"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#bytearray.copy",
+          "id": "bytearray.copy",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "bytearray.copy"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#bytearray.count",
+          "id": "bytearray.count",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "bytearray.count"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#bytearray.decode",
+          "id": "bytearray.decode",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "bytearray.decode"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#bytearray.endswith",
+          "id": "bytearray.endswith",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "bytearray.endswith"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#bytearray.expandtabs",
+          "id": "bytearray.expandtabs",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "bytearray.expandtabs"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#bytearray.extend",
+          "id": "bytearray.extend",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "bytearray.extend"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#bytearray.find",
+          "id": "bytearray.find",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "bytearray.find"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#bytearray.fromhex",
+          "id": "bytearray.fromhex",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "bytearray.fromhex"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#bytearray.hex",
+          "id": "bytearray.hex",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "bytearray.hex"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#bytearray.index",
+          "id": "bytearray.index",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "bytearray.index"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#bytearray.insert",
+          "id": "bytearray.insert",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "bytearray.insert"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#bytearray.isalnum",
+          "id": "bytearray.isalnum",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "bytearray.isalnum"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#bytearray.isalpha",
+          "id": "bytearray.isalpha",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "bytearray.isalpha"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#bytearray.isascii",
+          "id": "bytearray.isascii",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "bytearray.isascii"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#bytearray.isdigit",
+          "id": "bytearray.isdigit",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "bytearray.isdigit"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#bytearray.islower",
+          "id": "bytearray.islower",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "bytearray.islower"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#bytearray.isspace",
+          "id": "bytearray.isspace",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "bytearray.isspace"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#bytearray.istitle",
+          "id": "bytearray.istitle",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "bytearray.istitle"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#bytearray.isupper",
+          "id": "bytearray.isupper",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "bytearray.isupper"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#bytearray.join",
+          "id": "bytearray.join",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "bytearray.join"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#bytearray.ljust",
+          "id": "bytearray.ljust",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "bytearray.ljust"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#bytearray.lower",
+          "id": "bytearray.lower",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "bytearray.lower"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#bytearray.lstrip",
+          "id": "bytearray.lstrip",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "bytearray.lstrip"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#bytearray.maketrans",
+          "id": "bytearray.maketrans",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "bytearray.maketrans"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#bytearray.partition",
+          "id": "bytearray.partition",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "bytearray.partition"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#bytearray.pop",
+          "id": "bytearray.pop",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "bytearray.pop"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#bytearray.remove",
+          "id": "bytearray.remove",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "bytearray.remove"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#bytearray.removeprefix",
+          "id": "bytearray.removeprefix",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "bytearray.removeprefix"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#bytearray.removesuffix",
+          "id": "bytearray.removesuffix",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "bytearray.removesuffix"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#bytearray.replace",
+          "id": "bytearray.replace",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "bytearray.replace"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#bytearray.resize",
+          "id": "bytearray.resize",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "bytearray.resize"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#bytearray.reverse",
+          "id": "bytearray.reverse",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "bytearray.reverse"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#bytearray.rfind",
+          "id": "bytearray.rfind",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "bytearray.rfind"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#bytearray.rindex",
+          "id": "bytearray.rindex",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "bytearray.rindex"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#bytearray.rjust",
+          "id": "bytearray.rjust",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "bytearray.rjust"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#bytearray.rpartition",
+          "id": "bytearray.rpartition",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "bytearray.rpartition"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#bytearray.rsplit",
+          "id": "bytearray.rsplit",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "bytearray.rsplit"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#bytearray.rstrip",
+          "id": "bytearray.rstrip",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "bytearray.rstrip"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#bytearray.split",
+          "id": "bytearray.split",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "bytearray.split"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#bytearray.splitlines",
+          "id": "bytearray.splitlines",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "bytearray.splitlines"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#bytearray.startswith",
+          "id": "bytearray.startswith",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "bytearray.startswith"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#bytearray.strip",
+          "id": "bytearray.strip",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "bytearray.strip"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#bytearray.swapcase",
+          "id": "bytearray.swapcase",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "bytearray.swapcase"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#bytearray.title",
+          "id": "bytearray.title",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "bytearray.title"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#bytearray.translate",
+          "id": "bytearray.translate",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "bytearray.translate"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#bytearray.upper",
+          "id": "bytearray.upper",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "bytearray.upper"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#bytearray.zfill",
+          "id": "bytearray.zfill",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "bytearray.zfill"
+        }
+      ],
+      "kind": "builtin-type",
+      "status": "todo",
+      "suggested_test_files": [
+        "languages/python/types/bytearray_test.py"
+      ],
+      "title": "`bytearray` built-in type"
+    },
+    {
+      "doc_url": "https://docs.python.org/3/library/stdtypes.html",
+      "id": "types.memoryview",
+      "items": [
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#memoryview",
+          "id": "memoryview",
+          "kind": "class",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "memoryview"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#memoryview.__eq__",
+          "id": "memoryview.__eq__",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "memoryview.__eq__"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#memoryview.c_contiguous",
+          "id": "memoryview.c_contiguous",
+          "kind": "attribute",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "memoryview.c_contiguous"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#memoryview.cast",
+          "id": "memoryview.cast",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "memoryview.cast"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#memoryview.contiguous",
+          "id": "memoryview.contiguous",
+          "kind": "attribute",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "memoryview.contiguous"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#memoryview.count",
+          "id": "memoryview.count",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "memoryview.count"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#memoryview.f_contiguous",
+          "id": "memoryview.f_contiguous",
+          "kind": "attribute",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "memoryview.f_contiguous"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#memoryview.format",
+          "id": "memoryview.format",
+          "kind": "attribute",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "memoryview.format"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#memoryview.hex",
+          "id": "memoryview.hex",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "memoryview.hex"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#memoryview.index",
+          "id": "memoryview.index",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "memoryview.index"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#memoryview.itemsize",
+          "id": "memoryview.itemsize",
+          "kind": "attribute",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "memoryview.itemsize"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#memoryview.nbytes",
+          "id": "memoryview.nbytes",
+          "kind": "attribute",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "memoryview.nbytes"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#memoryview.ndim",
+          "id": "memoryview.ndim",
+          "kind": "attribute",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "memoryview.ndim"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#memoryview.obj",
+          "id": "memoryview.obj",
+          "kind": "attribute",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "memoryview.obj"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#memoryview.readonly",
+          "id": "memoryview.readonly",
+          "kind": "attribute",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "memoryview.readonly"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#memoryview.release",
+          "id": "memoryview.release",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "memoryview.release"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#memoryview.shape",
+          "id": "memoryview.shape",
+          "kind": "attribute",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "memoryview.shape"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#memoryview.strides",
+          "id": "memoryview.strides",
+          "kind": "attribute",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "memoryview.strides"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#memoryview.suboffsets",
+          "id": "memoryview.suboffsets",
+          "kind": "attribute",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "memoryview.suboffsets"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#memoryview.tobytes",
+          "id": "memoryview.tobytes",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "memoryview.tobytes"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#memoryview.tolist",
+          "id": "memoryview.tolist",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "memoryview.tolist"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#memoryview.toreadonly",
+          "id": "memoryview.toreadonly",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "memoryview.toreadonly"
+        }
+      ],
+      "kind": "builtin-type",
+      "status": "todo",
+      "suggested_test_files": [
+        "languages/python/types/memoryview_test.py"
+      ],
+      "title": "`memoryview` built-in type"
+    },
+    {
+      "doc_url": "https://docs.python.org/3/library/stdtypes.html",
+      "id": "types.set",
+      "items": [
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#set",
+          "id": "set",
+          "kind": "class",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "set"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#set.add",
+          "id": "set.add",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "set.add"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#set.clear",
+          "id": "set.clear",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "set.clear"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#set.copy",
+          "id": "set.copy",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "set.copy"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#set.difference",
+          "id": "set.difference",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "set.difference"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#set.difference_update",
+          "id": "set.difference_update",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "set.difference_update"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#set.discard",
+          "id": "set.discard",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "set.discard"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#set.intersection",
+          "id": "set.intersection",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "set.intersection"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#set.intersection_update",
+          "id": "set.intersection_update",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "set.intersection_update"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#set.isdisjoint",
+          "id": "set.isdisjoint",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "set.isdisjoint"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#set.issubset",
+          "id": "set.issubset",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "set.issubset"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#set.issuperset",
+          "id": "set.issuperset",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "set.issuperset"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#set.pop",
+          "id": "set.pop",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "set.pop"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#set.remove",
+          "id": "set.remove",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "set.remove"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#set.symmetric_difference",
+          "id": "set.symmetric_difference",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "set.symmetric_difference"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#set.symmetric_difference_update",
+          "id": "set.symmetric_difference_update",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "set.symmetric_difference_update"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#set.union",
+          "id": "set.union",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "set.union"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#set.update",
+          "id": "set.update",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "set.update"
+        }
+      ],
+      "kind": "builtin-type",
+      "status": "todo",
+      "suggested_test_files": [
+        "languages/python/types/set_test.py"
+      ],
+      "title": "`set` built-in type"
+    },
+    {
+      "doc_url": "https://docs.python.org/3/library/stdtypes.html",
+      "id": "types.frozenset",
+      "items": [
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#frozenset",
+          "id": "frozenset",
+          "kind": "class",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "frozenset"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#frozenset.copy",
+          "id": "frozenset.copy",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "frozenset.copy"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#frozenset.difference",
+          "id": "frozenset.difference",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "frozenset.difference"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#frozenset.intersection",
+          "id": "frozenset.intersection",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "frozenset.intersection"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#frozenset.isdisjoint",
+          "id": "frozenset.isdisjoint",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "frozenset.isdisjoint"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#frozenset.issubset",
+          "id": "frozenset.issubset",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "frozenset.issubset"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#frozenset.issuperset",
+          "id": "frozenset.issuperset",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "frozenset.issuperset"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#frozenset.symmetric_difference",
+          "id": "frozenset.symmetric_difference",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "frozenset.symmetric_difference"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#frozenset.union",
+          "id": "frozenset.union",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "frozenset.union"
+        }
+      ],
+      "kind": "builtin-type",
+      "status": "todo",
+      "suggested_test_files": [
+        "languages/python/types/frozenset_test.py"
+      ],
+      "title": "`frozenset` built-in type"
+    },
+    {
+      "doc_url": "https://docs.python.org/3/library/stdtypes.html",
+      "id": "types.dict",
+      "items": [
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#dict",
+          "id": "dict",
+          "kind": "class",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "dict"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#dict.clear",
+          "id": "dict.clear",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "dict.clear"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#dict.copy",
+          "id": "dict.copy",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "dict.copy"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#dict.fromkeys",
+          "id": "dict.fromkeys",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "dict.fromkeys"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#dict.get",
+          "id": "dict.get",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "dict.get"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#dict.items",
+          "id": "dict.items",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "dict.items"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#dict.keys",
+          "id": "dict.keys",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "dict.keys"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#dict.pop",
+          "id": "dict.pop",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "dict.pop"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#dict.popitem",
+          "id": "dict.popitem",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "dict.popitem"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#dict.setdefault",
+          "id": "dict.setdefault",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "dict.setdefault"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#dict.update",
+          "id": "dict.update",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "dict.update"
+        },
+        {
+          "doc_url": "https://docs.python.org/3/library/stdtypes.html#dict.values",
+          "id": "dict.values",
+          "kind": "method",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "dict.values"
+        }
+      ],
+      "kind": "builtin-type",
+      "status": "todo",
+      "suggested_test_files": [
+        "languages/python/types/dict_test.py"
+      ],
+      "title": "`dict` built-in type"
+    },
+    {
+      "doc_url": "https://docs.python.org/3/library/stdtypes.html",
+      "id": "types.type",
+      "items": [
+        {
+          "doc_url": "https://docs.python.org/3/library/functions.html#type",
+          "id": "type",
+          "kind": "class",
+          "source": "objects.inv",
+          "status": "todo",
+          "test_files": [],
+          "title": "type"
+        }
+      ],
+      "kind": "builtin-type",
+      "status": "todo",
+      "suggested_test_files": [
+        "languages/python/types/type_test.py"
+      ],
+      "title": "`type` built-in type"
+    },
+    {
+      "doc_url": "https://docs.python.org/3/reference/datamodel.html",
+      "id": "data-model.protocols",
+      "items": [
+        {
+          "id": "protocol.iteration",
+          "kind": "protocol",
+          "source": "Python data model",
+          "status": "todo",
+          "test_files": [],
+          "title": "Iteration protocol: __iter__, __next__, old __getitem__ fallback"
+        },
+        {
+          "id": "protocol.container",
+          "kind": "protocol",
+          "source": "Python data model",
+          "status": "todo",
+          "test_files": [],
+          "title": "Container protocol: __contains__, __len__, __getitem__, __setitem__, __delitem__"
+        },
+        {
+          "id": "protocol.context-manager",
+          "kind": "protocol",
+          "source": "Python data model",
+          "status": "todo",
+          "test_files": [],
+          "title": "Context manager protocol: __enter__, __exit__"
+        },
+        {
+          "id": "protocol.async",
+          "kind": "protocol",
+          "source": "Python data model",
+          "status": "todo",
+          "test_files": [],
+          "title": "Async protocols: __await__, __aiter__, __anext__, __aenter__, __aexit__"
+        },
+        {
+          "id": "protocol.descriptor",
+          "kind": "protocol",
+          "source": "Python data model",
+          "status": "todo",
+          "test_files": [],
+          "title": "Descriptor protocol: __get__, __set__, __delete__, __set_name__"
+        },
+        {
+          "id": "protocol.attribute-access",
+          "kind": "protocol",
+          "source": "Python data model",
+          "status": "todo",
+          "test_files": [],
+          "title": "Attribute access protocol: __getattribute__, __getattr__, __setattr__, __delattr__"
+        },
+        {
+          "id": "protocol.callable",
+          "kind": "protocol",
+          "source": "Python data model",
+          "status": "todo",
+          "test_files": [],
+          "title": "Callable protocol: __call__"
+        },
+        {
+          "id": "protocol.numeric",
+          "kind": "protocol",
+          "source": "Python data model",
+          "status": "todo",
+          "test_files": [],
+          "title": "Numeric protocols: unary, binary, reflected, in-place, __index__"
+        },
+        {
+          "id": "protocol.comparison",
+          "kind": "protocol",
+          "source": "Python data model",
+          "status": "todo",
+          "test_files": [],
+          "title": "Comparison and hashing protocols: rich comparison, __hash__"
+        },
+        {
+          "id": "protocol.class-creation",
+          "kind": "protocol",
+          "source": "Python data model",
+          "status": "todo",
+          "test_files": [],
+          "title": "Class creation hooks: metaclass, __init_subclass__, __class_getitem__, __mro_entries__"
+        }
+      ],
+      "kind": "protocol-group",
+      "status": "todo",
+      "suggested_test_files": [
+        "languages/python/datamodel/protocols_test.py"
+      ],
+      "title": "Data model protocols and magic methods"
+    }
+  ],
+  "kind": "python-language-checklist",
+  "schema_version": 1,
+  "source_baseline": "stdlib.baseline.json",
+  "source_objects": "stdlib.objects.json",
+  "updated_at": "2026-07-09T00:56:21.838870+00:00"
+}
