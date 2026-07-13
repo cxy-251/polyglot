@@ -19,6 +19,7 @@ Polyglot 用可阅读、可执行的测试案例学习 Python、C++、Node.js、
 按照当前约定：
 
 - 先连续编写 Python 测试套；
+- 测试文件使用三位数编号表达推荐阅读顺序，例如 `test_001_...py`；
 - 暂不运行 pytest；
 - Python 编写阶段结束后统一在 `ohdev` 中执行；
 - 当前所有 Python 文件都应视为 draft / unverified；
@@ -59,6 +60,19 @@ languages/python/
 ```
 
 主题允许跨层。例如真假值测试同时包含布尔表达式、`bool()`、`__bool__()` 和 `__len__()`，因为把它们放在一个测试套中更容易理解真实分派关系。
+
+同一学习阶段的文件按三位数连续编号，编号是稳定的推荐阅读顺序，主题后缀用于
+搜索。例如：
+
+```text
+test_001_truth_value_testing.py
+test_002_comparison_semantics.py
+test_003_binary_operator_dispatch.py
+```
+
+新增文件必须先查看该目录已有的最大编号，再使用下一个编号；不要为了插入新
+主题批量重排已提交编号。若后来发现遗漏，优先补充到原主题文件，确实需要独立
+文件时追加新编号，并在注释中说明它依赖的前置主题。
 
 ## 执行模型
 
