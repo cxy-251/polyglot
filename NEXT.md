@@ -1,6 +1,6 @@
 # Current Task
 
-ID: `python.core.imports-modules-and-packages`
+ID: `python.builtins.boolean-and-integer-types`
 
 Status: `ready`
 
@@ -8,56 +8,56 @@ Repository phase: `python-authoring-unverified`
 
 ## Goal
 
-编写 Python 3.10 import 语句、module object、package/relative import 与导入缓存测试套，使用 pytest ``tmp_path`` 构造隔离的小型模块树，讲清导入执行、名字绑定、``sys.modules`` 和 reload 的真实语义。
+编写 Python 3.10 ``bool`` 与 ``int`` 内置类型测试套，在已有真假协议/运算符分派基础上集中展示构造、字面量、任意精度、整数专用方法、字节转换和 bool/int 继承关系中的真实陷阱。
 
 ## Covers
 
-- ``import module``、``import module as alias``、``from module import name`` 的绑定差异；
-- ``import package.submodule`` 默认绑定顶层 package；
-- module 的 ``__name__``、``__package__``、``__spec__``、``__file__``；
-- 首次 import 执行模块代码，后续 import 复用 ``sys.modules`` 同一对象；
-- 从 ``sys.modules`` 删除后再次 import 创建新 module 并重新执行；
-- ``importlib.import_module()`` 返回指定子模块；
-- ``__import__()`` 默认返回顶层包，``fromlist`` 改变返回对象；
-- package ``__init__.py``、绝对导入与显式相对导入；
-- 相对导入依赖正确 ``__package__`` 上下文，不能在普通顶层模块任意使用；
-- ``__all__`` 控制 star import，未定义时默认排除下划线名称；
-- ``importlib.reload()`` 重新执行但复用 module object/dict，旧名称可能残留；
-- 导入失败、部分初始化 module 与循环 import 的诊断边界；
-- ``if __name__ == "__main__"`` 区分导入和脚本执行。
+- ``True`` / ``False`` 单例、``bool`` 是 ``int`` 子类但语义用途不同；
+- bool 的数值相等/hash/算术行为及作为 dict key 与 0/1 的碰撞；
+- 十进制、二/八/十六进制字面量和下划线分组；
+- int 任意精度与 ``sys.maxsize`` 不是最大整数；
+- ``int()`` 从整数、float、字符串、bytes/bytearray 构造；
+- 字符串正负号、空白、下划线、显式 base 与 ``base=0`` 前缀推断；
+- float 转 int 向零截断，NaN/Infinity 转换失败；
+- ``bit_length()``、``bit_count()``、``as_integer_ratio()``；
+- ``to_bytes()`` / ``from_bytes()`` 的 byteorder、length、signed；
+- 字节长度不足的 ``OverflowError`` 与 signed 误用；
+- 整数 ``real`` / ``imag`` / ``numerator`` / ``denominator`` / ``conjugate()``；
+- 负移位、除零和无效 base 等异常边界；
+- ``int`` 不可变性与构造已有精确 int 时的对象复用边界。
 
 ## Common Pitfalls To Explain
 
-- 以为重复 import 会重复执行模块顶层副作用；
-- 以为 ``import a.b`` 直接在局部绑定名称 ``b``；
-- 修改已导入 module 文件后只调用 import，忽略缓存；
-- 把 reload 当成全新干净命名空间；
-- 使用隐式相对导入或在缺少 package context 时写相对导入；
-- star import 造成来源不明的名字覆盖；
-- 循环 import 在模块尚未完成初始化时读取对方属性。
+- 在业务数据中利用 ``True == 1``，导致 dict/set 键碰撞；
+- 把 ``sys.maxsize`` 当作 Python int 上限；
+- 混淆 floor division 与 int(float) 的向零截断；
+- 使用 ``base=0`` 解析带前导零但无合法前缀的字符串；
+- 忘记 ``to_bytes`` 默认 unsigned，负数必须 ``signed=True``；
+- 按字符数而不是数值位宽估算字节长度；
+- 依赖小整数缓存或 ``int(existing) is existing`` 作为语言语义。
 
 ## Target File
 
-`languages/python/core/test_018_imports_modules_and_packages.py`
+`languages/python/core/test_019_boolean_and_integer_types.py`
 
 ## Official Sources
 
-- https://docs.python.org/3.10/reference/simple_stmts.html#the-import-statement
-- https://docs.python.org/3.10/reference/import.html
-- https://docs.python.org/3.10/reference/datamodel.html#modules
-- https://docs.python.org/3.10/library/importlib.html
-- https://docs.python.org/3.10/library/functions.html#__import__
-- https://docs.python.org/3.10/library/runpy.html
+- https://docs.python.org/3.10/library/stdtypes.html#boolean-values
+- https://docs.python.org/3.10/library/stdtypes.html#numeric-types-int-float-complex
+- https://docs.python.org/3.10/library/stdtypes.html#additional-methods-on-integer-types
+- https://docs.python.org/3.10/library/functions.html#int
+- https://docs.python.org/3.10/reference/lexical_analysis.html#integer-literals
+- https://docs.python.org/3.10/library/sys.html#sys.maxsize
 
 ## Authoring Requirements
 
-- 使用 pytest ``tmp_path`` / ``monkeypatch`` 隔离临时模块，不写真实用户目录；
-- 每个临时 module/package 使用独特名称，并在结束时清理相关 ``sys.modules`` 条目；
-- 使用必要而详细的中文注释解释执行、绑定、缓存与相对导入上下文；
-- 案例保持正常、具体、可复用，不做完整 import hook/finders/loaders 实现；
+- 使用 pytest 风格的普通测试函数；
+- 使用必要而详细的中文注释解释数值语义、解析规则和字节边界；
+- 与 001/003/004 已覆盖的通用协议分派避免机械重复，必要时通过注释交叉说明；
+- 案例保持正常、具体、可复用，不做穷举式边界矩阵；
 - 文件顶部写 `polyglot-covers` 标记；
 - 本阶段不运行测试。
 
 ## Handoff
 
-001--017 共十七个 Python 核心测试套已完成首轮编写；最新的 017 覆盖普通/链式/解包/带注解赋值、容器 display、comprehension 求值顺序和 assignment expression。全部文件按照用户要求尚未运行。下一步直接编写 018 import、module 与 package；不要先运行 pytest。
+001--018 共十八个 Python 测试套已完成首轮编写；最新的 018 覆盖 import 绑定、module/package 元数据、sys.modules 缓存、relative/star import、reload、失败/循环导入和 main guard。全部文件按照用户要求尚未运行。下一步直接编写 019 bool/int 内置类型；不要先运行 pytest。
