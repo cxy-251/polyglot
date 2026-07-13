@@ -1,6 +1,6 @@
 # Current Task
 
-ID: `python.core.names-scopes-and-closures`
+ID: `python.core.decorators-and-metaclasses`
 
 Status: `ready`
 
@@ -8,53 +8,54 @@ Repository phase: `python-authoring-unverified`
 
 ## Goal
 
-编写 Python 3.10 名字绑定、作用域与闭包测试套，系统展示 local / enclosing / global / builtins 查找、赋值对局部作用域的静态影响、``global`` / ``nonlocal``、闭包 cell 和各类临时作用域。
+编写 Python 3.10 函数/类装饰器与元类测试套，展示装饰器表达式求值和应用顺序、包装函数元数据、class 创建流水线、``__prepare__`` / metaclass ``__new__`` / ``__init__`` / ``__call__`` 以及元类选择与冲突。
 
 ## Covers
 
-- 赋值、解包、for/with/except/import 等语句产生名字绑定；
-- LEGB 名字查找与内置名称遮蔽；
-- 函数体内只要出现赋值，该名称默认在整个代码块被判定为 local；
-- ``UnboundLocalError`` 与“读取后再赋值”陷阱；
-- ``global`` 修改模块级绑定，``nonlocal`` 修改最近的 enclosing 函数绑定；
-- ``nonlocal`` 不会跳到 global，且目标必须已存在于 enclosing scope；
-- 闭包保存 cell 而不是简单复制值，并可通过 nonlocal 维护状态；
-- 默认参数捕获定义时值与闭包晚绑定的差异；
-- comprehension / generator expression 的隐式作用域；
-- class body 命名空间不是方法函数的 enclosing lexical scope；
-- ``del`` 删除名字绑定，以及删除后重新查找/报错；
-- ``locals()`` / ``globals()`` 作为命名空间视图的正常查阅边界。
+- 函数装饰器接收并替换函数对象；
+- 多层装饰器表达式从上到下求值、从下到上应用；
+- 带参数 decorator factory 的配置时机；
+- 包装器转发 ``*args`` / ``**kwargs`` 与返回值/异常；
+- ``functools.wraps`` / ``update_wrapper`` 保留名称、文档、注解和 ``__wrapped__``；
+- 类装饰器在类创建后接收并替换类对象；
+- ``type(name, bases, namespace)`` 动态创建类；
+- metaclass ``__prepare__`` 提供类体命名空间；
+- metaclass ``__new__`` 与 ``__init__`` 创建/初始化类对象；
+- metaclass ``__call__`` 包围实例的 ``__new__`` / ``__init__``；
+- 派生类的元类必须兼容所有基类元类，以及元类冲突；
+- 类关键字流向 metaclass 与 ``__init_subclass__`` 的边界；
+- decorator/metaclass 中返回错误对象导致绑定语义改变的风险。
 
 ## Common Pitfalls To Explain
 
-- 以为局部赋值只从执行到该行之后才影响名字解析；
-- 忘记 ``global`` / ``nonlocal`` 声明必须位于同一代码块并先于相关使用；
-- 用局部变量名遮蔽 ``list``、``str`` 等内置对象；
-- 以为修改 ``locals()`` 返回 dict 就能可靠改变优化后的函数局部变量；
-- 认为 class body 中的普通名称可被方法像闭包变量一样直接读取；
-- 混淆闭包晚绑定与默认参数定义时求值。
+- 以为多装饰器按书写顺序从上到下包裹；
+- wrapper 忘记 return 原函数结果或不接受完整参数；
+- 不用 ``functools.wraps`` 导致名称、文档、签名跟踪信息丢失；
+- decorator factory 在定义时执行而非每次调用时执行；
+- metaclass ``__new__`` 忘记调用/返回 ``super().__new__``；
+- 把 metaclass ``__call__`` 与实例 ``__call__`` 混为一谈；
+- 多继承时忽略元类兼容关系。
 
 ## Target File
 
-`languages/python/core/test_012_names_scopes_and_closures.py`
+`languages/python/core/test_013_decorators_and_metaclasses.py`
 
 ## Official Sources
 
-- https://docs.python.org/3.10/reference/executionmodel.html#naming-and-binding
-- https://docs.python.org/3.10/reference/simple_stmts.html#the-global-statement
-- https://docs.python.org/3.10/reference/simple_stmts.html#the-nonlocal-statement
-- https://docs.python.org/3.10/reference/expressions.html#displays-for-lists-sets-and-dictionaries
-- https://docs.python.org/3.10/library/functions.html#locals
-- https://docs.python.org/3.10/library/functions.html#globals
+- https://docs.python.org/3.10/reference/compound_stmts.html#function-definitions
+- https://docs.python.org/3.10/reference/compound_stmts.html#class-definitions
+- https://docs.python.org/3.10/reference/datamodel.html#customizing-class-creation
+- https://docs.python.org/3.10/library/functools.html#functools.wraps
+- https://docs.python.org/3.10/library/functions.html#type
 
 ## Authoring Requirements
 
 - 使用 pytest 风格的普通测试函数；
-- 使用必要而详细的中文注释解释静态作用域判定、cell 与遮蔽陷阱；
+- 使用必要而详细的中文注释解释定义时求值、替换关系和 class 创建顺序；
 - 案例保持正常、具体、可复用，不做穷举式边界矩阵；
 - 文件顶部写 `polyglot-covers` 标记；
 - 本阶段不运行测试。
 
 ## Handoff
 
-001--011 共十一个 Python 核心测试套已完成首轮编写；最新的 011 覆盖 class 执行、构造两阶段、不可变子类、方法绑定、C3 MRO、协作多继承、subclass hook 和名称改写。全部文件按照用户要求尚未运行。下一步直接编写 012 名字、作用域与闭包；不要先运行 pytest。
+001--012 共十二个 Python 核心测试套已完成首轮编写；最新的 012 覆盖名字绑定、LEGB、global/nonlocal、编译期作用域判定、closure cell、comprehension/class scope 和 locals/globals。全部文件按照用户要求尚未运行。下一步直接编写 013 装饰器与元类；不要先运行 pytest。
