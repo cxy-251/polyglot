@@ -1,6 +1,6 @@
 # Current Task
 
-ID: `python.builtins.dynamic-code-and-namespaces`
+ID: `python.builtins.io-and-interactive-functions`
 
 Status: `ready`
 
@@ -8,58 +8,57 @@ Repository phase: `python-authoring-unverified`
 
 ## Goal
 
-编写 Python 3.10 `compile`、`eval`、`exec`、`globals`、`locals` 动态代码与命名空间测试套，展示源码→code object→求值/执行的正常工作流、globals/locals 查找与写回规则、内置名称注入和安全边界。
+编写 Python 3.10 `open`、`print`、`input`、`breakpoint`、`help` 测试套，展示文本/二进制文件边界、模式与资源管理、标准流交互和可测试的调试/帮助钩子。
 
 ## Covers
 
-- `compile(source, filename, mode)` 的 `eval` / `exec` / `single` 模式差异；
-- str、bytes 和 AST 输入，以及 code object 的可复用性/filename 元数据；
-- `flags` / `dont_inherit` / `optimize` 中有教学价值的显式编译选项；
-- `eval()` 只接受表达式并返回值，不能直接执行赋值语句；
-- `exec()` 执行 suite、返回 None 并把定义写入命名空间；
-- eval/exec 接收源码或预编译 code object；
-- globals/locals 单独传入时的名字读取、写入和函数 global 绑定；
-- 只传 globals 时同一 dict 同时作为 global/local；
-- 缺少 `__builtins__` 时的自动插入，以及显式 builtins mapping；
-- `globals()` 返回模块全局 dict，`locals()` 在函数作用域只用于读取；
-- 单独 globals/locals 的 exec 接近 class body 语义，函数看不到 locals 中的顶层赋值；
-- SyntaxError filename/lineno 与空字节等输入错误；
-- `ast.literal_eval()` 作为只解析字面量的较窄替代，但不是通用不可信资源防护。
+- `open()` 接受 path-like，默认读取模式与显式 text/binary mode；
+- `r` / `w` / `a` / `x` 及 `+` 的读取、截断、追加、独占创建语义；
+- `encoding` / `errors` / `newline` 的文本边界和换行转换；
+- context manager 关闭、`closed` 状态和关闭后操作异常；
+- `read()` / `readline()` / 迭代、`write()` 返回值；
+- binary file 的 `seek()` / `tell()` / `truncate()`；
+- text stream 只接收 str、binary stream 只接收 bytes-like；
+- `print(*objects, sep, end, file, flush)`、返回 None 和 `str()` 转换；
+- `input(prompt)` 对 stdout/stdin 的行为、只移除行终止符、EOFError；
+- input 总是返回 str，数值解析必须显式转换；
+- `breakpoint(*args, **kwargs)` 委托 `sys.breakpointhook` 并返回其结果；
+- `help()` 委托 pydoc 帮助系统，以及在自动化测试中替换交互钩子。
 
 ## Common Pitfalls To Explain
 
-- 对不可信输入调用 eval/exec；
-- 认为删掉 `__builtins__` 就构成可靠安全沙箱；
-- 用 `eval("x = 1")` 执行 statement；
-- 为每条数据反复 compile 同一表达式；
-- 传不同 globals/locals 后，期待 exec 定义的函数读取 locals 顶层变量；
-- 修改函数 `locals()` mapping 并期待真实 fast locals 可靠改变；
-- 使用没有意义的 filename，使回溯难以定位动态代码来源。
+- 依赖平台默认 encoding 或 newline；
+- 混用 str/bytes 文件对象；
+- 用 `w` 打开已有文件却没意识到会立即截断；
+- 忘记 context manager/close，或在关闭后继续读写；
+- 认为 append 模式会在当前 seek 位置写入；
+- 认为 input 会去掉两端空格或自动解析 Python/数字；
+- 在自动化测试/生产路径直接进入默认 debugger 或交互 help；
+- 把 print 当结构化日志/持久协议而未控制格式和编码。
 
 ## Target File
 
-`languages/python/builtins/test_028_dynamic_code_and_namespaces.py`
+`languages/python/builtins/test_029_io_and_interactive_functions.py`
 
 ## Official Sources
 
-- https://docs.python.org/3.10/library/functions.html#compile
-- https://docs.python.org/3.10/library/functions.html#eval
-- https://docs.python.org/3.10/library/functions.html#exec
-- https://docs.python.org/3.10/library/functions.html#globals
-- https://docs.python.org/3.10/library/functions.html#locals
-- https://docs.python.org/3.10/library/ast.html#ast.literal_eval
-- https://docs.python.org/3.10/reference/executionmodel.html
-- https://docs.python.org/3.10/reference/simple_stmts.html#the-exec-statement
+- https://docs.python.org/3.10/library/functions.html#open
+- https://docs.python.org/3.10/library/functions.html#print
+- https://docs.python.org/3.10/library/functions.html#input
+- https://docs.python.org/3.10/library/functions.html#breakpoint
+- https://docs.python.org/3.10/library/functions.html#help
+- https://docs.python.org/3.10/library/io.html#text-i-o
+- https://docs.python.org/3.10/library/io.html#binary-i-o
 
 ## Authoring Requirements
 
-- 使用 pytest 风格的普通测试函数；
-- 中文注释明确动态代码的命名空间和安全边界；
-- 只执行测试文件内固定的小型源码字符串，不读取网络或用户输入；
-- 与 009 的 SyntaxError、012 的作用域、018 的 import 避免机械重复；
+- 使用 pytest 和 `tmp_path` / `monkeypatch`，不读写真实用户目录；
+- 中文注释解释 mode、编码、换行、流和资源生命周期；
+- breakpoint/help 必须替换钩子，绝不进入真实调试器或交互帮助；
+- 与未来 pathlib/io 标准库工作流文件避免机械重复；
 - 文件顶部写 `polyglot-covers` 标记；
 - 本阶段不运行测试。
 
 ## Handoff
 
-001--018 位于 `language/`，019--027 位于 `builtins/`，编号在整个 Python 树全局连续。027 内省与属性内置函数已完成首轮编写，尚未运行。下一步直接编写 028 动态代码与命名空间；不要先运行 pytest。
+001--018 位于 `language/`，019--028 位于 `builtins/`，编号在整个 Python 树全局连续。028 动态代码与命名空间已完成首轮编写，尚未运行。下一步直接编写 029 I/O 与交互内置函数；不要先运行 pytest。
