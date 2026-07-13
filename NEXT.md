@@ -1,6 +1,6 @@
 # Current Task
 
-ID: `python.core.assignment-displays-and-comprehensions`
+ID: `python.core.imports-modules-and-packages`
 
 Status: `ready`
 
@@ -8,56 +8,56 @@ Repository phase: `python-authoring-unverified`
 
 ## Goal
 
-编写 Python 3.10 普通/解包/带注解/赋值表达式、容器 display 与 comprehension 测试套，讲清右侧求值一次、目标从左到右写入、starred 收集类型、display 覆盖规则和 comprehension 的求值/作用域。
+编写 Python 3.10 import 语句、module object、package/relative import 与导入缓存测试套，使用 pytest ``tmp_path`` 构造隔离的小型模块树，讲清导入执行、名字绑定、``sys.modules`` 和 reload 的真实语义。
 
 ## Covers
 
-- 普通赋值、链式赋值共享同一对象且右侧只求值一次；
-- tuple/list 嵌套解包、starred target 总是收集为 list；
-- 交换变量与解包数量不匹配异常；
-- 多目标赋值按从左到右写入，后续 target 可观察先前 target 的变化；
-- 带注解赋值与 ``__annotations__``，仅注解不创建属性值；
-- list/tuple/set/dict display 的 ``*`` / ``**`` 解包；
-- dict display 重复键后者覆盖前者，以及键先于值求值；
-- list/set/dict comprehension 的嵌套循环与 filter 顺序；
-- comprehension 的隐式作用域和外部 iterable 求值边界；
-- assignment expression ``:=`` 返回并绑定值；
-- ``:=`` 与比较/布尔运算的优先级、必须加括号的语法位置；
-- comprehension 中 ``:=`` 绑定到外围作用域；
-- ``:=`` 只能绑定单个名称，不能直接绑定属性、下标或解包 target；
-- comprehension 中禁止用 ``:=`` 重绑定迭代变量。
+- ``import module``、``import module as alias``、``from module import name`` 的绑定差异；
+- ``import package.submodule`` 默认绑定顶层 package；
+- module 的 ``__name__``、``__package__``、``__spec__``、``__file__``；
+- 首次 import 执行模块代码，后续 import 复用 ``sys.modules`` 同一对象；
+- 从 ``sys.modules`` 删除后再次 import 创建新 module 并重新执行；
+- ``importlib.import_module()`` 返回指定子模块；
+- ``__import__()`` 默认返回顶层包，``fromlist`` 改变返回对象；
+- package ``__init__.py``、绝对导入与显式相对导入；
+- 相对导入依赖正确 ``__package__`` 上下文，不能在普通顶层模块任意使用；
+- ``__all__`` 控制 star import，未定义时默认排除下划线名称；
+- ``importlib.reload()`` 重新执行但复用 module object/dict，旧名称可能残留；
+- 导入失败、部分初始化 module 与循环 import 的诊断边界；
+- ``if __name__ == "__main__"`` 区分导入和脚本执行。
 
 ## Common Pitfalls To Explain
 
-- 以为链式赋值会复制 list/dict；
-- 以为 starred target 保留原 iterable 类型；
-- 忽略重叠 target 的左到右赋值顺序；
-- 把 dict ``**`` 合并误认为会报告重复键；
-- 在 comprehension 中混入复杂副作用导致求值顺序难读；
-- 把 ``:=`` 当成普通赋值语句的任意 target 版本；
-- 忽略 comprehension 内海象绑定会泄漏到外围作用域。
+- 以为重复 import 会重复执行模块顶层副作用；
+- 以为 ``import a.b`` 直接在局部绑定名称 ``b``；
+- 修改已导入 module 文件后只调用 import，忽略缓存；
+- 把 reload 当成全新干净命名空间；
+- 使用隐式相对导入或在缺少 package context 时写相对导入；
+- star import 造成来源不明的名字覆盖；
+- 循环 import 在模块尚未完成初始化时读取对方属性。
 
 ## Target File
 
-`languages/python/core/test_017_assignment_displays_and_comprehensions.py`
+`languages/python/core/test_018_imports_modules_and_packages.py`
 
 ## Official Sources
 
-- https://docs.python.org/3.10/reference/simple_stmts.html#assignment-statements
-- https://docs.python.org/3.10/reference/simple_stmts.html#annotated-assignment-statements
-- https://docs.python.org/3.10/reference/expressions.html#assignment-expressions
-- https://docs.python.org/3.10/reference/expressions.html#list-displays
-- https://docs.python.org/3.10/reference/expressions.html#dictionary-displays
-- https://docs.python.org/3.10/reference/expressions.html#displays-for-lists-sets-and-dictionaries
+- https://docs.python.org/3.10/reference/simple_stmts.html#the-import-statement
+- https://docs.python.org/3.10/reference/import.html
+- https://docs.python.org/3.10/reference/datamodel.html#modules
+- https://docs.python.org/3.10/library/importlib.html
+- https://docs.python.org/3.10/library/functions.html#__import__
+- https://docs.python.org/3.10/library/runpy.html
 
 ## Authoring Requirements
 
-- 使用 pytest 风格的普通测试函数；
-- 使用必要而详细的中文注释解释求值/写入顺序、作用域和语法限制；
-- 案例保持正常、具体、可复用，不做穷举式边界矩阵；
+- 使用 pytest ``tmp_path`` / ``monkeypatch`` 隔离临时模块，不写真实用户目录；
+- 每个临时 module/package 使用独特名称，并在结束时清理相关 ``sys.modules`` 条目；
+- 使用必要而详细的中文注释解释执行、绑定、缓存与相对导入上下文；
+- 案例保持正常、具体、可复用，不做完整 import hook/finders/loaders 实现；
 - 文件顶部写 `polyglot-covers` 标记；
 - 本阶段不运行测试。
 
 ## Handoff
 
-001--016 共十六个 Python 核心测试套已完成首轮编写；最新的 016 覆盖 match/case 的 literal/capture/value/OR/AS/guard/sequence/mapping/class patterns 与编译期约束。全部文件按照用户要求尚未运行。下一步直接编写 017 赋值、display 与 comprehension；不要先运行 pytest。
+001--017 共十七个 Python 核心测试套已完成首轮编写；最新的 017 覆盖普通/链式/解包/带注解赋值、容器 display、comprehension 求值顺序和 assignment expression。全部文件按照用户要求尚未运行。下一步直接编写 018 import、module 与 package；不要先运行 pytest。
