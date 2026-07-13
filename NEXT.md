@@ -1,6 +1,6 @@
 # Current Task
 
-ID: `python.builtins.general-sequence-types`
+ID: `python.builtins.mapping-dict`
 
 Status: `ready`
 
@@ -8,62 +8,59 @@ Repository phase: `python-authoring-unverified`
 
 ## Goal
 
-编写 Python 3.10 `list`、`tuple` 与 `range` 通用序列测试套，展示共同序列操作以及可变列表、不可变记录和惰性等差数列之间的关键差异。
+编写 Python 3.10 `dict` 映射类型测试套，展示构造、键契约、顺序、动态视图、读取/写入/删除方法、合并和浅拷贝，并讲清楚共享默认值与迭代期间修改等真实陷阱。
 
 ## Covers
 
-- `list()` / `tuple()` / `range()` 构造与字面量、空值和生成 iterable；
-- 通用索引、切片、成员判断、连接、重复、`index()` / `count()`；
-- 序列的字典序比较及首个不同元素决定结果；
-- list 索引/切片写入、扩展切片等长约束和删除；
-- `append()` / `extend()` / `insert()` 的输入形状差异；
-- `remove()` / `pop()` / `clear()`、不存在元素异常；
-- `reverse()`、`copy()` 与浅拷贝边界；
-- `sort()` 的 key、reverse、稳定性，以及原地方法返回 None；
-- 嵌套 list 乘法造成的别名共享；
-- tuple packing/unpacking、单元素逗号、不可变容器内的可变对象；
-- list 不可 hash、tuple 的 hashability 取决于元素；
-- range 的 start/stop/step、负步长、空 range 和 step=0；
-- range 的惰性、索引/切片仍返回 range、成员判断；
-- 不同参数但元素相同的 range 相等/hash，以及超大 range 的 `len()` 边界。
+- 字面量、dict comprehension、关键字/键值 iterable/另一个 mapping 构造；
+- 重复键与后写值覆盖、插入顺序不因覆盖已有键而改变；
+- hashable key 契约，以及数值相等键的碰撞；
+- `d[key]`、`get()`、`setdefault()`、`__missing__()` 的差异；
+- 索引写入、`update()`、`|` / `|=` 的左右覆盖和返回/原地语义；
+- `keys()` / `values()` / `items()` 动态视图与 keys/items 集合运算；
+- 正向/反向迭代遵循插入顺序；
+- `pop()` / `popitem()` / `del` / `clear()` 的返回值和异常；
+- `copy()` 与 `dict(existing)` 的浅拷贝边界；
+- `dict.fromkeys()` 对同一个可变默认对象的复用；
+- `setdefault()` 默认表达式的预先求值和常用分组模式；
+- 迭代期间改变大小导致 RuntimeError，以及基于快照/推导式的安全改写；
+- dict equality 与顺序无关，但 `list(d)` / `repr` 等观察顺序有关。
 
 ## Common Pitfalls To Explain
 
-- 混淆 `append(iterable)` 与 `extend(iterable)`；
-- 期待 `list.sort()` / `reverse()` 返回排好序的列表；
-- 使用 `[[0] * width] * height` 得到共享行；
-- 认为 list.copy() 会递归复制嵌套对象；
-- 认为 tuple 里有 list 时整个对象仍可 hash；
-- 把括号当作 tuple 的决定因素，忘记单元素 tuple 的逗号；
-- 为了检查成员把 range 先转成 list；
-- 认为 range 参数不同就一定不相等，或认为任意大 range 的 len 都能表示。
+- 使用 list/dict/set 作为键；
+- 忘记 `True`、`1`、`1.0` 作为键会碰撞；
+- 用 `get(key)` 无法区分缺失与显式存储 None；
+- 用 `dict.fromkeys(keys, [])` 创建每键独立列表；
+- 认为 `setdefault(key, expensive())` 只在缺失时才计算默认值；
+- 认为覆盖已有键会把键移动到字典末尾；
+- 遍历 dict 时直接增删键；
+- 把浅拷贝当作嵌套结构隔离；
+- 忽略 `left | right` 中右侧同名键获胜。
 
 ## Target File
 
-`languages/python/builtins/test_023_general_sequence_types.py`
+`languages/python/builtins/test_024_mapping_dict.py`
 
 ## Official Sources
 
-- https://docs.python.org/3.10/library/stdtypes.html#sequence-types-list-tuple-range
-- https://docs.python.org/3.10/library/stdtypes.html#common-sequence-operations
-- https://docs.python.org/3.10/library/stdtypes.html#mutable-sequence-types
-- https://docs.python.org/3.10/library/stdtypes.html#lists
-- https://docs.python.org/3.10/library/stdtypes.html#tuples
-- https://docs.python.org/3.10/library/stdtypes.html#ranges
-- https://docs.python.org/3.10/library/functions.html#list
-- https://docs.python.org/3.10/library/functions.html#tuple
-- https://docs.python.org/3.10/library/functions.html#range
-- https://docs.python.org/3.10/library/functions.html#sorted
+- https://docs.python.org/3.10/library/stdtypes.html#mapping-types-dict
+- https://docs.python.org/3.10/library/stdtypes.html#dictionary-view-objects
+- https://docs.python.org/3.10/library/stdtypes.html#dict
+- https://docs.python.org/3.10/library/functions.html#dict
+- https://docs.python.org/3.10/reference/datamodel.html#object.__hash__
+- https://docs.python.org/3.10/reference/datamodel.html#object.__missing__
+- https://peps.python.org/pep-0584/
 
 ## Authoring Requirements
 
 - 使用 pytest 风格的普通测试函数；
-- 中文注释解释原地/新对象、浅拷贝/共享和惰性范围；
-- 不做无意义的每个边界组合矩阵，使用可复用的数据处理例子；
-- 与 005 的订阅协议、017 的赋值/解包和后续 built-in function 文件避免机械重复；
+- 中文注释解释键的 equality/hash 契约、动态视图和共享引用；
+- 按实际配置合并、分组和索引工作流组织案例；
+- 与 002/014 的 equality/hash 协议、017 的 dict display/comprehension 避免机械重复；
 - 文件顶部写 `polyglot-covers` 标记；
 - 本阶段不运行测试。
 
 ## Handoff
 
-001--018 位于 `language/`，019--022 位于 `builtins/`，编号在整个 Python 树全局连续。022 bytes/bytearray/memoryview 已完成首轮编写，尚未运行。下一步直接编写 023 list/tuple/range；不要先运行 pytest。
+001--018 位于 `language/`，019--023 位于 `builtins/`，编号在整个 Python 树全局连续。023 list/tuple/range 已完成首轮编写，尚未运行。下一步直接编写 024 dict；不要先运行 pytest。
