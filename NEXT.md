@@ -1,6 +1,6 @@
 # Current Task
 
-ID: `python.builtins.float-and-complex-types`
+ID: `python.builtins.text-sequence-str`
 
 Status: `ready`
 
@@ -8,55 +8,60 @@ Repository phase: `python-authoring-unverified`
 
 ## Goal
 
-编写 Python 3.10 `float` 与 `complex` 内置类型测试套，展示构造、字面量、特殊值、精确表示工具、混合数值运算和复数限制；重点解释二进制浮点不是十进制精确数，以及 NaN 不能按普通相等关系处理。
+编写 Python 3.10 `str` 文本序列测试套，集中展示 Unicode 字符串字面量、不可变序列行为、查找/拆分/拼接/清理/替换、大小写与字符分类、编码边界，以及真实文本处理中最常见的语义陷阱。
 
 ## Covers
 
-- 浮点字面量、科学计数法、下划线分组和 `float()` 文本构造；
-- int/float 混合运算的类型提升，以及 `/` 总是返回 float；
-- 二进制浮点表示导致的十进制舍入现象；
-- `as_integer_ratio()`、`hex()` / `float.fromhex()`、`is_integer()`；
-- 正负零的相等/hash、符号保留与除法边界；
-- `inf` / `-inf` / `nan` 的构造、传播、比较和真假值；
-- `math.isfinite()` / `isinf()` / `isnan()` / `isclose()` 的正常判断工作流；
-- complex 字面量、`complex()` 构造、`real` / `imag` / `conjugate()`；
-- 实数与复数混合运算、负数平方根的复数写法；
-- complex 不支持大小排序，也不能直接转为 float/int；
-- float/complex 的不可变性与 hash/equality 一致性。
+- 单/双/三引号、转义、raw string、相邻字面量拼接；
+- Unicode code point、`ord()` / `chr()`、`len()` 与用户感知字符数的区别；
+- 索引、切片、步长、成员判断和不可变性；
+- `find()` / `index()` / `count()` / `startswith()` / `endswith()`；
+- `split()`、无参数空白折叠、显式分隔符、`rsplit()`、`splitlines()`；
+- `partition()` / `rpartition()` 总是返回三元组；
+- `join()` 的调用方向、只接受 str 元素以及空/单元素行为；
+- `strip()` / `lstrip()` / `rstrip()` 的字符集合语义；
+- `removeprefix()` / `removesuffix()` 与误用 strip 的区别；
+- `replace()`、`translate()` / `str.maketrans()`；
+- `lower()` / `upper()` / `casefold()`、`swapcase()` / `title()` / `capitalize()`；
+- `isalpha()` / `isdecimal()` / `isdigit()` / `isnumeric()` / `isspace()` / `isidentifier()`；
+- 对齐与填充：`center()` / `ljust()` / `rjust()` / `zfill()`；
+- `encode()` 的编码和 errors 策略，以及 bytes/str 边界；
+- `%`、`str.format()`、`format_map()` 只做 str 类型入口，格式迷你语言细节与 014 交叉引用。
 
 ## Common Pitfalls To Explain
 
-- 用 `0.1 + 0.2 == 0.3` 判断测量值或计算结果；
-- 用 `== float("nan")` 检测 NaN；
-- 把 `math.isclose()` 当作精确财务运算，或忽略它的相对/绝对容差；
-- 认为 `-0.0` 与 `0.0` 的所有外部表现都相同；
-- 期待 `(-1) ** 0.5` 自动返回 float，或对 complex 使用 `<` / `>`；
-- 误以为 `float.hex()` 是十六进制文本的常规用户展示格式。
+- 把 Python `len(str)` 当作屏幕字符宽度、字节数或 grapheme cluster 数；
+- raw string 末尾写单个反斜杠；
+- 用 `strip("prefix")` 删除固定前后缀；
+- 混淆 `split()` 与 `split(" ")` 的空字段和空白折叠规则；
+- 写成 `items.join(",")`，或让 join 隐式转换非 str 元素；
+- 用 `lower()` 做不区分大小写的 Unicode 比较，而未考虑 `casefold()`；
+- 把 `isdigit()` 等字符分类方法当作可直接交给 `int()` 的完整语法验证；
+- 在 str 与 bytes 之间隐式混用，或用默认编码掩盖协议边界。
 
 ## Target File
 
-`languages/python/builtins/test_020_float_and_complex_types.py`
+`languages/python/builtins/test_021_text_sequence_str.py`
 
 ## Official Sources
 
-- https://docs.python.org/3.10/library/stdtypes.html#numeric-types-int-float-complex
-- https://docs.python.org/3.10/library/stdtypes.html#additional-methods-on-float
-- https://docs.python.org/3.10/library/functions.html#float
-- https://docs.python.org/3.10/library/functions.html#complex
-- https://docs.python.org/3.10/library/math.html#floating-point-arithmetic
-- https://docs.python.org/3.10/tutorial/floatingpoint.html
-- https://docs.python.org/3.10/reference/lexical_analysis.html#floating-point-literals
-- https://docs.python.org/3.10/reference/lexical_analysis.html#imaginary-literals
+- https://docs.python.org/3.10/library/stdtypes.html#text-sequence-type-str
+- https://docs.python.org/3.10/library/stdtypes.html#string-methods
+- https://docs.python.org/3.10/library/functions.html#str
+- https://docs.python.org/3.10/library/functions.html#ord
+- https://docs.python.org/3.10/library/functions.html#chr
+- https://docs.python.org/3.10/reference/lexical_analysis.html#string-and-bytes-literals
+- https://docs.python.org/3.10/howto/unicode.html
 
 ## Authoring Requirements
 
 - 使用 pytest 风格的普通测试函数；
-- 使用必要而详细的中文注释解释近似值、特殊值和复数语义；
-- 与 002/003/004 已覆盖的通用比较和运算协议避免机械重复；
-- 使用 `math` 标准库展示判断方法，不引入第三方数值库；
+- 中文注释解释 Unicode、分隔/清理规则和 str/bytes 边界；
+- 不把所有方法机械拆成一方法一测试；按实际文本工作流组织案例；
+- 与 005 的通用序列订阅、014 的 `__format__` 协议避免机械重复；
 - 文件顶部写 `polyglot-covers` 标记；
 - 本阶段不运行测试。
 
 ## Handoff
 
-001--018 已从 `core/` 迁入 `language/`；Python 编号现在跨 `language/`、`builtins/`、`stdlib/` 全局连续。019 bool/int 已完成首轮编写并迁入 `builtins/`。全部 Python 文件仍按照用户要求尚未运行。下一步直接编写 020 float/complex；不要先运行 pytest。
+001--018 位于 `language/`，019--020 位于 `builtins/`，编号在整个 Python 树全局连续。020 float/complex 已完成首轮编写，尚未运行。下一步直接编写 021 str；不要先运行 pytest。
