@@ -1,6 +1,6 @@
 # Current Task
 
-ID: `python.core.decorators-and-metaclasses`
+ID: `python.core.representation-formatting-and-hashing`
 
 Status: `ready`
 
@@ -8,54 +8,55 @@ Repository phase: `python-authoring-unverified`
 
 ## Goal
 
-编写 Python 3.10 函数/类装饰器与元类测试套，展示装饰器表达式求值和应用顺序、包装函数元数据、class 创建流水线、``__prepare__`` / metaclass ``__new__`` / ``__init__`` / ``__call__`` 以及元类选择与冲突。
+编写 Python 3.10 对象表示、格式化、字节转换与哈希协议测试套，把 ``repr`` / ``str`` / ``ascii`` / ``format`` / f-string / ``bytes`` / ``hash`` 连接到对应特殊方法，并讲清相等性与稳定哈希的约束。
 
 ## Covers
 
-- 函数装饰器接收并替换函数对象；
-- 多层装饰器表达式从上到下求值、从下到上应用；
-- 带参数 decorator factory 的配置时机；
-- 包装器转发 ``*args`` / ``**kwargs`` 与返回值/异常；
-- ``functools.wraps`` / ``update_wrapper`` 保留名称、文档、注解和 ``__wrapped__``；
-- 类装饰器在类创建后接收并替换类对象；
-- ``type(name, bases, namespace)`` 动态创建类；
-- metaclass ``__prepare__`` 提供类体命名空间；
-- metaclass ``__new__`` 与 ``__init__`` 创建/初始化类对象；
-- metaclass ``__call__`` 包围实例的 ``__new__`` / ``__init__``；
-- 派生类的元类必须兼容所有基类元类，以及元类冲突；
-- 类关键字流向 metaclass 与 ``__init_subclass__`` 的边界；
-- decorator/metaclass 中返回错误对象导致绑定语义改变的风险。
+- ``__repr__()``、``repr()`` 与无 ``__str__`` 时的字符串 fallback；
+- ``__str__()`` 面向用户显示与 ``str()``；
+- ``ascii()`` 对 ``repr`` 中非 ASCII 字符进行转义；
+- ``__format__()``、``format()`` 和 f-string format spec；
+- f-string ``!s`` / ``!r`` / ``!a`` 转换先于格式化；
+- f-string debug ``value=`` 语法；
+- ``__bytes__()`` 与 ``bytes()``；
+- 表示/格式化特殊方法必须返回严格的 str/bytes 类型；
+- ``__hash__()`` 与 ``hash()``；
+- 相等对象必须具有相同 hash；
+- 覆盖 ``__eq__`` 后默认变为不可哈希，以及显式不可哈希 ``__hash__ = None``；
+- 基于可变字段计算 hash 会破坏 dict/set 查找；
+- 自定义不可变值对象同时实现 eq/hash 的正常键工作流。
 
 ## Common Pitfalls To Explain
 
-- 以为多装饰器按书写顺序从上到下包裹；
-- wrapper 忘记 return 原函数结果或不接受完整参数；
-- 不用 ``functools.wraps`` 导致名称、文档、签名跟踪信息丢失；
-- decorator factory 在定义时执行而非每次调用时执行；
-- metaclass ``__new__`` 忘记调用/返回 ``super().__new__``；
-- 把 metaclass ``__call__`` 与实例 ``__call__`` 混为一谈；
-- 多继承时忽略元类兼容关系。
+- 认为 ``__repr__`` 必须能被 eval，或在表示中泄漏敏感信息；
+- 只实现 ``__str__`` 导致容器仍显示默认 repr；
+- 在 ``__format__`` 中忽略空 spec 或擅自接受未知 spec；
+- 以为 f-string ``!r`` 仍调用原对象的 ``__format__``；
+- ``__repr__`` / ``__str__`` 返回非字符串；
+- 定义值相等却沿用身份哈希；
+- 把参与 hash 的字段设为可变。
 
 ## Target File
 
-`languages/python/core/test_013_decorators_and_metaclasses.py`
+`languages/python/core/test_014_representation_formatting_and_hashing.py`
 
 ## Official Sources
 
-- https://docs.python.org/3.10/reference/compound_stmts.html#function-definitions
-- https://docs.python.org/3.10/reference/compound_stmts.html#class-definitions
-- https://docs.python.org/3.10/reference/datamodel.html#customizing-class-creation
-- https://docs.python.org/3.10/library/functools.html#functools.wraps
-- https://docs.python.org/3.10/library/functions.html#type
+- https://docs.python.org/3.10/reference/datamodel.html#object.__repr__
+- https://docs.python.org/3.10/reference/datamodel.html#object.__format__
+- https://docs.python.org/3.10/reference/datamodel.html#object.__hash__
+- https://docs.python.org/3.10/reference/lexical_analysis.html#formatted-string-literals
+- https://docs.python.org/3.10/library/functions.html#repr
+- https://docs.python.org/3.10/library/functions.html#format
 
 ## Authoring Requirements
 
 - 使用 pytest 风格的普通测试函数；
-- 使用必要而详细的中文注释解释定义时求值、替换关系和 class 创建顺序；
+- 使用必要而详细的中文注释解释转换顺序、严格返回类型和 hash 不变量；
 - 案例保持正常、具体、可复用，不做穷举式边界矩阵；
 - 文件顶部写 `polyglot-covers` 标记；
 - 本阶段不运行测试。
 
 ## Handoff
 
-001--012 共十二个 Python 核心测试套已完成首轮编写；最新的 012 覆盖名字绑定、LEGB、global/nonlocal、编译期作用域判定、closure cell、comprehension/class scope 和 locals/globals。全部文件按照用户要求尚未运行。下一步直接编写 013 装饰器与元类；不要先运行 pytest。
+001--013 共十三个 Python 核心测试套已完成首轮编写；最新的 013 覆盖 decorator 求值/应用、wraps、class decorator、动态 type、metaclass 创建/调用流水线、class keyword 与元类选择冲突。全部文件按照用户要求尚未运行。下一步直接编写 014 表示、格式化与哈希协议；不要先运行 pytest。
