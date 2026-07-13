@@ -1,6 +1,6 @@
 # Current Task
 
-ID: `python.builtins.binary-sequences`
+ID: `python.builtins.general-sequence-types`
 
 Status: `ready`
 
@@ -8,60 +8,62 @@ Repository phase: `python-authoring-unverified`
 
 ## Goal
 
-编写 Python 3.10 `bytes`、`bytearray` 与 `memoryview` 二进制序列测试套，展示三者在构造、索引、切片、编解码、十六进制转换、可变性和零拷贝视图方面的共同点与关键差异。
+编写 Python 3.10 `list`、`tuple` 与 `range` 通用序列测试套，展示共同序列操作以及可变列表、不可变记录和惰性等差数列之间的关键差异。
 
 ## Covers
 
-- bytes 字面量、ASCII 源码限制和十六进制/转义字节；
-- `bytes()` 从长度、整数 iterable、buffer 和文本+encoding 构造；
-- 索引返回 int、切片返回同类二进制序列，以及与 str 索引的区别；
-- bytes 的不可变性，bytearray 的索引/切片写入和改变长度操作；
-- `decode()` 与 str `encode()` 往返、errors 策略和 BOM/协议编码边界；
-- `hex()` / `fromhex()`、分隔符参数和可读的二进制诊断；
-- 二进制 `find()` / `index()` / `count()` / `split()` / `partition()` / `join()`；
-- bytes/bytearray 的 ASCII 导向大小写和字符分类方法限制；
-- bytes `%` 格式化作为面向二进制协议的入口；
-- `memoryview()` 暴露底层 buffer、切片共享、只读/可写区别；
-- memoryview 的 `format` / `itemsize` / `ndim` / `shape` / `strides` / `nbytes`；
-- `cast()` 的形状/格式约束、`tobytes()` / `tolist()`、`readonly`；
-- `release()` / 上下文管理器，以及视图存活时 bytearray 不能改变大小；
-- 相等比较与 hashability 的可变/只读边界。
+- `list()` / `tuple()` / `range()` 构造与字面量、空值和生成 iterable；
+- 通用索引、切片、成员判断、连接、重复、`index()` / `count()`；
+- 序列的字典序比较及首个不同元素决定结果；
+- list 索引/切片写入、扩展切片等长约束和删除；
+- `append()` / `extend()` / `insert()` 的输入形状差异；
+- `remove()` / `pop()` / `clear()`、不存在元素异常；
+- `reverse()`、`copy()` 与浅拷贝边界；
+- `sort()` 的 key、reverse、稳定性，以及原地方法返回 None；
+- 嵌套 list 乘法造成的别名共享；
+- tuple packing/unpacking、单元素逗号、不可变容器内的可变对象；
+- list 不可 hash、tuple 的 hashability 取决于元素；
+- range 的 start/stop/step、负步长、空 range 和 step=0；
+- range 的惰性、索引/切片仍返回 range、成员判断；
+- 不同参数但元素相同的 range 相等/hash，以及超大 range 的 `len()` 边界。
 
 ## Common Pitfalls To Explain
 
-- 误以为 `bytes(5)` 得到文本 `b"5"`，而实际得到五个零字节；
-- 忘记 bytes 索引返回 0--255 的 int，而非长度 1 的 bytes；
-- 用 str 方法语义理解 bytes 的 ASCII-only 大小写/分类操作；
-- 在协议边界隐式混用 str 与 bytes，或错误猜测编码；
-- 把 memoryview 切片当独立副本，意外改写原 bytearray；
-- 持有导出视图时调整 bytearray 长度，触发 BufferError；
-- 认为 memoryview 永远可写、连续或可 hash。
+- 混淆 `append(iterable)` 与 `extend(iterable)`；
+- 期待 `list.sort()` / `reverse()` 返回排好序的列表；
+- 使用 `[[0] * width] * height` 得到共享行；
+- 认为 list.copy() 会递归复制嵌套对象；
+- 认为 tuple 里有 list 时整个对象仍可 hash；
+- 把括号当作 tuple 的决定因素，忘记单元素 tuple 的逗号；
+- 为了检查成员把 range 先转成 list；
+- 认为 range 参数不同就一定不相等，或认为任意大 range 的 len 都能表示。
 
 ## Target File
 
-`languages/python/builtins/test_022_binary_sequences.py`
+`languages/python/builtins/test_023_general_sequence_types.py`
 
 ## Official Sources
 
-- https://docs.python.org/3.10/library/stdtypes.html#binary-sequence-types-bytes-bytearray-memoryview
-- https://docs.python.org/3.10/library/stdtypes.html#bytes-objects
-- https://docs.python.org/3.10/library/stdtypes.html#bytearray-objects
-- https://docs.python.org/3.10/library/stdtypes.html#bytes-and-bytearray-operations
-- https://docs.python.org/3.10/library/stdtypes.html#printf-style-bytes-formatting
-- https://docs.python.org/3.10/library/stdtypes.html#memory-views
-- https://docs.python.org/3.10/library/functions.html#bytes
-- https://docs.python.org/3.10/library/functions.html#bytearray
-- https://docs.python.org/3.10/library/functions.html#memoryview
+- https://docs.python.org/3.10/library/stdtypes.html#sequence-types-list-tuple-range
+- https://docs.python.org/3.10/library/stdtypes.html#common-sequence-operations
+- https://docs.python.org/3.10/library/stdtypes.html#mutable-sequence-types
+- https://docs.python.org/3.10/library/stdtypes.html#lists
+- https://docs.python.org/3.10/library/stdtypes.html#tuples
+- https://docs.python.org/3.10/library/stdtypes.html#ranges
+- https://docs.python.org/3.10/library/functions.html#list
+- https://docs.python.org/3.10/library/functions.html#tuple
+- https://docs.python.org/3.10/library/functions.html#range
+- https://docs.python.org/3.10/library/functions.html#sorted
 
 ## Authoring Requirements
 
 - 使用 pytest 风格的普通测试函数；
-- 中文注释重点解释文本/字节边界、复制/共享和可变性；
-- 使用 bytearray 等内存数据，不访问真实设备、网络或持久文件；
-- 与 005 的通用订阅协议、021 的 str 编解码避免机械重复；
+- 中文注释解释原地/新对象、浅拷贝/共享和惰性范围；
+- 不做无意义的每个边界组合矩阵，使用可复用的数据处理例子；
+- 与 005 的订阅协议、017 的赋值/解包和后续 built-in function 文件避免机械重复；
 - 文件顶部写 `polyglot-covers` 标记；
 - 本阶段不运行测试。
 
 ## Handoff
 
-001--018 位于 `language/`，019--021 位于 `builtins/`，编号在整个 Python 树全局连续。021 str 已完成首轮编写，尚未运行。下一步直接编写 022 bytes/bytearray/memoryview；不要先运行 pytest。
+001--018 位于 `language/`，019--022 位于 `builtins/`，编号在整个 Python 树全局连续。022 bytes/bytearray/memoryview 已完成首轮编写，尚未运行。下一步直接编写 023 list/tuple/range；不要先运行 pytest。
