@@ -1,6 +1,6 @@
 # Current Task
 
-ID: `python.core.functions-calls-and-argument-binding`
+ID: `python.core.attribute-access-and-descriptors`
 
 Status: `ready`
 
@@ -8,50 +8,50 @@ Repository phase: `python-authoring-unverified`
 
 ## Goal
 
-编写 Python 3.10 函数定义、调用与参数绑定测试套，连接 ``def`` / ``lambda``、位置参数、关键字参数、解包语法和 ``__call__`` 协议，并讲清默认值与调用求值时机。
+编写 Python 3.10 属性访问与描述符协议测试套，把点号访问、内置属性函数、实例/类命名空间和 descriptor 分派连接到对应特殊方法，并清楚展示 data descriptor、实例属性与 non-data descriptor 的优先级。
 
 ## Covers
 
-- ``def`` 创建函数对象、函数返回值与隐式 ``None``；
-- 位置参数、普通参数、仅限位置参数 ``/``、仅限关键字参数 ``*``；
-- 默认参数在定义时求值，以及可变默认值陷阱；
-- ``*args`` 收集为 tuple、``**kwargs`` 收集为 dict；
-- 调用时 ``*iterable`` 与 ``**mapping`` 解包；
-- 参数绑定中的重复值、缺失值、多余值和非字符串关键字错误；
-- 参数表达式从左到右求值，绑定失败也不会回滚已有副作用；
-- 函数注解只保存元数据，不自动执行运行时类型检查；
-- ``lambda`` 的表达式边界与闭包晚绑定陷阱；
-- 自定义对象的 ``__call__()``，以及 ``callable()`` 的协议判断。
+- 实例属性、类属性、实例遮蔽与删除后回退；
+- ``getattr()``、``setattr()``、``delattr()``、``hasattr()``；
+- ``__getattribute__()`` 拦截所有读取，``__getattr__()`` 只处理正常查找失败；
+- ``__setattr__()``、``__delattr__()`` 与使用 ``object`` 基础实现避免递归；
+- ``__get__()``、``__set__()``、``__delete__()``、``__set_name__()``；
+- data descriptor > instance dictionary > non-data descriptor > class variable 的查找优先级；
+- 函数作为 non-data descriptor 形成绑定方法；
+- ``property`` 的 getter/setter/deleter 正常工作流；
+- ``__slots__`` 对实例存储和 ``__dict__`` 的影响；
+- 属性钩子中吞掉或误用 ``AttributeError`` 的常见后果。
 
 ## Common Pitfalls To Explain
 
-- 把默认参数当成每次调用都会重新计算；
-- 用可变默认 list/dict 保存临时状态；
-- 混淆调用端 ``*`` / ``**`` 解包与定义端参数收集；
-- 认为注解会阻止错误类型实参；
-- 在循环中创建 lambda 时忽略自由变量的晚绑定；
-- 以为参数绑定失败意味着参数表达式没有执行。
+- 在 ``__getattribute__`` 或 ``__setattr__`` 中再次使用普通点号访问导致无限递归；
+- 以为 ``__getattr__`` 会在每次属性读取时调用；
+- 以为实例属性总能遮蔽类上的 descriptor；
+- 让 property getter 内部意外抛出 ``AttributeError``，导致 ``hasattr`` 把真实错误当成“不存在”；
+- 以为定义 ``__slots__`` 后所有继承层级都自动禁止 ``__dict__``。
 
 ## Target File
 
-`languages/python/core/test_functions_calls_and_argument_binding.py`
+`languages/python/core/test_attribute_access_and_descriptors.py`
 
 ## Official Sources
 
-- https://docs.python.org/3.10/reference/compound_stmts.html#function-definitions
-- https://docs.python.org/3.10/reference/expressions.html#calls
-- https://docs.python.org/3.10/reference/expressions.html#lambda
-- https://docs.python.org/3.10/reference/datamodel.html#object.__call__
-- https://docs.python.org/3.10/library/functions.html#callable
+- https://docs.python.org/3.10/reference/expressions.html#attribute-references
+- https://docs.python.org/3.10/reference/datamodel.html#customizing-attribute-access
+- https://docs.python.org/3.10/reference/datamodel.html#implementing-descriptors
+- https://docs.python.org/3.10/howto/descriptor.html
+- https://docs.python.org/3.10/library/functions.html#getattr
+- https://docs.python.org/3.10/library/functions.html#property
 
 ## Authoring Requirements
 
 - 使用 pytest 风格的普通测试函数；
-- 使用必要而详细的中文注释解释绑定顺序、求值时机和常见坑；
+- 使用必要而详细的中文注释解释属性查找优先级和常见坑；
 - 案例保持正常、具体、可复用，不做穷举式边界矩阵；
 - 文件顶部写 `polyglot-covers` 标记；
 - 本阶段不运行测试。
 
 ## Handoff
 
-真假值、比较、二元运算、一元与数值转换、订阅与切片共五个测试套已完成首轮编写，但按照用户要求尚未运行。下一步直接编写函数调用与参数绑定测试套；不要先运行 pytest。
+真假值、比较、二元运算、一元与转换、订阅切片、函数调用共六个测试套已完成首轮编写，但按照用户要求尚未运行。下一步直接编写属性访问与描述符测试套；不要先运行 pytest。
