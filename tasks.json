@@ -1,0 +1,340 @@
+{
+  "schema_version": 1,
+  "milestone": "m1-foundation-examples",
+  "task_count": 9,
+  "tasks": [
+    {
+      "id": "repository.native-workflow",
+      "kind": "infrastructure",
+      "language": null,
+      "title": "Replace handoff sources and generated checklists with repository-native continuation",
+      "status": "done",
+      "depends_on": [],
+      "files": [
+        ".gitignore",
+        ".github/workflows/repository.yml",
+        "AGENTS.md",
+        "README.md",
+        "project.json",
+        "tasks.json",
+        "tools/project.py",
+        "tools/run.sh"
+      ],
+      "covers": [],
+      "cases": [],
+      "sources": [],
+      "acceptance": [
+        "The active tree contains no chatgpt-sources or generated checklist inventory",
+        "A fresh conversation can discover scope, next work, acceptance, and validation from repository files",
+        "The metadata checker rejects inconsistent task state"
+      ],
+      "verify": [
+        "./tools/run.sh check",
+        "bash -n tools/run.sh",
+        "PYTHONPYCACHEPREFIX=/tmp/polyglot-pycache python3 -m py_compile tools/project.py"
+      ],
+      "handoff": "",
+      "blocker": ""
+    },
+    {
+      "id": "python.collections-core",
+      "kind": "example",
+      "language": "python",
+      "title": "Create the Python test root with core collection workflows",
+      "status": "todo",
+      "depends_on": [
+        "repository.native-workflow"
+      ],
+      "files": [
+        "languages/python/test_collections.py"
+      ],
+      "covers": [
+        "list comprehension",
+        "dict.get",
+        "dict.setdefault",
+        "set operations"
+      ],
+      "cases": [
+        "transform and filter a short sequence with a readable comprehension",
+        "distinguish a non-mutating default lookup from setdefault insertion",
+        "use set intersection and difference to compare memberships"
+      ],
+      "sources": [
+        "https://docs.python.org/3/library/stdtypes.html",
+        "https://docs.python.org/3/tutorial/datastructures.html"
+      ],
+      "acceptance": [
+        "Tests are deterministic and teach the cases without helper indirection",
+        "The file uses pytest assertions and only Python standard-library behavior",
+        "The complete Python runner passes"
+      ],
+      "verify": [
+        "./tools/run.sh python"
+      ],
+      "handoff": "",
+      "blocker": ""
+    },
+    {
+      "id": "cpp.vector-algorithm",
+      "kind": "example",
+      "language": "cpp",
+      "title": "Create the C++ test root with vector and algorithm workflows",
+      "status": "todo",
+      "depends_on": [
+        "repository.native-workflow"
+      ],
+      "files": [
+        "languages/cpp/CMakeLists.txt",
+        "languages/cpp/test_vector_algorithm.cpp"
+      ],
+      "covers": [
+        "std::vector",
+        "std::sort",
+        "std::accumulate"
+      ],
+      "cases": [
+        "grow a vector and inspect its ordered contents",
+        "sort values in place and accumulate the sorted range"
+      ],
+      "sources": [
+        "https://en.cppreference.com/w/cpp/container/vector",
+        "https://en.cppreference.com/w/cpp/algorithm/sort",
+        "https://en.cppreference.com/w/cpp/algorithm/accumulate"
+      ],
+      "acceptance": [
+        "CMake discovers an installed GoogleTest without downloading dependencies",
+        "Tests use TEST and EXPECT or ASSERT macros and define no main function",
+        "The complete C++ runner configures, builds, and passes in a temporary directory"
+      ],
+      "verify": [
+        "./tools/run.sh cpp"
+      ],
+      "handoff": "",
+      "blocker": ""
+    },
+    {
+      "id": "nodejs.path-fs-url",
+      "kind": "example",
+      "language": "nodejs",
+      "title": "Create the Node.js test root with path, file, and URL workflows",
+      "status": "todo",
+      "depends_on": [
+        "repository.native-workflow"
+      ],
+      "files": [
+        "languages/nodejs/path-fs-url.test.mjs"
+      ],
+      "covers": [
+        "node:path",
+        "node:fs/promises",
+        "node:url",
+        "node:test"
+      ],
+      "cases": [
+        "build a platform-correct path inside a temporary directory",
+        "write and read UTF-8 text with promise APIs",
+        "convert a file path to a file URL and back"
+      ],
+      "sources": [
+        "https://nodejs.org/api/path.html",
+        "https://nodejs.org/api/fs.html#promises-api",
+        "https://nodejs.org/api/url.html"
+      ],
+      "acceptance": [
+        "Tests use node:test and strict assertions",
+        "Temporary files are automatically cleaned and no home directory is touched",
+        "The complete Node.js runner passes"
+      ],
+      "verify": [
+        "./tools/run.sh nodejs"
+      ],
+      "handoff": "",
+      "blocker": ""
+    },
+    {
+      "id": "julia.collections-iteration",
+      "kind": "example",
+      "language": "julia",
+      "title": "Create the Julia test root with collection and iteration workflows",
+      "status": "todo",
+      "depends_on": [
+        "repository.native-workflow"
+      ],
+      "files": [
+        "languages/julia/runtests.jl"
+      ],
+      "covers": [
+        "Dict",
+        "get",
+        "comprehensions",
+        "map",
+        "filter"
+      ],
+      "cases": [
+        "look up present and missing dictionary keys without mutating the dictionary",
+        "transform and filter a short range with comprehensions and iterator helpers"
+      ],
+      "sources": [
+        "https://docs.julialang.org/en/v1/base/collections/",
+        "https://docs.julialang.org/en/v1/manual/arrays/#man-comprehensions"
+      ],
+      "acceptance": [
+        "Examples use the Test standard library",
+        "Assertions remain small and show normal collection workflows",
+        "The complete Julia runner passes"
+      ],
+      "verify": [
+        "./tools/run.sh julia"
+      ],
+      "handoff": "",
+      "blocker": ""
+    },
+    {
+      "id": "r.vectors-data-frame",
+      "kind": "example",
+      "language": "r",
+      "title": "Create the R test root with vector and data-frame workflows",
+      "status": "todo",
+      "depends_on": [
+        "repository.native-workflow"
+      ],
+      "files": [
+        "languages/r/test_base.R"
+      ],
+      "covers": [
+        "vectorized arithmetic",
+        "logical indexing",
+        "data.frame",
+        "transform"
+      ],
+      "cases": [
+        "transform and filter numeric vectors with vectorized operations",
+        "create a small data frame and derive a column without external packages"
+      ],
+      "sources": [
+        "https://cran.r-project.org/doc/manuals/r-release/R-intro.html"
+      ],
+      "acceptance": [
+        "The file uses base stopifnot assertions and no third-party packages",
+        "The examples avoid global workspace and graphics-device state",
+        "The complete R runner passes"
+      ],
+      "verify": [
+        "./tools/run.sh r"
+      ],
+      "handoff": "",
+      "blocker": ""
+    },
+    {
+      "id": "go.strings-json",
+      "kind": "example",
+      "language": "go",
+      "title": "Create the Go test root with strings and JSON workflows",
+      "status": "todo",
+      "depends_on": [
+        "repository.native-workflow"
+      ],
+      "files": [
+        "languages/go/go.mod",
+        "languages/go/strings_json_test.go"
+      ],
+      "covers": [
+        "strings.Fields",
+        "strings.Join",
+        "encoding/json.Marshal",
+        "encoding/json.Unmarshal"
+      ],
+      "cases": [
+        "split normalized words and join them with a chosen separator",
+        "round-trip a small exported struct through JSON"
+      ],
+      "sources": [
+        "https://pkg.go.dev/strings",
+        "https://pkg.go.dev/encoding/json",
+        "https://pkg.go.dev/testing"
+      ],
+      "acceptance": [
+        "Tests use the testing package and standard library only",
+        "The JSON example makes exported-field behavior visible",
+        "The complete Go runner passes"
+      ],
+      "verify": [
+        "./tools/run.sh go"
+      ],
+      "handoff": "",
+      "blocker": ""
+    },
+    {
+      "id": "rust.option-iterator",
+      "kind": "example",
+      "language": "rust",
+      "title": "Create the Rust test root with Option and iterator workflows",
+      "status": "todo",
+      "depends_on": [
+        "repository.native-workflow"
+      ],
+      "files": [
+        "languages/rust/Cargo.toml",
+        "languages/rust/src/lib.rs"
+      ],
+      "covers": [
+        "Option::map",
+        "Option::unwrap_or",
+        "Iterator::filter",
+        "Iterator::map",
+        "Iterator::collect"
+      ],
+      "cases": [
+        "transform Some while preserving None and provide a normal fallback",
+        "chain lazy iterator adapters and collect an owned vector"
+      ],
+      "sources": [
+        "https://doc.rust-lang.org/std/option/enum.Option.html",
+        "https://doc.rust-lang.org/std/iter/trait.Iterator.html"
+      ],
+      "acceptance": [
+        "Tests use built-in test attributes and declare no external crates",
+        "The iterator example keeps ownership and type inference readable",
+        "The complete Rust runner passes"
+      ],
+      "verify": [
+        "./tools/run.sh rust"
+      ],
+      "handoff": "",
+      "blocker": ""
+    },
+    {
+      "id": "catalog.expand-after-foundation",
+      "kind": "planning",
+      "language": null,
+      "title": "Plan the next learning-oriented example milestone",
+      "status": "todo",
+      "depends_on": [
+        "python.collections-core",
+        "cpp.vector-algorithm",
+        "nodejs.path-fs-url",
+        "julia.collections-iteration",
+        "r.vectors-data-frame",
+        "go.strings-json",
+        "rust.option-iterator"
+      ],
+      "files": [
+        "project.json",
+        "tasks.json"
+      ],
+      "covers": [],
+      "cases": [],
+      "sources": [],
+      "acceptance": [
+        "The next milestone contains compact tasks prioritized by learning value rather than exhaustive API inventory",
+        "Every new example task has sources, cases, files, acceptance criteria, and an executable verification command",
+        "project.json and tasks.json name the same current milestone"
+      ],
+      "verify": [
+        "./tools/run.sh check"
+      ],
+      "handoff": "",
+      "blocker": ""
+    }
+  ]
+}

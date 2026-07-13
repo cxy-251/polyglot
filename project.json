@@ -1,0 +1,68 @@
+{
+  "schema_version": 1,
+  "project": "polyglot-stdlib-by-example",
+  "mission": "Teach language and standard-library workflows through small runnable example tests.",
+  "phase": "repository-native",
+  "current_milestone": "m1-foundation-examples",
+  "task_source": "tasks.json",
+  "legacy_tip": "662e0d1",
+  "languages": [
+    {
+      "id": "python",
+      "name": "Python",
+      "root": "languages/python",
+      "test_framework": "pytest",
+      "validate": "./tools/run.sh python"
+    },
+    {
+      "id": "cpp",
+      "name": "C++",
+      "root": "languages/cpp",
+      "test_framework": "GoogleTest via CMake/CTest",
+      "validate": "./tools/run.sh cpp"
+    },
+    {
+      "id": "nodejs",
+      "name": "Node.js",
+      "root": "languages/nodejs",
+      "test_framework": "node:test",
+      "validate": "./tools/run.sh nodejs"
+    },
+    {
+      "id": "julia",
+      "name": "Julia",
+      "root": "languages/julia",
+      "test_framework": "Test",
+      "validate": "./tools/run.sh julia"
+    },
+    {
+      "id": "r",
+      "name": "R",
+      "root": "languages/r",
+      "test_framework": "base stopifnot()",
+      "validate": "./tools/run.sh r"
+    },
+    {
+      "id": "go",
+      "name": "Go",
+      "root": "languages/go",
+      "test_framework": "testing",
+      "validate": "./tools/run.sh go"
+    },
+    {
+      "id": "rust",
+      "name": "Rust",
+      "root": "languages/rust",
+      "test_framework": "cargo test",
+      "validate": "./tools/run.sh rust"
+    }
+  ],
+  "policies": {
+    "standard_library_only": true,
+    "direct_repository_writes": true,
+    "generated_handoff_sources": false,
+    "generated_api_inventories": false,
+    "temporary_output_root": "/tmp/polyglot-*",
+    "one_coherent_task_per_change": true
+  }
+}

@@ -1,172 +1,90 @@
-# Agent Notes
+# Repository Contract
 
-This project is a checklist-first standard-library example atlas.
+This repository is designed so that a new coding conversation can continue the
+work using repository state alone. Do not rely on memories, copied prompts, or
+an external handoff document.
 
-## Current Phase
+## Start Here
 
-- The current objective is to build auditable language checklists and task data.
-- Python, C++, Node.js, Julia, R, Go, and Rust are active checklists.
-- Node.js, Julia, R, Go, and Rust are Dash-backed first-pass checklist models; test writing is still paused.
-- `languages/` may be empty until test writing resumes.
-- Keep only the root `README.md`; do not add README files under subdirectories.
-- Do not delete empty directories under `checklists/`.
+At the beginning of every task:
 
-## Contract
+1. Run `git status --short` and inspect recent commits.
+2. Read `README.md`, `project.json`, and `tasks.json`.
+3. Run `./tools/run.sh check` and `./tools/run.sh status`.
+4. If the user named a task, follow that scope. Otherwise resume an
+   `in_progress` task; if none exists, use `./tools/run.sh next`.
+5. Read the selected task's `covers`, `cases`, `sources`, `acceptance`, `files`,
+   and `verify` fields before editing.
 
-- Checklist/task data is the planning source of truth.
-- Use JSON data sources for Python checklist work, not Markdown checkbox files.
+## Product Boundary
+
+Polyglot is a learning atlas of small, runnable standard-library examples for
+exactly seven languages: Python, C++, Node.js, Julia, R, Go, and Rust.
+
+- Put runnable example tests directly under `languages/<language-id>/`.
+- Demonstrate language or standard-library behavior, not test-framework tricks.
+- Use only the language standard library plus the test framework declared in
+  `project.json`.
+- Keep examples deterministic. Do not use public network access, sleeps, real
+  home-directory writes, or persistent machine state.
+- Prefer a normal workflow example over exhaustive edge-case matrices.
+- Use temporary directories for generated files and `/tmp/polyglot-*` for
+  build output.
+- Do not add a new language unless the project scope is explicitly changed.
+
+## Sources of Truth
+
+- `project.json` defines project scope, language roots, frameworks, and runner
+  commands.
+- `tasks.json` is the planning and continuation source of truth.
+- `languages/` contains the product itself: runnable examples and their minimal
+  test/build configuration.
+- Git history preserves the retired checklist-first implementation. It is
+  reference material, not a current contract.
+
+Do not recreate `chatgpt-sources/`, prompt templates, generated API inventories,
+or generated checklist trees. Official documentation URLs belong in a task's
+`sources` field; do not duplicate the same links across handoff files.
+
+## Task Workflow
+
+Keep one coherent task in flight per branch or change set.
+
+1. Select one task.
+2. Change its status to `in_progress` only when work is actually present. Add a
+   concise `handoff` describing the exact remaining step if the task will be
+   left unfinished.
+3. Implement the listed cases directly in the listed files. Small supporting
+   files are allowed when required by the declared test framework.
+4. Run every command in the task's `verify` list, plus `./tools/run.sh check`.
+5. Compare the result with every acceptance item.
+6. Set the task to `done`, clear `handoff` and `blocker`, and commit only after
+   all required validation passes.
+
+Status meanings:
+
+- `todo`: no implementation has been accepted.
+- `in_progress`: concrete work exists and `handoff` says what remains.
+- `blocked`: progress requires an external decision or unavailable capability;
+  `blocker` states the evidence and needed resolution.
+- `done`: listed files exist and all acceptance and verification steps pass.
+
+Do not mark partial or unverified work `done`. If a task is interrupted, leave
+the repository in a state another conversation can diagnose without reading
+the previous chat.
+
+## Editing and Validation
+
 - Keep task records compact and learning-oriented.
-- Put official documentation URLs in source metadata or task/module sections; do not repeat links unnecessarily.
-- Prefer runnable examples over exhaustive edge-case testing when test writing resumes.
-- The APIs being demonstrated should come from the language standard library. Test frameworks are explicit exceptions and must match catalog/handoff contracts: Python pytest, C++ GoogleTest, Node.js node:test, Julia Test, R base stopifnot, Go testing, Rust cargo test.
-- Do not add package-manager dependencies just to write checklist tooling or examples.
-- Route host execution through `./tools/run.sh`, which uses `docker exec ohdev` when outside the container.
-- Put generated binaries, caches, and temporary state under `/tmp/polyglot-*` or the tool default temp location.
-- Project language scope is intentionally limited to Python, C++, Node.js, Julia, R, Go, and Rust.
-- Use local Dash docsets as the preferred offline object/API fact source when a language lacks an official machine object inventory.
+- A task's `cases` drive test structure; `covers` constrain the intended API
+  surface. Do not generate one test per covered symbol mechanically.
+- Add comments only when they explain a non-obvious behavior.
+- Do not add dependencies merely for repository tooling.
+- Validation should be proportional: metadata-only changes need
+  `./tools/run.sh check`; example changes also need that language's runner.
+- When a coherent task passes, make a local Git commit without waiting for an
+  extra prompt.
 
-## Active Data Models
-
-Python checklist data lives in `checklists/python/`:
-
-- `schema.json`: schema and status enums.
-- `language.checklist.json`: Python language core, including builtins, built-in types, data model, magic methods, and protocol dispatch.
-- `stdlib.baseline.json`: machine snapshot from `https://docs.python.org/3/library/index.html`.
-- `stdlib.objects.json`: machine snapshot from `https://docs.python.org/3/objects.inv`.
-- `stdlib.checklist.json`: generated/auditable stdlib classification skeleton.
-- `stdlib.tasks.json`: the single curated human-maintained Python stdlib task file.
-
-Do not treat `stdlib.checklist.json` as the long-term manual editing surface. New stdlib judgment should usually go into `stdlib.tasks.json`. Do not split Python stdlib tasks into multiple files.
-
-C++ checklist data lives in `checklists/cpp/`:
-
-- `schema.json`: schema and status enums.
-- `language.checklist.json`: C++ language core, including RAII, value/reference/move semantics, templates, iterators, lambdas, and exception boundaries.
-- `stdlib.baseline.json`: broad standard header + symbol baseline generated by `tools/cpp_stdlib_audit.py refresh-baseline`. It uses cppreference's standard library header organization as navigable source structure, while ISO C++ remains the intended normative authority.
-- `stdlib.objects.json`: generated object index. It imports the local Dash C++.docset by default, can use cppreference Doxygen tag XML when supplied, and falls back to baseline symbols for missing objects.
-- `stdlib.checklist.json`: generated/auditable stdlib classification skeleton.
-- `stdlib.tasks.json`: the single curated human-maintained C++ stdlib task file.
-
-Do not treat C++ `stdlib.checklist.json` as the long-term manual editing surface. Do not split C++ stdlib tasks into multiple files. C++ `covers` must exist in `stdlib.objects.json` object names. Keep the baseline/objects/checklist comprehensive; keep common/teachable judgment in `stdlib.tasks.json`. `baseline-fallback` means the symbol came from the broad baseline because Dash/tag did not provide a matching object.
-
-Node.js, Julia, R, Go, and Rust checklist data lives in `checklists/<language-id>/` with the same six-file layout:
-
-- `schema.json`: schema and status enums.
-- `language.checklist.json`: human-maintained language core.
-- `stdlib.baseline.json`: Dash-generated module/package/category baseline.
-- `stdlib.objects.json`: Dash-generated object index.
-- `stdlib.checklist.json`: generated/auditable stdlib classification skeleton.
-- `stdlib.tasks.json`: the single curated human-maintained stdlib task file.
-
-For these Dash-backed languages, do not hand-edit baseline/objects/checklist. Refresh them with `python3 tools/<language>_stdlib_audit.py refresh-all`. Do not split tasks by module/package.
-
-## Task First Workflow
-
-1. Find the target in `checklists/<language>/`.
-2. For stdlib work, add or refine tasks in the language's single `stdlib.tasks.json` file.
-3. Use `covers` to link a task to known API names in that language's `stdlib.objects.json` object names.
-4. Use `cases` to describe the usage scenarios the future runnable test should teach.
-5. Run only the lightweight validation that matches the change before marking the cleanup or data change done.
-
-For Python, do not stop at beginner examples. Builtins often dispatch to data-model protocols, so include protocol-level targets such as `__abs__`, `__index__`, `__iter__`, `__format__`, descriptors, attribute hooks, context managers, and async protocols.
-
-## Tools
-
-Language-specific tools should be named with the language prefix:
-
-- `tools/python_checklist_status.py`
-- `tools/python_stdlib_audit.py`
-- `tools/python_render_task.py`
-- `tools/python_api_inventory.py`
-- `tools/cpp_checklist_status.py`
-- `tools/cpp_stdlib_audit.py`
-- `tools/cpp_render_task.py`
-- `tools/nodejs_checklist_status.py`
-- `tools/nodejs_stdlib_audit.py`
-- `tools/nodejs_render_task.py`
-- `tools/julia_checklist_status.py`
-- `tools/julia_stdlib_audit.py`
-- `tools/julia_render_task.py`
-- `tools/r_checklist_status.py`
-- `tools/r_stdlib_audit.py`
-- `tools/r_render_task.py`
-- `tools/go_checklist_status.py`
-- `tools/go_stdlib_audit.py`
-- `tools/go_render_task.py`
-- `tools/rust_checklist_status.py`
-- `tools/rust_stdlib_audit.py`
-- `tools/rust_render_task.py`
-
-Common shell entry points may keep generic names:
-
-- `tools/run.sh`
-- `tools/run-in-container.sh`
-
-Internal shared helpers may have generic names when they are not user-facing language tools:
-
-- `tools/dash_docset.py`
-- `tools/dash_language_configs.py`
-- `tools/dash_stdlib_common.py`
-
-Validation should stay proportional. There are no runnable tests yet, so data-only edits should not trigger a full toolchain sweep.
-
-For any `stdlib.tasks.json`-only change, check that JSON parses and that new `covers` exist in that language's `stdlib.objects.json` object names. For C++ baseline/object/checklist changes, update the generator first, run the matching `refresh-*` command, then run `python3 tools/cpp_stdlib_audit.py audit`. For Dash-backed baseline/object/checklist changes, update the config/common reader first, run `python3 tools/<language>_stdlib_audit.py refresh-all`, then run its audit. For renderer or tool changes, run syntax checks and one representative command.
-
-Useful commands:
-
-```bash
-python3 tools/cpp_checklist_status.py
-python3 tools/cpp_stdlib_audit.py audit
-python3 tools/cpp_stdlib_audit.py refresh-objects
-python3 tools/cpp_stdlib_audit.py refresh-objects --dash-docset "/path/to/C++.docset"
-python3 tools/cpp_stdlib_audit.py refresh-checklist
-python3 tools/cpp_render_task.py vector --limit 1
-python3 tools/go_stdlib_audit.py audit
-python3 tools/go_render_task.py strings --limit 1
-python3 tools/julia_stdlib_audit.py audit
-python3 tools/julia_render_task.py Base.Dict --limit 1
-python3 tools/nodejs_stdlib_audit.py audit
-python3 tools/nodejs_render_task.py path --limit 1
-python3 tools/python_checklist_status.py python
-python3 tools/python_stdlib_audit.py audit
-python3 tools/python_stdlib_audit.py audit --objects heapq pathlib json list dict str
-python3 tools/python_render_task.py heapq --limit 1
-python3 tools/r_stdlib_audit.py audit
-python3 tools/r_render_task.py base --limit 1
-python3 tools/rust_stdlib_audit.py audit
-python3 tools/rust_render_task.py std::vec --limit 1
-```
-
-Do not run Docker entry points or full pytest unless the user explicitly asks, runner code changed, or test files have intentionally been restored.
-When a coherent checklist/task phase is complete and validations pass, make a local git commit without waiting for an extra prompt.
-
-## ChatGPT App Handoff
-
-The user may ask ChatGPT, not Codex, to generate a single future test file. Keep `chatgpt-sources/<language-id>/` self-contained enough for that workflow:
-
-- `chatgpt-sources/project-instructions.md`: global generation rules intended for ChatGPT Project Instructions.
-- `project-contract.md`: project rules and language runner conventions for future test-file generation.
-- `task-template.md`: fill-in prompt using the language's `tools/<language>_render_task.py`.
-- `example-test-file.*`: compact style reference.
-
-The global project instructions are the highest-level generation boundary for ChatGPT handoff: `cases` drive test structure, `covers` constrain API usage, and `protocols` authorize custom protocol examples. Do not let generated examples drift into edge-case matrices or one-test-per-API output unless the rendered task explicitly asks for that.
-
-Codex should maintain these source files and the runner. ChatGPT can generate individual test files from rendered tasks when test writing resumes.
-
-Future test conventions: Python uses pytest. C++ uses GoogleTest: generated files should include `#include <gtest/gtest.h>`, use `TEST` / `EXPECT_*` / `ASSERT_*`, and should not define `main`. Node.js uses `node:test`; Julia uses `Test`; R uses base `stopifnot()` for now; Go uses `testing`; Rust uses `#[test]` / `cargo test`.
-
-## Naming
-
-- Language checklist folders live under `checklists/<language-id>/`.
-- Future test folders should live under `languages/<language-id>/`.
-- Language tools use the language prefix, for example `python_`, `cpp_`, `nodejs_`, `julia_`, `r_`, `go_`, and `rust_`.
-- Future test files should be readable before they are clever.
-- Prefer names like `test_json_round_trips_dict` or `test_vector_push_back_and_index`.
-
-## Adding A Language Checklist
-
-1. Keep the language entry in `catalog.json`.
-2. Use `checklists/<language-id>/` for its checklist data.
-3. Do not add subdirectory README files.
-4. Add language-prefixed tools only when there is real checklist logic to run.
-5. If a runtime is missing in `ohdev`, make the runner report that clearly instead of silently skipping it.
+The old repository state ends at commit `662e0d1`. Use `git show` or `git log`
+when historical detail is useful; do not restore old generated data into the
+active tree.

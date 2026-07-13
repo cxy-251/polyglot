@@ -2,5 +2,15 @@
 __pycache__/
 *.py[cod]
 .pytest_cache/
-.mypy_cache/
-.ruff_cache/
+.coverage
+.idea/
+.vscode/
+
+# Repository-local build output. Runners should prefer /tmp.
+/languages/cpp/build/
+/languages/rust/target/
+/languages/nodejs/node_modules/
+
+# Language session state.
+.Rhistory
+.RData
