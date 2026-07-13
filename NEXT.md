@@ -1,6 +1,6 @@
 # Current Task
 
-ID: `python.stdlib.tempfile`
+ID: `python.stdlib.shutil`
 
 Status: `ready`
 
@@ -8,58 +8,54 @@ Repository phase: `python-authoring-unverified`
 
 ## Goal
 
-编写 Python 3.10 `tempfile` 标准库测试套，展示自动清理的临时文件/目录、可命名临时文件、内存到磁盘的 spooled file，以及低层 `mkstemp` / `mkdtemp` 的资源所有权。
+编写 Python 3.10 `shutil` 高层文件操作测试套，展示复制语义、目录树合并/忽略、移动与递归删除、可执行文件查找、磁盘空间和归档工作流。
 
 ## Covers
 
-- `TemporaryFile()` 默认 binary mode、文本模式、seek/read/write 和自动关闭；
-- `NamedTemporaryFile()` 的 `.name`、delete=True 生命周期；
-- delete=False 跨上下文重开与调用者手工 unlink 责任；
-- `TemporaryDirectory()` 路径、嵌套内容和 context exit 递归清理；
-- 显式 `cleanup()` 的幂等使用与 `ignore_cleanup_errors`（Python 3.10）；
-- prefix/suffix/dir 控制，所有案例仍限制在 tmp_path；
-- `SpooledTemporaryFile(max_size, mode)` 在阈值前后的统一文件接口；
-- `rollover()` / `fileno()` 强制落盘，但调用者不依赖私有 `_file` 实现；
-- `mkstemp()` 返回 `(fd, path)`，需要 `os.close` + `os.unlink`；
-- `mkdtemp()` 返回目录路径，需要调用者递归/显式清理；
-- `gettempdir()` / `gettempdirb()` / `gettempprefix()` 只做稳定类型/契约断言；
-- 临时名称由安全创建 API 生成，不能用 `mktemp()` 先取名字再打开。
+- `copyfileobj()` 的流复制、length 不是总量限制且不自动 rewind/flush；
+- `copyfile()` 只复制内容、SameFileError 和返回目标路径；
+- `copymode()` / `copystat()` 的权限与元数据范围；
+- `copy()`（内容+mode）与 `copy2()`（尽量保留 metadata）；
+- `copytree()`、`dirs_exist_ok=True`、`ignore_patterns()`、自定义 ignore callable；
+- copytree 的 `symlinks`、`ignore_dangling_symlinks` 和 Error 聚合；
+- `move()` 同文件系统重命名与目录目标行为；
+- `rmtree()`、`ignore_errors` / `onerror` 回调和 symlink 防护边界；
+- `disk_usage()` 的 total/used/free 关系；
+- `which()` 的 PATH / mode 查找，使用 tmp_path 自建可执行文件；
+- `make_archive()` / `unpack_archive()` / `get_archive_formats()`；
+- `get_terminal_size()` 使用 fallback 的可测试路径。
 
 ## Common Pitfalls To Explain
 
-- 忘记 TemporaryFile 默认是 binary mode；
-- 依赖 NamedTemporaryFile 在不同平台上的“打开时再次打开同名文件”行为；
-- delete=False 后忘记清理；
-- 把 `.name` 当永久路径，在 context 退出后继续使用；
-- 忘记 mkstemp 返回的是已经打开的原始 fd；
-- 只关闭 fd 不删除路径，或只删除路径不关闭 fd；
-- 依赖 SpooledTemporaryFile 私有 `_file` 类型判断是否落盘；
-- 使用存在竞态漏洞的 `mktemp()`。
+- 认为 copy/copy2 会复制 owner、ACL、resource fork 等全部平台元数据；
+- 忘记 copyfileobj 从当前流位置开始且不负责 flush；
+- copytree 默认拒绝已存在目标，未理解 dirs_exist_ok 覆盖方向；
+- 忽略 symlink 复制/跟随差异；
+- 对不可信归档直接 unpack，产生路径穿越风险；
+- 对 symlink 路径调用递归删除或依赖 onerror 掩盖真实失败；
+- 依赖 which 查找当前目录或未显式控制 PATH。
 
 ## Target File
 
-`languages/python/stdlib/test_032_tempfile_lifecycle.py`
+`languages/python/stdlib/test_033_shutil_high_level_file_operations.py`
 
 ## Official Sources
 
-- https://docs.python.org/3.10/library/tempfile.html
-- https://docs.python.org/3.10/library/tempfile.html#tempfile.TemporaryFile
-- https://docs.python.org/3.10/library/tempfile.html#tempfile.NamedTemporaryFile
-- https://docs.python.org/3.10/library/tempfile.html#tempfile.SpooledTemporaryFile
-- https://docs.python.org/3.10/library/tempfile.html#tempfile.TemporaryDirectory
-- https://docs.python.org/3.10/library/tempfile.html#tempfile.mkstemp
-- https://docs.python.org/3.10/library/tempfile.html#tempfile.mkdtemp
+- https://docs.python.org/3.10/library/shutil.html
+- https://docs.python.org/3.10/library/shutil.html#directory-and-files-operations
+- https://docs.python.org/3.10/library/shutil.html#copytree-example
+- https://docs.python.org/3.10/library/shutil.html#archiving-operations
 
 ## Authoring Requirements
 
-- 使用 pytest 和 tmp_path；显式 dir=tmp_path，避免污染系统临时目录；
-- 中文注释解释资源所有权、自动/手工清理和跨平台命名文件边界；
-- 所有低层 fd/path 都用 try/finally 清理；
-- 不调用不安全的 mktemp()，只在注释解释；
-- 与 029/030 文件基础避免机械重复，侧重生命周期；
+- 使用 pytest 和 tmp_path，所有源/目标/归档均在临时目录；
+- 中文注释明确内容、mode、metadata、symlink 和归档安全边界；
+- 权限断言只检查 POSIX 容器中稳定的 mode 位，不依赖 owner/时间戳精度；
+- 不解包不可信数据，不接触真实 PATH 外的可执行文件；
+- 与 030--032 避免机械重复，侧重 shutil 的高层组合语义；
 - 文件顶部写 `polyglot-covers` 标记；
 - 本阶段不运行测试。
 
 ## Handoff
 
-001--029 已完成语言核心与内置层首轮编写；030 pathlib、031 os.path/目录遍历已完成标准库首轮编写。编号在整个 Python 树全局连续。全部 Python 文件尚未运行。下一步直接编写 032 tempfile 生命周期；不要先运行 pytest。
+001--029 已完成语言核心与内置层首轮编写；030 pathlib、031 os.path/目录遍历、032 tempfile 已完成标准库首轮编写。编号在整个 Python 树全局连续。全部 Python 文件尚未运行。下一步直接编写 033 shutil；不要先运行 pytest。
