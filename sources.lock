@@ -1,0 +1,13 @@
+format = 1
+
+[python]
+runtime = "3.10.12"
+documentation_series = "3.10"
+language_reference = "https://docs.python.org/3.10/reference/"
+data_model = "https://docs.python.org/3.10/reference/datamodel.html"
+built_in_functions = "https://docs.python.org/3.10/library/functions.html"
+built_in_types = "https://docs.python.org/3.10/library/stdtypes.html"
+standard_library = "https://docs.python.org/3.10/library/"
+object_inventory = "https://docs.python.org/3.10/objects.inv"
+peps = "https://peps.python.org/"
+offline_reference = "Local Dash Python docset, used only as an optional discovery source"

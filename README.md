@@ -1,86 +1,92 @@
-# Polyglot Standard Library by Example
+# Polyglot：通过测试学习编程语言
 
-Polyglot 用小而可运行的测试示例，展示多种编程语言中最值得学习的语言特性与标准库工作流。
+Polyglot 用可阅读、可执行的测试案例学习 Python、C++、Node.js、Julia、R、Go 和 Rust。
 
-项目固定覆盖七种语言：Python、C++、Node.js、Julia、R、Go、Rust。最终产品不是 API 清单，也不是生成提示词，而是 `languages/` 中可以直接运行、阅读和修改的示例。
+项目不仅展示“一个 API 怎么调用”，还要讲清楚：
+
+- 基础语法和常见工作流；
+- 高阶语言机制；
+- 表层语法、内置函数与底层协议之间的关系；
+- 官方语义中容易误解的行为和真实常见坑；
+- 示例逻辑是否能通过对应测试框架验证。
+
+例如 Python 中不仅要展示 `bool(value)`，还要展示真假值判断如何依次使用 `__bool__()` 和 `__len__()`；不仅展示 `for`，还要展示迭代协议和历史序列 fallback。
 
 ## 当前阶段
 
-仓库正在进入 `m1-foundation-examples`：先为每种语言建立最小测试入口和第一组代表性示例，再按学习价值扩展任务。
+当前进入 Python 3.10 测试套编写阶段。`ohdev` 容器中的解释器是 Python 3.10.12，官方内容来源锁定到 Python 3.10 文档系列。
 
-这次重置采用仓库原生协作方式：
+按照当前约定：
 
-- 对话直接修改仓库，不再经过 `chatgpt-sources/` 中转。
-- `tasks.json` 保存任务范围、状态、资料、产物和验收条件。
-- `AGENTS.md` 规定新对话如何读取状态、接续工作和完成任务。
-- `project.json` 保存稳定的语言范围、测试框架和运行命令。
-- 旧 checklist-first 实现保留在 Git 历史中，不再占据当前工作树。
+- 先连续编写 Python 测试套；
+- 暂不运行 pytest；
+- Python 编写阶段结束后统一在 `ohdev` 中执行；
+- 当前所有 Python 文件都应视为 draft / unverified；
+- 可以按连贯主题创建本地 authoring checkpoint commit，但这些 commit 不代表测试通过。
 
-## 快速开始
+## 新对话从哪里开始
 
-```bash
-./tools/run.sh check
-./tools/run.sh status
-./tools/run.sh next
-./tools/run.sh task python.collections-core
+只需要读取：
+
+```text
+AGENTS.md
+sources.lock
+NEXT.md
 ```
 
-没有用户指定任务时，`next` 会优先返回未完成的 `in_progress` 项，否则返回第一个依赖已满足的 `todo` 项。
-
-完成一个任务的标准流程：
-
-1. 阅读任务的 `covers`、`cases`、`sources`、`files`、`acceptance` 和 `verify`。
-2. 将示例直接写入 `languages/<language-id>/`。
-3. 执行任务列出的验证命令。
-4. 更新 `tasks.json` 状态，再运行 `./tools/run.sh check`。
-5. 验收全部通过后提交一个本地 commit。
+`NEXT.md` 永远只保存一个下一步任务。完整标准库对象清单、临时数据库和覆盖报告以后按需生成到 `/tmp`，不进入 Git。
 
 ## 仓库结构
 
 ```text
-AGENTS.md                         跨对话执行契约
-README.md                         产品说明与入口
-project.json                      稳定项目配置
-tasks.json                        当前计划与接续状态
-languages/<language-id>/          可运行示例（按任务逐步创建）
-tools/project.py                  状态、任务选择和一致性检查
-tools/run.sh                      统一验证入口
-.github/workflows/repository.yml  仓库状态检查
+AGENTS.md                   跨对话执行契约
+README.md                   项目目标和当前阶段
+NEXT.md                     唯一的当前任务
+sources.lock                语言版本和权威资料入口
+project.json                稳定语言范围与测试框架
+languages/python/           Python 教学测试
+tools/run.sh                宿主机 Docker 入口
+tools/run-in-container.sh   容器内测试入口
 ```
 
-`languages/` 不使用占位文件；对应语言的第一个任务完成时创建目录和最小运行配置。
+Python 测试按学习主题组织，而不是按官方文档的每个对象机械生成：
 
-## 任务状态
+```text
+languages/python/
+  core/          核心语义、表达式、语句和内置行为
+  protocols/     数据模型和特殊方法协议
+  stdlib/        标准库工作流
+```
 
-- `todo`：尚未验收。
-- `in_progress`：已有实际工作，`handoff` 必须说明下一步。
-- `blocked`：存在外部阻塞，`blocker` 必须说明证据和解除条件。
-- `done`：产物存在，验收项与验证命令全部通过。
+主题允许跨层。例如真假值测试同时包含布尔表达式、`bool()`、`__bool__()` 和 `__len__()`，因为把它们放在一个测试套中更容易理解真实分派关系。
 
-状态不是聊天记录摘要。所有接续所需的信息必须落在任务、代码、验证结果能说明的仓库状态中。
+## 执行模型
 
-## 验证入口
+宿主机不直接运行 Python 或其他语言工具：
+
+```text
+./tools/run.sh
+    ↓ docker exec ohdev
+./tools/run-in-container.sh
+    ↓ pytest / 编译器 / 对应测试框架
+```
+
+Python 编写阶段结束后，统一执行：
 
 ```bash
+./tools/run.sh doctor
 ./tools/run.sh python
-./tools/run.sh cpp
-./tools/run.sh nodejs
-./tools/run.sh julia
-./tools/run.sh r
-./tools/run.sh go
-./tools/run.sh rust
-./tools/run.sh all
 ```
 
-语言目录尚未建立时，对应入口会明确报错并提示先完成 foundation task。C++ 构建输出写到 `/tmp/polyglot-cpp-build`，其他工具也应避免把缓存和临时产物提交进仓库。
+目前不要因为单个文件写完就运行测试；这一约定会在进入验证阶段时更新。
 
 ## 历史
 
-重置前的 checklist、Dash 对象快照、审计脚本与 ChatGPT handoff source 截止于 commit `662e0d1`。需要参考旧判断或恢复某段资料时使用 Git 历史：
+重置前的 checklist、Dash 快照、审计脚本和 handoff source 保留在 commit `662e0d1`：
 
 ```bash
-git log --oneline --all
+git show 662e0d1:checklists/python/language.checklist.json
 git show 662e0d1:checklists/python/stdlib.tasks.json
 ```
 
-历史内容只用于查证，不代表当前结构或工作流。
+这些资料可以用于查证，但不是当前仓库结构。
