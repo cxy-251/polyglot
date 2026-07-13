@@ -1,6 +1,6 @@
 # Current Task
 
-ID: `python.core.representation-formatting-and-hashing`
+ID: `python.core.async-functions-and-protocols`
 
 Status: `ready`
 
@@ -8,55 +8,55 @@ Repository phase: `python-authoring-unverified`
 
 ## Goal
 
-编写 Python 3.10 对象表示、格式化、字节转换与哈希协议测试套，把 ``repr`` / ``str`` / ``ascii`` / ``format`` / f-string / ``bytes`` / ``hash`` 连接到对应特殊方法，并讲清相等性与稳定哈希的约束。
+编写 Python 3.10 ``async`` / ``await``、异步迭代器、异步生成器与异步上下文管理器测试套，在不引入 pytest 插件的前提下用标准库 ``asyncio.run()`` 驱动案例，连接全部核心异步特殊方法。
 
 ## Covers
 
-- ``__repr__()``、``repr()`` 与无 ``__str__`` 时的字符串 fallback；
-- ``__str__()`` 面向用户显示与 ``str()``；
-- ``ascii()`` 对 ``repr`` 中非 ASCII 字符进行转义；
-- ``__format__()``、``format()`` 和 f-string format spec；
-- f-string ``!s`` / ``!r`` / ``!a`` 转换先于格式化；
-- f-string debug ``value=`` 语法；
-- ``__bytes__()`` 与 ``bytes()``；
-- 表示/格式化特殊方法必须返回严格的 str/bytes 类型；
-- ``__hash__()`` 与 ``hash()``；
-- 相等对象必须具有相同 hash；
-- 覆盖 ``__eq__`` 后默认变为不可哈希，以及显式不可哈希 ``__hash__ = None``；
-- 基于可变字段计算 hash 会破坏 dict/set 查找；
-- 自定义不可变值对象同时实现 eq/hash 的正常键工作流。
+- 调用 ``async def`` 返回 coroutine，函数体到 await/运行时才开始；
+- coroutine 的返回值、异常传播和不能重复 await；
+- ``await`` 与 ``__await__()`` 协议，以及必须返回 iterator；
+- ``async for``、``__aiter__()``、``__anext__()``、``StopAsyncIteration``；
+- async iterator 单次状态与 async iterable 创建独立 iterator；
+- ``async for`` 的 ``break`` / ``else``；
+- ``async with``、``__aenter__()``、``__aexit__()``、异常传播与抑制；
+- 多个 async context manager 的进入/退出顺序；
+- async generator 的惰性执行与 ``__anext__()``；
+- ``asend()``、``athrow()``、``aclose()`` 与清理；
+- async generator 禁止带值 ``return`` 的语法边界；
+- 同步 iterable/context manager 与异步语法协议不可混用。
 
 ## Common Pitfalls To Explain
 
-- 认为 ``__repr__`` 必须能被 eval，或在表示中泄漏敏感信息；
-- 只实现 ``__str__`` 导致容器仍显示默认 repr；
-- 在 ``__format__`` 中忽略空 spec 或擅自接受未知 spec；
-- 以为 f-string ``!r`` 仍调用原对象的 ``__format__``；
-- ``__repr__`` / ``__str__`` 返回非字符串；
-- 定义值相等却沿用身份哈希；
-- 把参与 hash 的字段设为可变。
+- 调用 coroutine 函数后忘记 await；
+- 重复 await 已完成 coroutine；
+- 让 ``__await__`` 返回普通值而不是 iterator；
+- 在 Python 3.10 把 ``__aiter__`` 写成返回 awaitable，而不是直接返回 async iterator；
+- 用 ``StopIteration`` 结束 async iterator，而不是 ``StopAsyncIteration``；
+- 忘记 ``aclose`` 异步生成器所管理的资源；
+- 以为普通 ``with`` 对象自动支持 ``async with``。
 
 ## Target File
 
-`languages/python/core/test_014_representation_formatting_and_hashing.py`
+`languages/python/core/test_015_async_functions_and_protocols.py`
 
 ## Official Sources
 
-- https://docs.python.org/3.10/reference/datamodel.html#object.__repr__
-- https://docs.python.org/3.10/reference/datamodel.html#object.__format__
-- https://docs.python.org/3.10/reference/datamodel.html#object.__hash__
-- https://docs.python.org/3.10/reference/lexical_analysis.html#formatted-string-literals
-- https://docs.python.org/3.10/library/functions.html#repr
-- https://docs.python.org/3.10/library/functions.html#format
+- https://docs.python.org/3.10/reference/compound_stmts.html#coroutine-function-definition
+- https://docs.python.org/3.10/reference/expressions.html#await-expression
+- https://docs.python.org/3.10/reference/compound_stmts.html#the-async-for-statement
+- https://docs.python.org/3.10/reference/compound_stmts.html#the-async-with-statement
+- https://docs.python.org/3.10/reference/datamodel.html#coroutine-objects
+- https://docs.python.org/3.10/reference/expressions.html#asynchronous-generator-iterator-methods
+- https://docs.python.org/3.10/library/asyncio-runner.html#asyncio.run
 
 ## Authoring Requirements
 
-- 使用 pytest 风格的普通测试函数；
-- 使用必要而详细的中文注释解释转换顺序、严格返回类型和 hash 不变量；
+- 使用 pytest 风格的同步测试函数，在内部以 ``asyncio.run()`` 驱动 async 场景，不添加 pytest 插件；
+- 使用必要而详细的中文注释解释惰性执行、协议终止异常和清理语义；
 - 案例保持正常、具体、可复用，不做穷举式边界矩阵；
 - 文件顶部写 `polyglot-covers` 标记；
 - 本阶段不运行测试。
 
 ## Handoff
 
-001--013 共十三个 Python 核心测试套已完成首轮编写；最新的 013 覆盖 decorator 求值/应用、wraps、class decorator、动态 type、metaclass 创建/调用流水线、class keyword 与元类选择冲突。全部文件按照用户要求尚未运行。下一步直接编写 014 表示、格式化与哈希协议；不要先运行 pytest。
+001--014 共十四个 Python 核心测试套已完成首轮编写；最新的 014 覆盖 repr/str/ascii/format/f-string/bytes/hash、严格返回类型以及 eq/hash 稳定性。全部文件按照用户要求尚未运行。下一步直接编写 015 异步函数与协议；不要先运行 pytest。
