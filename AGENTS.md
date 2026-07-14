@@ -35,7 +35,9 @@ Polyglot 是一个通过测试代码学习编程语言的案例仓库，固定�
 - 用户明确要求先完成 Python 编写阶段，再统一运行测试。
 - 在用户改变要求或进入统一验证阶段前，不运行 pytest，也不把任何 Python 文件称为“已验证”或“完成”。
 - `NEXT.md` 只在实际交接时推进，并必须持续注明整个 Python 测试集尚未运行。
-- 允许按连贯主题做本地阶段性 commit；提交前做文本和 diff 静态审阅，commit message 必须表明这是尚未统一验证的 authoring checkpoint。
+- 默认完成一个连贯的语言分区或 `stdlib/` 服务类别后再统一做本地阶段性 commit，
+  不要为每个测试套单独提交；实际交接前可以提前提交当前批次。提交前做文本和 diff
+  静态审阅，commit message 必须表明这是尚未统一验证的 authoring checkpoint。
 
 ## Python 内容来源
 
