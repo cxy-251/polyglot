@@ -1,6 +1,6 @@
 # Current Task
 
-ID: `python.stdlib.collections-abc-sequence-mixins`
+ID: `python.stdlib.collections-abc-set-mixins`
 
 Status: `ready`
 
@@ -8,64 +8,65 @@ Repository phase: `python-authoring-unverified`
 
 ## Goal
 
-编写 Python 3.10 `collections.abc.Sequence`、`MutableSequence` 与 `ByteString` 测试套：
-用最小自定义容器展示 abstract primitive 如何生成完整 sequence API、mixin 的真实
-分派路径，以及 slicing、负索引、构造器和算法复杂度仍由实现者承担的边界。
+编写 Python 3.10 `collections.abc.Set` 与 `MutableSet` 测试套：用可容纳不可哈希元素的
+最小 list-backed set 展示集合比较、代数运算、结果构造、可选 hash 和原地 mutation
+mixin；讲清 ABC 提供算法但不决定存储结构、元素约束或构造器签名。
 
 ## Covers
 
-- `Sequence` 直接继承要求 `__getitem__` 与 `__len__`，缺少任一方法不能实例化；
-- mixin 自动提供 `__contains__`、`__iter__`、`__reversed__`、`index()`、`count()`；
-- primitive `__getitem__` 必须以 `IndexError` 表示结束，否则 iteration mixin 不会终止；
-- negative index 与 slice 语义不会由 ABC 自动补齐，必须在 `__getitem__` 中实现；
-- `index(value, start, stop)`、`count(value)` 和 equality 调用的正常工作流；
-- mixin `__iter__` / `__reversed__` / `index` 会重复调用 `__getitem__`；
-- 若 primitive access 是线性时间，默认 mixin 可能退化为平方复杂度；
-- 自定义 `__iter__` 可以绕开昂贵随机访问，但不改变 Sequence 的其他语义；
-- `MutableSequence` 额外要求 `__setitem__`、`__delitem__` 与 `insert()`；
-- append/extend/`+=`、pop/remove/reverse 等 mixin 如何委托 primitive mutation hooks；
-- scalar 与 slice 的赋值/删除都进入同一个 `__setitem__` / `__delitem__`，实现者负责区分；
-- `insert` 对负数和越界位置的 list-like 归一化由具体实现决定；
-- 失败 mutation 的异常类型和原容器不变性；
-- mixin mutation 方法的返回值遵循 list 约定，`+=` 返回原对象；
-- `ByteString` 是只读 byte sequence ABC；bytes/bytearray 的注册关系与元素为 int 的语义；
-- 仅实现 Sequence primitives 的任意对象不会自动结构化成为 Sequence/ByteString。
+- `Set` 直接继承要求 `__contains__`、`__iter__`、`__len__`；
+- 默认 `<=` / `<` / `==` / `!=` / `>` / `>=` 的集合包含语义；
+- 比较操作要求另一侧是 `Set`，不能把任意 iterable 当集合比较；
+- `&`、`|`、`-`、`^` 及反向运算可接受一般 iterable，并返回具体 subclass；
+- `isdisjoint()` 的正常工作流与发现首个交集后的短路；
+- list-backed set 可保存不可哈希元素，同时保持去重、membership 与代数语义；
+- 默认 `_from_iterable()` 假定 `Class(iterable)` 构造器；
+- 具有额外构造参数的 subclass 必须 override `_from_iterable()`；
+- Set mixin 不定义 `__hash__`，普通自定义 set 默认不可哈希；
+- 不可变 subclass 可用 `__hash__ = Set._hash`，并与相等 `frozenset` 保持 hash 一致；
+- 参与 `_hash()` 的元素自身仍必须可哈希；
+- `MutableSet` 额外要求 `add()` 与 `discard()`；
+- `discard` 对缺失值静默，`remove` 对缺失值抛 `KeyError`；
+- `pop` 取 iteration 的首个值并 discard，空集合抛 `KeyError`；
+- `clear` 反复 pop 直到空集合；
+- `|=` / `&=` / `^=` / `-=` 原地修改并返回原对象；
+- `values ^= values` 与 `values -= values` 的 self-alias 特殊路径会清空集合；
+- mutation mixin 通过 add/discard primitive 维护具体实现定义的不变量。
 
 ## Common Pitfalls To Explain
 
-- 认为继承 Sequence 就自动获得 slicing 或负索引处理；
-- `__getitem__` 越界返回 sentinel 而非抛 `IndexError`，导致默认迭代无限继续；
-- 用链表等线性索引存储却直接接受默认 iteration/index mixin 的复杂度；
-- MutableSequence 只实现单元素 mutation，忘记 slice 会传入 `slice` 对象；
-- 误以为 mixin 会自动校验元素类型或维护领域不变量；
-- 认为 virtual/structural Sequence 判定会注入 mixin；该内容已在 050 说明，051 只处理
-  真实继承；
-- 把 ByteString 当作“元素为 bytes”的序列，忽略 bytes 索引结果是整数。
+- 把 Set ABC 当成使用 hash table 的保证；
+- 认为集合运算结果一定是内置 set，而不是 `_from_iterable()` 创建的具体 class；
+- 自定义构造器要求额外参数，却忘记覆盖 `_from_iterable()`；
+- 因为 Set 提供 `_hash()` 就以为实例天然可哈希；
+- 认为 `discard` 与 `remove` 对缺失值行为相同；
+- 原地运算时忽略 `other is self`，边迭代边修改自身；
+- 用无序容器的 pop 结果做固定值假设；测试只断言它来自原集合且已被删除。
 
 ## Target File
 
-`languages/python/stdlib/data_types/test_051_collections_abc_sequences.py`
+`languages/python/stdlib/data_types/test_052_collections_abc_sets.py`
 
 ## Official Sources
 
 - https://docs.python.org/3.10/library/collections.abc.html
 - https://github.com/python/cpython/blob/3.10/Lib/_collections_abc.py
-- https://docs.python.org/3.10/reference/datamodel.html#emulating-container-types
-- https://docs.python.org/3.10/library/stdtypes.html#common-sequence-operations
+- https://docs.python.org/3.10/library/stdtypes.html#set-types-set-frozenset
 
 ## Authoring Requirements
 
 - 使用 pytest 普通测试函数，只使用 Python 3.10 标准库；
-- 自定义只读和可变 sequence 使用小型内存数据，不依赖 049 的 UserList；
-- primitive hook 可记录调用，用断言展示 mixin 分派，但不要制造调用次数穷举矩阵；
-- 明确展示 slicing/negative index 是具体容器责任，不把故意残缺实现称为推荐模板；
-- Set/MutableSet、Mapping/MutableMapping 与异步 ABC 留给后续独立测试套；
+- list-backed set 构造时保留首次出现顺序，仅用于让测试结果稳定；
+- 不宣称 Set ABC 有序；
+- 自定义 primitive 可记录 add/discard 调用，展示 mixin 分派而非穷举内部调用次数；
+- 用实际不可哈希元素证明接口不要求 hash table；
+- Mapping/MutableMapping、mapping views 与异步 ABC 留给后续独立测试套；
 - 文件顶部写 `polyglot-covers` 标记；
 - 本阶段不运行测试。
 
 ## Handoff
 
-001--049 已完成此前范围首轮编写；050 `collections.abc` 接口识别与简单协议已在
-`data_types/` 完成首轮静态编写，共 17 个测试，覆盖直接继承、虚拟注册、
-结构识别、Iterable/Iterator/Reversible/Hashable fallback 与 GenericAlias 边界。全部 Python
-文件仍未运行。下一步直接编写 051 sequence mixin；不要先运行 pytest。
+001--050 已完成此前范围首轮编写；051 `Sequence` / `MutableSequence` / `ByteString`
+已在 `data_types/` 完成首轮静态编写，共 24 个测试，覆盖 primitive、mixin 分派、
+IndexError 终止、切片责任、复杂度、mutation 组合与 byte sequence 注册关系。全部
+Python 文件仍未运行。下一步直接编写 052 set mixin；不要先运行 pytest。
