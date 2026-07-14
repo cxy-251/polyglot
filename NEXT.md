@@ -1,6 +1,6 @@
 # Current Task
 
-ID: `python.stdlib.collections-abc-mapping-views`
+ID: `python.stdlib.collections-abc-mutable-mapping-mixins`
 
 Status: `ready`
 
@@ -8,66 +8,67 @@ Repository phase: `python-authoring-unverified`
 
 ## Goal
 
-编写 Python 3.10 `collections.abc.Mapping`、`MappingView`、`KeysView`、`ItemsView` 与
-`ValuesView` 测试套：用最小只读映射展示三项 primitive 生成的查询 API、live view、
-set-like keys/items 语义，以及异常、比较与反向迭代的真实边界。
+编写 Python 3.10 `collections.abc.MutableMapping` 测试套：用记录 primitive 调用的
+最小 dict-backed mapping 展示 `pop`、`popitem`、`clear`、`update` 与 `setdefault`
+mixin 的精确组合路径、输入分支、返回值和非原子失败边界。
 
 ## Covers
 
-- `Mapping` 直接继承要求 `__getitem__`、`__iter__`、`__len__`；
-- mapping `__iter__` 应产生 key，而不是 value 或 item；
-- `get(key, default)` 通过 `self[key]`，仅捕获 `KeyError`；
-- `in` mixin 同样调用 `self[key]` 并仅以 `KeyError` 判断 key 缺失；
-- 返回 `None` 等假值的已存在 key 仍属于 mapping；
-- `keys()`、`items()`、`values()` 默认创建保存 mapping 引用的 live views；
-- 底层映射更新后，已有 view 的长度、membership 与 iteration 立即反映变化；
-- `KeysView` 是 Set，支持比较与集合代数，运算结果由 `_from_iterable()` 生成普通 set；
-- `ItemsView` 是 Set，membership 按 `(key, value)` 检查并优先使用 value identity；
-- item value 不可哈希时，membership/iteration 仍可工作；
-- 但某些 set 运算结果无法哈希 pair；
-- `ValuesView` 是 Collection 而不是 Set，可包含重复值且不提供集合代数；
-- view iteration 顺序跟随具体 mapping，不由 ABC 另行排序；
-- `Mapping.__eq__` 仅与另一 Mapping 比较，通过 items 内容忽略 iteration order；
-- 默认 Mapping 显式将 `__reversed__` 设为 `None`；具体实现需自行提供反向 key iteration；
-- `MappingView` 的长度与 repr 基础行为；
-- built-in dict views 与 ABC 的注册关系，以及 `types.MappingProxyType` 的只读 Mapping 关系；
-- Python 3.9+ `Mapping[str, int]` / `KeysView[str]` GenericAlias 基础元数据。
+- `MutableMapping` 在 Mapping 三项 primitive 之外要求 `__setitem__` 与 `__delitem__`；
+- `pop(key)` 先 lookup 再 delete，返回 value；缺失且无 default 时保留 `KeyError`；
+- `pop(key, default)` 对缺失 key 返回 default，包括显式传入 `None`，且不执行 delete；
+- `popitem()` 使用 `next(iter(self))` 取得某个 key，再 lookup/delete；
+- 自定义 insertion-ordered 实现会弹出首个 key，但 ABC 不保证顺序；
+- built-in dict 覆盖 popitem 并使用 LIFO，不能把它反推为 mixin 语义；
+- 空 mapping 的 `popitem()` 抛 `KeyError`；
+- `clear()` 反复 popitem，直至以空 mapping 的 `KeyError` 结束；
+- `update(other)` 对真正 `Mapping` 按 key iteration + lookup 写入；
+- 非 Mapping 但有 `keys()` 的 mapping-like 对象走单独分支；
+- 无 `keys()` 的 iterable 必须产生 `(key, value)` pair；
+- keyword arguments 最后写入，因此覆盖前面来源的同名 key；
+- update/setdefault 通过 `self[key] = value`，会触发具体 `__setitem__` hook；
+- `setdefault` 对已存在 key 只 lookup，不写入；缺失时写 default 并返回；
+- lookup 返回假值仍属于已存在，不会触发 default；
+- iterable update 或校验 hook 中途失败时，已完成的早期写入不会自动回滚；
+- malformed pair 的 `ValueError` / 不可迭代输入 `TypeError` 与已写入状态；
+- mutation mixin 的返回值遵循 dict：update/clear/setdefault 的相应约定；
+- 直接修改具体 storage 仍可绕过 `__setitem__` 领域约束；
+- dict 是已注册 MutableMapping，但其 C 方法可覆盖 ABC 默认分派与顺序。
 
 ## Common Pitfalls To Explain
 
-- 自定义 Mapping 的 `__iter__` 返回 value，导致 dict()、views 和 mixin 全部错位；
-- 用 value truthiness 判断 key 是否存在；
-- 认为 get/contains 会吞掉 `TypeError`、网络错误等所有 lookup 异常；
-- 把 view 当创建时的 list snapshot，忽略它持有底层 mapping 引用；
-- 认为 values view 会去重或支持 `&` / `|`；
-- 对包含不可哈希 value 的 ItemsView 无条件执行会物化 set 的代数运算；
-- 因 built-in dict 支持 `reversed()`，误以为 Mapping mixin 也自动提供；
-- 参数化 Mapping alias 不可传入 `isinstance()`；050 已说明，本文件只做元数据对照。
+- 认为 MutableMapping mixin 提供事务性 update；
+- 混淆 `pop(key, None)` 与省略 default 的异常语义；
+- 把 ABC popitem 当 built-in dict 的 LIFO；
+- mapping-like 对象有 `keys()` 时，误以为 update 会把它当 pair iterable；
+- 认为 keyword 参数先应用，不会覆盖 positional source；
+- 自定义 `__getitem__` 对缺失 key 返回 fallback，导致 setdefault 无法判断应否插入；
+- 只在 `__setitem__` 校验，却允许调用方直接修改公开底层存储。
 
 ## Target File
 
-`languages/python/stdlib/data_types/test_053_collections_abc_mappings.py`
+`languages/python/stdlib/data_types/test_054_collections_abc_mutable_mappings.py`
 
 ## Official Sources
 
 - https://docs.python.org/3.10/library/collections.abc.html
 - https://github.com/python/cpython/blob/3.10/Lib/_collections_abc.py
-- https://docs.python.org/3.10/library/stdtypes.html#dictionary-view-objects
-- https://docs.python.org/3.10/library/types.html#types.MappingProxyType
+- https://docs.python.org/3.10/library/stdtypes.html#mapping-types-dict
 
 ## Authoring Requirements
 
 - 使用 pytest 普通测试函数，只使用 Python 3.10 标准库；
-- 只读 mapping 用稳定 insertion order 的内存存储，让 view 断言可读；
-- 对 live view 先创建 view 再修改具体存储，明确证明不是 snapshot；
-- set-like view 只选常用运算，不复制 052 的完整 Set mixin 矩阵；
-- MutableMapping 写入 mixin 与异步 ABC 留给后续独立测试套；
+- 自定义 mapping 使用 insertion-ordered dict 存储并记录 get/set/del/iter 调用；
+- 对 popitem 只把“首个 key”称为该测试实现的结果，不宣称 ABC 有顺序保证；
+- update 三种 input branch 各给一个有语义案例，不扩展成畸形 pair 矩阵；
+- 中途失败案例明确断言已发生的写入，避免误导为原子操作；
+- Generator/Awaitable/Coroutine 与 async ABC 留给下一套；
 - 文件顶部写 `polyglot-covers` 标记；
 - 本阶段不运行测试。
 
 ## Handoff
 
-001--051 已完成此前范围首轮编写；052 `Set` / `MutableSet` 已在 `data_types/` 完成
-首轮静态编写，共 23 个测试，覆盖不可哈希元素、集合代数、`_from_iterable`、
-可选 hash、add/discard 分派和四种原地运算。全部 Python 文件仍未运行。下一步
-直接编写 053 read-only Mapping 与 views；不要先运行 pytest。
+001--052 已完成此前范围首轮编写；053 read-only `Mapping` 与 views 已在
+`data_types/` 完成首轮静态编写，共 19 个测试，覆盖查询 mixin、异常边界、live view、
+key/item 集合语义、value 重复、反向能力、dict view 和 mapping proxy。全部 Python
+文件仍未运行。下一步直接编写 054 MutableMapping mixin；不要先运行 pytest。
