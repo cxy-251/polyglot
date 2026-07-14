@@ -1,6 +1,6 @@
 # Current Task
 
-ID: `python.stdlib.collections-abc-interface-detection`
+ID: `python.stdlib.collections-abc-sequence-mixins`
 
 Status: `ready`
 
@@ -8,66 +8,64 @@ Repository phase: `python-authoring-unverified`
 
 ## Goal
 
-编写 Python 3.10 `collections.abc` 接口识别与基础协议测试套：展示直接继承、虚拟
-注册、结构化 `__subclasshook__` 三种 ABC 判定路径，以及简单容器协议、迭代 fallback
-和 GenericAlias 的真实边界。复杂的 Sequence/Set/Mapping mixin 与异步 ABC 留给后续
-独立主题。
+编写 Python 3.10 `collections.abc.Sequence`、`MutableSequence` 与 `ByteString` 测试套：
+用最小自定义容器展示 abstract primitive 如何生成完整 sequence API、mixin 的真实
+分派路径，以及 slicing、负索引、构造器和算法复杂度仍由实现者承担的边界。
 
 ## Covers
 
-- 直接继承 ABC 时必须实现 abstract methods，否则 class 可定义但不能实例化；
-- 实现必需方法后，继承关系同时支持 `issubclass()` 与 `isinstance()`；
-- `ABC.register()` 建立 virtual subclass，不改变目标类 MRO，也不注入 mixin 方法；
-- register 可作为 decorator，并返回原 class；
-- virtual subclass 仍由作者负责完整接口语义，注册本身不验证实现质量；
-- `Container`、`Hashable`、`Sized`、`Callable`、`Iterable` 等简单 ABC 的结构化识别；
-- 将协议方法显式设为 `None` 会阻止简单 ABC 的 `__subclasshook__` 识别；
-- `Collection` 同时要求 `__contains__`、`__iter__`、`__len__`；
-- `Iterator` 要求 `__next__`，并从 ABC 获得返回自身的 `__iter__` mixin；
-- `Reversible` 对显式 `__reversed__` 的识别，以及 `reversed()` 的 sequence fallback；
-- 旧式 `__getitem__` sequence 可以被 `iter()` 消费，却不一定是 `Iterable` instance；
-- 因此判断对象能否迭代的可靠操作是尝试 `iter(obj)`，不能只依赖 `isinstance`；
-- `Hashable` 识别 `__hash__ = None` 的不可哈希类型，并区分会在调用时抛错的坏实现；
-- 复杂接口不会仅因同名方法存在就自动成为 `Sequence` 或 `Mapping`；
-- Python 3.9+ ABC 支持 `Iterable[int]` 等 GenericAlias，用于注解但不用于参数化
-  `isinstance()`；
-- 常见内置类型与 `Container` / `Collection` / `Sequence` / `Mapping` 的关系作最小对照。
+- `Sequence` 直接继承要求 `__getitem__` 与 `__len__`，缺少任一方法不能实例化；
+- mixin 自动提供 `__contains__`、`__iter__`、`__reversed__`、`index()`、`count()`；
+- primitive `__getitem__` 必须以 `IndexError` 表示结束，否则 iteration mixin 不会终止；
+- negative index 与 slice 语义不会由 ABC 自动补齐，必须在 `__getitem__` 中实现；
+- `index(value, start, stop)`、`count(value)` 和 equality 调用的正常工作流；
+- mixin `__iter__` / `__reversed__` / `index` 会重复调用 `__getitem__`；
+- 若 primitive access 是线性时间，默认 mixin 可能退化为平方复杂度；
+- 自定义 `__iter__` 可以绕开昂贵随机访问，但不改变 Sequence 的其他语义；
+- `MutableSequence` 额外要求 `__setitem__`、`__delitem__` 与 `insert()`；
+- append/extend/`+=`、pop/remove/reverse 等 mixin 如何委托 primitive mutation hooks；
+- scalar 与 slice 的赋值/删除都进入同一个 `__setitem__` / `__delitem__`，实现者负责区分；
+- `insert` 对负数和越界位置的 list-like 归一化由具体实现决定；
+- 失败 mutation 的异常类型和原容器不变性；
+- mixin mutation 方法的返回值遵循 list 约定，`+=` 返回原对象；
+- `ByteString` 是只读 byte sequence ABC；bytes/bytearray 的注册关系与元素为 int 的语义；
+- 仅实现 Sequence primitives 的任意对象不会自动结构化成为 Sequence/ByteString。
 
 ## Common Pitfalls To Explain
 
-- 认为只要继承 ABC 就能实例化，忽略仍未实现的 abstract methods；
-- 把 virtual registration 当运行时适配器，期待它自动补齐方法；
-- 认为 ABC 检查会执行并验证方法语义；它通常只判断继承、注册或方法存在；
-- 用 `isinstance(value, Iterable)` 代替真正的 `iter(value)` 能力测试；
-- 因为 `reversed(obj)` 成功，就断言 obj 一定是 `Reversible`；
-- 自定义 `__hash__` 仅在调用时失败，却误以为 `Hashable` 能提前发现；
-- 将 `Iterable[int]` 之类参数化别名传入 `isinstance()`。
+- 认为继承 Sequence 就自动获得 slicing 或负索引处理；
+- `__getitem__` 越界返回 sentinel 而非抛 `IndexError`，导致默认迭代无限继续；
+- 用链表等线性索引存储却直接接受默认 iteration/index mixin 的复杂度；
+- MutableSequence 只实现单元素 mutation，忘记 slice 会传入 `slice` 对象；
+- 误以为 mixin 会自动校验元素类型或维护领域不变量；
+- 认为 virtual/structural Sequence 判定会注入 mixin；该内容已在 050 说明，051 只处理
+  真实继承；
+- 把 ByteString 当作“元素为 bytes”的序列，忽略 bytes 索引结果是整数。
 
 ## Target File
 
-`languages/python/stdlib/data_types/test_050_collections_abc_interfaces.py`
+`languages/python/stdlib/data_types/test_051_collections_abc_sequences.py`
 
 ## Official Sources
 
 - https://docs.python.org/3.10/library/collections.abc.html
 - https://github.com/python/cpython/blob/3.10/Lib/_collections_abc.py
-- https://docs.python.org/3.10/library/abc.html
-- https://docs.python.org/3.10/reference/datamodel.html#object.__iter__
+- https://docs.python.org/3.10/reference/datamodel.html#emulating-container-types
+- https://docs.python.org/3.10/library/stdtypes.html#common-sequence-operations
 
 ## Authoring Requirements
 
 - 使用 pytest 普通测试函数，只使用 Python 3.10 标准库；
-- 自定义协议类型只实现当前断言所需方法，并用有意义的小型容器数据；
-- 不在本文件展开 Sequence/MutableSequence、Set/MutableSet、Mapping/MutableMapping 的
-  全套 mixin；它们将在下一套集中展示；
-- 不在本文件展开 Awaitable/Coroutine/AsyncIterator/AsyncGenerator；
-- 对 ABC 判定与操作实际成功分别断言，明确两者并不总是等价；
+- 自定义只读和可变 sequence 使用小型内存数据，不依赖 049 的 UserList；
+- primitive hook 可记录调用，用断言展示 mixin 分派，但不要制造调用次数穷举矩阵；
+- 明确展示 slicing/negative index 是具体容器责任，不把故意残缺实现称为推荐模板；
+- Set/MutableSet、Mapping/MutableMapping 与异步 ABC 留给后续独立测试套；
 - 文件顶部写 `polyglot-covers` 标记；
 - 本阶段不运行测试。
 
 ## Handoff
 
-001--048 已完成此前范围首轮编写；049 `UserDict` / `UserList` / `UserString` 已在
-`data_types/` 完成首轮静态编写，共 25 个测试，覆盖复制、协议、mutation hook、
-返回类型、subclass 构造器约定与 `.data` 绕过路径。全部 Python 文件仍未运行。
-下一步直接编写 050 `collections.abc` 接口识别与简单协议；不要先运行 pytest。
+001--049 已完成此前范围首轮编写；050 `collections.abc` 接口识别与简单协议已在
+`data_types/` 完成首轮静态编写，共 17 个测试，覆盖直接继承、虚拟注册、
+结构识别、Iterable/Iterator/Reversible/Hashable fallback 与 GenericAlias 边界。全部 Python
+文件仍未运行。下一步直接编写 051 sequence mixin；不要先运行 pytest。
