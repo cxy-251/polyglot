@@ -1,6 +1,6 @@
 # Current Task
 
-ID: `python.stdlib.collections-deque-ordereddict`
+ID: `python.stdlib.collections-chainmap-namedtuple`
 
 Status: `ready`
 
@@ -8,65 +8,69 @@ Repository phase: `python-authoring-unverified`
 
 ## Goal
 
-编写 Python 3.10 `collections.deque` 与 `OrderedDict` 测试套，覆盖双端队列、固定容量窗口、rotate/recipe 和显式顺序重排语义；说明普通 dict 已保留插入顺序后，OrderedDict 仍在 FIFO/LIFO pop、移动到任一端和 order-sensitive 同类比较方面的价值。
+编写 Python 3.10 `collections.ChainMap` 与 `namedtuple()` 测试套：展示不复制数据的多层配置/作用域视图，以及兼具 tuple 协议、字段名称和轻量不可变记录的生成类；覆盖引用传播、写入层、迭代顺序、3.10 `new_child` kwargs 与 namedtuple introspection/defaults/rename/subclass 边界。
 
 ## Covers
 
-- `deque(iterable, maxlen=None)` 左到右构造、`maxlen` 只读属性；
-- `append()` / `appendleft()` / `pop()` / `popleft()` 的双端 O(1) 工作流；
-- `extend()` 保持输入顺序，`extendleft()` 因逐项左插而反转输入顺序；
-- bounded deque 满载后从相反一端自动丢弃旧元素；
-- `maxlen=0` 吞掉所有 append，适合只消费 iterable 的特殊边界；
-- 满载 bounded deque 的 `insert()` 不会淘汰而是抛 `IndexError`；
-- `rotate(n)` 正数向右、负数向左，步数按长度循环；
-- `reverse()` 原地返回 `None`，`reversed()` 提供反向 iterator；
-- `copy()` 是浅复制并保留 maxlen；
-- `count()` / `index(start, stop)` / `remove()` / `clear()`；
-- 端点索引、负索引和中间随机访问；明确 deque 不支持 slicing 且中间索引不是 list 的性能替代；
-- `+` / `*` / `*=` 的序列组合行为和 bounded maxlen 截断；
-- 空 deque pop/popleft 与缺失 index/remove 的异常边界；
-- bounded deque 实现 tail/recent-history，deque 实现 moving-window/round-robin 的可读 recipe；
-- append/pop 双端操作是 thread-safe，但组合检查+操作不是原子事务；不写时序脆弱线程测试；
-- `OrderedDict` 构造和覆盖已有 key 不自动改变原位置；
-- `move_to_end(key, last=True/False)` 移至右端或左端；
-- `popitem(last=True)` LIFO 与 `popitem(last=False)` FIFO；
-- `reversed(od)` 以及 keys/items/values view 的反向迭代；
-- 两个 OrderedDict 之间 equality 对顺序敏感；与普通 Mapping 比较时对顺序不敏感；
-- `|` / `|=` 合并时的类型、值和 key 顺序；
-- 最后更新顺序 subclass 与小型 LRU 工作流，说明何时普通 dict 不足；
-- 空 popitem、移动缺失 key 的 `KeyError`。
+- `ChainMap(*maps)` 保存公开 `maps` list 并按从前到后优先级查找；
+- 不传 mapping 时自动创建一个空 dict；
+- 底层 mapping 按引用纳入，外部修改立即反映，ChainMap 不是 flatten copy；
+- lookup/membership 检查所有层，赋值/update/setdefault 只写第一层；
+- `del` / `pop` 只操作第一层，即使 key 存在于父层也不会深删；
+- iteration/key/item 顺序按最后一层到第一层做 dict-update 式合并，与 lookup 方向不同；
+- `new_child()` 添加局部 scope，不修改父 chain；
+- `new_child(m)` 使用显式前置 mapping；
+- Python 3.10 `new_child(**kwargs)` 初始化新 scope，及同时传 m/kwargs 的更新语义；
+- `parents` 跳过第一层，`maps` 可显式重排/替换搜索链；
+- `dict(chain)` flatten snapshot 与继续引用的 ChainMap view 差别；
+- `|` / `|=` mapping merge 的层和值边界；
+- 命令行 > environment > defaults 的实际配置优先级工作流；
+- 最小 `DeepChainMap` subclass 将写/删路由到首次包含 key 的深层 mapping，并说明这不是默认行为；
+- `namedtuple(typename, field_names)` 接受空白/逗号字符串或 iterable；
+- 生成类是 tuple subclass，支持索引、迭代、unpack、比较、hash，实例无 per-instance `__dict__`；
+- 字段 attribute、可读 repr 和不可变赋值边界；
+- `_make()` 从 iterable 构造，长度不匹配失败；
+- `_asdict()` 在 Python 3.10 返回保序普通 dict；
+- `_replace()` 返回新实例且拒绝未知 field；
+- `_fields` 用于 introspection/组合新 record；
+- `defaults` 只从最右字段开始，`_field_defaults` 暴露映射；
+- `rename=True` 将 keyword、重复、下划线开头等非法字段替换为位置名；默认 `rename=False` 抛 `ValueError`；
+- `module=` 控制生成类的 `__module__`，以及 pickle 仍要求模块中有与 typename 匹配的绑定；
+- 通过 `__slots__ = ()` subclass 添加计算属性/自定义 docstring，不引入实例 dict。
 
 ## Common Pitfalls To Explain
 
-- 认为 `extendleft([1,2,3])` 得到从左到右 1,2,3；
-- 满载 bounded deque 使用 `insert()` 时期待像 append 一样自动淘汰；
-- 把 deque 当支持 slicing/快速中间随机访问的 list；
-- 忘记 maxlen eviction 的方向取决于从哪一端添加；
-- 把 rotate 的正负方向写反；
-- 看到单个 deque 操作 thread-safe 就推断多步业务流程自动原子；
-- 只因需要 insertion order 就选择 OrderedDict；现代 dict 已保证该顺序；
-- 覆盖 OrderedDict 已有 key 后以为它自动移动到末尾；
-- 忘记 OrderedDict 对同类比较时顺序会参与 equality；
-- 用普通 dict 模拟 `move_to_end(last=False)` 写出昂贵/难读代码。
+- 把 ChainMap 当数据副本，忽略底层 dict 后续修改会透出；
+- 认为赋值/删除会修改找到 key 的那一层；默认永远只写/删第一层；
+- 混淆 lookup 从前到后与 iteration 从后到前的顺序；
+- 将 `dict(chain)` snapshot 后仍期待它随底层 mapping 更新；
+- 直接修改 `maps` 后忘记优先级也随之改变；
+- 把 namedtuple 当可变对象，尝试属性赋值；
+- 认为 `_replace()` 原地修改；
+- 把 defaults 当从左侧字段开始；
+- 在 3.10 仍假设 `_asdict()` 返回 OrderedDict；
+- 生成 namedtuple 后未绑定到与 typename 一致的模块级名字，却期待 pickle 能按类名恢复；
+- subclass namedtuple 时忘记 `__slots__ = ()`，意外增加实例存储。
 
 ## Target File
 
-`languages/python/stdlib/data_types/test_047_deque_ordereddict.py`
+`languages/python/stdlib/data_types/test_048_chainmap_namedtuple.py`
 
 ## Official Sources
 
-- https://docs.python.org/3.10/library/collections.html#deque-objects
-- https://docs.python.org/3.10/library/collections.html#ordereddict-objects
+- https://docs.python.org/3.10/library/collections.html#chainmap-objects
+- https://docs.python.org/3.10/library/collections.html#collections.namedtuple
 
 ## Authoring Requirements
 
 - 使用 pytest 普通测试函数，只使用 Python 3.10 标准库；
-- recipe 保持小型、确定性，不使用 sleep 或时钟；
-- 不用并发压力测试证明文档的 thread-safe 单操作保证，只用注释划清组合操作边界；
-- OrderedDict 案例必须展示普通 dict 无法同样简洁表达的重排/FIFO 能力；
+- ChainMap 使用配置层/嵌套 scope 的有语义案例；
+- DeepChainMap subclass 只实现当前教学所需 `__setitem__` / `__delitem__`；
+- namedtuple 生成类名称清楚，辅助方法按官方下划线命名使用；
+- pickle 只解释/验证可稳定隔离的类绑定，不依赖测试模块的偶然导入名；
 - 文件顶部写 `polyglot-covers` 标记；
 - 本阶段不运行测试。
 
 ## Handoff
 
-001--045 已完成此前范围首轮编写；046 `Counter` / `defaultdict` 已在 `data_types/` 完成首轮静态编写，覆盖 Python 3.10 total/comparisons 与 missing factory 副作用。全部 Python 文件仍未运行。下一步直接编写 047 `deque` / `OrderedDict`；不要先运行 pytest。
+001--046 已完成此前范围首轮编写；047 `deque` / `OrderedDict` 已在 `data_types/` 完成首轮静态编写，包含 bounded/window/round-robin 与显式顺序/LRU 工作流。全部 Python 文件仍未运行。下一步直接编写 048 `ChainMap` / `namedtuple`；不要先运行 pytest。
