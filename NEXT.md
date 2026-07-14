@@ -1,6 +1,6 @@
 # Current Task
 
-ID: `python.stdlib.readline-rlcompleter`
+ID: `python.stdlib.struct`
 
 Status: `ready`
 
@@ -8,62 +8,58 @@ Repository phase: `python-authoring-unverified`
 
 ## Goal
 
-编写 Python 3.10 `readline` 与 `rlcompleter` 测试套，覆盖历史记录、补全器注册/分隔符、hook 生命周期和 Python 名称/属性补全，同时隔离进程全局状态并说明 GNU readline、libedit 与非 Unix 平台差异。
+编写 Python 3.10 `struct` 测试套，用可读的二进制记录案例讲清格式字符串、字节序、原生/标准大小与对齐、定长字段、buffer 原地读写和重复解析；同时明确哪些格式适合跨平台协议，哪些只适合当前机器内存布局。
 
 ## Covers
 
-- `readline` 在 Unix 构建中的可选可用性，以及 GNU readline/libedit 行为不可假定完全一致；
-- `parse_and_bind()` 的配置入口，只使用两种后端都可接受的最小绑定；
-- `clear_history()` / `add_history()` / `get_current_history_length()`；
-- `get_history_item()` 的 1-based 读取索引；
-- `remove_history_item()` / `replace_history_item()` 的 0-based 修改索引；
-- `read_history_file()` / `write_history_file()` / `append_history_file()` 与固定临时文件；
-- `set_history_length()` / `get_history_length()` 对写文件截断的影响；
-- `set_auto_history()` 只控制交互输入自动入历史，不影响显式 `add_history()`；
-- `set_completer()` / `get_completer()` 与 `complete(text, state)` 的逐项协议；
-- `set_completer_delims()` / `get_completer_delims()`，以及 delimiter 如何决定补全文本边界；
-- `get_completion_type()` / `get_begidx()` / `get_endidx()` 仅在真实补全回调期间有可靠上下文；
-- `set_startup_hook()` / `set_pre_input_hook()` / `set_completion_display_matches_hook()` 的注册和显式清理；
-- `rlcompleter.Completer(namespace)` 的显式 namespace，不污染/依赖测试模块 globals；
-- `complete()` 以 state=0,1,... 拉取候选，耗尽时返回 `None`；
-- keyword、builtin、namespace 名称和 callable 候选的补全形状；
-- `global_matches()` 与 `attr_matches()` 的直接使用；
-- 单下划线/双下划线属性只有在用户已输入下划线前缀时才应出现；
-- attribute completion 可能触发 `getattr()`、property/descriptor 等用户代码的风险边界。
+- `pack()` / `unpack()` 的 bytes 输出与 tuple 结果，以及 `calcsize()`；
+- 格式前缀 `@`、`=`、`<`、`>`、`!` 对字节序、字段大小和自动对齐的不同影响；
+- 无前缀时默认使用原生 `@`，不能把结果当作稳定跨平台格式；
+- 格式中的空白、重复计数和相邻字段；
+- 有符号/无符号整数代码与越界时的 `struct.error`；
+- 非整数对象通过 `__index__()` 提供整数值，以及普通浮点数不能冒充整数；
+- `?` 使用真假值打包布尔字段；
+- `c`、`s`、`p`、`x` 分别表示单字节字符、定长字节串、Pascal 字符串和填充字节；
+- `s` 前的计数是一个字段的字节长度，而数字代码和 `c` 前的计数表示重复字段；
+- `e`、`f`、`d` 浮点格式和近似比较，不对不可精确表示的小数写精确相等断言；
+- 原生专用的 `n`、`N`、`P`，以及它们不能用于标准字节序格式；
+- `pack_into()` 写入可写 buffer 的指定 offset；
+- `unpack_from()` 从更大 buffer 的指定 offset 读取，不要求整个 buffer 长度恰好等于记录；
+- `iter_unpack()` 连续解析固定长度记录，输入长度必须是记录大小的整数倍；
+- `Struct` 预编译格式的 `format`、`size`、`pack`、`unpack`、`pack_into`、`unpack_from` 和 `iter_unpack`；
+- buffer 太小、`unpack()` 有多余/不足字节、参数数量或类型错误时的失败边界。
 
 ## Common Pitfalls To Explain
 
-- 假设所有平台都有 `readline`，或把 GNU readline 特有配置写成跨后端断言；
-- 测试后不恢复 history、completer、delimiter、hook 等进程全局状态；
-- 混淆 history 查询的 1-based 索引与 remove/replace 的 0-based 索引；
-- 认为 `set_history_length()` 会立即裁剪内存历史，而不是影响写文件；
-- 把 `set_auto_history(False)` 当作禁止显式 `add_history()`；
-- 直接调用 completer 时仍相信 `get_begidx()` / `get_endidx()` 有当前行上下文；
-- 忘记补全协议要递增 state 直到 `None`；
-- 使用默认 namespace 后意外暴露调用方 globals；
-- 对不可信对象做 attribute completion，触发 descriptor/property 副作用；
-- 写依赖候选完整顺序或后端显示格式的脆弱断言。
+- 用默认 `@` 生成磁盘或网络格式，忽略平台字节序、C 类型大小和对齐差异；
+- 把 `=` 误解成“小端”或“原生对齐”；它使用原生字节序，但使用标准大小且不自动对齐；
+- 误把 `4s` 当作四个独立值，或误把 `4c` 当作一个四字节字段；
+- 给 `s` / `c` 传 `str` 而不是 bytes-like 值；
+- 忘记定长 `s` 会截断过长输入并用 NUL 填充过短输入，解包后需要按协议自行去填充；
+- 认为 `?` 只接受 `True` / `False`，忽略它按真假值转换；
+- 对二进制浮点值使用精确相等断言；
+- 用 `unpack()` 读取带 header/trailer 的较大 buffer，而不是 `unpack_from()`；
+- 假设 `iter_unpack()` 会容忍末尾半条记录；
+- 认为 `struct` 自带消息边界、校验、版本控制或字符串编码。
 
 ## Target File
 
-`languages/python/stdlib/test_040_readline_rlcompleter.py`
+`languages/python/stdlib/binary_data/test_041_struct_binary_layouts.py`
 
 ## Official Sources
 
-- https://docs.python.org/3.10/library/readline.html
-- https://docs.python.org/3.10/library/rlcompleter.html
+- https://docs.python.org/3.10/library/struct.html
 
 ## Authoring Requirements
 
 - 使用 pytest 普通测试函数，只使用 Python 3.10 标准库；
-- 文件级导入要对 `readline` 不可用的平台给出清晰 skip，不伪造实现；
-- 用 autouse fixture 快照并恢复可读取的全局状态；没有 getter 的 hook 必须在 `try/finally` 中清回 `None`；
-- 历史文件只能使用 `tmp_path`，不得读取或改写用户真实 history/init 文件；
-- 不启动 REPL、不读取 stdin、不调用会重绘真实终端的交互路径；
-- 候选只断言关键集合/前缀，不依赖完整排序；
+- 使用小型、带字段含义的记录格式，不把案例写成无语义的数字矩阵；
+- 平台相关断言用 `sys.byteorder`、`calcsize()` 或原生格式自身推导，不硬编码当前主机布局；
+- 跨平台协议示例显式选择 `<`、`>` 或 `!`；
+- 错误案例精确展示失败原因，但不穷举每个格式代码的每个边界；
 - 文件顶部写 `polyglot-covers` 标记；
 - 本阶段不运行测试。
 
 ## Handoff
 
-001--029 已完成语言核心与内置层首轮编写；030--039 已完成文件/目录访问、正则与除 readline/rlcompleter 外的文本处理服务。编号在整个 Python 树全局连续。全部 Python 文件尚未运行。下一步直接编写 040 readline/rlcompleter；不要先运行 pytest。
+001--029 已完成语言核心与内置层首轮编写；030--035 已归入 `file_and_directory_access/`，036--040 已归入 `text_processing/`。040 `readline` / `rlcompleter` 已完成首轮静态编写，全部 Python 文件仍未运行。下一步创建 `binary_data/` 并直接编写 041 `struct`；不要先运行 pytest。
