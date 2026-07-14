@@ -1,6 +1,6 @@
 # Current Task
 
-ID: `python.stdlib.datetime-core`
+ID: `python.stdlib.zoneinfo`
 
 Status: `ready`
 
@@ -8,64 +8,63 @@ Repository phase: `python-authoring-unverified`
 
 ## Goal
 
-编写 Python 3.10 `datetime` 核心测试套，系统展示 `timedelta`、`date`、`time`、`datetime`、`timezone` 的构造、规范化、算术、比较、ISO/格式化和时间戳转换；重点讲清 naive/aware 边界、固定偏移时区、日期算术与时刻算术的区别。IANA 时区和 DST 转换留给下一份 `zoneinfo` 测试套。
+编写 Python 3.10 `zoneinfo` 测试套，以稳定的 2020 年 America/Los_Angeles DST 转换展示 IANA 地区时区、ambiguous/nonexistent wall time、`fold` 和 UTC 转换；同时覆盖数据源缺失、key/cache/pickle/TZPATH 契约，并严格隔离会改变进程全局路径或 cache 的示例。
 
 ## Covers
 
-- `MINYEAR` / `MAXYEAR`、各类型的 `min` / `max` / `resolution`，以及不可变、可哈希属性；
-- `timedelta` 将 weeks/days/hours/minutes/seconds/milliseconds/microseconds 规范化为 days/seconds/microseconds；
-- 负 `timedelta` 的规范化表示、`total_seconds()` 与 `.seconds` 的差别；
-- `timedelta` 加减、正负号、`abs()`、整数/浮点乘除、与另一个 duration 的 `/`、`//`、`%`、`divmod()`；
-- `date` 构造范围和闰年校验；
-- `date.fromordinal()` / `toordinal()`、`fromisoformat()` / `isoformat()` 的往返；
-- `weekday()` / `isoweekday()` / `isocalendar()` / `fromisocalendar()`，包括 Gregorian 年与 ISO week-year 不一致的年界；
-- `date.replace()`、`timetuple()` 和 date ± timedelta；
-- date 算术只使用 `timedelta.days`，忽略 seconds/microseconds；
-- `time` 的字段、`fold`、`replace()`、`isoformat(timespec=...)`，以及 time 本身不支持跨日算术；
-- `datetime` 构造、`combine()`、`date()`、`time()`、`timetz()`、`replace()`；
-- datetime ± timedelta、datetime 相减和字段跨日进位；
-- naive 对象的 `tzinfo is None`，aware 对象的 `utcoffset()` 非 `None`；
-- naive 与 aware datetime 不能排序或相减；相等比较返回不相等而不是推测本地时区；
-- `timezone.utc`、固定偏移 `timezone()`、`utcoffset()` / `tzname()` / `dst()`；
-- `astimezone()` 保持同一时刻，`replace(tzinfo=...)` 只是重新贴标签；
-- `timestamp()` 与 `fromtimestamp(timestamp, tz=...)` 的 aware 往返；
-- `datetime.utcnow()` 返回 naive UTC，而 `datetime.now(timezone.utc)` 返回 aware UTC；只断言形状，不依赖真实当前时间；
-- `isoformat()` / `fromisoformat()` 的 Python 3.10 支持范围、separator 与 `timespec`；
-- `strftime()` / `strptime()` 常用字段、缺省年份 1900 和 `%z` aware 解析；
-- 无效日期、越界 fixed offset、混合 aware/naive 运算和不完整解析的异常边界。
+- `ZoneInfo` 是 `tzinfo` 具体实现，`key` / `str()` 表示 IANA 主键而非用户友好名称；
+- 数据来自系统 IANA 数据库或可选 `tzdata` 包，标准库模块自身不捆绑时区数据；
+- 数据完全缺失时 `ZoneInfoNotFoundError`，并确认它是 `KeyError` 子类；
+- 主构造器 `ZoneInfo(key)` 对同一 key 使用 identity cache；
+- `ZoneInfo.no_cache(key)` 每次返回新对象及其语义警告；
+- `ZoneInfo.clear_cache(only_keys=...)` 的全局影响，放在短生命周期子进程演示；
+- 2020-10-31 到 2020-11-01 America/Los_Angeles 从 PDT 到 PST 的 offset/name 变化；
+- 跨 DST 的 `datetime + timedelta(days=1)` 保持墙上时间，但换算到 UTC 后实际 elapsed time 可为 25 小时；
+- fall-back 重复的 01:00/01:30：`fold=0` 使用转换前 offset，`fold=1` 使用转换后 offset；
+- 从 UTC `astimezone()` 到重复区间会自动设置正确 `fold`；
+- spring-forward 不存在的墙上时间不会因直接构造而自动报错；两个 `fold` 值选择转换两侧 offset，调用方仍要做业务有效性校验；
+- aware datetime 在不同 ZoneInfo/UTC 间的相等、timestamp 和往返；
+- key 必须是规范化相对 POSIX path，绝对路径、`..` 等非法 key 抛 `ValueError`；
+- `ZoneInfo.from_file()` 从二进制 TZif 文件创建新对象、可选 key、绕过 cache 且不可 pickle；若只有 package 数据而无可访问系统文件则清晰 skip；
+- 主构造对象按 key pickle，反序列化通常回到主 cache identity；
+- `no_cache` 对象 pickle 后仍绕过 cache；
+- `available_timezones()` 返回当前数据源中的 canonical key set，并说明每次调用可能打开很多文件；
+- `TZPATH` 只含绝对路径且应通过 `zoneinfo.TZPATH` 动态读取；
+- `reset_tzpath()` 要求绝对路径 sequence、不会自动清 ZoneInfo cache；路径修改示例放在子进程隔离。
 
 ## Common Pitfalls To Explain
 
-- 把 `timedelta.seconds` 当作总秒数，导致跨天或负 duration 计算错误；
-- 被负 timedelta 的 `days=-1, seconds=...` 规范化表示误导；
-- 认为 date 加几个小时会改变日期，忽略 date 算术只看整天分量；
-- 混用 naive 与 aware datetime，或把 naive 自动解释成本地/UTC 时刻；
-- 用 `replace(tzinfo=...)` 做时区转换，实际只改变标签；
-- 用无 `tz` 的 `fromtimestamp()` / `timestamp()` 编写依赖主机本地时区的测试；
-- 把固定偏移 `timezone` 当作包含 DST 历史规则的地区时区；
-- 认为 `datetime.utcnow()` 返回带 UTC tzinfo 的 aware 对象；
-- 认为 Python 3.10 `fromisoformat()` 接受所有 ISO 8601 变体或结尾 `Z`；
-- 解析不含年份的月日后忘记 `strptime()` 默认使用 1900，导致 2 月 29 日失败；
-- 假设所有平台支持同一套非标准 `strftime` 指令。
+- 认为导入 `zoneinfo` 就保证机器一定有 IANA 数据；
+- 把 `America/Los_Angeles` 这样的 key 或 `PST` 缩写直接当作本地化 UI 文案；
+- 用固定 `timezone(-08:00)` 代替包含历史/DST 规则的地区 ZoneInfo；
+- 认为 timedelta(days=1) 跨 DST 永远等于 UTC 时间线上的 24 小时；
+- 在 fall-back 重复时间忽略 `fold`，或认为直接构造 wall time 能自动判断用户想要哪个时刻；
+- 认为 spring-forward gap 中的 wall time 构造会失败；
+- 随意调用 `clear_cache()` / `reset_tzpath()`，改变其他测试或长寿命 datetime 的语义；
+- 认为 `reset_tzpath()` 会使已经 cache 的 key 自动重载；
+- pickle transition 数据本身；实际按 key 恢复，结果依赖反序列化环境的时区数据库版本；
+- 对未来政治规则、所有平台的 zone 集合或缩写写脆弱断言。
 
 ## Target File
 
-`languages/python/stdlib/data_types/test_043_datetime_core.py`
+`languages/python/stdlib/data_types/test_044_zoneinfo_transitions.py`
 
 ## Official Sources
 
-- https://docs.python.org/3.10/library/datetime.html
+- https://docs.python.org/3.10/library/zoneinfo.html
+- https://docs.python.org/3.10/library/datetime.html#datetime.datetime.fold
 
 ## Authoring Requirements
 
-- 使用 pytest 普通测试函数，只使用 Python 3.10 标准库；
-- 不读取系统本地时区、不修改 `TZ`、不 sleep，不对真实当前时间写精确值断言；
-- 稳定时刻示例使用 `timezone.utc` 或显式 fixed offset；
-- `zoneinfo`、DST gap/fold 和 IANA 数据库可用性留到后续独立文件；
-- 平台相关 `strftime` 行为只使用 Python 3.10 文档保证的常用指令；
+- 使用 pytest 普通测试函数，只使用 Python 3.10 标准库；不得安装 `tzdata` 依赖；
+- helper 捕获 `ZoneInfoNotFoundError` 并对需要真实 zone data 的案例给出清晰 skip；
+- 转换断言使用文档中的稳定 2020 America/Los_Angeles 历史区间，不依赖当前/未来时刻；
+- `clear_cache()`、`reset_tzpath()` 和环境变量路径操作只能在子进程内演示；
+- `from_file()` 只读取 `zoneinfo.TZPATH` 下现有 TZif 文件，不修改系统数据；找不到文件则 skip；
+- 不把完整 `available_timezones()` 集合或时区缩写排序写成快照；
 - 文件顶部写 `polyglot-covers` 标记；
 - 本阶段不运行测试。
 
 ## Handoff
 
-001--041 已完成语言、内置层、文本/文件访问和 `struct` 首轮编写；042 `codecs` 已在 `binary_data/` 完成首轮静态编写。全部 Python 文件仍未运行。下一步创建 `data_types/` 并直接编写 043 `datetime` 核心；不要先运行 pytest。
+001--042 已完成此前范围首轮编写；043 `datetime` 核心已在新分类 `data_types/` 完成首轮静态编写。全部 Python 文件仍未运行。下一步直接编写 044 `zoneinfo`；所有全局 cache/path 改动必须放在子进程，不要先运行 pytest。
