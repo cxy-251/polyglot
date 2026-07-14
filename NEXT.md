@@ -1,6 +1,6 @@
 # Current Task
 
-ID: `python.stdlib.zoneinfo`
+ID: `python.stdlib.calendar`
 
 Status: `ready`
 
@@ -8,63 +8,60 @@ Repository phase: `python-authoring-unverified`
 
 ## Goal
 
-编写 Python 3.10 `zoneinfo` 测试套，以稳定的 2020 年 America/Los_Angeles DST 转换展示 IANA 地区时区、ambiguous/nonexistent wall time、`fold` 和 UTC 转换；同时覆盖数据源缺失、key/cache/pickle/TZPATH 契约，并严格隔离会改变进程全局路径或 cache 的示例。
+编写 Python 3.10 `calendar` 测试套，覆盖 proleptic Gregorian 计算、按周/月/年生成结构化日历数据、文本/HTML 渲染、全局与实例 first weekday、闰年工具和 UTC time tuple 转换；明确 padding、locale 与进程全局状态边界。
 
 ## Covers
 
-- `ZoneInfo` 是 `tzinfo` 具体实现，`key` / `str()` 表示 IANA 主键而非用户友好名称；
-- 数据来自系统 IANA 数据库或可选 `tzdata` 包，标准库模块自身不捆绑时区数据；
-- 数据完全缺失时 `ZoneInfoNotFoundError`，并确认它是 `KeyError` 子类；
-- 主构造器 `ZoneInfo(key)` 对同一 key 使用 identity cache；
-- `ZoneInfo.no_cache(key)` 每次返回新对象及其语义警告；
-- `ZoneInfo.clear_cache(only_keys=...)` 的全局影响，放在短生命周期子进程演示；
-- 2020-10-31 到 2020-11-01 America/Los_Angeles 从 PDT 到 PST 的 offset/name 变化；
-- 跨 DST 的 `datetime + timedelta(days=1)` 保持墙上时间，但换算到 UTC 后实际 elapsed time 可为 25 小时；
-- fall-back 重复的 01:00/01:30：`fold=0` 使用转换前 offset，`fold=1` 使用转换后 offset；
-- 从 UTC `astimezone()` 到重复区间会自动设置正确 `fold`；
-- spring-forward 不存在的墙上时间不会因直接构造而自动报错；两个 `fold` 值选择转换两侧 offset，调用方仍要做业务有效性校验；
-- aware datetime 在不同 ZoneInfo/UTC 间的相等、timestamp 和往返；
-- key 必须是规范化相对 POSIX path，绝对路径、`..` 等非法 key 抛 `ValueError`；
-- `ZoneInfo.from_file()` 从二进制 TZif 文件创建新对象、可选 key、绕过 cache 且不可 pickle；若只有 package 数据而无可访问系统文件则清晰 skip；
-- 主构造对象按 key pickle，反序列化通常回到主 cache identity；
-- `no_cache` 对象 pickle 后仍绕过 cache；
-- `available_timezones()` 返回当前数据源中的 canonical key set，并说明每次调用可能打开很多文件；
-- `TZPATH` 只含绝对路径且应通过 `zoneinfo.TZPATH` 动态读取；
-- `reset_tzpath()` 要求绝对路径 sequence、不会自动清 ZoneInfo cache；路径修改示例放在子进程隔离。
+- Monday=0 到 Sunday=6 的 weekday 常量与默认周起点；
+- `Calendar(firstweekday)` / `firstweekday` 属性 / `iterweekdays()` 的实例级配置；
+- 模块级 `setfirstweekday()` / `firstweekday()` 的进程全局配置及恢复；
+- `itermonthdates()` 返回前后月补齐的完整 `date` 周；
+- `itermonthdays()` 以 `0` 表示目标月外 padding；
+- `itermonthdays2()` 的 `(day, weekday)`、`itermonthdays3()` 的 `(year, month, day)`、`itermonthdays4()` 的完整四元组；
+- `itermonthdays*` 不受 `datetime.date` 的 1..9999 年范围限制，展示 year 0 / negative year 的 ISO 8601 含义；
+- `monthdatescalendar()` / `monthdayscalendar()` / `monthdays2calendar()` 的周矩阵结构；
+- `yeardatescalendar()` / `yeardayscalendar()` / `yeardays2calendar()` 的 width 分组和 12 个月覆盖；
+- `TextCalendar.formatmonth()` / `formatyear()` 与 `prmonth()` 输出边界；
+- `HTMLCalendar.formatmonth()` / `formatyear()` / `formatyearpage()` 的 table/page 与 bytes encoding；
+- 继承 `HTMLCalendar` 自定义 weekday/month CSS class，而不是事后替换整段 HTML；
+- `LocaleTextCalendar` / `LocaleHTMLCalendar` 临时修改 process-wide locale、因而不是线程安全；只在子进程用稳定 `C` locale 演示；
+- `isleap()` 的 Gregorian 规则、`leapdays(y1, y2)` 的半开区间和跨世纪情况；
+- `weekday()`、`monthrange()`、`monthcalendar()` 的数值结果和 padding；
+- `weekheader()`、`day_name` / `day_abbr`、`month_name` / `month_abbr` 的 current-locale 属性与 month index 0 空值；
+- `timegm()` 与 `time.gmtime()` 的 UTC/POSIX 互逆关系；
+- `IllegalMonthError` / `IllegalWeekdayError` 的 ValueError 边界。
 
 ## Common Pitfalls To Explain
 
-- 认为导入 `zoneinfo` 就保证机器一定有 IANA 数据；
-- 把 `America/Los_Angeles` 这样的 key 或 `PST` 缩写直接当作本地化 UI 文案；
-- 用固定 `timezone(-08:00)` 代替包含历史/DST 规则的地区 ZoneInfo；
-- 认为 timedelta(days=1) 跨 DST 永远等于 UTC 时间线上的 24 小时；
-- 在 fall-back 重复时间忽略 `fold`，或认为直接构造 wall time 能自动判断用户想要哪个时刻；
-- 认为 spring-forward gap 中的 wall time 构造会失败；
-- 随意调用 `clear_cache()` / `reset_tzpath()`，改变其他测试或长寿命 datetime 的语义；
-- 认为 `reset_tzpath()` 会使已经 cache 的 key 自动重载；
-- pickle transition 数据本身；实际按 key 恢复，结果依赖反序列化环境的时区数据库版本；
-- 对未来政治规则、所有平台的 zone 集合或缩写写脆弱断言。
+- 混淆 `weekday()` 的 Monday=0 与 `datetime.isoweekday()` 的 Monday=1；
+- 修改模块级 first weekday 后不恢复，导致其他测试的月矩阵列顺序改变；
+- 把 `0` padding 当作真实日期，或误以为 `itermonthdates()` 只返回目标月；
+- 假设每月固定 5 周；完整矩阵可能为 4、5 或 6 周；
+- 把 `leapdays(y1, y2)` 的 y2 当作包含端点；
+- 认为所有能由 `calendar` 数值迭代的年份都能构造 `datetime.date`；
+- 对英文月份/星期名写跨 locale 断言；
+- 在线程中使用 Locale*Calendar，忽略它临时改变进程全局 locale；
+- 手工拼接/替换 HTMLCalendar 输出而不是通过 CSS class 属性定制；
+- 把 `timegm()` 当本地时间转换；它明确按 UTC/POSIX 解释 tuple。
 
 ## Target File
 
-`languages/python/stdlib/data_types/test_044_zoneinfo_transitions.py`
+`languages/python/stdlib/data_types/test_045_calendar_layouts.py`
 
 ## Official Sources
 
-- https://docs.python.org/3.10/library/zoneinfo.html
-- https://docs.python.org/3.10/library/datetime.html#datetime.datetime.fold
+- https://docs.python.org/3.10/library/calendar.html
 
 ## Authoring Requirements
 
-- 使用 pytest 普通测试函数，只使用 Python 3.10 标准库；不得安装 `tzdata` 依赖；
-- helper 捕获 `ZoneInfoNotFoundError` 并对需要真实 zone data 的案例给出清晰 skip；
-- 转换断言使用文档中的稳定 2020 America/Los_Angeles 历史区间，不依赖当前/未来时刻；
-- `clear_cache()`、`reset_tzpath()` 和环境变量路径操作只能在子进程内演示；
-- `from_file()` 只读取 `zoneinfo.TZPATH` 下现有 TZif 文件，不修改系统数据；找不到文件则 skip；
-- 不把完整 `available_timezones()` 集合或时区缩写排序写成快照；
+- 使用 pytest 普通测试函数，只使用 Python 3.10 标准库；
+- autouse fixture 快照并恢复模块级 first weekday；实例 Calendar 测试优先使用实例配置；
+- locale 相关格式化只在短生命周期子进程使用 `C` locale，不修改 pytest 主进程 locale；
+- 文本/HTML 不做完整大字符串快照，只断言结构、关键字段和自定义 class；
+- 不断言平台相关的最早可格式化年份，也不依赖当前系统语言；
 - 文件顶部写 `polyglot-covers` 标记；
 - 本阶段不运行测试。
 
 ## Handoff
 
-001--042 已完成此前范围首轮编写；043 `datetime` 核心已在新分类 `data_types/` 完成首轮静态编写。全部 Python 文件仍未运行。下一步直接编写 044 `zoneinfo`；所有全局 cache/path 改动必须放在子进程，不要先运行 pytest。
+001--043 已完成此前范围首轮编写；044 `zoneinfo` 已在 `data_types/` 完成首轮静态编写，真实 IANA 数据缺失会清晰 skip，全局 cache/TZPATH 操作均在子进程。全部 Python 文件仍未运行。下一步直接编写 045 `calendar`；不要先运行 pytest。
