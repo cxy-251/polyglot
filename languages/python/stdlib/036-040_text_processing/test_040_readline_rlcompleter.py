@@ -401,7 +401,8 @@ def test_attr_matches_reveals_private_names_only_after_user_types_underscore():
     assert "obj._private" in private
     assert all(not match.startswith("obj.__") for match in private)
     assert "obj.__special__" in dunder
-    assert "obj.__class__" in dunder
+    assert "obj.__class__()" in dunder
+    # rlcompleter 会给可无参调用的对象加 ()，给其他 callable 加左括号。
 
 
 def test_attribute_completion_can_execute_dir_and_getattr_user_code():

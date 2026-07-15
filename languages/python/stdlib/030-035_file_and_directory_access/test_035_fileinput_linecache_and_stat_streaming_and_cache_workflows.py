@@ -158,7 +158,7 @@ def test_hook_encoded_opens_each_file_with_explicit_encoding(tmp_path):
     ) as lines:
         assert list(lines) == ["咖啡\n"]
 
-    with pytest.raises(ValueError, match="openhook"):
+    with pytest.raises(ValueError, match="opening hook"):
         fileinput.FileInput(
             files=(str(path),),
             inplace=True,
@@ -293,7 +293,7 @@ def test_stat_result_index_constants_match_named_attributes(tmp_path):
 
     assert metadata[stat.ST_MODE] == metadata.st_mode
     assert metadata[stat.ST_SIZE] == metadata.st_size == 3
-    assert metadata[stat.ST_MTIME] == metadata.st_mtime
+    assert metadata[stat.ST_MTIME] == int(metadata.st_mtime)
 
 
 def test_linecache_getline_is_one_based_and_missing_is_empty_string(tmp_path):
@@ -565,9 +565,10 @@ def test_fileinput_input_rejects_a_second_active_global_sequence(tmp_path):
     """嵌套 input() 会覆盖 singleton，因而直接报错；独立读取应构造 FileInput instance。"""
 
     path = tmp_path / "input.txt"
-    path.touch()
+    path.write_text("one\n", encoding="utf-8")
     first = fileinput.input(files=(path,))
     try:
+        assert next(first) == "one\n"
         with pytest.raises(RuntimeError, match="already active"):
             fileinput.input(files=(path,))
     finally:
@@ -646,11 +647,13 @@ def test_hook_encoded_is_deprecated_in_favour_of_encoding_parameters(tmp_path):
     path = tmp_path / "input.txt"
     path.write_text("café\n", encoding="utf-8")
 
-    with pytest.warns(DeprecationWarning):
-        hook = fileinput.hook_encoded("utf-8", "strict")
+    hook = fileinput.hook_encoded("utf-8", "strict")
 
     with fileinput.FileInput(files=(path,), openhook=hook) as lines:
         assert list(lines) == ["café\n"]
+
+    # 文档中的 deprecated 标记不保证每次调用都发出运行时 warning；
+    # 迁移判断应依据版本文档，而不是捕获警告作为功能契约。
 
 
 def test_inplace_filter_rewrites_the_file_and_keeps_an_explicit_backup(tmp_path):

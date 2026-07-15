@@ -349,7 +349,9 @@ def test_async_with_rejects_sync_only_context_manager():
         async with SyncOnly():
             pass
 
-    with pytest.raises(TypeError):
+    # 3.10 在查找缺失的异步协议入口时直接报告 AttributeError；后续版本把
+    # 这类协议不匹配统一成了 TypeError。
+    with pytest.raises(AttributeError, match="__aenter__"):
         asyncio.run(scenario())
 
 

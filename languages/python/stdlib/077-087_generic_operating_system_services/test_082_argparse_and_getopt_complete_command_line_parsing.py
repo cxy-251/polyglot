@@ -305,7 +305,10 @@ def test_parent_parser_reuses_a_fully_declared_common_option_set():
     assert args.verbose == 1
     assert args.config == "ci.ini"
     assert args.target == "wheel"
-    assert build.format_help().count("--config") == 1
+    assert sum(action.dest == "config" for action in build._actions) == 1
+    assert "--config CONFIG" in build.format_help()
+    # help 中 usage 和 options 表各出现一次文本；应检查 action 没有重复注册，
+    # 不能用整份帮助字符串的 substring 次数替代结构断言。
 
 
 def test_prefix_chars_changes_both_user_options_and_automatic_help_flags():

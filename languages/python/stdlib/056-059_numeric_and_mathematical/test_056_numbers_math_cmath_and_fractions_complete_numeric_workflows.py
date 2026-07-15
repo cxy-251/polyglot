@@ -387,13 +387,11 @@ def test_factorial_handles_zero_and_rejects_negative_values():
         math.factorial(-1)
 
 
-def test_python_310_factorial_still_accepts_integral_float_but_warns():
-    """3.10 尚兼容 5.0，但该行为自 3.9 已弃用；新代码应始终传 int。"""
+def test_python_310_factorial_rejects_integral_float():
+    """3.10 已移除 integral float 兼容路径；即使是 5.0 也必须显式转成 int。"""
 
-    with pytest.warns(DeprecationWarning, match="factorial.*floats"):
-        result = math.factorial(5.0)
-
-    assert result == 120
+    with pytest.raises(TypeError, match="integer"):
+        math.factorial(5.0)
 
 
 def test_gcd_is_variadic_nonnegative_and_has_a_zero_argument_identity():

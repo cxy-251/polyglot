@@ -456,12 +456,15 @@ def test_open_makefile_keeps_descriptor_alive_after_socket_object_closes():
     binary_reader = left.makefile("rb", buffering=0)
     left.close()
     try:
-        assert left.fileno() == -1
+        assert left._closed is True
+        assert left.fileno() >= 0
         right.sendall(b"data")
         assert binary_reader.read(4) == b"data"
     finally:
         binary_reader.close()
+        assert left.fileno() == -1
         right.close()
+    # close 先标记 socket wrapper；makefile 的引用释放后才真正关闭共享 descriptor。
 
 
 # socket fd 的 dup、fromfd、detach、fileno= 与显式 close 所有权。
@@ -865,7 +868,12 @@ def test_host_and_network_byte_order_functions_are_inverse_pairs():
 
 
 def test_protocol_and_service_names_map_to_standard_integer_constants():
-    assert socket.getprotobyname("tcp") == socket.IPPROTO_TCP
+    try:
+        tcp_protocol = socket.getprotobyname("tcp")
+    except OSError:
+        pytest.skip("精简容器没有 /etc/protocols 名称数据库")
+
+    assert tcp_protocol == socket.IPPROTO_TCP
     assert socket.getprotobyname("udp") == socket.IPPROTO_UDP
     assert socket.getservbyname("http", "tcp") == 80
     assert socket.getservbyport(80, "tcp") == "http"

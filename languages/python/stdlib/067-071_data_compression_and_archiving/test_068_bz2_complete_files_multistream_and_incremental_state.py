@@ -219,7 +219,7 @@ def test_incremental_compressor_concatenates_outputs_and_flush():
     """compress 可返回空 bytes；所有输出按调用顺序加上最终 flush 才是完整 stream。"""
 
     chunks = [b"first" * 100, b"second" * 100, b"third" * 100]
-    compressor = bz2.BZ2Compressor(compresslevel=5)
+    compressor = bz2.BZ2Compressor(5)
     parts = [compressor.compress(chunk) for chunk in chunks]
     parts.append(compressor.flush())
 

@@ -1126,7 +1126,14 @@ def test_raw_thread_exception_is_reported_to_sys_unraisablehook():
     finally:
         sys.unraisablehook = original_hook
 
-    assert summaries == [(LookupError, "raw failure", True, None)]
+    assert summaries == [
+        (
+            LookupError,
+            "raw failure",
+            True,
+            "Exception ignored in thread started by",
+        )
+    ]
 
 
 @pytest.mark.skipif(os.name != "posix", reason="custom SIGUSR1 案例使用 POSIX signal")

@@ -209,7 +209,8 @@ def test_stream_reader_rejects_random_access_to_an_earlier_member():
         second = archive.next()
         assert first is not None and second is not None
         with pytest.raises(tarfile.StreamError, match="backward"):
-            archive.extractfile(first)
+            archive.extractfile(first).read()
+        # extractfile 只创建延迟读取对象；真正需要倒带时才报告 StreamError。
 
 
 # ``TarFile.add``、``gettarinfo``/``addfile``、归档过滤与链接语义。
@@ -1079,6 +1080,7 @@ def test_fully_trusted_can_write_a_parent_path_but_data_filter_refuses(tmp_path)
 
     trusted_raw = _build_filter_archive(("../trusted-escape.txt", b"escaped"))
     trusted_destination = tmp_path / "trusted"
+    trusted_destination.mkdir()
     with tarfile.open(fileobj=io.BytesIO(trusted_raw), mode="r:") as archive:
         archive.extractall(trusted_destination, filter="fully_trusted")
 
@@ -1204,7 +1206,7 @@ def test_custom_filter_can_skip_members_and_replace_metadata(tmp_path):
     assert (destination / "keep.txt").read_bytes() == b"keep"
     assert stat.S_IMODE((destination / "keep.txt").stat().st_mode) == 0o600
     assert not (destination / "discard.tmp").exists()
-    assert seen_destinations == [str(destination), str(destination)]
+    assert seen_destinations == [destination, destination]
 
 
 @_section_134_pytestmark

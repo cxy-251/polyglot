@@ -39,7 +39,6 @@ wheel 引导 pip，``venv`` 创建可重建的隔离前缀，``zipapp`` 把纯 P
 # polyglot-covers: python.zipapp.entry-point-validation
 # polyglot-covers: python.zipapp.runtime-dependency-boundary
 
-import ensurepip
 from io import BytesIO
 import json
 import os
@@ -52,6 +51,19 @@ import zipapp
 import zipfile
 
 import pytest
+
+try:
+    import ensurepip
+except ModuleNotFoundError:
+    # CPython 可以用 --without-ensurepip 构建；这不应阻止同文件的 venv/zipapp
+    # 案例被收集和验证。
+    ensurepip = None
+
+
+requires_ensurepip = pytest.mark.skipif(
+    ensurepip is None,
+    reason="当前 CPython 构建未捆绑 ensurepip",
+)
 
 
 class RecordingEnvBuilder(venv.EnvBuilder):
@@ -123,6 +135,7 @@ def make_zipapp_source(root, *, with_main=True):
     return source
 
 
+@requires_ensurepip
 def test_ensurepip_reports_the_bundled_version_without_installing_anything():
     bundled = ensurepip.version()
     completed = run_command(
@@ -136,11 +149,13 @@ def test_ensurepip_reports_the_bundled_version_without_installing_anything():
     assert completed.stderr == ""
 
 
+@requires_ensurepip
 def test_ensurepip_rejects_conflicting_script_selection_before_bootstrap():
     with pytest.raises(ValueError, match="altinstall and default_pip"):
         ensurepip.bootstrap(altinstall=True, default_pip=True)
 
 
+@requires_ensurepip
 def test_ensurepip_bootstraps_pip_inside_a_temporary_venv_without_network(tmp_path):
     environment = tmp_path / "pip-environment"
     builder = RecordingEnvBuilder(with_pip=False)

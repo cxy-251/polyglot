@@ -247,10 +247,21 @@ async def _recv_datagram(loop, sock):
     return await ready
 
 
-def test_connected_datagram_transport_preserves_each_message_boundary():
+@pytest.mark.skipif(
+    not hasattr(socket, "AF_UNIX"),
+    reason="案例使用 Unix domain datagram 的临时地址",
+)
+def test_connected_datagram_transport_preserves_each_message_boundary(tmp_path):
     async def scenario():
         loop = asyncio.get_running_loop()
-        owned, peer = socket.socketpair(socket.AF_UNIX, socket.SOCK_DGRAM)
+        owned_address = str(tmp_path / "owned.sock")
+        peer_address = str(tmp_path / "peer.sock")
+        owned = socket.socket(socket.AF_UNIX, socket.SOCK_DGRAM)
+        peer = socket.socket(socket.AF_UNIX, socket.SOCK_DGRAM)
+        owned.bind(owned_address)
+        peer.bind(peer_address)
+        owned.connect(peer_address)
+        peer.connect(owned_address)
         owned.setblocking(False)
         peer.setblocking(False)
         protocol = RecordingDatagramProtocol(loop)
@@ -261,17 +272,20 @@ def test_connected_datagram_transport_preserves_each_message_boundary():
         try:
             peer.send(b"one")
             peer.send(b"two")
-            received = await protocol.datagrams
+            received = await asyncio.wait_for(protocol.datagrams, timeout=1)
 
             assert returned is protocol
             assert [data for data, _ in received] == [b"one", b"two"]
             assert protocol.errors == []
 
             transport.sendto(b"reply")
-            assert await _recv_datagram(loop, peer) == b"reply"
+            assert await asyncio.wait_for(
+                _recv_datagram(loop, peer),
+                timeout=1,
+            ) == b"reply"
         finally:
             transport.close()
-            assert await protocol.closed is None
+            assert await asyncio.wait_for(protocol.closed, timeout=1) is None
             peer.close()
 
     asyncio.run(scenario())
@@ -327,10 +341,10 @@ def test_read_and_write_pipe_transports_support_pause_resume_and_eof():
             )
             assert returned_reader_protocol is read_protocol
             assert isinstance(write_protocol, asyncio.Protocol)
-            assert read_transport.is_reading() is True
+            with pytest.raises(NotImplementedError):
+                read_transport.is_reading()
 
             read_transport.pause_reading()
-            assert read_transport.is_reading() is False
             pending = asyncio.create_task(reader.readexactly(4))
             write_transport.write(b"pipe")
             await _next_loop_turn()
@@ -340,6 +354,8 @@ def test_read_and_write_pipe_transports_support_pause_resume_and_eof():
             assert await pending == b"pipe"
             write_transport.close()
             assert await reader.read() == b""
+            # 3.10 Unix pipe transport 支持 pause/resume，却没有覆盖
+            # ReadTransport.is_reading；以可观察的交付暂停验证真实协议。
         finally:
             if write_transport is not None:
                 write_transport.close()

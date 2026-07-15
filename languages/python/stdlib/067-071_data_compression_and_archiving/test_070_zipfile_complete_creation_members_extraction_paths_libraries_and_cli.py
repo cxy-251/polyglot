@@ -390,9 +390,9 @@ def test_active_writer_excludes_other_archive_operations():
         writer = archive.open("active.txt", "w")
         try:
             writer.write(b"active")
-            with pytest.raises(ValueError, match="writing handle"):
+            with pytest.raises(ValueError, match=r"writ(?:e|ing) handle"):
                 archive.read("ready.txt")
-            with pytest.raises(ValueError, match="writing handle"):
+            with pytest.raises(ValueError, match=r"writ(?:e|ing) handle"):
                 archive.open("another.txt", "w")
         finally:
             writer.close()
@@ -944,10 +944,11 @@ def test_writepy_preserves_package_layout_and_recurses_in_sorted_order(tmp_path)
     assert names == [
         "demo_package/__init__.pyc",
         "demo_package/alpha.pyc",
-        "demo_package/zeta.pyc",
         "demo_package/nested/__init__.pyc",
         "demo_package/nested/module.pyc",
+        "demo_package/zeta.pyc",
     ]
+    # 递归遍历把排序后的目录与文件放在同一层比较，nested 因此先于 zeta。
 
 
 def test_filterfunc_skips_a_file_or_an_entire_directory_subtree(tmp_path):
@@ -1026,7 +1027,7 @@ def test_writepy_rejects_a_non_python_file(tmp_path):
 
     source = _write_source(tmp_path / "notes.txt", "not a module\n")
     with zipfile.PyZipFile(tmp_path / "invalid.zip", "w") as archive:
-        with pytest.raises(RuntimeError, match="not a Python file"):
+        with pytest.raises(RuntimeError, match="must end with"):
             archive.writepy(source)
 
 

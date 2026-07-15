@@ -485,7 +485,7 @@ def test_syslog_priority_combines_facility_and_severity_numbers_offline():
     expected = (SysLogHandler.LOG_LOCAL0 << 3) | SysLogHandler.LOG_INFO
     assert handler.encodePriority("local0", "info") == expected
     assert handler.encodePriority(SysLogHandler.LOG_USER, SysLogHandler.LOG_ERR) == 11
-    with pytest.raises(ValueError, match="Unknown facility"):
+    with pytest.raises(KeyError, match="missing"):
         handler.encodePriority("missing", "info")
 
 
@@ -666,7 +666,7 @@ def test_smtp_handler_formats_message_and_runs_auth_tls_sequence(monkeypatch):
         "send_message",
         "quit",
     ]
-    assert smtp.message["To"] == "first@example,second@example"
+    assert smtp.message["To"] == "first@example, second@example"
     assert smtp.message["Subject"] == "Build failed"
     assert "ERROR:payload" in smtp.message.get_content()
 

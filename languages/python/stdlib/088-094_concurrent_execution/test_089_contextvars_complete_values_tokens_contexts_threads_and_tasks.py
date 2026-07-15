@@ -99,7 +99,7 @@ def test_python_310_token_does_not_implement_context_manager_protocol():
     def scenario():
         token = REQUEST_ID_229.set("req-7")
         try:
-            with pytest.raises(TypeError, match="context manager"):
+            with pytest.raises(AttributeError, match="__enter__"):
                 with token:
                     pass
         finally:
@@ -157,9 +157,9 @@ def test_context_is_mapping_and_run_contains_binding_changes():
     assert context[REQUEST_ID_230] == "req-42"
     assert REQUEST_ID_230 in context
     assert list(context) == [REQUEST_ID_230]
-    assert context.keys() == [REQUEST_ID_230]
-    assert context.values() == ["req-42"]
-    assert context.items() == [(REQUEST_ID_230, "req-42")]
+    assert list(context.keys()) == [REQUEST_ID_230]
+    assert list(context.values()) == ["req-42"]
+    assert list(context.items()) == [(REQUEST_ID_230, "req-42")]
     with pytest.raises(LookupError):
         REQUEST_ID_230.get()
 

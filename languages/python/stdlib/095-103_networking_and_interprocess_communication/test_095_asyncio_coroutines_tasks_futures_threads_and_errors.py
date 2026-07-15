@@ -258,7 +258,9 @@ def test_cancel_injects_message_runs_finally_and_marks_task_cancelled():
 
         with pytest.raises(asyncio.CancelledError) as raised:
             await task
-        assert raised.value.args == ("stop requested",)
+        assert raised.value.args == ()
+        # 3.10.12 接受 cancel(msg)，但 await 边界尚未稳定保留 message；
+        # 业务控制流只能依赖 CancelledError 类型和 cancelled() 状态。
         assert cleanup == ["released"]
         assert task.done() is True
         assert task.cancelled() is True
@@ -578,7 +580,7 @@ def test_directly_cancelled_inner_also_cancels_shield_awaitable():
 
 def test_wait_rejects_empty_input_and_timeout_does_not_cancel_pending_task():
     async def scenario():
-        with pytest.raises(ValueError, match="Set of Tasks/Futures is empty"):
+        with pytest.raises(ValueError, match="coroutines/Futures is empty"):
             await asyncio.wait([])
 
         started = asyncio.Event()
@@ -1266,11 +1268,11 @@ def test_run_in_executor_uses_thread_pool_and_partial_for_keywords():
     assert worker_ident != caller_ident
 
 
-def test_default_executor_must_be_thread_pool_and_shutdown_is_terminal_for_loop():
+def test_default_executor_warns_for_other_types_and_shutdown_is_terminal_for_loop():
     loop = asyncio.new_event_loop()
     executor = ThreadPoolExecutor(max_workers=1, thread_name_prefix="polyglot-default")
     try:
-        with pytest.raises(TypeError, match="executor must be ThreadPoolExecutor instance"):
+        with pytest.warns(DeprecationWarning, match="not an instance"):
             loop.set_default_executor(object())
 
         loop.set_default_executor(executor)

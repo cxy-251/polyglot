@@ -486,10 +486,12 @@ def test_methodcaller_invokes_named_method_with_frozen_arguments():
     """methodcaller(name,*args,**kwargs)(obj) 等价于 getattr(obj,name)(*args,**kwargs)。"""
 
     normalize = operator.methodcaller("replace", "-", " ")
-    center = operator.methodcaller("center", 7, fillchar=".")
+    center = operator.methodcaller("center", 7, ".")
 
     assert normalize("one-two") == "one two"
     assert center("A") == "...A..."
+    # methodcaller 会原样保存调用参数；str.center 的 fillchar 在 3.10
+    # 是 positional-only，不能因为 factory 支持 kwargs 就改用关键字。
 
 
 def test_methodcaller_looks_up_the_method_each_time():

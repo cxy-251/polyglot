@@ -376,7 +376,7 @@ def test_task_done_more_times_than_put_is_rejected():
     work.get()
     work.task_done()
 
-    with pytest.raises(ValueError, match="task_done\(\) called too many times"):
+    with pytest.raises(ValueError, match=r"task_done\(\) called too many times"):
         work.task_done()
 
 

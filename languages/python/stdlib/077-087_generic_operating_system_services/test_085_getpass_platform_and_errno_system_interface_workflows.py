@@ -251,10 +251,14 @@ def test_system_alias_maps_sunos_release_to_common_solaris_numbering():
     )
 
 
-def test_libc_probe_returns_caller_fallback_when_file_cannot_be_scanned(tmp_path):
-    """不存在的 executable 不抛错，而是返回给定 lib/version fallback。"""
+def test_libc_probe_distinguishes_missing_file_from_unrecognized_contents(tmp_path):
+    """路径缺失是 I/O 错误；存在但无 libc marker 才返回 caller fallback。"""
 
     missing = tmp_path / "missing-executable"
+    with pytest.raises(FileNotFoundError):
+        platform.libc_ver(executable=str(missing))
+
+    missing.write_bytes(b"not an executable image")
 
     assert platform.libc_ver(
         executable=str(missing),

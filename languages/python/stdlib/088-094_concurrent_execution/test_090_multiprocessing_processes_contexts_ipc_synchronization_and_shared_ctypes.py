@@ -422,7 +422,7 @@ def test_process_inherits_authkey_and_setter_requires_bytes():
     assert process.authkey == parent.authkey
     process.authkey = b"teaching-secret"
     assert process.authkey == b"teaching-secret"
-    with pytest.raises(TypeError, match="byte string"):
+    with pytest.raises(TypeError, match="encoding"):
         process.authkey = "text-secret"
 
 

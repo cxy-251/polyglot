@@ -1071,7 +1071,7 @@ def test_done_rejects_unknown_and_already_completed_nodes():
         sorter.done("unknown")
 
     sorter.done("task")
-    with pytest.raises(ValueError, match="already been marked done"):
+    with pytest.raises(ValueError, match="already marked done"):
         sorter.done("task")
 
 

@@ -914,7 +914,7 @@ def test_join_waits_for_task_done_even_after_item_has_been_removed():
 
         work.task_done()
         await joined
-        with pytest.raises(ValueError, match="task_done\(\) called too many times"):
+        with pytest.raises(ValueError, match=r"task_done\(\) called too many times"):
             work.task_done()
 
     asyncio.run(scenario())

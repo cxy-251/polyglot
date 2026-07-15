@@ -313,7 +313,7 @@ def test_default_unpickling_does_not_call_init_again():
 def test_lambda_and_live_file_objects_are_not_picklable(tmp_path):
     """lambda 没有可导入的稳定 qualified name，打开文件则包含 OS resource state。"""
 
-    with pytest.raises(pickle.PicklingError):
+    with pytest.raises((pickle.PicklingError, AttributeError)):
         pickle.dumps(lambda value: value)
 
     path = tmp_path / "item.txt"
@@ -439,7 +439,7 @@ class FalseState:
     setstate_calls = 0
 
     def __getstate__(self):
-        return {}
+        return None
 
     def __setstate__(self, state):
         type(self).setstate_calls += 1
@@ -656,8 +656,8 @@ def test_setstate_accepts_an_arbitrary_picklable_state_shape():
     assert (restored.x, restored.y) == (3, 4)
 
 
-def test_false_getstate_value_skips_setstate_entirely():
-    """None/空 dict 等 false state 不调用 __setstate__；需要 callback 时返回 truthy state。"""
+def test_none_getstate_value_skips_setstate_entirely():
+    """None 表示没有 BUILD state；需要恢复 callback 时必须返回实际 state。"""
 
     FalseState.setstate_calls = 0
 

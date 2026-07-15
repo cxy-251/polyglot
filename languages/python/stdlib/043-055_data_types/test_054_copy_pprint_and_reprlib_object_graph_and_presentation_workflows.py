@@ -405,7 +405,10 @@ def test_depth_replaces_deeper_containers_with_ellipsis_and_is_not_round_trippab
     formatted = printer.pformat(value)
 
     assert formatted == "{'outer': {...}}"
-    assert not printer.isreadable(value)
+    assert printer.isreadable(value) is True
+    assert eval(formatted) != value
+    # 3.10 的 isreadable 检查对象自身的安全 repr，不把 printer.depth
+    # 造成的信息截断计入结果；有 depth 时不能据此承诺 round trip。
 
 
 def test_compact_packs_multiple_sequence_items_on_each_available_line():

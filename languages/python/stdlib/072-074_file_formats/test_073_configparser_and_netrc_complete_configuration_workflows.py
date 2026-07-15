@@ -363,7 +363,8 @@ def test_read_ignores_missing_paths_and_overlays_existing_files_in_order(tmp_pat
     parser = configparser.ConfigParser()
     loaded = parser.read([missing, base, override], encoding="utf-8")
 
-    assert loaded == [base, override]
+    assert loaded == [str(base), str(override)]
+    # read 接受 PathLike，但返回值规范化为实际打开时使用的字符串路径。
     assert dict(parser["app"]) == {
         "host": "localhost",
         "port": "9000",

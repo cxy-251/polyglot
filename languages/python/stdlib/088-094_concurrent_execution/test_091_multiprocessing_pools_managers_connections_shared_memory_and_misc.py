@@ -807,7 +807,7 @@ def test_duplicate_name_and_nonpositive_create_size_are_rejected():
         owner.unlink()
         owner.close()
 
-    with pytest.raises(ValueError, match="size must be a positive number"):
+    with pytest.raises(ValueError, match="positive number"):
         shared_memory.SharedMemory(create=True, size=0)
 
 
@@ -893,8 +893,11 @@ def test_length_is_fixed_and_unsupported_values_or_slices_fail():
             values.append(4)
         with pytest.raises(TypeError):
             _ = values[:]
-        with pytest.raises(TypeError, match="type"):
+        with pytest.raises(KeyError):
             values[0] = {"not": "supported"}
+        assert values[0] == 1
+        # 3.10 的实现直接查内部 type mapping，因而泄露 KeyError；
+        # 后续版本可能把实现细节收敛成更友好的 TypeError。
     finally:
         values.shm.unlink()
         values.shm.close()

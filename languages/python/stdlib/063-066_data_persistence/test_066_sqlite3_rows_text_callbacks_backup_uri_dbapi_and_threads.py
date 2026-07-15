@@ -433,7 +433,8 @@ def test_authorizer_can_deny_an_operation_before_it_changes_data():
         with pytest.raises(sqlite3.DatabaseError):
             connection.execute("DELETE FROM item")
 
-        connection.set_authorizer(None)
+        # 3.10 尚不支持用 None 禁用 authorizer；用全允许 callback 恢复访问。
+        connection.set_authorizer(lambda *arguments: sqlite3.SQLITE_OK)
         assert connection.execute("SELECT * FROM item").fetchall() == [("kept",)]
         assert any(call[0] == sqlite3.SQLITE_DELETE for call in calls)
     finally:

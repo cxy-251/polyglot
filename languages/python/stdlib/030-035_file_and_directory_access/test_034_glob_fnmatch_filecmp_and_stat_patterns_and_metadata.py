@@ -1030,9 +1030,10 @@ def test_stat_symbolic_indexes_map_to_the_portable_ten_tuple(tmp_path):
     assert metadata[stat.ST_UID] == metadata.st_uid
     assert metadata[stat.ST_GID] == metadata.st_gid
     assert metadata[stat.ST_SIZE] == metadata.st_size == 3
-    assert metadata[stat.ST_ATIME] == metadata.st_atime
-    assert metadata[stat.ST_MTIME] == metadata.st_mtime
-    assert metadata[stat.ST_CTIME] == metadata.st_ctime
+    assert metadata[stat.ST_ATIME] == int(metadata.st_atime)
+    assert metadata[stat.ST_MTIME] == int(metadata.st_mtime)
+    assert metadata[stat.ST_CTIME] == int(metadata.st_ctime)
+    # 十槽 tuple 为兼容旧接口保留整数秒；命名属性可能包含亚秒精度。
 
 
 def test_optional_platform_file_type_constants_are_zero_when_unsupported():

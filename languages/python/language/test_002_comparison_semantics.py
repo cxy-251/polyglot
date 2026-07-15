@@ -87,7 +87,9 @@ def test_chained_comparison_short_circuits_later_expressions():
         events.append("upper bound evaluated")
         return 100
 
-    assert not (10 < 5 < upper_bound())
+    # 先保存表达式结果，再断言，避免 pytest 为生成失败解释而改写 assert 表达式。
+    result = 10 < 5 < upper_bound()
+    assert result is False
     assert events == []
 
 

@@ -237,7 +237,7 @@ def test_html_calendar_returns_tables_and_a_complete_encoded_page():
 
     assert isinstance(page, bytes)
     decoded_page = page.decode("utf-8")
-    assert "<!DOCTYPE HTML" in decoded_page
+    assert "<!DOCTYPE html" in decoded_page
     assert 'charset=utf-8' in decoded_page
     assert 'href="project-calendar.css"' in decoded_page
 

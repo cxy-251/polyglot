@@ -465,11 +465,11 @@ def test_explicit_rollover_is_idempotent_and_keeps_the_current_position(tmp_path
 
 
 def test_spooled_file_truncate_uses_the_same_file_object_contract(tmp_path):
-    """truncate 返回目标 size；它不负责把 cursor 自动移动到新文件末尾。"""
+    """3.10 的 spooled wrapper 不转发返回值，也不自动移动 cursor。"""
 
     with tempfile.SpooledTemporaryFile(max_size=2, dir=tmp_path) as stream:
         stream.write(b"abcdef")
-        assert stream.truncate(3) == 3
+        assert stream.truncate(3) is None
         assert stream.tell() == 6
         stream.seek(0)
         assert stream.read() == b"abc"

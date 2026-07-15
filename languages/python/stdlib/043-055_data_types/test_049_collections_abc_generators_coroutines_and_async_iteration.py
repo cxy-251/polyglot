@@ -978,7 +978,13 @@ def test_native_async_generator_aclose_rejects_yield_after_generator_exit():
 
         with pytest.raises(RuntimeError, match="ignored GeneratorExit"):
             await value.aclose()
-        assert await value.aclose() is None
+        # 第一次 aclose 已消费错误 yield；3.10 再次关闭时以
+        # StopAsyncIteration 表示对象终于结束，而不是返回普通值。
+        with pytest.raises(StopAsyncIteration):
+            await value.aclose()
+        with pytest.raises(StopAsyncIteration):
+            await anext(value)
+        assert value.ag_frame is None
 
     assert asyncio.run(workflow()) is None
 

@@ -200,6 +200,9 @@ def test_writeback_close_persists_cached_changes_and_context_closes_shelf():
     assert pickle.loads(backing[b"items"]) == [1, 2]
     with pytest.raises(ValueError):
         _ = shelf["items"]
+    # writeback=True 的 __setitem__ 会先缓存再写 backing；closed 写入若失败，
+    # 遗留 cache 会使 __del__ 再次 sync 并产生 unraisable warning。
+    shelf.writeback = False
     with pytest.raises(ValueError):
         shelf["other"] = 3
 
@@ -209,7 +212,7 @@ def test_unpicklable_value_is_rejected_before_underlying_mapping_assignment():
 
     backing = {}
     with shelve.Shelf(backing) as shelf:
-        with pytest.raises(pickle.PicklingError):
+        with pytest.raises((pickle.PicklingError, AttributeError)):
             shelf["callable"] = lambda value: value
 
         assert "callable" not in shelf
@@ -315,7 +318,12 @@ def test_supported_scalar_values_round_trip_with_their_python_types():
     for value in values:
         restored = marshal.loads(marshal.dumps(value))
         assert restored == value
-        assert type(restored) is type(value)
+        if isinstance(value, bytearray):
+            assert type(restored) is bytes
+        else:
+            assert type(restored) is type(value)
+    # 3.10 marshal 把 bytearray 规范化为 bytes；它保存值而不承诺保留
+    # 所有相似二进制容器的具体类型。
 
 
 def test_supported_containers_round_trip_when_every_member_is_supported():
@@ -370,21 +378,21 @@ def test_nested_unsupported_value_makes_dumps_fail():
         marshal.dumps({"valid": 1, "invalid": UnsupportedRecord("value")})
 
 
-def test_dump_can_write_garbage_before_reporting_an_unsupported_member():
-    """dump 不是 transactional：ValueError 后 position 已推进，不能再使用该 record。"""
+def test_dump_validates_before_calling_file_write_for_an_unsupported_member():
+    """3.10 先构造完整 bytes；编码失败时不会调用 Python file.write。"""
 
     stream = io.BytesIO()
 
     with pytest.raises(ValueError):
         marshal.dump([1, UnsupportedRecord("value"), 3], stream)
 
-    assert stream.tell() > 0
-    stream.seek(0)
-    assert marshal.load(stream) == [1, None, 3]
+    assert stream.tell() == 0
+    # 文档仍警告失败后可能留下 garbage；调用方不应把这个实现细节
+    # 当成跨版本事务保证，最稳妥的做法仍是写临时文件后原子替换。
 
 
 def test_dump_and_load_round_trip_through_a_binary_file(tmp_path):
-    """file API 要求 binary stream；返回 None，record framing 由 marshal 自己写入。"""
+    """file API 要求 binary stream；3.10 转发 write 的字节数返回值。"""
 
     path = tmp_path / "value.marshal"
     with path.open("wb") as stream:
@@ -393,7 +401,7 @@ def test_dump_and_load_round_trip_through_a_binary_file(tmp_path):
     with path.open("rb") as stream:
         restored = marshal.load(stream)
 
-    assert returned is None
+    assert returned == path.stat().st_size
     assert restored == {"value": [1, 2, 3]}
 
 

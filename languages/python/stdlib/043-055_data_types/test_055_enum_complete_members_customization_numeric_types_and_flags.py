@@ -94,7 +94,7 @@ def test_lookup_by_value_and_name_use_different_call_and_subscription_syntax():
     assert Status("running") is Status.RUNNING
     assert Status["RUNNING"] is Status.RUNNING
 
-    with pytest.raises(ValueError, match="not a valid Status"):
+    with pytest.raises(ValueError, match="not a valid"):
         Status("RUNNING")
     with pytest.raises(KeyError, match="running"):
         Status["running"]
@@ -401,7 +401,7 @@ def test_enum_member_names_cannot_be_rebound_but_mutable_values_remain_mutable()
     class Registry(Enum):
         PLUGINS = []
 
-    with pytest.raises(AttributeError, match="cannot reassign member"):
+    with pytest.raises(AttributeError, match=r"(?i)cannot reassign members"):
         Registry.PLUGINS = ["replacement"]
 
     Registry.PLUGINS.value.append("loaded")
@@ -651,7 +651,7 @@ def test_flag_value_lookup_accepts_known_combinations_but_rejects_unknown_bits()
 
     assert Permission(3) == Permission.READ | Permission.WRITE
 
-    with pytest.raises(ValueError, match="not a valid Permission"):
+    with pytest.raises(ValueError, match="not a valid"):
         Permission(4)
 
 
@@ -697,7 +697,7 @@ def test_int_flag_bitwise_operations_preserve_type_and_accept_raw_ints():
 
 
 def test_int_flag_accepts_unknown_bits_and_preserves_them_in_pseudo_members():
-    """和裸系统掩码互操作时未知 bit 不报错；value 原样保留，名称是合成诊断信息。"""
+    """和裸系统掩码互操作时未知 bit 不报错；value 原样保留。"""
 
     class Permission(IntFlag):
         READ = 4
@@ -708,8 +708,11 @@ def test_int_flag_accepts_unknown_bits_and_preserves_them_in_pseudo_members():
 
     assert isinstance(value, Permission)
     assert value.value == 9
-    assert value.name == "8|EXECUTE"
+    assert value.name is None
+    assert "8|EXECUTE" in repr(value)
     assert Permission(9) is value
+    # 3.10 的 pseudo-member 没有正式 name，repr 才合成未知 bit 与已知成员；
+    # 不能把诊断文本当成可按名称查找的成员。
 
 
 def test_int_flag_arithmetic_loses_membership_while_bitwise_operations_keep_it():

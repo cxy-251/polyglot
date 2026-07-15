@@ -274,7 +274,7 @@ def test_inconsistent_parent_orders_make_c3_mro_creation_fail():
     class YBeforeX(Y, X):
         pass
 
-    with pytest.raises(TypeError, match="method resolution order"):
+    with pytest.raises(TypeError, match=r"(?is)resolution\s+order"):
         type("Impossible", (XBeforeY, YBeforeX), {})
 
 

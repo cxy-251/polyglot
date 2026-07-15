@@ -438,7 +438,7 @@ def test_modify_replaces_an_immutable_key_and_map_tracks_the_current_key():
         peer.close()
 
 
-def test_registered_file_object_must_be_unregistered_before_it_is_closed():
+def test_unregister_can_recover_a_closed_registered_object_by_identity():
     owned, peer = socket.socketpair()
     selector = selectors.DefaultSelector()
     try:
@@ -446,11 +446,12 @@ def test_registered_file_object_must_be_unregistered_before_it_is_closed():
         original_fd = key.fd
         owned.close()
         assert owned.fileno() == -1
-        with pytest.raises(ValueError):
-            selector.unregister(owned)
+        assert selector.unregister(owned) == key
 
-        # 故障恢复时仍可用先前保存的整数 fd 删除映射，但正常代码不应依赖这条补救路径。
-        assert selector.unregister(original_fd) == key
+        # 3.10 在 fileno() 已失效时会按对象 identity 回查映射；删除后旧整数 fd
+        # 也不再存在。正常代码仍应先 unregister 再 close，以免依赖恢复路径。
+        with pytest.raises(KeyError):
+            selector.unregister(original_fd)
     finally:
         selector.close()
         owned.close()

@@ -117,7 +117,7 @@ def test_relpath_commonpath_and_commonprefix_answer_different_questions():
     """commonpath 按路径组件计算；commonprefix 只比较原始字符。"""
 
     assert os.path.relpath("/srv/app/logs", start="/srv/app") == "logs"
-    assert os.path.relpath("/srv/data", start="/srv/app") == "../../data"
+    assert os.path.relpath("/srv/data", start="/srv/app") == "../data"
 
     paths = ["/usr/lib", "/usr/local"]
     assert os.path.commonpath(paths) == "/usr"
