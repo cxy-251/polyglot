@@ -168,12 +168,15 @@ def _preserve_global_database_for_monkeypatch(monkeypatch):
 def test_init_with_empty_file_list_is_repeatable_and_uses_builtin_tables(monkeypatch):
     _preserve_global_database_for_monkeypatch(monkeypatch)
     monkeypatch.setattr(mimetypes, "knownfiles", [])
+    # init(files=[]) 若已有 _db 会沿用它，而不是强制清空系统扩展；先隔离为未初始化状态，
+    # 才能准确演示“只加载内置表”。这也是测试全局模块时很容易漏掉的前置条件。
+    monkeypatch.setattr(mimetypes, "_db", None)
+    monkeypatch.setattr(mimetypes, "inited", False)
 
     mimetypes.init(files=[])
     first = mimetypes.guess_type("lesson.html")
     first_size = len(mimetypes.types_map)
-    # files=None 完全重建默认状态；knownfiles 已隔离为空，所以不会读取宿主机配置。
-    mimetypes.init(files=None)
+    mimetypes.init(files=[])
     assert mimetypes.inited is True
     assert mimetypes.guess_type("lesson.html") == first == ("text/html", None)
     assert len(mimetypes.types_map) == first_size

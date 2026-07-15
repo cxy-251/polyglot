@@ -296,9 +296,9 @@ def test_explicit_conversions_keep_the_existing_tree_as_the_first_part():
 def test_mixed_container_cannot_be_converted_back_to_related_or_alternative():
     message = EmailMessage()
     message.make_mixed()
-    with pytest.raises(TypeError):
+    with pytest.raises(ValueError, match="Cannot convert mixed to related"):
         message.make_related()
-    with pytest.raises(TypeError):
+    with pytest.raises(ValueError, match="Cannot convert mixed to alternative"):
         message.make_alternative()
 
 
@@ -631,7 +631,7 @@ def test_nested_message_is_a_container_even_though_maintype_is_message():
 def test_message_partial_and_rfc822_reject_incompatible_object_cte_options():
     inner = EmailMessage()
     inner.set_content("nested")
-    with pytest.raises(TypeError):
+    with pytest.raises(ValueError, match="message/partial is not supported"):
         EmailMessage().set_content(inner, subtype="partial")
     with pytest.raises(ValueError):
         EmailMessage().set_content(inner, cte="base64")
@@ -640,8 +640,9 @@ def test_message_partial_and_rfc822_reject_incompatible_object_cte_options():
 # RFC 2231 filename、Content-Type 参数、boundary、默认类型与手动 attach。
 #
 # add_header 会把非 ASCII filename 作为 RFC 2231 参数序列化，get_filename 返回解码且去引号值。
-# set_param(replace=True)、del_param 与 set_boundary 原位重写 header，保留 header 顺序；无
-# Content-Type 时 set_boundary 抛 HeaderParseError。default type 不是 header，只影响缺失时的解释。
+# set_param(replace=True) 与 set_boundary 原位重写 header；del_param 在 3.10 删除后重新追加，
+# 不保证顺序和大小写。无 Content-Type 时 set_boundary 抛 HeaderParseError。default type 不是
+# header，只影响缺失时的解释。
 #
 # 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
 
@@ -683,7 +684,7 @@ def test_nonascii_filename_round_trips_and_serializes_as_rfc2231():
     assert fallback.get_filename() == "fallback.bin"
 
 
-def test_parameter_and_boundary_updates_preserve_content_type_header_position():
+def test_parameter_replacement_and_boundary_preserve_position_but_deletion_reappends():
     message = EmailMessage()
     message["X-Before"] = "one"
     message["Content-Type"] = "text/plain; charset=utf-8"
@@ -692,12 +693,16 @@ def test_parameter_and_boundary_updates_preserve_content_type_header_position():
     message.set_param("format", "flowed", replace=True)
     assert message.keys() == ["X-Before", "Content-Type", "X-After"]
     assert message["Content-Type"].params["format"] == "flowed"
-    message.del_param("format")
-    assert "format" not in message["Content-Type"].params
 
     message.set_boundary("boundary with space")
     assert message.get_boundary() == "boundary with space"
     assert message.keys() == ["X-Before", "Content-Type", "X-After"]
+
+    # del_param 没有 replace=True 入口：3.10 通过删除再追加 header 实现，因此位置和字段名
+    # 大小写都可能变化。若顺序有业务意义，应完成所有删除后再显式整理 header。
+    message.del_param("format")
+    assert "format" not in message["Content-Type"].params
+    assert message.keys() == ["X-Before", "X-After", "content-type"]
     with pytest.raises(HeaderParseError):
         EmailMessage().set_boundary("missing content type")
 

@@ -37,7 +37,8 @@ class TextCollector(handler.ContentHandler):
         self.text_parts = []
 
     def startElement(self, name, attrs):
-        self.start_tags.append((name, attrs.copy()))
+        # AttributesImpl.copy() 仍返回包装对象；转换成 dict 才得到可跨解析器比较的值快照。
+        self.start_tags.append((name, dict(attrs)))
 
     def characters(self, content):
         self.text_parts.append(content)
@@ -130,9 +131,12 @@ class EventRecorder(handler.ContentHandler):
         self.events.append(("end-document",))
 
     def startElement(self, name, attrs):
-        position = (self.locator.getLineNumber(), self.locator.getColumnNumber())
+        # parse()/parseString() 会先交付 Locator；直接手动 feed() 的实现不保证这一回调发生。
+        position = None
+        if self.locator is not None:
+            position = (self.locator.getLineNumber(), self.locator.getColumnNumber())
         # attrs 对象可能被解析器复用；copy 后才适合跨回调保存。
-        self.events.append(("start", name, attrs.copy(), position))
+        self.events.append(("start", name, dict(attrs), position))
 
     def endElement(self, name):
         self.events.append(("end", name))
@@ -445,7 +449,9 @@ def test_attributes_impl_supports_sax_queries_and_mapping_operations():
     assert attrs.getValue("id") == attrs["id"] == "one"
     assert "empty" in attrs
     assert attrs.get("missing", "fallback") == "fallback"
-    assert attrs.copy() == {"id": "one", "empty": ""}
+    copied = attrs.copy()
+    assert isinstance(copied, xmlreader.AttributesImpl)
+    assert dict(copied) == {"id": "one", "empty": ""}
     assert dict(attrs.items()) == {"id": "one", "empty": ""}
 
 
@@ -529,7 +535,7 @@ class CharacterRecorder(handler.ContentHandler):
 
 
 def test_dtd_and_lexical_handlers_receive_declarations_comments_and_cdata_bounds():
-    xml = """\
+    document = """\
 <!DOCTYPE root [
   <!ELEMENT root (#PCDATA)>
   <!NOTATION png SYSTEM "image/png">
@@ -545,7 +551,7 @@ def test_dtd_and_lexical_handlers_receive_declarations_comments_and_cdata_bounds
     parser.setContentHandler(content)
     parser.setProperty(handler.property_lexical_handler, lexical)
     source = xmlreader.InputSource()
-    source.setCharacterStream(io.StringIO(xml))
+    source.setCharacterStream(io.StringIO(document))
 
     parser.parse(source)
 

@@ -71,7 +71,8 @@ def test_implementation_builds_doctype_namespaced_root_and_empty_document():
     assert document.documentElement.prefix == "c"
     assert document.documentElement.localName == "catalog"
     assert document.doctype is doctype
-    assert doctype.name == "c:catalog"
+    # minidom 的 DocumentType.name 保存 local name；根元素本身仍保留完整 tagName/prefix。
+    assert doctype.name == "catalog"
     assert doctype.publicId == "-//POLYGLOT//DTD CATALOG 1.0//EN"
     assert doctype.systemId == "catalog.dtd"
 
@@ -612,9 +613,11 @@ def test_parse_accepts_a_filename_or_file_like_and_bufsize_is_chunk_size(tmp_pat
     from_file = minidom.parse(io.StringIO(XML_TEXT_454), bufsize=2)
 
     assert from_name.documentElement.namespaceURI == "urn:parts"
-    assert from_file.getElementsByTagNameNS("urn:parts", "item")[0].firstChild.data == (
-        "value"
-    )
+    item = from_file.getElementsByTagNameNS("urn:parts", "item")[0]
+    # 小 bufsize 可能把连续字符拆成相邻 Text 节点；DOM 使用方不能只读 firstChild。
+    assert "".join(
+        child.data for child in item.childNodes if child.nodeType == Node.TEXT_NODE
+    ) == "value"
 
 
 def test_parse_string_accepts_text_or_encoded_xml_bytes():
@@ -743,8 +746,9 @@ def test_getevent_exposes_document_start_then_flat_element_and_text_events():
         pulldom.START_ELEMENT,
         pulldom.END_ELEMENT,
         pulldom.CHARACTERS,
-        pulldom.END_DOCUMENT,
     } <= event_names
+    # Python 3.10 pulldom 以迭代耗尽表示文档结束，不产生 END_DOCUMENT 事件。
+    assert pulldom.END_DOCUMENT not in event_names
 
 
 def test_expandnode_builds_only_the_selected_subtree_and_consumes_its_events():

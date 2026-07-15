@@ -50,7 +50,8 @@ def test_standard_altchars_and_urlsafe_alphabets_round_trip_bytes_like_input():
 def test_validate_changes_nonalphabet_characters_from_ignored_to_error():
     disguised = b"c2Vj!!cmV0\n"  # 插入 ! 和换行后，宽松模式仍解成 secret。
     assert base64.b64decode(disguised) == b"secret"
-    with pytest.raises(binascii.Error, match="Only base64 data"):
+    # 不同 3.10 补丁版本使用过不同文案；稳定契约是抛 binascii.Error，而不是具体英文句子。
+    with pytest.raises(binascii.Error, match="(?i)base64"):
         base64.b64decode(disguised, validate=True)
     with pytest.raises(binascii.Error, match="padding"):
         base64.b64decode(b"YWJ")
@@ -363,23 +364,31 @@ def test_crc_algorithms_accept_the_previous_chunk_result_as_seed():
 
 
 def test_hqx_ascii_conversion_reports_whether_the_end_marker_was_seen():
-    payload = b"legacy-binhex"
-    encoded = binascii.b2a_hqx(payload)
-    decoded, done = binascii.a2b_hqx(encoded)
+    # 不带 ``:`` 时，输入仍必须包含完整的 3-byte/4-character 编码量子；否则 Incomplete
+    # 表示调用方还应继续喂数据，而不是“没有结束标记”的普通 done=0。
+    payload = b"legacy-binhex!!"
+    with pytest.warns(DeprecationWarning):
+        encoded = binascii.b2a_hqx(payload)
+    with pytest.warns(DeprecationWarning):
+        decoded, done = binascii.a2b_hqx(encoded)
     assert decoded == payload
     assert done == 0
 
-    decoded, done = binascii.a2b_hqx(encoded + b":")
+    with pytest.warns(DeprecationWarning):
+        decoded, done = binascii.a2b_hqx(encoded + b":")
     assert decoded == payload
     assert done == 1
 
 
 def test_hqx_rle_round_trip_and_orphaned_marker_incomplete_error():
     payload = b"AAAAA\x90\x90BBBBBBBB"
-    encoded = binascii.rlecode_hqx(payload)
-    assert binascii.rledecode_hqx(encoded) == payload
-    with pytest.raises(binascii.Incomplete):
-        binascii.rledecode_hqx(b"orphan\x90")
+    with pytest.warns(DeprecationWarning):
+        encoded = binascii.rlecode_hqx(payload)
+    with pytest.warns(DeprecationWarning):
+        assert binascii.rledecode_hqx(encoded) == payload
+    with pytest.warns(DeprecationWarning):
+        with pytest.raises(binascii.Incomplete):
+            binascii.rledecode_hqx(b"orphan\x90")
     assert issubclass(binascii.Incomplete, Exception)
 
 

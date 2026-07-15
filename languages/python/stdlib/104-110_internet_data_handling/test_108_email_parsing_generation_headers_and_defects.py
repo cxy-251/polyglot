@@ -51,11 +51,15 @@ SIMPLE_BYTES = b"From: sender@example.test\r\nSubject: hello\r\n\r\nbody\r\n"
 
 def test_binary_and_text_parsers_accept_whole_values_or_file_objects():
     byte_parser = BytesParser(policy=policy.default)
-    from_bytes = byte_parser.parsebytes(memoryview(SIMPLE_BYTES))
+    from_bytes = byte_parser.parsebytes(bytearray(SIMPLE_BYTES))
     from_binary_file = byte_parser.parse(io.BytesIO(SIMPLE_BYTES))
     assert isinstance(from_bytes, EmailMessage)
     assert from_bytes.get_content() == "body\r\n"
     assert from_binary_file.as_bytes() == from_bytes.as_bytes()
+
+    # parsebytes 在 3.10 直接调用输入的 decode；memoryview 虽是 bytes-like，却没有该方法。
+    with pytest.raises(AttributeError, match="decode"):
+        byte_parser.parsebytes(memoryview(SIMPLE_BYTES))
 
     text = SIMPLE_BYTES.decode("ascii")
     text_parser = Parser(policy=policy.default)
@@ -379,7 +383,7 @@ def test_email_error_hierarchy_separates_parse_and_structure_failures():
 # polyglot-covers: python.email.headerregistry.SingleAddressHeader.address
 # polyglot-covers: python.email.headerregistry.DateHeader.datetime
 # polyglot-covers: python.email.structured-header-defects
-# polyglot-covers: python.email.invalid-addr-spec-valueerror
+# polyglot-covers: python.email.invalid-addr-spec-header-parse-error
 # polyglot-covers: python.email.headerregistry.Address.__str__
 # polyglot-covers: python.email.headerregistry.Group.display_name
 # polyglot-covers: python.email.headerregistry.Group.addresses
@@ -396,15 +400,19 @@ def test_address_headers_preserve_groups_and_offer_a_flat_address_view():
 
     message = EmailMessage()
     message["From"] = sender
+    message["Sender"] = sender
     message["To"] = (direct, team)
     from_header = message["From"]
     to_header = message["To"]
 
     assert isinstance(from_header, BaseHeader)
-    assert from_header.address == sender
-    assert from_header.address.display_name == "发送者"
-    assert from_header.address.username == "sender"
-    assert from_header.address.domain == "example.test"
+    # From 是可含多个地址的 AddressHeader，即使当前只有一个也通过 addresses 暴露；
+    # Sender 才是 SingleAddressHeader，提供便捷的 address 属性。
+    assert from_header.addresses == (sender,)
+    sender_address = message["Sender"].address
+    assert sender_address.display_name == "发送者"
+    assert sender_address.username == "sender"
+    assert sender_address.domain == "example.test"
     assert direct.addr_spec == '"quoted local"@example.test'
     assert str(team_member) == "Member <member@example.test>"
     assert team.display_name == "Team"
@@ -426,7 +434,7 @@ def test_date_header_keeps_an_aware_datetime_value():
 
 
 def test_address_rejects_an_addr_spec_that_cannot_be_fully_parsed():
-    with pytest.raises(ValueError):
+    with pytest.raises(errors.HeaderParseError):
         Address(addr_spec="bad@@example.test")
 
 

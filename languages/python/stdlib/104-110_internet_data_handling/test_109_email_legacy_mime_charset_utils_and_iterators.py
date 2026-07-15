@@ -260,7 +260,9 @@ def test_7or8bit_inspects_ascii_decodability_while_noop_changes_nothing():
 
     assert ascii_message["Content-Transfer-Encoding"] == "7bit"
     assert binary_message["Content-Transfer-Encoding"] == "8bit"
-    assert untouched.get_payload() == b"raw"
+    # Message.set_payload 会把可用 ASCII 表示的 bytes 存成 str；encode_noop 的“不改变”是指
+    # 不再编码 payload、也不添加 CTE header，并不撤销 set_payload 已完成的规范化。
+    assert untouched.get_payload() == "raw"
     assert untouched["Content-Transfer-Encoding"] is None
 
 
@@ -306,9 +308,10 @@ def test_header_combines_unicode_and_bytes_pieces_with_declared_charsets():
 
 
 def test_header_folding_accounts_for_field_name_and_uses_requested_line_separator():
-    value = "alpha, beta, gamma, delta, epsilon, zeta"
+    value = "数据" * 12
     header = Header(
         value,
+        "utf-8",
         maxlinelen=24,
         header_name="Subject",
         continuation_ws="\t",
@@ -377,7 +380,8 @@ def test_charset_normalizes_aliases_and_exposes_transport_policy():
     assert utf8.body_encoding == BASE64
     assert utf8.get_body_encoding() == "base64"
     assert utf8.get_output_charset() == "utf-8"
-    assert ascii_charset.get_body_encoding() == "7bit"
+    # US-ASCII 可依据实际 payload 选择 7bit/8bit，因此返回的是编码器函数而非固定字符串。
+    assert ascii_charset.get_body_encoding() is encode_7or8bit
 
 
 def test_charset_encodes_headers_and_bodies_according_to_different_constraints():
@@ -687,11 +691,11 @@ def test_rfc2231_encoder_and_low_level_decoder_keep_declared_metadata():
     assert encoded == "utf-8'fr'r%C3%A9sum%C3%A9.pdf"
 
     # 这里第三项仍是 percent-encoded；decode_rfc2231 的职责只是拆三段。
-    assert decode_rfc2231(encoded) == (
+    assert decode_rfc2231(encoded) == [
         "utf-8",
         "fr",
         "r%C3%A9sum%C3%A9.pdf",
-    )
+    ]
 
 
 def test_decode_params_and_collapse_form_the_complete_unicode_pipeline():
@@ -705,21 +709,23 @@ def test_decode_params_and_collapse_form_the_complete_unicode_pipeline():
     assert decoded[0] == ("attachment", "")
     name, structured_value = decoded[1]
     assert name == "filename"
-    assert collapse_rfc2231_value(structured_value) == "résumé.pdf"
+    # decode_params 的低层结构保留了参数引号；collapse 负责字符集解码，不替调用方去引号。
+    assert collapse_rfc2231_value(structured_value) == '"résumé.pdf"'
+    assert unquote(collapse_rfc2231_value(structured_value)) == "résumé.pdf"
     assert collapse_rfc2231_value('"plain.txt"') == "plain.txt"
 
 
 # email.iterators 的 body 行、MIME 类型筛选与结构调试输出。
 #
-# body_line_iterator 深度遍历后只展开 str payload，跳过 header 和 bytes payload；
-# typed_subpart_iterator 按 maintype/subtype 过滤 walk 结果。_structure 很适合人工诊断 MIME 树，
-# 但官方明确把它标为不受支持的私有调试接口，业务逻辑不能依赖其文本格式。
+# body_line_iterator 深度遍历后展开每个以 str 存储的 leaf payload，不看 MIME 主类型；legacy
+# set_payload(bytes) 也可能先规范化成 str。typed_subpart_iterator 才按 maintype/subtype 过滤
+# walk 结果。_structure 很适合人工诊断 MIME 树，但它是私有调试接口，业务逻辑不能依赖格式。
 #
 # 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
 
 # polyglot-covers: python.email.iterators.body_line_iterator
 # polyglot-covers: python.email.iterators.body-line-iterator-skips-headers
-# polyglot-covers: python.email.iterators.body-line-iterator-skips-bytes-payload
+# polyglot-covers: python.email.iterators.body-line-iterator-legacy-bytes-coerced-to-text
 # polyglot-covers: python.email.iterators.body-line-iterator-line-boundaries
 # polyglot-covers: python.email.iterators.typed_subpart_iterator
 # polyglot-covers: python.email.iterators.typed-subpart-maintype-default
@@ -740,9 +746,11 @@ def build_message_tree():
     return root
 
 
-def test_body_line_iterator_yields_string_payload_lines_not_headers_or_bytes():
+def test_body_line_iterator_yields_every_leaf_payload_that_is_stored_as_text():
     lines = list(body_line_iterator(build_message_tree()))
-    assert lines == ["plain one\n", "plain two", "<p>html</p>"]
+    # legacy Message.set_payload(bytes) 会先产生 surrogateescape 文本，因此这里的 binary leaf
+    # 仍满足 body_line_iterator 的 str 检查；该迭代器不会按 MIME 主类型替调用方过滤正文。
+    assert lines == ["plain one\n", "plain two", "<p>html</p>", "\x00�"]
 
 
 def test_typed_iterator_filters_by_main_type_and_optional_subtype():

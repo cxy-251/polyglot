@@ -151,9 +151,11 @@ def test_start_tag_normalizes_structure_but_preserves_raw_lexical_text():
 
 def test_xhtml_empty_tag_uses_default_start_then_end_fallback():
     parser = TagRecorder()
-    parser.feed("<BR class=gap/>")
+    # XHTML 风格的 ``/>`` 紧跟未加引号的属性值时，HTML 语法会把 slash 当作值的一部分；
+    # 为了触发 startendtag，最后一个属性值必须加引号或在 slash 前留空格。
+    parser.feed('<BR class="gap"/>')
     assert parser.events == [
-        ("start", "br", [("class", "gap")], "<BR class=gap/>"),
+        ("start", "br", [("class", "gap")], '<BR class="gap"/>'),
         ("end", "br"),
     ]
 

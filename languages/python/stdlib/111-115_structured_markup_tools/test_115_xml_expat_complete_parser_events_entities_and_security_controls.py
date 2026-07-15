@@ -242,10 +242,9 @@ def test_declaration_handlers_receive_typed_dtd_information():
 
     assert ("item", "id", "ID", None, 1) in declarations["attributes"]
     assert any(event[0] == "word" and event[2] == "hello" for event in declarations["entities"])
-    assert any(
-        event[0] == "logo" and event[4] == "logo.png" and event[6] == "png"
-        for event in declarations["entities"]
-    )
+    # 注册专用 UnparsedEntityDeclHandler 后，NDATA 实体走该入口，不会再重复交给通用
+    # EntityDeclHandler；普通内部实体 word 仍由通用入口报告。
+    assert [event[0] for event in declarations["entities"]] == ["word"]
     assert declarations["notations"] == [("png", None, "image/png", None)]
     assert declarations["unparsed"] == [
         ("logo", None, "logo.png", None, "png")
@@ -449,7 +448,9 @@ def test_parameter_entity_and_foreign_dtd_controls_must_be_set_before_parsing():
     parser = expat.ParserCreate()
     assert parser.SetParamEntityParsing(expat.XML_PARAM_ENTITY_PARSING_NEVER)
     parser.UseForeignDTD(False)
-    parser.Parse("<root/>", True)
+    # isfinal=False 保持解析器处于“已经开始但尚未结束”的状态；完整解析结束后的调用在部分
+    # Expat 补丁版本中只是 no-op，不能用来验证 once-parsing 限制。
+    parser.Parse("<root>", False)
 
     with pytest.raises(expat.ExpatError) as caught:
         parser.UseForeignDTD(True)
@@ -457,6 +458,7 @@ def test_parameter_entity_and_foreign_dtd_controls_must_be_set_before_parsing():
     assert caught.value.code == expat.errors.codes[
         expat.errors.XML_ERROR_CANT_CHANGE_FEATURE_ONCE_PARSING
     ]
+    parser.Parse("</root>", True)
 
 
 # Python 3.10 后期回移的 Expat reparse deferral 与内存放大防护 API。

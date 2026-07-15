@@ -686,16 +686,18 @@ def test_babyl_mailbox_reports_custom_labels_and_file_view_survives_close(tmp_pa
         box.unlock()
     assert box.get_labels() == ["project"]
 
-    view = box.get_file(key)
     box.close()
+
+    # Babyl 写入后的内存 TOC 与重读文件得到的 TOC 表示略有不同；文件视图应从重新扫描后的
+    # mailbox 获取。get_file 返回独立 BytesIO，所以 mailbox 关闭后仍可读取。
+    reopened = mailbox.Babyl(path, create=False)
+    view = reopened.get_file(key)
+    assert reopened.get_message(key).get_labels() == ["unseen", "project"]
+    reopened.close()
     try:
         assert b"Subject: stored" in view.read()
     finally:
         view.close()
-
-    reopened = mailbox.Babyl(path, create=False)
-    assert reopened.get_message(key).get_labels() == ["unseen", "project"]
-    reopened.close()
 
 
 # Maildir 与 mbox/MMDF 之间的格式状态转换表。
