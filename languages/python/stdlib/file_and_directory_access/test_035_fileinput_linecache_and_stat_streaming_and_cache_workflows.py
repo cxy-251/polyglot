@@ -361,7 +361,7 @@ def test_linecache_lazycache_defers_loader_get_source_until_first_read(tmp_path)
     linecache.clearcache()
 
 
-# 098｜``fileinput`` 多文件行流与 ``linecache`` source line cache。
+# ``fileinput`` 多文件行流与 ``linecache`` source line cache。
 #
 # ``fileinput`` 把多个文件串成一个有累计行号的 stream，也提供会修改 global stdin/stdout 或
 # 原文件的便捷模式；应优先使用 instance/context manager 并明确清理。``linecache`` 面向

@@ -50,7 +50,7 @@ generator 的发送/异常/关闭生命周期，以及三个 ABC 的 mixin 与�
 
 ## Target File
 
-`languages/python/stdlib/data_types/test_056_collections_abc_async_iteration.py`
+`languages/python/stdlib/data_types/test_049_collections_abc_generators_coroutines_and_async_iteration.py`
 
 ## Official Sources
 

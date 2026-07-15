@@ -416,7 +416,7 @@ def test_get_terminal_size_uses_environment_then_fallback(monkeypatch):
     assert shutil.get_terminal_size(fallback=(80, 24)) == os.terminal_size((120, 40))
 
 
-# 094｜``shutil`` 的 stream、文件与目录树复制工作流。
+# ``shutil`` 的 stream、文件与目录树复制工作流。
 #
 # ``copyfile`` 只复制内容，``copy`` 再复制 mode，``copy2`` 再尽力复制 stat metadata；
 # 即便是最高层函数也不保证 owner、ACL、resource fork 等平台 metadata 完整。目录树操作还要
@@ -822,7 +822,7 @@ def test_move_uses_copy_function_when_rename_cannot_cross_the_boundary(tmp_path,
     assert not source.exists()
 
 
-# 095｜``shutil`` 的归档、命令查找与环境查询。
+# ``shutil`` 的归档、命令查找与环境查询。
 #
 # 高层归档 API 适合可信目录的打包与解包，但 extension 只负责选择 unpacker，不证明内容
 # 安全；不可信 archive 必须先检查 member path，防止 absolute/``..`` 越过 extract_dir。

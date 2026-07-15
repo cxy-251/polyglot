@@ -364,7 +364,7 @@ def test_dircmp_reports_human_readable_summary_and_recursive_closures(tmp_path, 
     # report 输出面向人且格式可演进；自动化应使用 left_only/diff_files/subdirs 等属性。
 
 
-# 096｜``glob`` 路径展开与 ``fnmatch`` 单名称匹配。
+# ``glob`` 路径展开与 ``fnmatch`` 单名称匹配。
 #
 # 两者共享 shell-style wildcard，但边界不同：``glob`` 按 path segment 扫描文件系统并对
 # leading dot 有特殊规则；``fnmatch`` 只比较给定字符串，separator 与 leading dot 都是普通
@@ -677,7 +677,7 @@ def test_fnmatch_supports_bytes_but_rejects_mixed_text_domains():
         fnmatch.fnmatch(b"item.txt", "*.txt")
 
 
-# 097｜``filecmp`` 的正确性权衡与 ``stat`` mode 位域解释。
+# ``filecmp`` 的正确性权衡与 ``stat`` mode 位域解释。
 #
 # ``filecmp`` 的 shallow=True 比较 stat signature，不是内容证明；deep comparison 也有按 stat
 # 失效的 process cache。``stat`` 则把一次 system call 的 mode 拆成 file type、普通权限与

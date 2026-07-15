@@ -492,7 +492,7 @@ def test_invalid_time_fields_and_leap_seconds_fail_at_construction():
         datetime.fromisoformat("not-a-datetime")
 
 
-# 044｜``zoneinfo`` IANA 地区时区、DST 转换、cache 与数据源示例。
+# ``zoneinfo`` IANA 地区时区、DST 转换、cache 与数据源示例。
 #
 # ``ZoneInfo`` 提供规则引擎，但时区数据来自系统 IANA 数据库或可选 ``tzdata`` 包，
 # 模块本身并不捆绑 transition 数据。需要真实数据的测试通过 helper 清晰 skip；不安装

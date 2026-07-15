@@ -291,7 +291,7 @@ def test_secure_creation_apis_create_unique_existing_paths(tmp_path):
     # tempfile.mktemp() 只生成未占用名字，攻击者可在随后 open 前抢占；不要使用它。
 
 
-# 093｜``tempfile`` 的安全创建、生命周期与清理责任。
+# ``tempfile`` 的安全创建、生命周期与清理责任。
 #
 # 高层对象把随机命名、关闭和删除组合成 context manager；低层 ``mkstemp`` / ``mkdtemp``
 # 只负责安全创建，调用方仍必须关闭 descriptor 并删除路径。不要用已弃用的 ``mktemp``

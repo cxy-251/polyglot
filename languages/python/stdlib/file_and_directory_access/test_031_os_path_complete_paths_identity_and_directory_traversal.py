@@ -343,7 +343,7 @@ def test_makedirs_and_removedirs_create_and_prune_multiple_levels(tmp_path):
     assert not (top / "two").exists()
 
 
-# 092｜``os.path`` flavour、词法处理与文件 identity。
+# ``os.path`` flavour、词法处理与文件 identity。
 #
 # os.path 绑定宿主 flavour；需要离线处理固定格式时可显式用 posixpath/ntpath。多数函数
 # 只做字符串计算，不展开 shell 变量、不访问磁盘，也不能用 normpath 代替 symlink-aware

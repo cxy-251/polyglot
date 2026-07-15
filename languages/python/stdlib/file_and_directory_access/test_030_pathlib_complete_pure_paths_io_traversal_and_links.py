@@ -410,7 +410,7 @@ def test_symlink_readlink_resolve_and_broken_link_have_distinct_observations(tmp
     assert not broken.is_symlink()
 
 
-# 089｜``pathlib`` 纯路径 flavour 与词法变换。
+# ``pathlib`` 纯路径 flavour 与词法变换。
 #
 # PurePosixPath/PureWindowsPath 只做词法计算，可在任意宿主系统上安全研究另一平台路径。
 # 它们会折叠冗余分隔符和单点，却刻意保留 ``..``，因为符号链接会让天真归一化改变含义。
@@ -726,7 +726,7 @@ def test_path_component_replacements_validate_names_and_suffix_shape():
         PurePosixPath("file.txt").with_suffix("txt")
 
 
-# 090｜``pathlib.Path`` 目录、文件 I/O 与基础状态变更。
+# ``pathlib.Path`` 目录、文件 I/O 与基础状态变更。
 #
 # Path 继承纯路径的词法 API，并增加真实系统调用。所有案例只在 pytest tmp_path 下工作；
 # 目录枚举不依赖系统返回顺序，权限只检查 chmod 后的 mode bits，不访问真实用户目录。
@@ -1051,7 +1051,7 @@ def test_resolve_strict_controls_missing_remainder_handling(tmp_path):
         missing.resolve(strict=True)
 
 
-# 091｜``pathlib.Path`` 遍历、模式匹配与链接语义。
+# ``pathlib.Path`` 遍历、模式匹配与链接语义。
 #
 # glob/rglob 返回无顺序保证的惰性路径迭代器；``**`` 会递归整棵树，生产代码应控制范围。
 # symlink 的 ``exists`` 跟随 target，而 ``is_symlink``/lstat 检查 link 本身；hard link
