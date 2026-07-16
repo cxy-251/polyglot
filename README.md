@@ -19,6 +19,10 @@ fallback。
 Python 3.10 基线已经完成统一验证。`ohdev` 容器中的解释器是 Python 3.10.12，
 官方内容来源锁定到 Python 3.10 文档系列。
 
+C++20 阶段已经开始。当前基线是 GCC/libstdc++ 11.4.0、CMake 3.22.1，以及
+`ohdev` 中 OpenHarmony 工作区自带的 GoogleTest 1.16.0。构建输出位于
+`/tmp/polyglot-cpp-build`，普通测试运行不下载依赖。
+
 当前验证证据：
 
 - `languages/python/` 有 178 个测试文件，编号从 `001` 连续到 `178`；
@@ -52,6 +56,7 @@ NEXT.md                     唯一的当前任务
 sources.lock                语言版本和权威资料入口
 project.json                稳定语言范围与测试框架
 languages/python/           Python 教学测试
+languages/cpp/              C++20 教学测试与 CMake 入口
 tools/run.sh                宿主机 Docker 入口
 tools/run-in-container.sh   容器内测试入口
 ```
@@ -107,6 +112,20 @@ Python 严格全量验证执行：
 
 以后修改 Python 文件时，先复跑受影响类别，再运行上述完整命令；只有两者都通过，
 才能继续称当前 Python 基线为 verified。
+
+C++ 阶段验证执行：
+
+```bash
+./tools/run.sh cpp
+./tools/run.sh cpp -R '^test_001_'
+```
+
+第一个命令配置、增量编译并运行全部 CTest；第二个命令用于按文件编号筛选已发现的
+GoogleTest 案例。C++ 测试在小批次和类别边界提前验证，不等全部测试套写完后首次编译。
+
+主机阅读 C++ 代码使用仓库根目录的 `.clangd`。它让主机已有的 clangd 读取 macOS SDK，
+并把 Docker 挂载对应的 GoogleTest 头文件加入索引；这只提供跳转、补全和静态诊断，
+不改变所有编译与测试仍在 `ohdev` 中执行的边界。
 
 ## 历史
 

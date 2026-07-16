@@ -1,0 +1,25 @@
+If:
+  PathMatch: languages/cpp/.*\.cpp
+
+CompileFlags:
+  Compiler: /Library/Developer/CommandLineTools/usr/bin/clang++
+  Add:
+    - -std=c++20
+    - -isysroot
+    - /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk
+    - -I/Volumes/LinuxKernel/openharmony/third_party/googletest/googletest/include
+    - -Wall
+    - -Wextra
+    - -Wpedantic
+  Remove:
+    - -Werror
+
+Diagnostics:
+  UnusedIncludes: Strict
+  MissingIncludes: Strict
+
+Index:
+  Background: Build
+
+InlayHints:
+  Enabled: Yes
