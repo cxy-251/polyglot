@@ -39,6 +39,12 @@ file(
   "${CMAKE_CURRENT_SOURCE_DIR}/*/*/test_[0-9][0-9][0-9]_*.cpp"
 )
 
+file(
+  GLOB_RECURSE POLYGLOT_CPP_SUPPORT_SOURCES
+  CONFIGURE_DEPENDS
+  "${CMAKE_CURRENT_SOURCE_DIR}/support_*.cpp"
+)
+
 if(NOT POLYGLOT_CPP_TEST_SOURCES)
   message(FATAL_ERROR "No C++ test_NNN_topic.cpp files were found")
 endif()
@@ -46,7 +52,16 @@ endif()
 foreach(test_source IN LISTS POLYGLOT_CPP_TEST_SOURCES)
   get_filename_component(test_target "${test_source}" NAME_WE)
 
-  add_executable("${test_target}" "${test_source}")
+  string(REGEX MATCH "^test_([0-9][0-9][0-9])_" test_name_match "${test_target}")
+  if(NOT test_name_match)
+    message(FATAL_ERROR "Invalid C++ test target name: ${test_target}")
+  endif()
+  set(test_number "${CMAKE_MATCH_1}")
+
+  set(test_support_sources ${POLYGLOT_CPP_SUPPORT_SOURCES})
+  list(FILTER test_support_sources INCLUDE REGEX "support_${test_number}_.+\\.cpp$")
+
+  add_executable("${test_target}" "${test_source}" ${test_support_sources})
   target_link_libraries("${test_target}" PRIVATE GTest::gtest_main)
 
   if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
