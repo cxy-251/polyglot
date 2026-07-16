@@ -195,9 +195,9 @@ def test_bdb_canonicalizes_real_paths_but_preserves_pseudo_filenames(tmp_path):
     assert debugger.canonic(str(relative)) == os.path.normcase(
         os.path.abspath(relative)
     )
-    assert debugger.is_skipped_line("vendor.parser") is True
-    assert debugger.is_skipped_line("generated_module") is True
-    assert debugger.is_skipped_line("application.service") is False
+    assert debugger.is_skipped_module("vendor.parser") is True
+    assert debugger.is_skipped_module("generated_module") is True
+    assert debugger.is_skipped_module("application.service") is False
 
 
 def test_bdb_validates_sets_queries_and_clears_source_breakpoints(tmp_path):
@@ -219,13 +219,15 @@ def test_bdb_validates_sets_queries_and_clears_source_breakpoints(tmp_path):
         # set_break 只接受 linecache 能从真实文件读到的行；失败以字符串返回，
         # 而不是抛出异常。
         error = debugger.set_break(str(source), 99)
-        assert "Line 99" in error
+        assert f"{source}:99" in error
         assert "does not exist" in error
     finally:
         debugger.clear_break(canonical, 2)
 
     assert debugger.get_breaks(canonical, 2) == []
-    assert debugger.clear_break(canonical, 2).startswith("There are no breakpoints at")
+    missing = debugger.clear_break(canonical, 2)
+    assert missing.startswith("There are no breakpoints ")
+    assert canonical in missing
 
 
 def test_bdb_runcall_records_frame_stack_and_returns_function_result():

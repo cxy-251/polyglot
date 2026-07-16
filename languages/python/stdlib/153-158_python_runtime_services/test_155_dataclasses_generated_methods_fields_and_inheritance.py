@@ -53,8 +53,10 @@ from dataclasses import make_dataclass
 from dataclasses import MISSING
 from dataclasses import replace
 import inspect
+import typing
 from typing import Any
 from typing import ClassVar
+from typing import get_type_hints
 
 import pytest
 
@@ -664,5 +666,8 @@ def test_make_dataclass_builds_a_dynamic_type_with_the_same_generation_rules():
     assert is_dataclass(DynamicRecord)
     assert record.describe() == "record:7"
     assert record.enabled is False
-    assert fields(DynamicRecord)[1].type is Any
+    # 仅给字段名时 make_dataclass 在 3.10 写入字符串 typing.Any；解析后仍是 Any。
+    assert fields(DynamicRecord)[1].type == "typing.Any"
+    # 动态类的求值 globals 不一定是调用方模块；解析字符串注解时显式提供所需名字。
+    assert get_type_hints(DynamicRecord, globalns={"typing": typing})["payload"] is Any
     assert not hasattr(record, "__dict__")

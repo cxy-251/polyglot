@@ -189,11 +189,10 @@ def test_union_optional_and_pep604_runtime_behavior():
     assert set(get_args(classic)) == {int, str}
     assert get_args(Optional[int]) == (int, type(None))
 
-    # isinstance 会从左到右短路。参数化 generic 本身非法，因此把它放进
-    # union 并不能保证总是合法：前面已经命中时可能成功，
-    # 真正走到该分支时仍会报错。
+    # 3.10 会先验证 union 的所有成员，不能依赖左侧 int 命中来绕过非法的参数化 generic。
     mixed = int | list[int]
-    assert isinstance(1, mixed)
+    with pytest.raises(TypeError, match="parameterized generic"):
+        isinstance(1, mixed)
     with pytest.raises(TypeError, match="parameterized generic"):
         isinstance([], mixed)
 
@@ -410,7 +409,8 @@ def test_final_overload_and_no_type_check_are_tooling_contracts():
     class RuntimeSubclass(BaseService):
         pass
 
-    assert BaseService.__final__ is True
+    # 3.10 的 final 只把约束交给类型检查器；运行时 __final__ 标记是后续版本才加入的便利。
+    assert not hasattr(BaseService, "__final__")
     assert isinstance(RuntimeSubclass(), BaseService)
     assert identity(3) == 3
     assert identity("value") == "value"

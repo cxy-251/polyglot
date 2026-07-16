@@ -109,7 +109,13 @@ def test_output_checker_handles_blank_lines_whitespace_ellipsis_and_exceptions()
     expected = "Traceback (most recent call last):\nValueError: any detail\n"
     actual = "Traceback (most recent call last):\nValueError: platform detail\n"
     assert not checker.check_output(expected, actual, 0)
-    assert checker.check_output(expected, actual, doctest.IGNORE_EXCEPTION_DETAIL)
+    # IGNORE_EXCEPTION_DETAIL 由 DocTestRunner 在已识别为异常的分支处理；直接把完整 traceback
+    # 交给通用 OutputChecker.check_output 时，这个 bit 不会先提取异常类型。
+    assert not checker.check_output(
+        expected,
+        actual,
+        doctest.IGNORE_EXCEPTION_DETAIL,
+    )
 
 
 def test_custom_doctest_option_flags_are_stable_process_wide_markers():
@@ -143,7 +149,8 @@ different output
     )
     failures = []
     runner = doctest.DocTestRunner()
-    result = runner.run(test, out=failures.append)
+    # 默认 clear_globs=True 会在运行后主动断开对象引用；教学检查共享命名空间时显式保留。
+    result = runner.run(test, out=failures.append, clear_globs=False)
 
     assert result.failed == 0
     assert result.attempted == 4
@@ -442,7 +449,9 @@ def test_assertion_families_and_context_managers_expose_captured_objects():
     case.assertSetEqual({1, 2}, {2, 1})
     case.assertAlmostEqual(1.234, 1.235, places=2)
     case.assertIsInstance(True, int)
-    case.assertIsSubclass(bool, int)
+    # assertIsSubclass/assertNotIsSubclass 在 3.10 尚不存在，使用 assertTrue 包装 issubclass。
+    assert not hasattr(case, "assertIsSubclass")
+    case.assertTrue(issubclass(bool, int))
 
     with case.assertRaisesRegex(ValueError, "bad value") as exception_context:
         raise ValueError("bad value: 7")

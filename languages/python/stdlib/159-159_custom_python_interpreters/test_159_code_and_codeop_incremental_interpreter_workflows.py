@@ -45,6 +45,13 @@ import sys
 import pytest
 
 
+@pytest.fixture(autouse=True)
+def use_default_exception_hook(monkeypatch):
+    # pytest 会替换 sys.excepthook；InteractiveInterpreter 发现自定义 hook 后会绕过 write()。
+    # 恢复默认 hook，准确验证嵌入式终端通过覆盖 write 收集诊断的标准路径。
+    monkeypatch.setattr(sys, "excepthook", sys.__excepthook__)
+
+
 class RecordingInterpreter(code.InteractiveInterpreter):
     """把解释器诊断收集到列表，模拟编辑器、网页终端等输出面板。"""
 

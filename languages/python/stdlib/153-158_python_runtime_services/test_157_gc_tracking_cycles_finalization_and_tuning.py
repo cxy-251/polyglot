@@ -172,8 +172,9 @@ def test_get_objects_can_filter_by_generation_and_never_contains_result_list_its
 
     assert marker in generation_zero
     assert marker in all_tracked
-    assert generation_zero not in generation_zero
-    assert all_tracked not in all_tracked
+    # 成员运算会调用任意追踪对象的 __eq__，这里必须用身份判断结果列表不包含自身。
+    assert not any(item is generation_zero for item in generation_zero)
+    assert not any(item is all_tracked for item in all_tracked)
 
 
 def test_get_referents_exposes_traversal_edges_not_all_language_level_attributes():

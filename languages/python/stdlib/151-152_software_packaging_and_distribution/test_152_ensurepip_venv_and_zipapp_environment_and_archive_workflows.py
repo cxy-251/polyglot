@@ -212,6 +212,8 @@ def test_envbuilder_create_runs_hooks_and_produces_an_isolated_prefix(tmp_path):
         "setup_python",
         "setup_scripts",
         "post_setup",
+        # system_site_packages 创建时先保持 False，安装步骤后再重写配置为 True。
+        "create_configuration",
     ]
     assert Path(context.env_dir) == environment
     assert context.env_name == "teaching-env"

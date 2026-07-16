@@ -224,10 +224,12 @@ def test_spec_limits_lookup_while_spec_set_also_limits_assignment():
     with pytest.raises(AttributeError):
         strict.dynamic_state = "blocked"
 
-    # spec 让 mock 的 __class__ 报告目标类，因此部分 isinstance 分支可以通过；
-    # 对象本身仍然是 Mock，不应据此把它交给依赖真实实现细节的代码。
+    # spec 让 mock 的 __class__ 报告目标类，因此部分 isinstance 分支可以通过；Mock 还会为
+    # spec 动态创建内部子类，所以连 ``type(obj) is Mock`` 也不成立。
     assert isinstance(loose, ServiceAPI)
-    assert type(loose) is Mock
+    assert loose.__class__ is ServiceAPI
+    assert type(loose) is not Mock
+    assert issubclass(type(loose), Mock)
 
 
 def test_spec_does_not_enforce_signatures_but_autospec_does():

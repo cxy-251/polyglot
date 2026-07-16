@@ -323,7 +323,9 @@ def test_sysconfig_schemes_expand_named_installation_paths():
     assert {"stdlib", "platstdlib", "purelib", "platlib", "include", "scripts", "data"} <= set(
         path_names
     )
-    assert set(paths) == set(path_names)
+    # get_path_names 是公共核心集合；具体 scheme 可额外暴露 platinclude 等路径。
+    assert set(path_names) <= set(paths)
+    assert set(paths) - set(path_names) == {"platinclude"}
     assert sysconfig.get_path("stdlib", default_scheme) == paths["stdlib"]
     assert all(Path(path).is_absolute() for path in paths.values())
 

@@ -69,6 +69,19 @@ def documented_function(value: int, scale: int = 2) -> int:
     return value * scale
 
 
+class DocumentedParent:
+    def operation(self):
+        """Perform the inherited operation.
+
+        The indentation is normalized by inspect.getdoc.
+        """
+
+
+class UndocumentedChild(DocumentedParent):
+    def operation(self):
+        pass
+
+
 def signature_target(
     positional_only,
     /,
@@ -214,7 +227,7 @@ def test_module_name_file_and_module_queries_keep_different_responsibilities():
     assert Path(inspect.getfile(documented_function)) == Path(__file__)
     assert Path(inspect.getsourcefile(documented_function)) == Path(__file__)
 
-    with pytest.raises(TypeError, match="built-in"):
+    with pytest.raises(TypeError, match="builtin_function_or_method"):
         inspect.getfile(len)
 
 
@@ -226,23 +239,13 @@ def test_source_queries_return_text_lines_and_original_starting_line():
     assert source.startswith("def documented_function")
     assert "return value * scale" in source
     assert starting_line == documented_function.__code__.co_firstlineno
-    with pytest.raises(TypeError, match="built-in"):
+    with pytest.raises(TypeError, match="builtin_function_or_method"):
         inspect.getsource(len)
 
 
 def test_getdoc_cleans_indentation_and_can_inherit_parent_documentation():
-    class Parent:
-        def operation(self):
-            """Perform the inherited operation.
-
-            The indentation is normalized by inspect.getdoc.
-            """
-
-    class Child(Parent):
-        def operation(self):
-            pass
-
-    inherited = inspect.getdoc(Child.operation)
+    # _finddoc 通过模块和 qualname 找父定义；函数内局部类无法从模块路径重新定位。
+    inherited = inspect.getdoc(UndocumentedChild.operation)
     assert inherited.startswith("Perform the inherited operation.")
     assert "\nThe indentation is normalized" in inherited
 
@@ -381,7 +384,8 @@ def test_signature_follows_wrapped_by_default_and_can_inspect_wrapper_itself():
         return original(*args, **kwargs)
 
     assert inspect.signature(wrapper) == inspect.signature(original)
-    assert str(inspect.signature(wrapper, follow_wrapped=False)) == "(*args, **kwargs)"
+    # 停止追踪 __wrapped__ 不会撤销 functools.wraps 已复制到 wrapper 的返回注解。
+    assert str(inspect.signature(wrapper, follow_wrapped=False)) == "(*args, **kwargs) -> int"
     assert inspect.unwrap(wrapper) is original
 
 
@@ -730,4 +734,6 @@ def test_inspect_module_cli_can_print_details_for_a_qualified_object():
     )
     assert "Target: json:loads" in completed.stdout
     assert "Origin:" in completed.stdout
-    assert "Loader:" in completed.stdout
+    assert "Cached:" in completed.stdout
+    assert "Line:" in completed.stdout
+    assert "Loader:" not in completed.stdout

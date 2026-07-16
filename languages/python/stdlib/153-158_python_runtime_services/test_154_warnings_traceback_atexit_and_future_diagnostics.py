@@ -281,7 +281,8 @@ def test_traceback_exception_preserves_explicit_cause_and_suppresses_context():
 
     assert summary.exc_type is LookupError
     assert summary.__cause__.exc_type is ValueError
-    assert summary.__context__.exc_type is ValueError
+    # cause 与 context 是同一异常时只保留 cause，避免格式化同一分支两次。
+    assert summary.__context__ is None
     assert summary.__suppress_context__ is True
     rendered = "".join(summary.format(chain=True))
     assert "ValueError" in rendered
@@ -421,7 +422,8 @@ def test_future_features_expose_release_history_and_compiler_flags():
     annotations = __future__.annotations
     assert isinstance(annotations, __future__._Feature)
     assert annotations.getOptionalRelease() == (3, 7, 0, "beta", 1)
-    assert annotations.getMandatoryRelease() is None
+    # 3.10 的表仍记录当时计划在 3.11 强制启用；该计划后来撤回。
+    assert annotations.getMandatoryRelease() == (3, 11, 0, "alpha", 0)
     assert annotations.compiler_flag > 0
 
     division = __future__.division

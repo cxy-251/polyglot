@@ -398,7 +398,10 @@ def test_get_object_traceback_reports_where_a_traced_object_was_allocated():
 
         assert allocation_traceback is not None
         assert any(frame.filename == __file__ for frame in allocation_traceback)
-        assert allocation_traceback.total_nframe >= len(allocation_traceback)
+        # 对象查询路径在 3.10 可能不知道截断前总帧数，以 None 表示；Snapshot trace 通常有值。
+        if allocation_traceback.total_nframe is not None:
+            assert allocation_traceback.total_nframe >= len(allocation_traceback)
+        assert 1 <= len(allocation_traceback) <= 5
 
     assert tracemalloc.get_object_traceback(payload) is None
 

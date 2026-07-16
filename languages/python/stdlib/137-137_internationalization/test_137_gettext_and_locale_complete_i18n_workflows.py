@@ -436,8 +436,12 @@ def test_c_locale_is_portable_and_querying_does_not_change_it():
         assert isinstance(conventions["grouping"], list)
         assert conventions["frac_digits"] == locale.CHAR_MAX
 
-        with pytest.raises(ValueError, match="Currency formatting"):
-            locale.currency(12.5)
+        # 3.10.12 不拒绝 C locale 的 CHAR_MAX frac_digits，而会生成极长、没有货币符号的
+        # 不可用字符串；这比抛错更隐蔽。C locale 适合协议数字，不适合 currency() 展示。
+        formatted_currency = locale.currency(12.5)
+        assert conventions["currency_symbol"] == ""
+        assert len(formatted_currency) > 100
+        assert locale.format_string("%.2f", 12.5) == "12.50"
 
 
 def test_locale_switch_failure_leaves_current_setting_unchanged():

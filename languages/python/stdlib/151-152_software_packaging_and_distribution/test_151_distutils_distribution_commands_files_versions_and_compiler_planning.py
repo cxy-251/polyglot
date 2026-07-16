@@ -179,7 +179,8 @@ def test_distribution_metadata_and_feature_predicates():
     assert distribution.has_pure_modules() is True
     assert distribution.has_modules() is True
     assert distribution.has_scripts() is True
-    assert distribution.has_ext_modules() is False
+    # 未配置 ext_modules 时旧 API 返回 None 而非规范 bool；谓词调用方应按真假值解释。
+    assert distribution.has_ext_modules() is None
     assert distribution.is_pure() is True
 
 
@@ -365,8 +366,8 @@ def test_filelist_processes_manifest_rules_and_removes_duplicates(tmp_path, monk
 
     assert files.files == [
         "README.md",
-        "pkg/docs/guide.txt",
         "pkg/module.py",
+        "pkg/docs/guide.txt",
     ]
 
 
@@ -382,8 +383,13 @@ def test_translate_pattern_builds_anchored_and_prefix_aware_regular_expressions(
 
 def test_textfile_turns_physical_lines_into_clean_logical_lines(tmp_path):
     source = tmp_path / "options.txt"
+    # 显式生成反斜杠 + newline，避免 Python 字符串词法层先吞掉 TextFile 的续行标记。
     source.write_text(
-        """# full-line comment\nalpha = one \\\n    two   # trailing comment\n\n beta = three\n""",
+        "# full-line comment\n"
+        "alpha = one \\\n"
+        "    two   # trailing comment\n"
+        "\n"
+        " beta = three\n",
         encoding="utf-8",
     )
 
@@ -398,7 +404,9 @@ def test_textfile_turns_physical_lines_into_clean_logical_lines(tmp_path):
     )
     try:
         assert reader.readlines() == ["alpha = one two", "beta = three"]
-        assert reader.current_line == 5
+        # full-line comment 在计数递增前被 continue；current_line 是清洗器内部位置，不是原文件
+        # 的可靠物理行号。续行和空白处理后此处为 4。
+        assert reader.current_line == 4
     finally:
         reader.close()
 
@@ -437,11 +445,12 @@ def test_versions_and_version_predicate_expose_legacy_comparison_rules():
     assert LooseVersion("1.2.10") > LooseVersion("1.2.2")
     assert LooseVersion("2026.07") == LooseVersion("2026.7")
 
-    predicate = VersionPredicate("polyglot-demo (>=1.2, <2.0)")
-    assert predicate.name == "polyglot-demo"
+    # legacy 包名语法只接受标识符/点，不接受现代发行名常见的 hyphen。
+    predicate = VersionPredicate("polyglot_demo (>=1.2, <2.0)")
+    assert predicate.name == "polyglot_demo"
     assert predicate.satisfied_by(StrictVersion("1.5")) is True
     assert predicate.satisfied_by(StrictVersion("2.0")) is False
-    assert str(predicate) == "polyglot-demo (>= 1.2, < 2.0)"
+    assert str(predicate) == "polyglot_demo (>= 1.2, < 2.0)"
 
 
 def test_boolean_shell_word_and_variable_helpers_have_strict_boundaries():
@@ -457,9 +466,10 @@ def test_boolean_shell_word_and_variable_helpers_have_strict_boundaries():
         "two words",
         "three four",
     ]
-    assert subst_vars("$name-${version}", {"name": "demo", "version": "1.2"}) == (
-        "demo-1.2"
-    )
+    variables = {"name": "demo", "version": "1.2"}
+    assert subst_vars("$name-$version", variables) == "demo-1.2"
+    # distutils 只支持 $name，不支持 shell 风格 ${name}。
+    assert subst_vars("$name-${version}", variables) == "demo-${version}"
     with pytest.raises(ValueError, match="invalid variable"):
         subst_vars("$missing", {})
 
@@ -505,8 +515,9 @@ def test_file_directory_dependency_and_archive_utilities_form_a_local_workflow(
     moved = move_file(str(target_dir / "lines.txt"), str(target_dir / "moved.txt"))
     assert Path(moved).read_text(encoding="utf-8") == "one\ntwo\n"
 
-    assert newer(str(original), str(target_dir / "missing.txt")) is True
-    assert newer_group([str(original)], str(target_dir / "missing.txt")) is True
+    # 这些 legacy helper 返回整数 0/1，不保证 bool 单例。
+    assert newer(str(original), str(target_dir / "missing.txt")) == 1
+    assert newer_group([str(original)], str(target_dir / "missing.txt")) == 1
     sources, targets = newer_pairwise(
         [str(original)],
         [str(target_dir / "missing.txt")],

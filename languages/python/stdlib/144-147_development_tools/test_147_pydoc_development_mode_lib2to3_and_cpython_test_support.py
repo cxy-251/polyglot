@@ -145,7 +145,9 @@ def test_safeimport_distinguishes_missing_modules_from_import_time_failures(
 
     with pytest.raises(pydoc.ErrorDuringImport) as captured:
         pydoc.safeimport(bad_name)
-    assert captured.value.exc_info[0] is RuntimeError
+    assert captured.value.exc is RuntimeError
+    assert isinstance(captured.value.value, RuntimeError)
+    assert captured.value.tb is not None
     assert "broken at import time" in str(captured.value)
 
     # safeimport 会实际执行模块顶层代码，
@@ -181,6 +183,7 @@ def test_html_document_and_writedoc_create_local_static_documentation(
     module = types.ModuleType("polyglot_documented_module")
     module.__doc__ = "A generated module for pydoc."
     module.__file__ = str(tmp_path / "polyglot_documented_module.py")
+    module.__all__ = ["greet"]
     exec(
         '''
 def greet(name):
@@ -191,14 +194,16 @@ def greet(name):
     )
 
     html = pydoc.HTMLDoc().document(module, module.__name__)
-    assert "A generated module for pydoc." in html
+    # HTMLDoc 会把文档字符串中的普通空格转成不换行实体，不能用纯文本子串比较 HTML。
+    assert "A&nbsp;generated&nbsp;module&nbsp;for&nbsp;pydoc." in html
     assert "greet" in html
 
     monkeypatch.chdir(tmp_path)
     pydoc.writedoc(module)
     generated = tmp_path / "polyglot_documented_module.html"
     assert generated.exists()
-    assert "Return a greeting." in generated.read_text(encoding="utf-8")
+    generated_html = generated.read_text(encoding="utf-8")
+    assert "Return&nbsp;a&nbsp;greeting." in generated_html
     assert "wrote polyglot_documented_module.html" in capsys.readouterr().out
 
 
@@ -246,7 +251,8 @@ def test_python_dev_mode_environment_variable_enables_the_same_startup_bundle():
     flag, options = json.loads(completed.stdout)
 
     assert flag is True
-    assert options["dev"] is True
+    # 环境变量启用同一启动 bundle，但 sys._xoptions 只记录真正的 -X 命令行选项。
+    assert "dev" not in options
 
 
 def test_development_mode_changes_warning_defaults_but_explicit_flags_can_override():
