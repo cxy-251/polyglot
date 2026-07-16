@@ -6,7 +6,7 @@
 
 codec search functions 与 error handlers 属于进程全局注册表。本文件会注销自定义
 search function；没有 unregister API 的 error handler 放入短生命周期子进程，避免
-污染整个 pytest 会话。当前文件尚未经过 pytest 验证。
+污染整个 pytest 会话。
 """
 
 # polyglot-covers: python.stdlib.codecs python.codecs.encode-decode

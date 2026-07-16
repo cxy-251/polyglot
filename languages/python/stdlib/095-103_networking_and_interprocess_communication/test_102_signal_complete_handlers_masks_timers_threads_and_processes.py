@@ -4,7 +4,7 @@ Python 3.5 起，常见 SIG*、SIG_DFL/SIG_IGN 和 SIG_BLOCK 等常量分别属�
 整数传给系统 API，同时具备可读名称。可用信号是平台能力，valid_signals 比假定 ``1..NSIG``
 更可靠，实时信号或系统保留号尤其不能靠硬编码清单判断。
 
-这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+这些案例面向 Python 3.10 当前补丁系列。
 """
 
 # polyglot-covers: python.signal.Signals
@@ -75,7 +75,7 @@ def test_optional_signal_names_must_be_feature_detected():
 # 仍保持安装（SIGCHLD 的具体行为依平台）；临时修改全局处理器必须放在 try/finally 中恢复。
 # 处理器接收信号号与当时主线程的栈帧，不能把它写成无参数回调。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.signal.signal
 # polyglot-covers: python.signal.signal-returns-previous-handler
@@ -141,7 +141,7 @@ def test_ignore_action_discards_the_signal_and_signal_returns_custom_handler():
 # 主线程运行；因此 signal 不是线程间通信机制，worker 间协调应使用 Event、Queue 等同步原语。
 # pthread_kill 的 signalnum=0 只校验线程标识，不实际投递信号。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.signal.only-main-thread-installs-handler
 # polyglot-covers: python.signal.signal-worker-thread-valueerror
@@ -213,7 +213,7 @@ def test_pthread_kill_zero_checks_the_current_thread_without_delivery():
 # 不会调用该信号的 Python handler；这比异步回调更适合专用信号线程。mask 是线程局部状态，测试和
 # 库代码都必须保存旧集合并用 SIG_SETMASK 恢复。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.signal.pthread_sigmask
 # polyglot-covers: python.signal.pthread-sigmask-returns-old-mask
@@ -281,7 +281,7 @@ def test_sigkill_and_sigstop_are_silently_excluded_from_a_requested_mask():
 # timeout=0 只检查当前 pending 集合。要先 block 再产生信号，否则默认动作或异步 handler 可能先
 # 执行，这是采用同步信号模型时最关键的顺序。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.signal.sigwaitinfo
 # polyglot-covers: python.signal.sigwaitinfo.si_signo
@@ -342,7 +342,7 @@ def test_timed_wait_with_zero_timeout_still_consumes_an_already_pending_signal()
 # 立即醒来；Python handler 仍按正常规则在主线程执行。应用必须主动排空 fd，并根据用途决定缓冲区
 # 满时是否警告。set_wakeup_fd 返回旧 fd，因此嵌入式库要保存并恢复它。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.signal.set_wakeup_fd
 # polyglot-covers: python.signal.set-wakeup-fd-returns-old-fd
@@ -408,7 +408,7 @@ def test_blocking_descriptor_is_rejected_before_it_can_be_installed():
 # 浮点延时、重复 interval 和三种计时来源，返回 ``(delay, interval)`` 旧值。测试只安排远期计时器
 # 并立即取消，不依赖真实等待；finally 恢复调用前的全局计时器。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.signal.alarm
 # polyglot-covers: python.signal.alarm-replaces-previous
@@ -483,7 +483,7 @@ def test_timer_kinds_and_invalid_kind_error_are_explicit():
 # “凭空”出现在主线程任意字节码处，可能打断尚未建立好的不变量。高可靠服务通常让 handler 只写
 # wakeup fd/设置标志，而不直接抛异常。siginterrupt 控制被信号打断的系统调用是否自动重启。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.signal.handler-exception-propagates-main-thread
 # polyglot-covers: python.signal.handler-exception-bytecode-boundary-trap
@@ -539,7 +539,7 @@ def test_siginterrupt_switches_restart_policy_without_a_query_api():
 # 机会清理资源并决定退出码。不能为了消除异常把 SIGPIPE 改成 SIG_DFL：任何断开的网络连接都可能
 # 直接终止整个进程。本例显式安装 SIG_IGN，避免依赖测试进程启动时的外部配置。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.signal.SIGPIPE
 # polyglot-covers: python.signal.python-ignores-sigpipe-policy
@@ -579,7 +579,7 @@ def test_ignored_sigpipe_turns_a_write_to_a_closed_pipe_into_an_exception():
 # pidfd_send_signal 可避免“检查后再发送”期间命中另一个进程。signal=0 只做目标与权限校验，不
 # 实际投递信号，适合安全展示该接口；siginfo 在 Python 3.10 必须为 None，flags 必须为 0。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.signal.pidfd_send_signal
 # polyglot-covers: python.signal.pidfd-process-identity

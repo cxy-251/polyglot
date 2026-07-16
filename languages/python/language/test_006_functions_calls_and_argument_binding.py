@@ -7,8 +7,7 @@
 语法。
 
 内容基于 Python 3.10 Function definitions、Calls、Lambdas 和 Data Model
-``object.__call__``。当前项目处于只编写、暂不执行的阶段，本文件尚未经过
-pytest 验证。
+``object.__call__``。
 """
 
 # polyglot-covers: python.statement.function-definition

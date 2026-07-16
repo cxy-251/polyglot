@@ -4,7 +4,7 @@
 只能 start 一次。``join()`` 始终返回 None，判断 timeout 应再看 ``is_alive()``。Thread
 异常不会由 join 重新抛给调用方，而是交给 ``threading.excepthook``。
 
-这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+这些案例面向 Python 3.10 当前补丁系列。
 """
 
 # polyglot-covers: python.threading.Thread python.threading.Thread-target
@@ -166,7 +166,7 @@ def test_daemon_flag_must_be_configured_before_start():
 # 每个首次访问它的 thread 中分别执行。但 subclass slots 属于 class descriptor，不是
 # thread-local storage。未捕获异常经 ``threading.excepthook`` 报告，不由 ``join`` 传播。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.threading.local python.threading.local-attribute-isolation
 # polyglot-covers: python.threading.local-subclass-init-per-thread
@@ -294,7 +294,7 @@ def test_custom_excepthook_receives_uncaught_worker_exception():
 # level，只能由 owner 对称释放。两者的 context manager 都保证异常路径 release。等待者
 # 被唤醒的次序未定义，不能把 lock 当作公平 queue。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.threading.Lock python.threading.Lock-factory
 # polyglot-covers: python.threading.Lock.acquire python.threading.Lock.release
@@ -428,7 +428,7 @@ def test_timeout_larger_than_timeout_max_raises_before_waiting():
 # ``notify`` 只唤醒 waiter，并不释放 lock，所以 waiter 要等 notifier 离开 critical section
 # 才能继续。predicate 必须在 loop 中重查，``wait_for`` 封装了该模式。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.threading.Condition python.threading.Condition-shared-lock
 # polyglot-covers: python.threading.Condition.acquire-release-delegation
@@ -533,7 +533,7 @@ def test_condition_fully_releases_and_restores_recursive_rlock_level():
 # 顺序不保证公平。BoundedSemaphore 额外记住初始上限，可尽早发现 release 多于 acquire
 # 的资源计数错误。两者都可用作 context manager。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.threading.Semaphore python.threading.Semaphore-counter
 # polyglot-covers: python.threading.Semaphore.acquire
@@ -639,7 +639,7 @@ def test_semaphore_limits_simultaneous_critical_sections_without_sleep():
 # clear。Timer 是 Thread subclass；cancel 只在 action 尚处于等待阶段时有效。测试使用
 # barrier/zero-delay/cancel 驱动，不用 sleep 推测调度时机。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.threading.Event python.threading.Event.is_set
 # polyglot-covers: python.threading.Event.set python.threading.Event.clear
@@ -731,7 +731,7 @@ def test_cancel_sets_timer_finished_flag_before_long_interval_action():
 # action 由其中一个参与者在 release 前执行；action 异常、timeout 或 abort 会把 barrier
 # 置为 broken，使其他 waiter 得到 BrokenBarrierError，避免永久等待。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.threading.Barrier python.threading.Barrier.parties
 # polyglot-covers: python.threading.Barrier.wait python.threading.Barrier-index
@@ -836,7 +836,7 @@ def test_action_exception_reaches_action_runner_and_breaks_barrier():
 # native_id 也只在线程存活期间唯一。settrace/setprofile 是后续 ``threading.Thread`` 的全局
 # 默认 hook，测试必须恢复；stack_size 同样影响之后创建的 thread。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.threading.current_thread python.threading.main_thread
 # polyglot-covers: python.threading.enumerate python.threading.active_count
@@ -995,7 +995,7 @@ def test_default_name_uses_target_name_and_group_is_reserved():
 # threading。raw thread 共享相同 lock primitive，未捕获异常走 ``sys.unraisablehook``，
 # 而 ``_thread.exit`` 只是抛 SystemExit，raw thread 会静默结束。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python._thread python._thread.start_new_thread
 # polyglot-covers: python._thread.start-new-thread-args
@@ -1085,7 +1085,7 @@ def test_thread_exit_raises_systemexit_and_raw_thread_treats_it_as_silent_exit()
 # 是原 target callable。``interrupt_main`` 不真正发送 OS signal，只安排 main thread 调用
 # Python signal handler；为避免影响 pytest process，signal workflow 放进 child interpreter。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python._thread.unhandled-exception
 # polyglot-covers: python._thread.sys-unraisablehook-dispatch

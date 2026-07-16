@@ -4,7 +4,7 @@ ZIP 是成员容器而不是单一压缩流：归档可以同时保存未压缩�
 成员，``write``/``writestr`` 决定成员名与内容，``w``/``a``/``x`` 决定容器生命周期。
 追加到非 ZIP 文件还可形成带前缀的数据文件；读取方会从末尾目录定位成员。
 
-这些案例面向 Python 3.10；当前文件尚未经过 pytest 验证。
+这些案例面向 Python 3.10。
 """
 
 # polyglot-covers: python.zipfile.ZipFile python.zipfile.context-manager
@@ -263,7 +263,7 @@ def test_force_zip64_requires_allow_zip64():
 # 对象传给 ``open``/``read``。写成员流适合未知长度的数据，读成员流支持常用 buffered
 # 操作；归档关闭前必须先关闭活动 writer。CRC 检查可发现内容损坏，但不是恶意输入防线。
 #
-# 这些案例面向 Python 3.10；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10。
 
 # polyglot-covers: python.zipfile.ZipInfo python.zipfile.ZipInfo.is_dir
 # polyglot-covers: python.zipfile.ZipInfo.from_file python.zipfile.member-metadata
@@ -553,7 +553,7 @@ def test_stdlib_zipfile_cannot_create_an_encrypted_member():
 # 仍要求在解压不可信归档前检查成员。路径穿越只是风险之一：超大展开体积、极端压缩比、
 # 重复覆盖和类 Unix symlink 元数据都需要应用按自身信任边界制定策略。
 #
-# 这些案例面向 Python 3.10；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10。
 
 # polyglot-covers: python.zipfile.extract python.zipfile.extract-return-path
 # polyglot-covers: python.zipfile.extractall python.zipfile.extract-subset
@@ -742,7 +742,7 @@ def test_preflight_recognizes_unix_symlink_metadata():
 # ``joinpath``、目录枚举和 text/binary open。它还能推导未显式存储的父目录，但不会清理
 # 成员名称；将归档路径映射到真实文件系统前，caller 必须自行阻止绝对路径和 ``..``。
 #
-# 这些案例面向 Python 3.10；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10。
 
 # polyglot-covers: python.zipfile.Path python.zipfile.Path.root
 # polyglot-covers: python.zipfile.Path.truediv python.zipfile.Path.joinpath
@@ -867,7 +867,7 @@ def test_path_exposes_parent_components_without_sanitizing_them():
 # ``.pyc``，区分单文件、普通目录和 package 目录，并可用 ``filterfunc`` 跳过整棵子树。
 # 编译优化级别属于归档构建配置；生成物仍是当前解释器版本绑定的 bytecode。
 #
-# 这些案例面向 Python 3.10；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10。
 
 # polyglot-covers: python.zipfile.PyZipFile python.zipfile.PyZipFile.optimize
 # polyglot-covers: python.zipfile.writepy python.zipfile.writepy-file
@@ -1037,7 +1037,7 @@ def test_writepy_rejects_a_non_python_file(tmp_path):
 # ``--list`` 打印目录，``--test`` 读取并校验成员，``--extract`` 展开归档。它没有应用级
 # 资源限制或交互式冲突策略；不可信输入仍应由调用方先执行与 Python API 相同的预检。
 #
-# 这些案例面向 Python 3.10；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10。
 
 # polyglot-covers: python.zipfile.cli python.zipfile.python-m-zipfile
 # polyglot-covers: python.zipfile.cli-create python.zipfile.cli-recursive-directory

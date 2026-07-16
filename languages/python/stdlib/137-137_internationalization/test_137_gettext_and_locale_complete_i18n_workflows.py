@@ -3,8 +3,7 @@
 gettext 负责应用消息翻译，locale 负责进程级文化约定。
 案例自行构造 GNU MO；除短暂进入 C locale 外不依赖系统语言包。
 
-这些案例面向 Python 3.10 当前补丁系列；整个 Python 测试集尚未经过
-pytest 统一验证。
+这些案例面向 Python 3.10 当前补丁系列。
 """
 
 # polyglot-covers: python.stdlib.gettext python.gettext.NullTranslations

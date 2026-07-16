@@ -5,7 +5,7 @@ string。search/match/fullmatch 决定搜索范围；捕获组会改变 findall/
 结果结构；flags 又会改变锚点、点号和 Unicode 字符类语义。
 
 内容基于 Python 3.10 re 文档与 Regular Expression HOWTO。性能陷阱只用小输入
-说明结构，不做阻塞式压力测试；当前文件尚未经过 pytest 验证。
+说明结构，不做阻塞式压力测试。
 """
 
 # polyglot-covers: python.stdlib.re python.re.compile python.re.cache

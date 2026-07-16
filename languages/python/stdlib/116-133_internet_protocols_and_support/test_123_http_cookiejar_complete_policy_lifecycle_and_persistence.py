@@ -3,7 +3,7 @@
 CookieJar 不负责发起网络请求；它只依赖 urllib.request.Request 与具有 info() 的响应对象。
 提取和返回是两个策略检查阶段，Secure Cookie 不会回送到 HTTP，Path 也不是普通前缀匹配。
 
-这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+这些案例面向 Python 3.10 当前补丁系列。
 """
 
 from email.message import Message
@@ -103,7 +103,7 @@ def test_add_cookie_header_preserves_an_explicit_caller_header():
 # Cookie 的身份由 domain/path/name 三元组决定：同三元组会替换，不同 Path 可同名共存。
 # discard 表示随会话丢弃，与 expires 是否存在是不同维度；两个清理 API 不应混为一谈。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.http.cookiejar.CookieJar.set_cookie
 # polyglot-covers: python.http.cookiejar.CookieJar-identity-domain-path-name
@@ -200,7 +200,7 @@ def test_session_and_expiry_cleanup_use_different_cookie_flags():
 # 默认策略只启用 Netscape Set-Cookie，并把 RFC 2109 的 Version=1 表示降为版本 0；
 # RFC 2965 必须显式开启。make_cookies 只解析，set_cookie_if_ok 才检查来源策略。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.http.cookiejar.CookieJar.make_cookies
 # polyglot-covers: python.http.cookiejar.Set-Cookie-netscape-default
@@ -308,7 +308,7 @@ def test_checked_insertion_rejects_foreign_domain_but_set_cookie_is_unconditiona
 # 列表项不是 shell 通配符：无前导点只匹配完全相同的域；“.example.test”匹配更深子域，
 # 却不匹配裸 example.test。设置允许列表后，未命中的域会被拒绝，容易误伤预期主机。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.http.cookiejar.DefaultCookiePolicy
 # polyglot-covers: python.http.cookiejar.DefaultCookiePolicy.blocked_domains
@@ -399,7 +399,7 @@ def test_domain_lists_participate_in_set_cookie_if_ok():
 # Python 的 Netscape 默认域回送策略较宽松：未带 Domain 的 Cookie 也可能送往子域；开启
 # DomainStrictNonDomain 才限制为来源主机。不可验证的第三方请求也可按策略拒绝写入。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.http.cookiejar.DefaultCookiePolicy.strict_ns_domain
 # polyglot-covers: python.http.cookiejar.DefaultCookiePolicy.DomainLiberal
@@ -497,7 +497,7 @@ def test_strict_policy_rejects_netscape_cookie_from_unverifiable_third_party():
 # Cookie 是 CookieJar 使用的结构化值：specified/initial_dot 等字段记录“如何声明”，不只是
 # 最终字符串。未标准化的扩展属性保存在 rest 中，名称区分大小写；is_expired 可传入时间。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.http.cookiejar.Cookie
 # polyglot-covers: python.http.cookiejar.Cookie-standard-attributes
@@ -573,7 +573,7 @@ def test_is_expired_uses_less_than_or_equal_and_accepts_a_deterministic_now():
 # save/load 默认跳过 discard 会话 Cookie 和已过期 Cookie；需要快照会话状态时，写入和读取
 # 两端都要显式 ignore_discard。该文本格式便于交换，但不能无损保存所有现代 Cookie 属性。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.http.cookiejar.FileCookieJar
 # polyglot-covers: python.http.cookiejar.FileCookieJar.filename-pathlike-3.8
@@ -658,7 +658,7 @@ def test_ignore_flags_must_be_used_when_session_or_expired_entries_are_desired(t
 # load 把文件内容合并进现有 Jar；revert 则先以文件替换内存状态。revert 若遇到非法文件，会
 # 恢复调用前状态。LoadError 是 OSError 子类，适合并入普通文件读取错误处理。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.http.cookiejar.LWPCookieJar
 # polyglot-covers: python.http.cookiejar.LWPCookieJar-set-cookie3-format

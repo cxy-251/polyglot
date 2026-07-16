@@ -6,7 +6,7 @@ compile 把源码或 AST 变为 code object；eval 求表达式值，exec 执行
 
 SyntaxError、词法作用域和 import 机制已在 009、012、018 展示；本文件聚焦动态
 代码入口的正常工作流。内容基于 Python 3.10 Built-in Functions、Execution
-Model 和 ast.literal_eval；当前文件尚未经过 pytest 验证。
+Model 和 ast.literal_eval。
 """
 
 # polyglot-covers: python.builtin.compile python.builtin.eval python.builtin.exec

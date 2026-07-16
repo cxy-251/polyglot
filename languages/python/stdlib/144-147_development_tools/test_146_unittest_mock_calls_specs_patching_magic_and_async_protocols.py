@@ -4,8 +4,7 @@ mock 的价值不只是“返回假值”，而是记录交互并在正确的名
 替换依赖。本套覆盖 Mock/MagicMock/AsyncMock 的共同模型、签名约束、
 patch 生命周期以及最常见的“patch 定义处而不是使用处”陷阱。
 
-这些案例面向 Python 3.10 当前补丁系列；整个 Python 测试集尚未经过 pytest
-统一验证。
+这些案例面向 Python 3.10 当前补丁系列。
 """
 
 # polyglot-covers: python.stdlib.unittest.mock python.mock.mock-child-and-return-value

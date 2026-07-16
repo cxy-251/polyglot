@@ -5,8 +5,7 @@
 “供工具读取的元数据”和“解释器真正执行的约束”，避免把 type hint
 误当成运行时验证器。
 
-这些案例面向 Python 3.10 当前补丁系列；整个 Python 测试集尚未经过 pytest
-统一验证。
+这些案例面向 Python 3.10 当前补丁系列。
 """
 
 # polyglot-covers: python.stdlib.typing python.typing.annotation-runtime-metadata

@@ -6,8 +6,7 @@ loader 创建并填充模块，导入机械负责 ``sys.modules``、包元数据
 ``import_module/reload`` 的日常工作流进入 ``importlib.abc``、``machinery`` 和
 ``util``，并用内存 importer、path hook、文件 loader 与 LazyLoader 展示协议。
 
-这些案例面向 Python 3.10 当前补丁系列；整个 Python 测试集尚未经过 pytest
-统一验证。
+这些案例面向 Python 3.10 当前补丁系列。
 """
 
 # polyglot-covers: python.stdlib.importlib python.importlib.import-module
@@ -362,12 +361,13 @@ def test_inspect_loader_compiles_source_and_executes_it_through_concrete_default
 
     assert loader.get_source(name) == source
     code_object = loader.get_code(name)
-    assert code_object.co_filename == ""
+    assert code_object.co_filename == "<string>"
     loader.exec_module(module)
     assert module.answer == 42
     assert loader.is_package(name) is False
-    # InspectLoader 只要源码就能编译，但不知道文件路径，默认 co_filename
-    # 因此是空字符串；ExecutionLoader.get_filename 才能补上可诊断的位置。
+    # 3.10 的 InspectLoader 只要源码就能编译，但不知道文件路径时会把
+    # co_filename 设为 "<string>"；ExecutionLoader.get_filename 才能补上
+    # 可诊断的真实或虚拟位置。
 
     compiled = loader.source_to_code("value = 3", "virtual-file.py")
     namespace = {}
@@ -530,7 +530,7 @@ def test_cache_path_helpers_encode_tag_and_optimization_without_touching_disk(tm
     assert Path(util.source_from_cache(optimized)) == source
     assert not ordinary.exists()
 
-    with pytest.raises(ValueError, match="optimization"):
+    with pytest.raises(ValueError, match="alphanumeric"):
         util.cache_from_source(source, optimization="not-valid!")
     with pytest.raises(ValueError):
         util.source_from_cache(tmp_path / "module.pyc")

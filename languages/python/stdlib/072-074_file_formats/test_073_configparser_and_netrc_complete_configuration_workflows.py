@@ -5,7 +5,7 @@ parser 的 live proxy，而不是普通字典副本。DEFAULT 会被每个 secti
 因此删除 override、
 clear section、fallback lookup 等操作都有容易误判的优先级。
 
-这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+这些案例面向 Python 3.10 当前补丁系列。
 """
 
 # polyglot-covers: python.configparser.ConfigParser python.configparser.string-values
@@ -190,7 +190,7 @@ def test_structural_mutators_report_duplicates_missing_sections_and_absence():
 # 递归过深会在实际读取 option 时暴露。BasicInterpolation 使用 ``%(name)s``，而
 # ExtendedInterpolation 使用 ``${section:option}``；两者的转义字符也不同。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.configparser.BasicInterpolation python.configparser.percent-escape
 # polyglot-covers: python.configparser.lazy-interpolation python.configparser.raw-get
@@ -330,7 +330,7 @@ def test_recursive_interpolation_is_bounded_instead_of_looping_forever():
 # 无值 option、delimiter 和 inline comment 等 INI 方言，但过度启用 inline comment
 # 会让值中的字符不可转义。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.configparser.read python.configparser.optional-files
 # polyglot-covers: python.configparser.multiple-file-overlay python.configparser.read-encoding
@@ -510,7 +510,7 @@ def test_boolean_states_can_adapt_domain_words_without_global_mutation():
 # password；显式路径主要用于调用方指定的文件，并不会触发这项 home-file
 # 安全策略。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.netrc.netrc python.netrc.machine
 # polyglot-covers: python.netrc.login python.netrc.account

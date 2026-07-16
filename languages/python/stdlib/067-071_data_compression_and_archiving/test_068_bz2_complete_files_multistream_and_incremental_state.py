@@ -4,7 +4,7 @@ bzip2 的 level 范围是 1–9，没有 gzip/zlib 的 level 0。``bz2.decompres
 会透明处理拼接的多个 streams；append 因而可逐次增加 stream。传入已有 file object 时，
 BZ2File 的 ``w`` 不 truncate，而按 append 语义写入，这是与路径输入的重要差异。
 
-这些案例面向 Python 3.10；当前文件尚未经过 pytest 验证。
+这些案例面向 Python 3.10。
 """
 
 # polyglot-covers: python.bz2.compress python.bz2.decompress python.bz2.one-shot
@@ -199,7 +199,7 @@ def test_detach_and_truncate_are_not_supported(tmp_path):
 # 没有 flush；``needs_input=False`` 表示内部仍有 output，应以 ``b''`` 继续拉取。它一次只
 # 处理一个 stream，末尾内容进入 ``unused_data``，需要新 decompressor 接续。
 #
-# 这些案例面向 Python 3.10；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10。
 
 # polyglot-covers: python.bz2.BZ2Compressor python.bz2.incremental-compress
 # polyglot-covers: python.bz2.BZ2Compressor.compress python.bz2.BZ2Compressor.flush

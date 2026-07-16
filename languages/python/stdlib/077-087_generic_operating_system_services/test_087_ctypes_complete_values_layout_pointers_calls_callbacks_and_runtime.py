@@ -4,7 +4,7 @@ ctypes scalar 用 ``value`` 在 Python/C 表示间转换；固定宽整数按 C 
 整数的溢出保护。``c_char_p`` 只保存地址且适合只读 NUL-terminated bytes，需原地修改时
 应使用 ``create_string_buffer`` 拥有可写存储，并明确是否为末尾 NUL 预留空间。
 
-这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+这些案例面向 Python 3.10 当前补丁系列。
 """
 
 # polyglot-covers: python.ctypes._SimpleCData python.ctypes.scalar-value
@@ -135,7 +135,7 @@ def test_unicode_buffer_stores_mutable_wchar_array():
 # pointer/contents/byref/cast 都可能让多个 Python wrapper 指向同一块 C 内存，不会复制值。
 # pointer 没有长度元数据，越界读写可能崩溃，案例只访问已知有效范围。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.ctypes.Array python.ctypes.array-type-multiplication
 # polyglot-covers: python.ctypes.Array._length_ python.ctypes.Array._type_
@@ -240,7 +240,7 @@ def test_cast_can_reinterpret_owned_buffer_address_as_char_pointer():
 # 之前声明。Union 的所有字段共享地址，解释哪一个字段有效由外部 tag/protocol 决定。
 # bit field 顺序与 ABI 有关，含 bit field 的结构不应按值传给 foreign function。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.ctypes.Structure python.ctypes.Structure._fields_
 # polyglot-covers: python.ctypes.structure-positional-initialization
@@ -353,7 +353,7 @@ def test_bit_fields_mask_assigned_values_to_declared_width():
 # nested structure 属性返回引用父 buffer 的 wrapper，不是独立副本，因此直接 tuple-swap
 # 会因第一次写入改变第二个 wrapper 所见内存。跨字节序结构则禁止 pointer fields。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.ctypes.incomplete-Structure
 # polyglot-covers: python.ctypes.recursive-Structure python.ctypes.self-pointer
@@ -474,7 +474,7 @@ def test_non_native_endian_structure_rejects_pointer_fields():
 # 全局符号空间。函数默认返回 ``c_int``，实际调用前应声明 ``restype`` 和 ``argtypes``，
 # 否则 pointer-sized 返回值可能被截断，错误的参数也可能直到 native code 中才暴露。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.ctypes.CDLL python.ctypes.CDLL-none
 # polyglot-covers: python.ctypes.CDLL-name python.ctypes.CDLL-handle
@@ -555,7 +555,7 @@ def test_declared_strlen_signature_converts_bytes_and_rejects_text():
 # 这既记录 ABI 意图，也满足部分平台对 varargs register convention 的要求。Function
 # prototype 还能把 symbol、library 与 paramflags 组合成支持命名参数和默认值的 callable。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.ctypes.variadic-functions
 # polyglot-covers: python.ctypes.variadic-fixed-argtypes
@@ -636,7 +636,7 @@ def test_paramflags_can_supply_default_for_an_input_parameter():
 # 回调，就必须在 Python 侧保留强引用。callback 抛出的异常不能像普通调用那样穿过 C
 # stack 传播，因此 callback 边界应捕获错误并返回协议约定的状态值。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.ctypes.CFUNCTYPE-callback
 # polyglot-covers: python.ctypes.callback-function-pointer
@@ -736,7 +736,7 @@ def test_pyfunctype_keeps_the_gil_for_python_c_api_style_callbacks():
 # code 前集中验证 domain object。Instance 的 ``_as_parameter_`` 是更轻量的单值适配。
 # ``errcheck`` 则在 restype 转换后统一解释 status/pointer 并映射成 Python 结果或异常。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.ctypes._as_parameter_
 # polyglot-covers: python.ctypes.dynamic-as-parameter-property
@@ -830,7 +830,7 @@ def test_errcheck_turns_pointer_result_into_bytes_or_domain_error():
 # 或边界信息；案例只使用仍存活的 ctypes-owned buffer 和已知长度。``resize`` 可扩大 backing
 # store，却不会改变原 array type 的 ``_length_``，所以新增空间仍需通过正确 pointer view 访问。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.ctypes.addressof python.ctypes.sizeof
 # polyglot-covers: python.ctypes.alignment python.ctypes.native-address
@@ -918,7 +918,7 @@ def test_resize_rejects_size_smaller_than_natural_object_size():
 # thread-local copy，调用方再用 ``get_errno`` 读取。这避免另一个 C call 提前覆盖错误码，
 # 但仍必须紧跟返回值协议判断；errno 非零本身不代表本次调用失败。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.ctypes.get_errno python.ctypes.set_errno
 # polyglot-covers: python.ctypes.set-errno-returns-previous
@@ -995,7 +995,7 @@ def test_windows_last_error_helpers_are_exposed_only_on_windows():
 # Python error indicator。C API signature 默认仍是 c_int，因此每次使用前必须声明正确
 # restype/argtypes。``in_dll`` 可把 exported variable 映射为共享 native storage，应谨慎只读。
 #
-# 这些案例面向 CPython 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 CPython 3.10 当前补丁系列。
 
 # polyglot-covers: python.ctypes.pythonapi python.ctypes.PyDLL
 # polyglot-covers: python.ctypes.PyDLL-gil
@@ -1090,7 +1090,7 @@ def test_in_dll_reads_exported_interpreter_configuration_variable():
 # WinDLL 等 class 决定。``ctypes.wintypes`` 可导入 type declarations，但 Windows ABI
 # 调用与 WinDLL/OleDLL loaders 只应在 Windows 分支使用。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.ctypes.util python.ctypes.util.find_library
 # polyglot-covers: python.ctypes.find-library-platform-name

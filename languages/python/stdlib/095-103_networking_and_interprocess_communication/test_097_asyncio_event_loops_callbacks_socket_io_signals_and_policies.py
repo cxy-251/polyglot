@@ -4,7 +4,7 @@
 或 callback 内有效。run_until_complete 会把 coroutine 包成 Task。run_forever 遇 stop 时完成
 当前 callback batch，但 batch 内新排入的 callback 留到下一次 run。close 不可逆但可重复调用。
 
-这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+这些案例面向 Python 3.10 当前补丁系列。
 """
 
 # polyglot-covers: python.asyncio.get_running_loop
@@ -100,7 +100,7 @@ def test_close_discards_pending_callbacks_and_is_idempotent_but_irreversible():
 # delayed callback 使用 loop monotonic time，返回 TimerHandle；同一绝对时刻的相对顺序未定义。
 # callback 默认复制当前 Context，也可显式传 context。keyword args 应用 functools.partial 绑定。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.asyncio.loop.call_soon
 # polyglot-covers: python.asyncio.call-soon-registration-order
@@ -187,7 +187,7 @@ def test_zero_delay_and_current_time_timers_run_without_wall_clock_wait():
 # Streams。注册同一 fd 会替换旧 callback，remove_* 的 bool 能区分“确实移除”和“本来没有”。
 # callback 必须主动读取或移除监听，否则 level-triggered fd 会持续就绪并反复触发。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.asyncio.loop.add_reader
 # polyglot-covers: python.asyncio.loop.remove_reader
@@ -261,7 +261,7 @@ def test_writer_callback_fires_for_a_writable_socket_and_can_remove_itself():
 # 必须先设为 non-blocking。sendall 成功只返回 None，失败时也无法得知对端实际处理了多少字节。
 # 直接 socket API 较直观，但大量连接通常由 Transport/Protocol 或 Streams 更高效地管理。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.asyncio.loop.sock_recv
 # polyglot-covers: python.asyncio.sock-recv-up-to-nbytes
@@ -321,7 +321,7 @@ def test_sock_recv_into_mutates_a_writable_buffer_and_returns_count():
 # sock_connect/sock_accept 要求 non-blocking socket。accept 返回全新的连接 socket，监听 socket
 # 仍归调用者。这里使用 pytest 临时目录中的 AF_UNIX 地址，不占用端口，也不依赖 DNS 或外部网络。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.asyncio.loop.sock_connect
 # polyglot-covers: python.asyncio.sock-connect-nonblocking
@@ -372,7 +372,7 @@ def test_sock_connect_and_accept_create_two_independently_owned_endpoints(tmp_pa
 # sock_sendfile 尝试 os.sendfile，平台不支持时默认退回普通读取发送；file 必须是二进制模式的
 # regular file，socket 必须是 non-blocking SOCK_STREAM。返回实际发送字节数，并更新文件位置。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.asyncio.loop.sock_sendfile
 # polyglot-covers: python.asyncio.sock-sendfile-stream-socket
@@ -412,7 +412,7 @@ def test_sock_sendfile_honors_offset_and_count_and_advances_the_file(tmp_path):
 # 这两个 coroutine 对应 socket 模块的同步名称解析函数，event loop 通常把可能阻塞的解析工作
 # 放入 executor。案例强制 numeric host/service，只验证地址结构转换，不查询 DNS，也不访问网络。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.asyncio.loop.getaddrinfo
 # polyglot-covers: python.asyncio.getaddrinfo-coroutine
@@ -458,7 +458,7 @@ def test_numeric_address_and_name_resolution_are_async_and_network_free():
 # 它比 signal.signal 的最小异步信号处理函数更易组合。注册必须在主线程完成。remove 返回 bool，
 # 案例始终恢复原 handler，避免向其他测试泄漏进程级状态。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.asyncio.loop.add_signal_handler
 # polyglot-covers: python.asyncio.signal-handler-loop-scheduled-callback
@@ -499,7 +499,7 @@ def test_signal_handler_can_resolve_a_future_and_is_then_removed():
 # 自定义实现宜继承 DefaultEventLoopPolicy，仅覆写需要改变的方法。Unix child watcher 负责把子进程
 # 退出转成 loop callback；不同 watcher 在线程、signal 干扰、复杂度和平台支持之间取舍。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.asyncio.get_event_loop_policy
 # polyglot-covers: python.asyncio.set_event_loop_policy

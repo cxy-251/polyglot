@@ -4,7 +4,7 @@
 create_task 才把它并发调度。asyncio.run 为顶层入口创建并最终关闭新 event loop，还会清理
 未显式关闭的 async generator；运行中的同线程 event loop 内不能再次调用它。
 
-这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+这些案例面向 Python 3.10 当前补丁系列。
 """
 
 # polyglot-covers: python.asyncio-coroutine-object-not-scheduled
@@ -107,7 +107,7 @@ def test_run_finalizes_an_async_generator_left_open_by_main():
 # 协作切换。event loop 只保留 Task 弱引用，可靠的 background work 应保存强引用并在完成
 # callback 中移除。current_task/all_tasks 只反映当前 loop 中尚未完成的 Task。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.asyncio.create_task
 # polyglot-covers: python.asyncio.create-task-requires-running-loop
@@ -223,7 +223,7 @@ def test_background_task_set_keeps_strong_reference_then_discards_completion():
 # finally 能清理资源，coroutine 甚至可以抑制请求。CancelledError 自 3.8 起直接继承
 # BaseException，宽泛的 ``except Exception`` 不会误吞取消；通常捕获后必须重新抛出。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.asyncio.Task.cancel
 # polyglot-covers: python.asyncio.Task-cancel-message
@@ -327,7 +327,7 @@ def test_cancelled_error_is_not_caught_by_exception_handlers():
 # 自动取消其他 child；return_exceptions=True 才把异常当结果。取消 gather 会取消未完成的
 # child，而 gather 已因异常 done 后再 cancel 不会追溯取消仍在运行的 sibling。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.asyncio.gather
 # polyglot-covers: python.asyncio.gather-auto-task-scheduling
@@ -445,7 +445,7 @@ def test_cancelling_gather_cancels_each_pending_child():
 # 调用者取消向 inner 传播：outer 仍收到 CancelledError，inner 可继续；inner 若被直接取消，
 # shield 也会失败。两者组合可让 timeout 结束等待但保留后台 Task，调用者必须保存并回收它。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.asyncio.shield
 # polyglot-covers: python.asyncio.shield-outer-cancel-inner-survives
@@ -560,7 +560,7 @@ def test_directly_cancelled_inner_also_cancels_shield_awaitable():
 # coroutine object 但已弃用，而且返回隐式创建的 Task，造成 identity confusion；应先显式
 # create_task。as_completed 则返回 coroutine iterator，每次 await 取得下一项完成结果。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.asyncio.wait
 # polyglot-covers: python.asyncio.wait-empty-error
@@ -683,7 +683,7 @@ def test_as_completed_yields_result_coroutines_and_times_out_without_cancelling(
 # contextvars.Context，使 request-local binding 对 worker 可见，但 worker 的重新绑定不回写
 # caller。CPython GIL 下它主要隔离阻塞 I/O，不应被误当作纯 Python CPU parallelism。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.asyncio.to_thread
 # polyglot-covers: python.asyncio.to-thread-lazy-coroutine
@@ -746,7 +746,7 @@ def test_to_thread_reraises_worker_exception_at_await_boundary():
 # 线程同步取得结果、异常或发出取消。asyncio Task/Future 本身通常不是 thread-safe；跨线程
 # callback 应使用 loop.call_soon_threadsafe，不能直接操作 loop 内对象。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.asyncio.run_coroutine_threadsafe
 # polyglot-covers: python.asyncio.run-coroutine-threadsafe-explicit-loop
@@ -841,7 +841,7 @@ def test_cancelling_returned_future_requests_task_cancellation_in_loop_thread():
 # set_exception。pending Task 的 result/exception 是 InvalidStateError。get_stack/print_stack
 # 用于诊断 suspension point；成功或取消后 stack 为空。done callback 由 loop 调度执行。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.asyncio.Task.add_done_callback
 # polyglot-covers: python.asyncio.Task.remove_done_callback
@@ -945,7 +945,7 @@ def test_pending_task_result_is_invalid_and_manual_completion_is_forbidden():
 # await/ensure_future；asyncio 的 introspection 会识别它，而 inspect 的 native-coroutine
 # 判断不同。该 API 自 3.8 弃用并在 3.11 移除，新代码必须使用 async def/await。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.asyncio.coroutine-decorator
 # polyglot-covers: python.asyncio.generator-based-coroutine
@@ -957,11 +957,12 @@ def test_pending_task_result_is_invalid_and_manual_completion_is_forbidden():
 # polyglot-covers: python.asyncio.generator-coroutines-removed-in-3.11
 
 
+with pytest.warns(DeprecationWarning, match="@coroutine"):
 
-@asyncio.coroutine
-def _legacy_compute(value):
-    yielded = yield from asyncio.sleep(0, result=value * 2)
-    return yielded
+    @asyncio.coroutine
+    def _legacy_compute(value):
+        yielded = yield from asyncio.sleep(0, result=value * 2)
+        return yielded
 
 
 def test_asyncio_introspection_recognizes_legacy_generator_coroutine():
@@ -992,7 +993,7 @@ def test_legacy_coroutine_can_be_awaited_and_scheduled_with_ensure_future():
 # InvalidStateError；set_result/set_exception 完成单次赋值。Future 可重复 await 同一结果。
 # done callback 总由 loop.call_soon 排队，即使登记时已 done，也不会在调用栈内同步重入。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.asyncio.Future
 # polyglot-covers: python.asyncio.loop.create_future
@@ -1111,7 +1112,7 @@ def test_cancel_is_terminal_and_preserves_message_for_result_and_exception():
 # 无效对象抛 TypeError。wrap_future 把 concurrent.futures.Future 的 thread-safe completion
 # 转换成 loop-bound asyncio Future；两套 Future 的 wait/result timeout protocol 不能混用。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.asyncio.isfuture
 # polyglot-covers: python.asyncio.isfuture-future-like-marker
@@ -1206,7 +1207,7 @@ def test_asyncio_future_result_does_not_accept_concurrent_timeout_argument():
 # run_in_executor 返回 asyncio Future，positional args 原样传入，keyword 应使用 partial。
 # shutdown_default_executor 会 join worker，之后该 loop 不允许再次使用默认 executor。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.asyncio.loop.create_task
 # polyglot-covers: python.asyncio.loop.set_task_factory
@@ -1296,7 +1297,7 @@ def test_default_executor_warns_for_other_types_and_shutdown_is_terminal_for_loo
 # 放入 extensible context dict 交给 exception handler。custom handler 可处理或显式委托
 # default_exception_handler。set_exception_handler(None) 恢复默认；debug flag 可运行时切换。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.asyncio.loop.set_exception_handler
 # polyglot-covers: python.asyncio.loop.get_exception_handler

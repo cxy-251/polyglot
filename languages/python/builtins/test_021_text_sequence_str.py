@@ -5,7 +5,7 @@ str 是不可变的 Unicode code point 序列。它同时提供序列接口和�
 
 通用订阅/切片协议和格式化特殊方法已在 005、014 展示；本文件聚焦内置 str 的
 实际行为。内容基于 Python 3.10 Text Sequence Type、String Methods 和 Unicode
-HOWTO；当前文件尚未经过 pytest 验证。
+HOWTO。
 """
 
 # polyglot-covers: python.type.str python.literal.string python.literal.raw-string

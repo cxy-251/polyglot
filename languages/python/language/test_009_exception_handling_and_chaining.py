@@ -7,8 +7,7 @@
 克制。
 
 内容基于 Python 3.10 Try statement、Raise statement、Exceptions data model
-和 Built-in Exceptions。当前项目处于只编写、暂不执行的阶段，本文件尚未经过
-pytest 验证。
+和 Built-in Exceptions。
 """
 
 # polyglot-covers: python.statement.try python.statement.except

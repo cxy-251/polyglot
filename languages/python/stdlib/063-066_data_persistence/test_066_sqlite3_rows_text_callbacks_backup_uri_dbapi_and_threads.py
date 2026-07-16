@@ -4,7 +4,7 @@
 column-name access；自定义 ``row_factory(cursor, tuple)`` 可以输出 dict/namedtuple。
 ``text_factory`` 只控制 SQLite TEXT 的 bytes 到 Python 表示，BLOB 始终保持 bytes。
 
-这些案例面向 Python 3.10；当前文件尚未经过 pytest 验证。
+这些案例面向 Python 3.10。
 """
 
 # polyglot-covers: python.sqlite3.default-row-tuple python.sqlite3.Row
@@ -237,7 +237,7 @@ def test_text_factory_does_not_transform_blob_values():
 # authorizer、progress handler 和 trace callback 观察或限制执行。回调运行在 SQLite 执行
 # 路径内，返回值/异常规则各不相同；案例只用内存数据，不加载真实动态扩展。
 #
-# 这些案例面向 Python 3.10；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10。
 
 # polyglot-covers: python.sqlite3.create-function python.sqlite3.scalar-function
 # polyglot-covers: python.sqlite3.variadic-function python.sqlite3.deterministic-function
@@ -569,7 +569,7 @@ def test_load_extension_reports_a_missing_library_when_capability_exists(tmp_pat
 # 仍被访问时工作。``uri=True`` 才能使用 mode=ro/rw、named shared memory 等 SQLite URI
 # 参数。锁等待案例用 ``timeout=0`` 立即失败，不引入 sleep 或时间敏感断言。
 #
-# 这些案例面向 Python 3.10；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10。
 
 # polyglot-covers: python.sqlite3.iterdump python.sqlite3.sql-dump
 # polyglot-covers: python.sqlite3.dump-restore python.sqlite3.executescript-restore
@@ -800,7 +800,7 @@ def test_zero_timeout_reports_a_write_lock_without_sleeping(tmp_path):
 # DB-API ``threadsafety=1`` 表示可共享模块但默认不能跨线程使用同一 connection；确需共享时
 # 可传 ``check_same_thread=False``，但写操作的序列化责任转移给调用者。
 #
-# 这些案例面向 Python 3.10；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10。
 
 # polyglot-covers: python.sqlite3.apilevel python.sqlite3.paramstyle
 # polyglot-covers: python.sqlite3.threadsafety python.sqlite3.module-version

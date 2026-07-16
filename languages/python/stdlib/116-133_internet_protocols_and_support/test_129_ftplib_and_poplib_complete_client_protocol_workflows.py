@@ -3,8 +3,7 @@
 两个模块都是同步的文本协议客户端。案例不连接公网，而是使用内存
 socket、响应脚本和子类覆盖传输钩子。案例保留核心协议语义。
 
-这些案例面向 Python 3.10 当前补丁系列；整个 Python 测试集尚未经过
-pytest 统一验证。
+这些案例面向 Python 3.10 当前补丁系列。
 """
 
 # polyglot-covers: python.stdlib.ftplib python.ftplib.FTP-constructor-defaults

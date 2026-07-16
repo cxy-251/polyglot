@@ -5,8 +5,7 @@ syslog 则管理进程级日志设施与优先级。
 本套只操作临时文件、pipe、pty 和当前
 进程的可恢复状态，不向真实系统日志写消息，也不永久降低资源上限。
 
-这些案例面向 Python 3.10 当前补丁系列；整个 Python 测试集尚未经过 pytest
-统一验证。
+这些案例面向 Python 3.10 当前补丁系列。
 """
 
 # polyglot-covers: python.stdlib.fcntl python.fcntl.fcntl

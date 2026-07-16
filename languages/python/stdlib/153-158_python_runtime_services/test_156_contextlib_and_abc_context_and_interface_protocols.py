@@ -6,8 +6,7 @@
 ``isinstance/issubclass``。两者都围绕协议而非数据结构，合在一套里更容易看出
 显式实现、适配器、fallback、异常抑制和虚拟子类之间的边界。
 
-这些案例面向 Python 3.10 当前补丁系列；整个 Python 测试集尚未经过 pytest
-统一验证。
+这些案例面向 Python 3.10 当前补丁系列。
 """
 
 # polyglot-covers: python.stdlib.contextlib python.contextlib.contextmanager

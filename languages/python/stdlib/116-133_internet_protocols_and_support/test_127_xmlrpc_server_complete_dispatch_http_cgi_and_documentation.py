@@ -3,7 +3,7 @@
 register_function 支持直接调用和装饰器命名；_marshaled_dispatch 完成 loads→调用→dumps。
 未知方法、普通异常和显式 Fault 都返回 XML-RPC fault 包，而不是让 Python 异常逃到 HTTP 层。
 
-这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+这些案例面向 Python 3.10 当前补丁系列。
 """
 
 # polyglot-covers: python.xmlrpc.server.SimpleXMLRPCDispatcher
@@ -122,7 +122,7 @@ def test_explicit_fault_keeps_application_code_and_message():
 # 注册函数优先于实例同名方法。默认只暴露实例的顶层公开方法；allow_dotted_names=True 才
 # 沿属性链解析，但任何以下划线开头的段仍拒绝。点分开放给不可信实例可能暴露全局对象。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.xmlrpc.server.SimpleXMLRPCDispatcher.register_instance
 # polyglot-covers: python.xmlrpc.server.register-instance-public-method
@@ -209,7 +209,7 @@ def test_instance_dispatch_hook_receives_unresolved_name_and_parameter_tuple():
 # introspection 和 multicall 都要显式注册。listMethods 包含系统方法并排序；Python 实现不
 # 声明 XML-RPC 签名时返回说明字符串。批处理中单项失败变 fault dict，其他调用仍可成功。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.xmlrpc.server.register_introspection_functions
 # polyglot-covers: python.xmlrpc.server.system.listMethods
@@ -290,7 +290,7 @@ def test_multicall_keeps_successes_and_faults_in_corresponding_result_slots():
 # bind_and_activate=False 允许绑定前调整服务器属性。处理器默认只接收 / 与 /RPC2；
 # Accept-Encoding 的 q 值会转为 float，响应压缩只应在 gzip 权重大于零时考虑。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.xmlrpc.server.SimpleXMLRPCServer
 # polyglot-covers: python.xmlrpc.server.SimpleXMLRPCServer-is-TCPServer
@@ -377,7 +377,7 @@ def test_accept_encoding_parser_preserves_weights_for_compression_choice():
 # 合法 RPC 即使方法不存在或 XML 解析失败，也用 HTTP 200 携带 XML-RPC Fault；路径不在
 # rpc_paths 才是 HTTP 404。应用故障与传输故障分层，是客户端 Fault/ProtocolError 的来源。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.xmlrpc.server.SimpleXMLRPCRequestHandler.do_POST
 # polyglot-covers: python.xmlrpc.server.http-post-content-length-read
@@ -470,7 +470,7 @@ def test_unregistered_http_path_returns_plain_404_without_dispatch():
 # 请求 Content-Encoding=gzip 会先解压再分派；响应只有超过阈值且客户端接受 gzip 才压缩。
 # 损坏 gzip 映射 400，未知编码映射 501，二者都返回长度为零的 HTTP 错误而非 RPC Fault。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.xmlrpc.server.decode_request_content
 # polyglot-covers: python.xmlrpc.server.gzip-request-decoding
@@ -574,7 +574,7 @@ def test_bad_gzip_and_unknown_encoding_return_empty_http_errors():
 # 同一 HTTP 服务可以按 path 选择完全不同的注册表；请求处理器仍必须把这些路径加入
 # rpc_paths。add_dispatcher 返回原对象便于链式配置，未知路径会被包装为 XML-RPC Fault。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.xmlrpc.server.MultiPathXMLRPCServer
 # polyglot-covers: python.xmlrpc.server.MultiPathXMLRPCServer.add_dispatcher
@@ -628,7 +628,7 @@ def test_paths_select_independent_dispatchers_without_binding_socket(monkeypatch
 # CGI 版本不监听端口：POST 数据来自参数或 CONTENT_LENGTH 限定的 stdin，结果把文本头写到
 # stdout、XML bytes 写到 stdout.buffer。基础处理器的 GET 返回 400，因为 XML-RPC 使用 POST。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.xmlrpc.server.CGIXMLRPCRequestHandler
 # polyglot-covers: python.xmlrpc.server.CGIXMLRPCRequestHandler.handle_request
@@ -708,7 +708,7 @@ def test_get_is_reported_as_cgi_status_400_with_html_body(monkeypatch):
 # 文档生成器从已注册函数和实例的 introspection 信息构造 HTML，并转义标题。Doc 请求
 # 处理器只在合法 RPC path 上用 GET 返回文档；POST 行为仍继承普通 XML-RPC 处理器。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.xmlrpc.server.XMLRPCDocGenerator
 # polyglot-covers: python.xmlrpc.server.XMLRPCDocGenerator.set_server_title

@@ -4,7 +4,7 @@ wrapper 负责 initscr、noecho、cbreak、keypad 和最终恢复；即使 callb
 清理。测试用 fake 函数审计调用顺序，不改变真实终端。ESC delay 与 tab size 是 curses
 进程级状态，案例在 finally 中恢复，避免影响同一 pytest process 的其他测试。
 
-这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+这些案例面向 Python 3.10 当前补丁系列。
 """
 
 # polyglot-covers: python.curses.wrapper python.curses.initscr
@@ -156,7 +156,7 @@ def test_version_and_error_objects_expose_linked_curses_capability():
 # ``str.is*``。``ctrl`` 清除高三位，``alt`` 设置 meta bit，``ascii`` 清除 meta bit，
 # 而 ``unctrl`` 把控制字符转为适合终端展示的 caret notation。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.curses.ascii-control-constants
 # polyglot-covers: python.curses.ascii.isascii python.curses.ascii.isalnum
@@ -255,7 +255,7 @@ def test_string_inputs_must_contain_exactly_one_character():
 # 执行真实 Textbox 代码，覆盖 Emacs-like 控制键、insert mode、validator 和 gather，
 # 同时避免初始化用户终端。fake 只模拟当前案例所需的 curses window 契约。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.curses.textpad.rectangle
 # polyglot-covers: python.curses.textpad.Textbox
@@ -456,7 +456,7 @@ def test_navigation_line_editing_and_refresh_commands_update_window_state():
 # 让隔离子进程通过 ``curses.wrapper`` 使用真实 ncurses，并从独立 pipe 返回 JSON。
 # 它不接管用户终端、不读取输入、不 sleep；缺少 curses/terminfo 的平台会明确 skip。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.curses.newwin python.curses.window.getmaxyx
 # polyglot-covers: python.curses.window.box python.curses.window.addstr
@@ -480,7 +480,10 @@ def test_navigation_line_editing_and_refresh_commands_update_window_state():
 
 
 
-_section_202_pytestmark = pytest.mark.skipif(os.name != "posix", reason="PTY workflow requires POSIX")
+_section_202_pytestmark = pytest.mark.skipif(
+    os.name != "posix",
+    reason="PTY workflow requires POSIX",
+)
 
 
 def _run_in_temporary_pty(script):

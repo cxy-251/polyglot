@@ -6,8 +6,7 @@
 slots、继承与描述符字段，并用
 ``fields/asdict/replace/make_dataclass`` 展示常见工作流。
 
-这些案例面向 Python 3.10 当前补丁系列；整个 Python 测试集尚未经过 pytest
-统一验证。
+这些案例面向 Python 3.10 当前补丁系列。
 """
 
 # polyglot-covers: python.stdlib.dataclasses python.dataclasses.dataclass

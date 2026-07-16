@@ -3,7 +3,7 @@
 处理器从二进制 rfile 解析方法、含查询串的 path、版本和 RFC 风格头，再按大小写敏感的
 方法名调用 do_METHOD。HTTP/0.9 兼容请求没有响应状态行，只能用于 GET。
 
-这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+这些案例面向 Python 3.10 当前补丁系列。
 """
 
 from email.message import Message
@@ -108,7 +108,7 @@ def test_http09_get_dispatches_but_emits_only_the_response_body():
 # 解析失败会由处理器直接发送错误响应而不进入 do_*。请求行上限为 65536 字节；头字段
 # 过长映射到 431。HTTP/0.9 形式只允许 GET，未知的有效方法则映射到 501。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.http.server.bad-request-syntax-400
 # polyglot-covers: python.http.server.bad-request-version-400
@@ -203,7 +203,7 @@ def test_valid_but_unimplemented_method_maps_to_501():
 # 处理器只有在双方均支持 HTTP/1.1 时默认保持连接，并会在同一 rfile 中继续解析请求。
 # Expect 钩子必须先决定是否允许客户端发送正文；拒绝时返回最终错误且不能调用 do_POST。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.http.server.http11-persistent-connection
 # polyglot-covers: python.http.server.BaseHTTPRequestHandler.handle-loop
@@ -318,7 +318,7 @@ def test_expect_hook_can_send_final_error_and_prevent_body_dispatch():
 # send_response 会加入状态行、Server 和 Date，但直到 end_headers/flush_headers 才写入
 # wfile。send_header("Connection", ...) 还会同步改变循环状态；遗漏 end_headers 是常见坑。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.http.server.BaseHTTPRequestHandler.send_response
 # polyglot-covers: python.http.server.BaseHTTPRequestHandler.send_response_only
@@ -412,7 +412,7 @@ def test_version_date_and_address_helpers_have_protocol_specific_formats():
 # 错误页会计算 Content-Length 并强制关闭连接；自定义 message/explain 进入 HTML 前会转义。
 # HEAD 保留与 GET 相同的长度头但不写正文，1xx、204、205、304 则根本不生成错误正文。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.http.server.BaseHTTPRequestHandler.send_error
 # polyglot-covers: python.http.server.send-error-default-response-mapping
@@ -518,7 +518,7 @@ def test_unknown_status_uses_question_mark_fallback_text():
 # translate_path 会丢弃查询/片段、URL 解码并把结果限制在配置目录内；它不是直接拼接用户
 # 路径。自 Python 3.9 起 directory 接受 PathLike，extensions_map 只保存自定义覆盖项。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.http.server.SimpleHTTPRequestHandler
 # polyglot-covers: python.http.server.SimpleHTTPRequestHandler.directory-3.7
@@ -613,7 +613,7 @@ def test_constructor_converts_pathlike_directory_before_base_initialization(
 # send_head 负责打开文件并发送 Content-Type、精确长度和 Last-Modified；do_GET 再复制
 # 二进制内容，do_HEAD 只关闭文件。即使扩展名是文本，也按 rb 打开，避免平台换行转换。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.http.server.SimpleHTTPRequestHandler.do_GET
 # polyglot-covers: python.http.server.SimpleHTTPRequestHandler.do_HEAD
@@ -696,7 +696,7 @@ def test_head_returns_get_metadata_without_copying_the_file_body(tmp_path):
 # 目录 URL 缺少末尾斜杠时返回 301 并保留查询串；有斜杠后优先 index.html，再找
 # index.htm。没有首页才生成按名称排序的 HTML 列表，链接要 URL 编码、显示名要 HTML 转义。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.http.server.simple-directory-trailing-slash-redirect
 # polyglot-covers: python.http.server.simple-directory-redirect-preserves-query
@@ -785,7 +785,7 @@ def test_directory_listing_sorts_and_escapes_names_for_two_output_contexts(tmp_p
 # 有效 UTC 日期且文件不晚于条件时间时返回 304；存在 If-None-Match 时该实现不再处理
 # If-Modified-Since。非法日期被忽略。缺失文件和“文件名后带斜杠”都映射为 404。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.http.server.simple-if-modified-since-3.7
 # polyglot-covers: python.http.server.simple-if-modified-since-utc-comparison
@@ -895,7 +895,7 @@ def test_missing_file_and_file_with_trailing_slash_are_not_served(tmp_path):
 # CGI 不是按任意文件后缀启用，而是只识别 cgi_directories 下的路径；识别前会解码并折叠
 # 点段。POST 到普通静态路径返回 501。该服务器会执行程序，不适合作为生产安全边界。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.http.server.CGIHTTPRequestHandler
 # polyglot-covers: python.http.server.CGIHTTPRequestHandler.cgi_directories
@@ -992,7 +992,7 @@ def test_python_script_detection_is_case_insensitive_but_extension_specific():
 # ThreadingHTTPServer 通过 mixin 组合并使用守护线程。3.10.9 起默认日志转义控制字符；
 # SimpleHTTPRequestHandler 仍会跟随符号链接，所以配置目录不是可靠的文件系统沙箱。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.http.server.HTTPServer
 # polyglot-covers: python.http.server.HTTPServer-is-TCPServer

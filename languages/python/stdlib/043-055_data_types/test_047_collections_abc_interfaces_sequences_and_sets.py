@@ -5,8 +5,8 @@ ABC 判定可以来自真实继承、``register()`` 虚拟注册，或简单接�
 并不会调用方法验证行为。真正需要使用某项能力时，
 仍应执行相应操作并处理失败。
 
-本文件先处理简单同步接口；复杂容器 mixin 与异步 ABC 留给后续测试套。当前文件
-尚未经过 pytest 验证。
+本文件先处理简单同步接口；复杂容器 mixin 与异步 ABC 留给后续测试套。
+
 """
 
 # polyglot-covers: python.collections.abc python.abc.direct-inheritance
@@ -407,7 +407,7 @@ def test_common_builtin_types_have_distinct_abc_relationships():
 # 它们不会替实现者决定负索引、切片、元素约束或存储复杂度。
 #
 # 辅助类型中的调用日志只用于讲清分派路径，不是内部调用次数的通用承诺。
-# 当前文件尚未经过 pytest 验证。
+#
 
 # polyglot-covers: python.collections.abc.Sequence python.sequence.abstract-primitives
 # polyglot-covers: python.sequence.iter-mixin python.sequence.contains-mixin
@@ -418,7 +418,8 @@ def test_common_builtin_types_have_distinct_abc_relationships():
 # polyglot-covers: python.collections.abc.MutableSequence python.mutable-sequence.primitives
 # polyglot-covers: python.mutable-sequence.append-extend python.mutable-sequence.iadd
 # polyglot-covers: python.mutable-sequence.pop-remove python.mutable-sequence.reverse
-# polyglot-covers: python.mutable-sequence.slice-mutation python.mutable-sequence.insert-normalization
+# polyglot-covers: python.mutable-sequence.slice-mutation
+# polyglot-covers: python.mutable-sequence.insert-normalization
 # polyglot-covers: python.mutable-sequence.failure-atomicity python.mutable-sequence.clear
 # polyglot-covers: python.collections.abc.ByteString python.bytes.integer-elements
 
@@ -892,7 +893,7 @@ def test_direct_byte_string_subclass_still_controls_its_element_semantics():
 # 这个顺序不是 Set 合同。
 #
 # 结果类型由 ``_from_iterable()`` 决定，可变算法通过 ``add()`` / ``discard()`` 回调
-# 具体实现。当前文件尚未经过 pytest 验证。
+# 具体实现。
 
 # polyglot-covers: python.collections.abc.Set python.set-abc.abstract-primitives
 # polyglot-covers: python.set-abc.comparisons python.set-abc.algebra

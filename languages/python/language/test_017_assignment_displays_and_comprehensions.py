@@ -7,8 +7,7 @@ assignment expression ``:=`` 同时返回并绑定一个名称，但不是任意
 替代品。
 
 内容基于 Python 3.10 Assignment / Annotated assignment statements、Assignment
-expressions 和 Container displays/comprehensions。当前项目处于只编写、暂不
-执行的阶段，本文件尚未经过 pytest 验证。
+expressions 和 Container displays/comprehensions。
 """
 
 # polyglot-covers: python.statement.assignment python.assignment.chained

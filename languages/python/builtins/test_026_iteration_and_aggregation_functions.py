@@ -3,9 +3,8 @@
 本组函数大多接收任意 iterable，其中 iter/next/enumerate/zip/map/filter/reversed
 返回一次性惰性 iterator；sorted/min/max/sum/all/any 则消费输入并产生结果。
 
-迭代器协议和生成器控制流已在 008 展示，异步 aiter/anext 已在 015 展示；本文件
-聚焦同步内置函数的组合工作流。内容基于 Python 3.10 Built-in Functions；当前
-文件尚未经过 pytest 验证。
+迭代器协议和生成器控制流已在 008 展示，异步 aiter/anext 已在 015 展示；
+本文件聚焦同步内置函数的组合工作流。内容基于 Python 3.10 Built-in Functions。
 """
 
 # polyglot-covers: python.builtin.len python.builtin.iter python.builtin.next

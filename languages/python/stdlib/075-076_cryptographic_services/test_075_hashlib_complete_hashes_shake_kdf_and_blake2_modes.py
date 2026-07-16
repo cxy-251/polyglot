@@ -4,7 +4,7 @@ hash 函数接收 bytes-like 数据并生成摘要；它不是加密，不能还
 ``digest``/``hexdigest`` 不会 finalize object，后续仍可 update。``copy`` 适合复用公共
 prefix；算法名称集合则区分跨平台保证与当前 OpenSSL build 额外提供的实现。
 
-这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+这些案例面向 Python 3.10 当前补丁系列。
 """
 
 # polyglot-covers: python.hashlib.sha256 python.hashlib.named-constructor
@@ -156,7 +156,7 @@ def test_usedforsecurity_marks_policy_intent_without_changing_sha256_math():
 # key stretching。
 # 测试使用很小 cost；生产参数要依据当前硬件和安全要求制定。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.hashlib.shake-128 python.hashlib.shake-256
 # polyglot-covers: python.hashlib.shake.digest-length python.hashlib.shake.hexdigest-length
@@ -270,7 +270,7 @@ def test_plain_fast_hash_has_no_salt_or_cost_and_is_not_a_password_kdf():
 # tree hashing。digest_size 是算法参数，因此短摘要不是长摘要的 prefix。salt/person
 # 会补零到固定宽度；key 的尾随 NUL 是真实 material，三者不能混用。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.hashlib.blake2b python.hashlib.blake2s
 # polyglot-covers: python.hashlib.blake2-digest-size python.hashlib.blake2-not-prefix

@@ -4,7 +4,7 @@ read(n>0) 有至少一个 byte 即可返回，并不保证填满；readexactly �
 readuntil 成功时包含 separator，超过 limit 时数据仍留在 buffer；EOF 前数据不足则用
 IncompleteReadError.partial 暴露残片。案例直接 feed protocol 数据以消除真实 I/O 时序。
 
-这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+这些案例面向 Python 3.10 当前补丁系列。
 """
 
 # polyglot-covers: python.asyncio.StreamReader
@@ -121,7 +121,7 @@ def test_stream_reader_async_iteration_yields_lines_until_eof():
 # socket。write/writelines 只写入 transport buffer，drain 才实施 high/low watermark backpressure。
 # close 后应 await wait_closed。案例只使用 socketpair，不访问网络或固定机器端口。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.asyncio.open_connection
 # polyglot-covers: python.asyncio.open-connection-sock
@@ -204,7 +204,7 @@ def test_stream_writer_round_trip_half_close_and_socket_ownership():
 # 可把 bind/listen 与开始 accept 分开；Server async context 退出时 close 并 wait_closed。
 # Unix socket path 使用 pytest 临时目录，无公网、固定端口或持久机器状态。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.asyncio.start_unix_server
 # polyglot-covers: python.asyncio.open_unix_connection
@@ -282,7 +282,7 @@ def test_unix_stream_server_echoes_lines_and_context_closes_listener(tmp_path):
 # async with 保证异常路径 release。Event 是可重复读取的 level flag：set 唤醒全部当前 waiter，
 # 后来 wait 也立即成功，直到 clear。原语本身没有 timeout 参数，应外包 wait_for。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.asyncio.Lock
 # polyglot-covers: python.asyncio.Lock.acquire
@@ -381,7 +381,7 @@ def test_sync_primitive_methods_reject_direct_timeout_keyword():
 # lock，唤醒后再 acquire 才返回；因此状态检查必须在 lock 内用 wait_for predicate 循环。
 # notify/notify_all 只唤醒 waiter，不释放 lock，而且未持锁调用会抛 RuntimeError。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.asyncio.Condition
 # polyglot-covers: python.asyncio.Condition-shared-lock
@@ -476,7 +476,7 @@ def test_wait_and_notify_require_condition_lock_ownership():
 # over-release 当作配对错误。locked 表示当前不能立即 acquire，并不授予未来执行保证。
 # 案例用 Event gate 同时占满两个 permit，不依靠 wall-clock delay 判断并发上限。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.asyncio.Semaphore
 # polyglot-covers: python.asyncio.Semaphore.acquire
@@ -557,7 +557,7 @@ def test_negative_initial_semaphore_value_is_rejected():
 # 需要用 wait_for 包装。PIPE 对 stdin 生成 StreamWriter，对 stdout/stderr 生成 StreamReader。
 # 使用 PIPE 时 communicate 会并发排空，避免先 wait 造成 pipe capacity deadlock。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.asyncio.create_subprocess_exec
 # polyglot-covers: python.asyncio.subprocess.Process
@@ -684,7 +684,7 @@ def test_communicate_drains_two_outputs_larger_than_typical_pipe_capacity():
 # 形式更适合普通 argv。Process 的 send_signal/terminate/kill 是同步发请求，随后 await wait
 # 观察退出。POSIX 信号退出码仍为负 signal number。child 以 Event 阻塞，不使用 sleep。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.asyncio.create_subprocess_shell
 # polyglot-covers: python.asyncio.subprocess-shell-quoting
@@ -757,7 +757,7 @@ def test_send_signal_terminate_and_kill_set_negative_posix_returncodes():
 # 释放一个 slot。get/put 自身没有 timeout 参数，应用应以 wait_for 包装。nowait 版本用
 # QueueEmpty/QueueFull 表达不能立即完成，三种 Queue 仅改变 retrieval order。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.asyncio.Queue
 # polyglot-covers: python.asyncio.Queue.maxsize
@@ -852,7 +852,7 @@ def test_queue_timeout_is_composed_with_wait_for_not_a_method_keyword():
 # 恰好一次 task_done。join 只等计数归零。长驻 worker 常在 queue.join 后 cancel，并用 gather
 # 回收取消异常；task_done 应置于 finally，防止业务异常把 join 永久卡住。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.asyncio.Queue.task_done
 # polyglot-covers: python.asyncio.Queue.join

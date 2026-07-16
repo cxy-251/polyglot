@@ -7,8 +7,7 @@ Python 在编译函数代码块时决定名字属于 local、free 还是 global�
 定义时已经求出的对象。
 
 内容基于 Python 3.10 Execution Model 的 Naming and binding、Global /
-Nonlocal statements、Comprehensions 和内置 locals/globals。当前项目处于只
-编写、暂不执行的阶段，本文件尚未经过 pytest 验证。
+Nonlocal statements、Comprehensions 和内置 locals/globals。
 """
 
 # polyglot-covers: python.execution.names-and-binding python.execution.legb

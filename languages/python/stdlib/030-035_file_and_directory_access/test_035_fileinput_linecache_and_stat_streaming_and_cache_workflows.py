@@ -5,7 +5,7 @@ linecache 按 filename/1-based lineno 缓存源码行。三者分别处理输入
 位字段和可失效缓存，不能替代普通文件读写。
 
 内容基于 Python 3.10 fileinput、stat、linecache 文档。所有路径位于 pytest
-tmp_path；当前文件尚未经过 pytest 验证。
+tmp_path。
 """
 
 # polyglot-covers: python.stdlib.fileinput python.fileinput.input
@@ -367,7 +367,7 @@ def test_linecache_lazycache_defers_loader_get_source_until_first_read(tmp_path)
 # 原文件的便捷模式；应优先使用 instance/context manager 并明确清理。``linecache`` 面向
 # traceback/source retrieval：行号从 1 开始、失败返回空串，磁盘更新不会自动绕过已有 cache。
 #
-# 这些案例面向 Python 3.10；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10。
 
 # polyglot-covers: python.fileinput.FileInput python.fileinput.multiple-files
 # polyglot-covers: python.fileinput.context-manager python.fileinput.newline-preservation
@@ -381,7 +381,8 @@ def test_linecache_lazycache_defers_loader_get_source_until_first_read(tmp_path)
 # polyglot-covers: python.fileinput.openhook python.fileinput.openhook-keywords
 # polyglot-covers: python.fileinput.hook-compressed python.fileinput.gzip python.fileinput.bzip2
 # polyglot-covers: python.fileinput.hook-encoded python.fileinput.python310-hook-encoded-deprecated
-# polyglot-covers: python.fileinput.inplace python.fileinput.backup python.fileinput.stdout-redirection
+# polyglot-covers: python.fileinput.inplace python.fileinput.backup
+# polyglot-covers: python.fileinput.stdout-redirection
 # polyglot-covers: python.fileinput.inplace-default-backup-deletion
 # polyglot-covers: python.fileinput.inplace-openhook-conflict python.fileinput.mode-validation
 # polyglot-covers: python.fileinput.readline python.fileinput.deprecated-getitem

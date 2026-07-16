@@ -4,7 +4,7 @@ family/type/proto 决定地址表示和传输语义；AF_* 与 SOCK_* 是 IntEnu
 新 socket 默认 blocking、不可继承。Linux 可把 SOCK_NONBLOCK/SOCK_CLOEXEC 原子并入 type，
 但 Python 的 socket.type 会清除这两个 flag，只保留基本 kind，不能用它判断当前 blocking 状态。
 
-这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+这些案例面向 Python 3.10 当前补丁系列。
 """
 
 # polyglot-covers: python.socket.socket
@@ -85,7 +85,7 @@ def test_atomic_nonblocking_flag_changes_mode_but_not_type_attribute():
 # open file description 的 OS blocking flag，因此一个 wrapper 改模式可让另一个出现意外 EAGAIN。
 # setdefaulttimeout 是进程级默认值，测试必须恢复，避免影响以后创建的 socket。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.socket.socket.setblocking
 # polyglot-covers: python.socket.socket.getblocking
@@ -168,7 +168,7 @@ def test_process_default_timeout_applies_only_to_sockets_created_after_change():
 # 数量，可能小于输入；sendall 负责循环但成功只返回 None，失败也无法报告已发送量。SHUT_WR
 # 发送 EOF 同时保留读取方向；对端把 recv 返回 b"" 解释为有序 EOF，而不是一条空消息。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.socket.socket.send
 # polyglot-covers: python.socket.send-may-be-partial
@@ -230,7 +230,7 @@ def test_shutdown_write_delivers_eof_without_disabling_receive_direction():
 # recv 创建新 bytes；recv_into 改写 bytearray/memoryview 并返回写入计数，适合复用缓冲区。nbytes
 # 省略或为 0 时最多填满传入 view；只应读取计数覆盖的区域，未写入部分保留旧内容。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.socket.socket.recv_into
 # polyglot-covers: python.socket.recv-into-writable-buffer
@@ -276,7 +276,7 @@ def test_zero_nbytes_uses_the_destination_buffer_length():
 # 消息超过 bufsize 会被截断而非留给下一次读取。pathname 地址是 str；案例全部放在 pytest 临时
 # 目录，不使用网络接口。recvfrom_into 可直接写 caller buffer，并同样返回来源地址。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.socket.socket.bind
 # polyglot-covers: python.socket.AF_UNIX-pathname-address-str
@@ -339,7 +339,7 @@ def test_small_datagram_buffer_discards_remainder_and_into_returns_address(tmp_p
 # 的 errno 改为返回值，成功为 0，适合非阻塞状态机；名称解析等前置错误仍可能抛异常。accept
 # 产生的新 socket 默认不可继承，且在默认 timeout 为 None 时由 blocking listener 接受为 blocking。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.socket.server-socket-bind-listen-accept-sequence
 # polyglot-covers: python.socket.socket.listen
@@ -420,7 +420,7 @@ def test_connect_and_accept_use_global_default_timeout_for_new_sockets(tmp_path)
 # 期间失败可能让内部 buffer 不一致。关闭 file 不会单独关闭原 socket；反过来 socket.close 后，
 # 只要 makefile wrapper 仍存活，底层 fd 也暂缓关闭，直到所有 wrapper 一起关闭。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.socket.socket.makefile
 # polyglot-covers: python.socket.makefile-open-like-mode-buffering
@@ -473,7 +473,7 @@ def test_open_makefile_keeps_descriptor_alive_after_socket_object_closes():
 # 移出原对象，原 socket 立即进入 closed 状态。socket.socket(fileno=fd) 接管同一 fd，不再复制；
 # 若仍由其他代码 close 会产生 double-close 风险。socket.close(fd) 是跨平台关闭 socket fd 的入口。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.socket.socket.fileno
 # polyglot-covers: python.socket.socket.dup
@@ -551,7 +551,7 @@ def test_module_close_releases_a_detached_socket_descriptor():
 # 用 struct 解码。setsockopt 接收 int 或 bytes-like；kernel 可能调整 buffer size，所以不能把
 # SO_SNDBUF 的读回值写死为请求值。选项 level/optname 必须使用对应 SOL_*/SO_* 常量。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.socket.socket.getsockopt
 # polyglot-covers: python.socket.getsockopt-integer-form
@@ -605,7 +605,7 @@ def test_setsockopt_accepts_int_and_native_integer_bytes():
 # SOCK_STREAM。offset/count 决定片段，返回发送计数且更新 file position。non-blocking socket
 # 明确不支持，异步程序应使用 loop.sock_sendfile 或 loop.sendfile。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.socket.socket.sendfile
 # polyglot-covers: python.socket.sendfile-regular-binary-file
@@ -655,7 +655,7 @@ def test_sendfile_rejects_nonblocking_socket(tmp_path):
 # address。CMSG_LEN 不含尾部 padding，CMSG_SPACE 包含可移植控制消息所需 padding；接收 ancillary
 # data 应优先用后者计算 ancbufsize，否则控制消息可能被截断或丢弃。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.socket.socket.sendmsg
 # polyglot-covers: python.socket.sendmsg-gather-buffers
@@ -703,7 +703,7 @@ def test_cmsg_space_includes_at_least_the_unpadded_control_length():
 # 只暴露选中区域，外侧内容保留。系统对 iovec 数量有 SC_IOV_MAX 限制，不能把任意长列表直接
 # 交给底层。只读取 nbytes 覆盖的前缀，最后一个 buffer 的其余空间仍是旧值。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.socket.socket.recvmsg_into
 # polyglot-covers: python.socket.recvmsg-into-scatter-buffers
@@ -743,7 +743,7 @@ def test_recvmsg_into_scatter_writes_across_selected_buffers():
 # 引用同一 open file description，因此 file offset 也共享。收到的 fd 必须逐个显式 close，否则
 # 会泄漏资源。maxfds 限制接收数量；普通 message bytes 与 fd 列表一起返回。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.socket.send_fds
 # polyglot-covers: python.socket.recv_fds
@@ -790,7 +790,7 @@ def test_send_fds_transfers_a_readable_descriptor_and_shared_offset(tmp_path):
 # inet_pton/ntop 显式 family，适合双栈；IPv6 文本可能有多种等价写法，ntop 返回规范压缩形式。
 # 这只是纯转换，不做 DNS 查询，也不验证地址是否可路由。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.socket.inet_aton
 # polyglot-covers: python.socket.inet_aton-ipv4-only
@@ -837,7 +837,7 @@ def test_family_explicit_conversion_supports_ipv4_and_ipv6():
 # getprotobyname/getservbyname/getservbyport 查询 libc 数据库，不建立连接。Python 3.10 对 16-bit
 # htons/ntohs 新增明确范围检查，越过 unsigned short 不再静默截断。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.socket.htons
 # polyglot-covers: python.socket.ntohs
@@ -885,7 +885,7 @@ def test_protocol_and_service_names_map_to_standard_integer_constants():
 # 限制 family/type/flags 可避免得到调用者不会处理的地址。AI_NUMERICHOST/AI_NUMERICSERV 禁止
 # DNS/service lookup；非 numeric 输入抛 gaierror。getnameinfo 用 NI_* 做逆向的纯数字格式化。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.socket.getaddrinfo
 # polyglot-covers: python.socket.getaddrinfo-five-tuple
@@ -949,7 +949,7 @@ def test_socket_exception_aliases_follow_the_oserror_hierarchy():
 # 退回原输入。if_nameindex 列出 (index,name)，另外两个函数可双向转换。接口集合属于运行环境，
 # 案例只验证内部一致性，不把 Docker 中的具体名称或 index 写死。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.socket.gethostname
 # polyglot-covers: python.socket.gethostname-not-necessarily-fqdn
@@ -1010,7 +1010,7 @@ def test_ip_capability_probes_return_booleans_not_configuration_guarantees():
 # 设置 timeout/source_address。案例只连 127.0.0.1 的随机端口，数据不会离开当前容器网络空间。
 # server 返回的监听 socket 与 accept 返回的连接 socket 仍需分别关闭。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.socket.create_server
 # polyglot-covers: python.socket.create-server-bind-listen-convenience
@@ -1074,7 +1074,7 @@ def test_dualstack_flag_is_invalid_for_ipv4_server_family():
 # bytes 表示，不创建文件。应用若同时接受两种地址必须处理 str/bytes 两种类型，不能无条件做
 # Path 操作。地址在 kernel namespace 中仍须唯一，本例加入当前 pid。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.socket.AF_UNIX-abstract-address
 # polyglot-covers: python.socket.abstract-unix-address-leading-nul
@@ -1111,7 +1111,7 @@ def test_abstract_unix_address_round_trips_as_leading_nul_bytes():
 # gethostbyaddr 可反查 IPv4/IPv6。新代码通常选 getaddrinfo，因为它保留多个 family/type 结果。
 # 案例只查询 numeric loopback；容器的 localhost 来自本机 resolver database，不访问外部服务。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.socket.gethostbyname
 # polyglot-covers: python.socket.gethostbyname-ipv4-only

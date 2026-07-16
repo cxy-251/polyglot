@@ -3,8 +3,7 @@
 IMAP 用 tagged/untagged 响应维护邮箱状态；NNTP 使用三位状态码，
 并用点终止多行数据。记录型客户端保留公开方法的参数整理和解析逻辑。
 
-这些案例面向 Python 3.10 当前补丁系列；整个 Python 测试集尚未经过
-pytest 统一验证。
+这些案例面向 Python 3.10 当前补丁系列。
 """
 
 # polyglot-covers: python.stdlib.imaplib python.imaplib.IMAP4-exceptions

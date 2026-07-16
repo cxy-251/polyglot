@@ -5,7 +5,7 @@ aware ``datetime`` 才能在偏移已知时表示确定时刻。naive 对象的�
 库不会自动知道它是 UTC、本地时间还是业务时间。
 
 本文件只使用 UTC 和固定偏移 ``timezone``，不读取主机本地时区。IANA 地区规则、DST
-gap/fold 的真实转换将在后续 ``zoneinfo`` 文件处理。当前文件尚未经过 pytest 验证。
+gap/fold 的真实转换将在后续 ``zoneinfo`` 文件处理。
 """
 
 # polyglot-covers: python.stdlib.datetime python.datetime.constants
@@ -499,8 +499,8 @@ def test_invalid_time_fields_and_leap_seconds_fail_at_construction():
 # 额外依赖来掩盖部署环境缺少数据库的问题。
 #
 # 2020 年 America/Los_Angeles 的官方示例用于解释 fall-back、spring-forward 与
-# ``fold``。会改变进程级 cache、TZPATH 或环境变量的接口全部放在子进程。当前文件
-# 尚未经过 pytest 验证。
+# ``fold``。会改变进程级 cache、TZPATH 或环境变量的接口全部放在子进程。
+#
 
 # polyglot-covers: python.stdlib.zoneinfo python.zoneinfo.ZoneInfo
 # polyglot-covers: python.zoneinfo.data-sources python.zoneinfo.ZoneInfoNotFoundError

@@ -4,7 +4,7 @@ Decimal 的值由 sign、coefficient digits 和 exponent 组成；尾随零会�
 构造过程保存输入的全部位数，当前 context 的 precision 主要在算术时生效。
 所有会修改 context 的案例都使用 ``localcontext``，避免测试之间泄漏舍入环境。
 
-这些案例面向 Python 3.10；当前文件尚未经过 pytest 验证。
+这些案例面向 Python 3.10。
 """
 
 # polyglot-covers: python.decimal.Decimal python.decimal.exact-decimal-string
@@ -302,12 +302,13 @@ def test_context_create_decimal_from_float_combines_exact_conversion_and_roundin
 # flag 用于事后审计且会持续保留；trap 则把同一 signal 提升为异常。案例使用小型局部
 # context 主动制造 rounded、inexact、overflow、subnormal、underflow 和 clamped 状态。
 #
-# 这些案例面向 Python 3.10；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10。
 
 # polyglot-covers: python.decimal.quantize python.decimal.fixed-exponent
 # polyglot-covers: python.decimal.ROUND_CEILING python.decimal.ROUND_FLOOR
 # polyglot-covers: python.decimal.ROUND_DOWN python.decimal.ROUND_UP python.decimal.ROUND_05UP
-# polyglot-covers: python.decimal.ROUND_HALF_DOWN python.decimal.ROUND_HALF_EVEN python.decimal.ROUND_HALF_UP
+# polyglot-covers: python.decimal.ROUND_HALF_DOWN python.decimal.ROUND_HALF_EVEN
+# polyglot-covers: python.decimal.ROUND_HALF_UP
 # polyglot-covers: python.decimal.to_integral_value python.decimal.to_integral_exact
 # polyglot-covers: python.decimal.unary-plus python.decimal.context-application
 # polyglot-covers: python.decimal.flags-sticky python.decimal.clear_flags python.decimal.traps
@@ -645,7 +646,7 @@ def test_decimal_signal_exception_hierarchy_supports_broad_or_specific_handling(
 # ``fma``、十进制相邻值、digit-wise logical operations、scale/rotate/shift，以及工程记数。
 # 最后用受限/提高 precision 的同一计算说明十进制精确表示仍不等于无限精度算术。
 #
-# 这些案例面向 Python 3.10；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10。
 
 # polyglot-covers: python.decimal.remainder python.decimal.divide-integer
 # polyglot-covers: python.decimal.compare python.decimal.compare_signal
@@ -655,7 +656,8 @@ def test_decimal_signal_exception_hierarchy_supports_broad_or_specific_handling(
 # polyglot-covers: python.decimal.fma python.decimal.exp python.decimal.ln python.decimal.log10
 # polyglot-covers: python.decimal.sqrt python.decimal.logb
 # polyglot-covers: python.decimal.number_class python.decimal.classification
-# polyglot-covers: python.decimal.max python.decimal.min python.decimal.max_mag python.decimal.min_mag
+# polyglot-covers: python.decimal.max python.decimal.min
+# polyglot-covers: python.decimal.max_mag python.decimal.min_mag
 # polyglot-covers: python.decimal.next_minus python.decimal.next_plus python.decimal.next_toward
 # polyglot-covers: python.decimal.normalize python.decimal.remainder_near
 # polyglot-covers: python.decimal.logical_and python.decimal.logical_or

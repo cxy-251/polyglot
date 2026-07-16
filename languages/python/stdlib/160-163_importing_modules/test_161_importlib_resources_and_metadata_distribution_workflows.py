@@ -5,8 +5,7 @@
 清单。本套在临时目录中构造完整的 package、zip package 和 dist-info，避免依赖
 容器中偶然安装的发行版，也展示“模块名不一定等于发行版名”的边界。
 
-这些案例面向 Python 3.10 当前补丁系列；整个 Python 测试集尚未经过 pytest
-统一验证。
+这些案例面向 Python 3.10 当前补丁系列。
 """
 
 # polyglot-covers: python.stdlib.importlib.resources
@@ -439,10 +438,12 @@ def test_entry_points_select_by_group_and_name_with_sequence_helpers(tmp_path, m
 
     answer = selected.select(name="answer")
     assert len(answer) == 1
-    assert answer[0].name == "answer"
-    assert selected.select(name="missing") == metadata.EntryPoints()
+    with pytest.warns(DeprecationWarning, match="index"):
+        assert answer[0].name == "answer"
+    with pytest.warns(DeprecationWarning, match="list interface"):
+        assert selected.select(name="missing") == metadata.EntryPoints()
     # Python 3.10 引入 selectable API；新代码应传 group/name 或调用 select，
-    # 不依赖无参数 entry_points() 暂时保留的字典兼容视图。
+    # 不依赖 EntryPoints 暂时保留且已弃用的序列比较和下标接口。
 
 
 def test_distribution_entry_points_property_matches_functional_selection(

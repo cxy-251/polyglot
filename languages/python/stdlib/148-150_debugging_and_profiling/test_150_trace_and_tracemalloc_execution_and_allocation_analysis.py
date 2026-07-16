@@ -5,8 +5,7 @@ allocator 层保存分配 traceback。前者不是分支覆盖工具，后者也
 解释器之外的所有进程内存；案例展示各自能证明什么，以及全局 tracing
 状态应如何收尾。
 
-这些案例面向 Python 3.10 当前补丁系列；整个 Python 测试集尚未经过 pytest
-统一验证。
+这些案例面向 Python 3.10 当前补丁系列。
 """
 
 # polyglot-covers: python.stdlib.trace python.trace.trace-class

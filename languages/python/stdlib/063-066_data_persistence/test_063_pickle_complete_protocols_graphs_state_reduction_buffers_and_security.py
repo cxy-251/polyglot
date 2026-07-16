@@ -4,7 +4,7 @@ pickle 是 Python-specific binary serialization：它保存对象图中的共享
 function 只按 importable qualified name 引用。协议影响兼容性和编码能力，不改变 load 自动
 识别协议的行为。pickle 可在 unpickle 时执行任意代码，本文件只处理可信的本地测试数据。
 
-这些案例面向 Python 3.10；当前文件尚未经过 pytest 验证。
+这些案例面向 Python 3.10。
 """
 
 # polyglot-covers: python.pickle.dumps python.pickle.loads python.pickle.binary-format
@@ -341,7 +341,7 @@ def test_pickle_exception_hierarchy_and_corruption_boundaries():
 # 时用 ``__getnewargs_ex__``。状态迁移优先选择 ``__getstate__/__setstate__``；直接实现最多
 # 六项的 reduce value 更强，但 callable、state、list/dict iterators 的位置很容易写错。
 #
-# 这些案例面向 Python 3.10；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10。
 
 # polyglot-covers: python.pickle.__getnewargs-ex__ python.pickle.keyword-only-new
 # polyglot-covers: python.pickle.__getnewargs__ python.pickle.positional-new
@@ -792,7 +792,7 @@ def test_sixth_reduce_item_overrides_static_setstate_for_one_recipe():
 # table 则在不修改目标 class 的情况下提供 reduction recipe。优先用单个 Pickler 的私有表；
 # ``copyreg`` 修改 process-global registry，也会影响 ``copy.copy``，测试必须恢复原状态。
 #
-# 这些案例面向 Python 3.10；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10。
 
 # polyglot-covers: python.pickle.Pickler.persistent-id python.pickle.external-object
 # polyglot-covers: python.pickle.Unpickler.persistent-load python.pickle.external-store
@@ -1170,7 +1170,7 @@ def test_copyreg_legacy_constructor_argument_is_validated_but_not_invoked():
 # ``buffers`` iterable 必须按相同顺序配对。unpickle 会调用 stream 指定的 global callable，
 # ``find_class`` allowlist 可缩小攻击面但不是通用 sandbox；根本规则仍是只加载可信数据。
 #
-# 这些案例面向 Python 3.10；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10。
 
 # polyglot-covers: python.pickle.protocol-five python.pickle.PickleBuffer
 # polyglot-covers: python.pickle.PickleBuffer.raw python.pickle.buffer-protocol

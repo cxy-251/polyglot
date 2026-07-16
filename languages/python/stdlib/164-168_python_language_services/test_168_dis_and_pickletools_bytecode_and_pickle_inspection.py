@@ -6,8 +6,7 @@ pickletools 对 pickle 数据做同类的静态反汇编，并能删除无用 me
 但输出不是跨 Python 版本的稳定文件格式，
 而且“能检查 pickle”绝不意味着“不可信 pickle 可以安全加载”。
 
-这些案例面向 Python 3.10 当前补丁系列；整个 Python 测试集尚未经过 pytest
-统一验证。
+这些案例面向 Python 3.10 当前补丁系列。
 """
 
 # polyglot-covers: python.stdlib.dis python.dis.get-instructions
@@ -145,7 +144,9 @@ def test_source_line_tables_match_instruction_line_markers():
     ]
 
     assert starts == marked
-    assert starts[0][1] == branch.__code__.co_firstlineno
+    assert starts[0][1] == branch.__code__.co_firstlineno + 1
+    # co_firstlineno 指向 def；3.10 的行号表从第一条可执行的函数体指令开始，
+    # 因而 findlinestarts 不必包含定义行本身。
 
     original_first = next(
         item.starts_line for item in dis.get_instructions(branch) if item.starts_line

@@ -4,7 +4,7 @@ header 按原始大小写与插入顺序保存，查找不区分大小写；``ms
 KeyError。普通字段赋值是 append，不是 dict 式覆盖；重复字段必须用 get_all。标准 policy 会限制
 Subject 等 unique header，更新它们应使用 replace_header 或先删除再添加。
 
-这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+这些案例面向 Python 3.10 当前补丁系列。
 """
 
 # polyglot-covers: python.email.message.EmailMessage
@@ -89,7 +89,7 @@ def test_default_policy_rejects_crlf_header_injection():
 # Unicode；bytes 必须显式给 maintype/subtype，默认 base64，get_content 返回原 bytes。filename 会
 # 隐式创建 attachment disposition。clear_content 只移除 payload 与 Content-*，clear 才清空全部。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.email.contentmanager.raw_data_manager
 # polyglot-covers: python.email.message.set_content
@@ -174,7 +174,7 @@ def test_binary_content_requires_type_and_carries_attachment_metadata():
 # multipart/related 并把图片默认标为 inline；add_attachment 最外层建立 multipart/mixed。get_body
 # 按 related/html/plain 偏好选候选，iter_parts 只看直接子项，walk 深度优先遍历整棵树。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.email.message.add_alternative
 # polyglot-covers: python.email.message.add_related
@@ -257,7 +257,7 @@ def test_body_selection_attachment_iteration_and_walk_have_different_scope():
 # non-multipart → related → alternative → mixed 的兼容方向转换。显式 boundary 便于可重复 fixture，
 # 生产代码通常留空，让 generator 在首次 flatten 时生成唯一值。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.email.message.make_related
 # polyglot-covers: python.email.message.make_alternative
@@ -325,7 +325,7 @@ def test_preamble_and_epilogue_round_trip_outside_multipart_boundaries():
 # clone；``left + right`` 采用 right 的非默认值，因此不满足交换律。default 内部用 LF，SMTP 使用
 # RFC 要求的 CRLF，SMTPUTF8 还允许 RFC 6532 UTF-8 header；parser 应始终显式指定 policy。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.email.policy.Policy
 # polyglot-covers: python.email.policy.EmailPolicy
@@ -421,7 +421,7 @@ def test_email_policy_composes_factories_parsing_hooks_and_folding_protocols():
 # 用于可读展示而非直接 SMTP 发送。as_bytes/bytes 产生 binary。multipart boundary 可在首次 flatten
 # 时补入并修改原对象，因此“只序列化”并非严格无副作用；需要稳定输出时应提前固定 boundary。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.email.message.as_string
 # polyglot-covers: python.email.message.__str__
@@ -488,7 +488,7 @@ def test_unixfrom_is_envelope_metadata_outside_the_header_mapping():
 # 最后查 None fallback。set_content 会先 clear_content，避免旧 payload/header 混入新表示；multipart
 # 禁止直接替换内容。注册表没有匹配项时抛 KeyError，而不是猜测序列化方式。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.email.contentmanager.ContentManager
 # polyglot-covers: python.email.contentmanager.add_get_handler
@@ -584,7 +584,7 @@ def test_missing_handlers_and_multipart_set_are_explicit_errors():
 # is_multipart=True，即使 maintype 不是 multipart；walk/iter_parts 仍会下降。EmailMessage.set_content
 # 补 MIME-Version，而 MIMEPart 用于子 part，不自动加该 header，避免每层重复。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.email.message.MIMEPart
 # polyglot-covers: python.email.mimepart-no-automatic-mime-version
@@ -644,7 +644,7 @@ def test_message_partial_and_rfc822_reject_incompatible_object_cte_options():
 # 不保证顺序和大小写。无 Content-Type 时 set_boundary 抛 HeaderParseError。default type 不是
 # header，只影响缺失时的解释。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.email.message.add_header
 # polyglot-covers: python.email.rfc2231-nonascii-filename

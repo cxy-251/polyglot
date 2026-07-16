@@ -4,7 +4,7 @@ shutil 在 open/os/pathlib 之上组合高层文件操作。不同 copy 函数�
 范围不同，copytree/rmtree 对 symlink 的策略也必须显式选择。本文件所有路径均位于
 pytest tmp_path；归档只解包测试自己刚创建的可信内容。
 
-内容基于 Python 3.10 shutil 文档；当前文件尚未经过 pytest 验证。
+内容基于 Python 3.10 shutil 文档。
 """
 
 # polyglot-covers: python.stdlib.shutil python.shutil.copyfileobj
@@ -422,7 +422,7 @@ def test_get_terminal_size_uses_environment_then_fallback(monkeypatch):
 # 即便是最高层函数也不保证 owner、ACL、resource fork 等平台 metadata 完整。目录树操作还要
 # 明确 symlink、已存在目标、忽略规则和失败清理策略，不能把默认值当作安全策略。
 #
-# 这些案例面向 Python 3.10；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10。
 
 # polyglot-covers: python.shutil.copyfileobj python.shutil.copyfileobj.current-position
 # polyglot-covers: python.shutil.copyfileobj.length python.shutil.copyfileobj.no-flush
@@ -828,7 +828,7 @@ def test_move_uses_copy_function_when_rename_cannot_cross_the_boundary(tmp_path,
 # 安全；不可信 archive 必须先检查 member path，防止 absolute/``..`` 越过 extract_dir。
 # 格式注册表是 process-global mutable state，扩展它时要用唯一名称并在 finally 中恢复。
 #
-# 这些案例面向 Python 3.10；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10。
 
 # polyglot-covers: python.shutil.disk-usage python.shutil.disk-usage.namedtuple
 # polyglot-covers: python.shutil.which python.shutil.which.path-order
@@ -1001,7 +1001,10 @@ def test_default_archive_registries_expose_names_and_descriptions():
     """注册表适合 capability discovery；压缩格式是否存在仍受可选 compression module 影响。"""
 
     archive_formats = dict(shutil.get_archive_formats())
-    unpack_formats = {name: (extensions, description) for name, extensions, description in shutil.get_unpack_formats()}
+    unpack_formats = {
+        name: (extensions, description)
+        for name, extensions, description in shutil.get_unpack_formats()
+    }
 
     assert "tar" in archive_formats
     assert archive_formats["tar"]

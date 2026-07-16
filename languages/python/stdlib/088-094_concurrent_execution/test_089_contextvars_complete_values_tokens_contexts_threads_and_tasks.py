@@ -4,7 +4,7 @@ ContextVar 先查当前 Context binding，再按 ``get(call_default)``、variabl
 LookupError 的顺序 fallback。``set`` 返回只属于该 variable/Context/调用的一次性 Token；
 按嵌套顺序 reset 可恢复旧 binding。Python 3.10 Token 还不是 context manager。
 
-这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+这些案例面向 Python 3.10 当前补丁系列。
 """
 
 # polyglot-covers: python.contextvars.ContextVar python.contextvars.ContextVar.name
@@ -114,7 +114,7 @@ def test_python_310_token_does_not_implement_context_manager_protocol():
 # binding，``copy`` 是 shallow copy。``run`` 临时把指定 Context 压入当前 thread stack；
 # 调用中的 set 留在该 Context，返回后恢复调用者 Context，同一 object 不能递归或并发进入。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.contextvars.Context python.contextvars.Context-empty
 # polyglot-covers: python.contextvars.Context-mapping
@@ -247,7 +247,7 @@ def test_same_context_cannot_be_entered_by_two_threads_at_once():
 # 显式把 ``copy_context().run`` 作为 target。asyncio 则在 Task 创建时自动复制 current
 # Context，使 sibling tasks 可继承共同起点又各自修改，不发生 request-local 状态串线。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.contextvars.thread-top-level-context
 # polyglot-covers: python.contextvars.new-thread-does-not-inherit-context

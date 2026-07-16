@@ -6,7 +6,7 @@ Python float 通常实现为 IEEE 754 binary64：它能精确表示许多二进�
 
 通用比较、二元运算分派和数值转换协议已在 002--004 展示；本文件聚焦内置数值
 类型自身以及实际判断工作流。内容基于 Python 3.10 Built-in Types、float()、
-complex() 和 math；当前文件尚未经过 pytest 验证。
+complex() 和 math。
 """
 
 # polyglot-covers: python.type.float python.type.complex

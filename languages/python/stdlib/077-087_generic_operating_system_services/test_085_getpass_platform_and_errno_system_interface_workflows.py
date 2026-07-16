@@ -4,7 +4,7 @@ getpass 优先使用 controlling terminal；无法控制 echo 时才警告并从
 测试故意拒绝 ``/dev/tty`` 并使用内存流，不触碰真实终端设置，也不保存真实密码。
 ``getuser`` 首先按固定环境变量顺序找非空值，最后才查询 Unix password database。
 
-这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+这些案例面向 Python 3.10 当前补丁系列。
 """
 
 # polyglot-covers: python.getpass.getpass python.getpass.prompt
@@ -129,7 +129,7 @@ def test_getuser_falls_back_to_password_database_when_environment_is_absent(
 # 内部一致性，不硬编码容器 kernel、hostname 或 CPU。``platform()`` 明确面向人类展示，
 # 不能作为稳定机器协议；自动判断应选择 system/machine 或 os-release 的结构化字段。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.platform.uname python.platform.uname-namedtuple
 # polyglot-covers: python.platform.system python.platform.node
@@ -212,7 +212,7 @@ def test_python_build_metadata_has_stable_shapes_but_platform_defined_values():
 # 当前解释器位数时 ``sys.maxsize`` 更可靠。OS-specific 函数在其他系统通常返回调用方
 # 提供的 fallback 或空字段，适合展示信息而非能力检测。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.platform.architecture python.platform.architecture-fallback
 # polyglot-covers: python.platform.architecture-file-command-caveat
@@ -296,7 +296,7 @@ def test_windows_edition_helpers_have_explicit_non_windows_fallback():
 # 三个基础字段，并返回 dict copy。它缓存首次成功解析；测试替换内部 candidate path 指向
 # ``tmp_path``，既执行真实 public parser，又不读取或修改宿主机 ``/etc/os-release``。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.platform.freedesktop_os_release
 # polyglot-covers: python.platform.os-release-candidate-order
@@ -390,7 +390,7 @@ def test_os_release_raises_when_no_candidate_is_readable(tmp_path, monkeypatch):
 # ``exc.errno`` 与符号常量，不解析可能本地化的错误文本。构造 OSError 时，CPython 会按
 # 常见 errno 自动选择 FileNotFoundError、PermissionError 等更具体的内建异常子类。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.errno.integer-symbols python.errno.platform-dependent-symbols
 # polyglot-covers: python.errno.errorcode python.errno.numeric-to-symbol-name

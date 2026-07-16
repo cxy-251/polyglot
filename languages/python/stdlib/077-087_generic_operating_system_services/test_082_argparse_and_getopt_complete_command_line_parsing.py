@@ -4,7 +4,7 @@
 ``type`` 在 ``choices`` 校验前转换输入。option 名中的连字符默认会转成属性名中的
 下划线。这里直接传入 token list，避免案例依赖 pytest 自身的 ``sys.argv``。
 
-这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+这些案例面向 Python 3.10 当前补丁系列。
 """
 
 # polyglot-covers: python.argparse.ArgumentParser python.argparse.add_argument
@@ -111,7 +111,7 @@ def test_negative_numbers_are_positionals_until_a_similar_option_is_declared():
 # 也会改变结果是 scalar 还是 list。默认值的转换规则尤其容易忽略：只有字符串
 # 默认值会经过 ``type``，已经是其他 Python 对象的默认值会原样保存。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.argparse.action-store python.argparse.action-store-const
 # polyglot-covers: python.argparse.action-store-true python.argparse.action-store-false
@@ -250,7 +250,7 @@ def test_only_string_defaults_are_passed_through_type_and_suppress_omits_dest():
 # ``parents`` 复制父解析器已存在的 action；``conflict_handler='resolve'`` 只替换
 # 真正冲突的 option string，旧 action 若仍有别名便继续可用。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.argparse.prog python.argparse.usage
 # polyglot-covers: python.argparse.description python.argparse.epilog
@@ -366,7 +366,7 @@ def test_resolve_removes_only_the_conflicting_option_string():
 # argument group 只重排帮助文本，互斥 group 才增加解析约束。``FileType`` 会在解析阶段
 # 打开资源，调用方必须明确关闭；复杂 CLI 通常只解析路径，再在业务阶段打开文件。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.argparse.add_subparsers python.argparse.subparser-required
 # polyglot-covers: python.argparse.subparser-dest python.argparse.subparser-aliases
@@ -510,7 +510,7 @@ def test_parser_defaults_can_supply_non_cli_dispatch_metadata():
 # ``parse_intermixed_args`` 允许可选参数穿插在 ``nargs='*'`` 位置参数中。参数文件默认一行
 # 对应一个 token；若需要 shell-like 引号或一行多参数，应覆盖转换 hook 并明确其语法。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.argparse.parse_known_args python.argparse.unknown-arguments
 # polyglot-covers: python.argparse.parse_intermixed_args
@@ -616,7 +616,7 @@ def test_argument_file_hook_can_define_quoted_multi_token_lines(tmp_path):
 # Python 3.10 的 ``exit_on_error=False`` 只把一部分 action 错误改为 ``ArgumentError``；
 # 未知参数仍会触发 ``SystemExit``。需要完全控制时应覆写 ``error``/``exit``。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.argparse.Action python.argparse.custom-action
 # polyglot-covers: python.argparse.Action.__call__ python.argparse.ArgumentError
@@ -742,7 +742,7 @@ def test_literal_percent_in_help_must_be_doubled_before_interpolation():
 # pair 和剩余 operand。short option 后的冒号、long option 后的等号是在声明“必须有值”，
 # 不是命令行拼写的一部分。遇到第一个非 option 后，传统扫描立即停止。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.getopt.getopt python.getopt.shortopts
 # polyglot-covers: python.getopt.short-option-cluster
@@ -824,7 +824,7 @@ def test_double_dash_ends_scanning_while_lone_dash_is_an_operand():
 # ``POSIXLY_CORRECT`` 会恢复遇到 operand 即停止的规则。long option 允许唯一前缀，
 # 因此扩充 option 集可能让过去的缩写突然产生歧义；稳定接口应鼓励完整拼写。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.getopt.gnu_getopt python.getopt.gnu-intermixed-scanning
 # polyglot-covers: python.getopt.gnu-leading-plus python.getopt.POSIXLY_CORRECT

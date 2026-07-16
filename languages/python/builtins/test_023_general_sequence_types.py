@@ -5,7 +5,7 @@
 
 订阅/切片协议、赋值目标与解包语法已在 005、017 展示；本文件聚焦内置序列类型
 自身。内容基于 Python 3.10 Sequence Types、Mutable Sequence Types、Lists、
-Tuples 和 Ranges；当前文件尚未经过 pytest 验证。
+Tuples 和 Ranges。
 """
 
 # polyglot-covers: python.type.list python.type.tuple python.type.range

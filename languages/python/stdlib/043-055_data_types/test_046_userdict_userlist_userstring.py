@@ -5,7 +5,7 @@
 或自动受保护的存储。直接修改它，以及少数直接委托给它的复合操作，
 仍可能绕开 hook。
 
-本文件锁定 CPython/Python 3.10 的返回类型与构造器约定，尚未经过 pytest 验证。
+本文件锁定 CPython/Python 3.10 的返回类型与构造器约定。
 """
 
 # polyglot-covers: python.collections.UserDict python.userdict.data

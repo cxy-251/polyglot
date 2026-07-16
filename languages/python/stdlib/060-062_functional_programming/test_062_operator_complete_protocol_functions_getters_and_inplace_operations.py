@@ -4,7 +4,7 @@ operator.add(x, y) 与 x + y 走同一数据模型协议，包括 NotImplemented
 非 bool 的 rich comparison 返回值。函数形态适合 map/reduce/sorted 等高阶 API；
 没有双下划线的名字更清晰，保留双下划线别名主要用于向后兼容。
 
-这些案例面向 Python 3.10；当前文件尚未经过 pytest 验证。
+这些案例面向 Python 3.10。
 """
 
 # polyglot-covers: python.operator.rich-comparison python.operator.comparison-non-bool
@@ -270,7 +270,7 @@ def test_operator_functions_compose_with_map_and_reduce():
 # 重新执行协议。length_hint 只是预分配建议，不是正确性边界。iadd 等函数只执行
 # in-place 运算步骤，不会替调用者完成“把返回值重新赋给变量”的第二步。
 #
-# 这些案例面向 Python 3.10；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10。
 
 # polyglot-covers: python.operator.getitem python.operator.setitem python.operator.delitem
 # polyglot-covers: python.operator.slice-operations python.operator.mapping-operations
@@ -281,7 +281,8 @@ def test_operator_functions_compose_with_map_and_reduce():
 # polyglot-covers: python.operator.itemgetter python.operator.itemgetter-multiple
 # polyglot-covers: python.operator.itemgetter-slice python.operator.itemgetter-workflow
 # polyglot-covers: python.operator.methodcaller python.operator.methodcaller-arguments
-# polyglot-covers: python.operator.methodcaller-positional-name python.operator.dynamic-method-lookup
+# polyglot-covers: python.operator.methodcaller-positional-name
+# polyglot-covers: python.operator.dynamic-method-lookup
 # polyglot-covers: python.operator.iadd python.operator.inplace-assignment-boundary
 # polyglot-covers: python.operator.iconcat python.operator.inplace-mutable
 # polyglot-covers: python.operator.inplace-functions python.operator.imatmul

@@ -5,7 +5,7 @@
 同一个具体实现。本文件也用 ``Fraction`` 和最小自定义类型展示混合算术的
 ``__op__`` / ``__rop__`` fallback 规则。
 
-这些案例面向 Python 3.10；当前文件尚未经过 pytest 验证。
+这些案例面向 Python 3.10。
 """
 
 # polyglot-covers: python.numbers.Number python.numbers.numeric-tower
@@ -16,7 +16,8 @@
 # polyglot-covers: python.numbers.extensible-tower python.numbers.abc-register
 # polyglot-covers: python.numbers.rational-invariants python.numbers.cross-type-hash
 # polyglot-covers: python.numbers.mixed-mode-arithmetic python.numbers.builtin-fallback
-# polyglot-covers: python.numeric-dispatch.NotImplemented python.numeric-dispatch.reflected-operation
+# polyglot-covers: python.numeric-dispatch.NotImplemented
+# polyglot-covers: python.numeric-dispatch.reflected-operation
 # polyglot-covers: python.numeric-dispatch.subclass-priority python.numeric-dispatch.type-error
 
 
@@ -292,7 +293,7 @@ def test_type_error_is_raised_only_after_both_arithmetic_sides_decline():
 # 容差比较，以及 IEEE-754 浮点的拆分、相邻值、ULP、余数和特殊值。重点区分
 # ``fmod``/``remainder``/``%`` 三套余数规则，并展示 signed zero 不能只靠 ``==`` 观察。
 #
-# 这些案例面向 Python 3.10；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10。
 
 # polyglot-covers: python.math.ceil python.math.floor python.math.trunc
 # polyglot-covers: python.protocol.__ceil__ python.protocol.__floor__ python.protocol.__trunc__
@@ -318,7 +319,8 @@ def test_ceil_floor_and_trunc_round_negative_values_in_three_directions():
     assert math.ceil(value) == -1
     assert math.floor(value) == -2
     assert math.trunc(value) == -1
-    assert all(type(result) is int for result in (math.ceil(value), math.floor(value), math.trunc(value)))
+    results = (math.ceil(value), math.floor(value), math.trunc(value))
+    assert all(type(result) is int for result in results)
 
 
 def test_rounding_functions_delegate_to_non_float_special_methods():
@@ -627,7 +629,7 @@ def test_ieee_remainder_preserves_zero_sign_and_rejects_undefined_inputs():
 # 小量用 ``expm1``/``log1p``，向量长度用 ``hypot``，正态分布尾部用 ``erfc``。
 # 非法实数域会尽早抛异常；确实需要复数结果时应明确切换到 ``cmath``。
 #
-# 这些案例面向 Python 3.10；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10。
 
 # polyglot-covers: python.math.exp python.math.expm1 python.math.e
 # polyglot-covers: python.math.log python.math.log1p python.math.log2 python.math.log10
@@ -883,7 +885,7 @@ def test_math_reports_domain_overflow_and_complex_inputs_instead_of_hiding_them(
 # 平方根和反函数必须选择 principal branch；落在 branch cut 上时，虚部或实部的
 # signed zero 用来区分从哪一侧逼近。本文件把这个不容易从表面调用看出的规则显式化。
 #
-# 这些案例面向 Python 3.10；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10。
 
 # polyglot-covers: python.cmath.complex-input python.cmath.always-complex
 # polyglot-covers: python.protocol.__complex__ python.cmath.float-fallback
@@ -1144,14 +1146,15 @@ def test_cmath_constants_match_math_and_provide_imaginary_special_values():
 # 从 float 构造会忠实保留 binary64 的真实值；从十进制字符串或 Decimal 构造才表达
 # 人看到的十进制值。``limit_denominator`` 用于明确地把近似值恢复为小分母比例。
 #
-# 这些案例面向 Python 3.10；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10。
 
 # polyglot-covers: python.fractions.Fraction python.fraction.normalization
 # polyglot-covers: python.fraction.integer-pair python.fraction.positive-denominator
 # polyglot-covers: python.fraction.string-construction python.fraction.python310-slash-whitespace
 # polyglot-covers: python.fraction.float-construction python.fraction.decimal-construction
 # polyglot-covers: python.fraction.from_float python.fraction.from_decimal
-# polyglot-covers: python.fraction.numerator python.fraction.denominator python.fraction.as_integer_ratio
+# polyglot-covers: python.fraction.numerator python.fraction.denominator
+# polyglot-covers: python.fraction.as_integer_ratio
 # polyglot-covers: python.fraction.immutable python.fraction.hashable python.fraction.Rational
 # polyglot-covers: python.fraction.exact-arithmetic python.fraction.mixed-arithmetic
 # polyglot-covers: python.fraction.limit_denominator python.fraction.rational-recovery

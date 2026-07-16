@@ -5,8 +5,7 @@ match 只求值一次 subject，再从上到下尝试 case，首个 pattern 与 
 任意值，dotted name 才是常量 value pattern；sequence、mapping 和 class
 pattern 还会按各自协议拆解结构。
 
-内容基于 Python 3.10 Match statement、Patterns、PEP 634 与 PEP 636。当前项目
-处于只编写、暂不执行的阶段，本文件尚未经过 pytest 验证。
+内容基于 Python 3.10 Match statement、Patterns、PEP 634 与 PEP 636。
 """
 
 # polyglot-covers: python.statement.match python.pattern.literal

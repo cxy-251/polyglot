@@ -4,7 +4,7 @@ event loop 创建 Transport，再依次触发 connection_made、零到多次 dat
 eof_received，最后恰好一次 connection_lost。Protocol 保存 transport；socket 所有权已转移，
 应调用 transport.close 而不是直接关闭原 socket。write 只入队，不等价于对端已经处理。
 
-这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+这些案例面向 Python 3.10 当前补丁系列。
 """
 
 # polyglot-covers: python.asyncio.loop.create_connection-sock
@@ -124,7 +124,7 @@ def test_transport_protocol_pair_exchanges_data_and_observes_eof():
 # buffer，event loop 填充后用 buffer_updated(nbytes) 告知有效长度，从而减少大数据接收时的复制。
 # sizehint 只是建议，返回零长度 buffer 才是错误；只应读取本次 nbytes 覆盖的前缀。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.asyncio.BufferedProtocol
 # polyglot-covers: python.asyncio.buffered-protocol.get_buffer
@@ -191,7 +191,7 @@ def test_event_loop_writes_received_bytes_into_protocol_owned_buffer():
 # 不需要自己重组字节流。error_received 只在底层能观察到 OSError 时触发，无法投递的数据也可能
 # 被静默丢弃，因此它不是可靠送达确认。传入 sock 后，关闭责任转移给 transport。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.asyncio.loop.create_datagram_endpoint
 # polyglot-covers: python.asyncio.create-datagram-endpoint-existing-sock
@@ -297,7 +297,7 @@ def test_connected_datagram_transport_preserves_each_message_boundary(tmp_path):
 # SelectorEventLoop 会把 pipe 设为 non-blocking。pause_reading 只暂停向 protocol 投递，不阻止
 # 内核 pipe 接收；resume_reading 后继续。关闭 write end 后，reader 最终观察到 EOF。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.asyncio.loop.connect_read_pipe
 # polyglot-covers: python.asyncio.loop.connect_write_pipe
@@ -375,7 +375,7 @@ def test_read_and_write_pipe_transports_support_pause_resume_and_eof():
 # protocol。stdout/stderr 由 pipe_data_received(fd, data) 分流，process_exited 与 pipe 关闭
 # callback 的先后不应被假定。asyncio 子进程流是 bytes，文本解码由调用者负责。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.asyncio.loop.subprocess_exec
 # polyglot-covers: python.asyncio.loop.subprocess_shell
@@ -483,7 +483,7 @@ def test_low_level_shell_also_returns_a_subprocess_transport_protocol_pair():
 # 返回内部列表的副本；close 只停止接收新连接，wait_closed 才等待关闭完成。Server 也支持
 # async context manager，退出时保证监听端已经关闭。案例只使用 pytest 临时 Unix socket。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.asyncio.loop.create_unix_server
 # polyglot-covers: python.asyncio.loop.create_unix_connection
@@ -599,7 +599,7 @@ def test_cancelling_serve_forever_closes_the_server(tmp_path):
 # 成功后 accepted socket 的所有权转移给 transport；返回值仍是 (transport, protocol)。这里用
 # AF_UNIX 监听地址，避免端口、DNS 和外部网络依赖。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.asyncio.loop.connect_accepted_socket
 # polyglot-covers: python.asyncio.connect-accepted-socket-preaccepted-input
@@ -672,7 +672,7 @@ def test_preaccepted_unix_socket_can_be_handed_to_the_event_loop(tmp_path):
 # os.sendfile，默认允许 fallback；返回传输字节数并更新 file position。SSL transport 通常只能
 # 走 fallback，因为加密层不能直接零拷贝发送明文文件。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.asyncio.loop.sendfile
 # polyglot-covers: python.asyncio.transport-sendfile-regular-binary-file
@@ -736,7 +736,7 @@ def test_sendfile_uses_transport_and_updates_source_position(tmp_path):
 # protocol.pause_writing 被调用；降到 low 或更低时 resume_writing。协议应据此暂停生产数据，不能
 # 只看一次 write 的返回值。abort 立即丢弃尚未发送的 buffer，而 close 会先异步 flush。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.asyncio.write-transport.get_write_buffer_size
 # polyglot-covers: python.asyncio.write-transport.get_write_buffer_limits
@@ -849,7 +849,7 @@ def test_abort_marks_transport_closing_without_flushing_pending_bytes():
 # coder 会缓存协议侧和 wire-side data。server/client 两端要协调升级，本例先让 server upgrade task
 # 进入等待，再启动 client，避免 ClientHello 被旧 plain protocol 当 application data 消费。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.asyncio.loop.start_tls
 # polyglot-covers: python.asyncio.start-tls-existing-transport-protocol

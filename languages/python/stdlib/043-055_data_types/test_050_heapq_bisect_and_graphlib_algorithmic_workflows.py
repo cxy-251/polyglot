@@ -4,7 +4,7 @@
 不大于两个子节点，因此只能保证 ``heap[0]`` 是最小值，不能把内部 list 当成完整
 排序结果。组合操作、惰性归并和稳定优先队列还各有不同的返回值与状态语义。
 
-当前文件尚未经过 pytest 验证。
+
 """
 
 # polyglot-covers: python.heapq.heap-invariant python.heapq.zero-based-children
@@ -446,7 +446,7 @@ def test_selection_size_boundaries_return_new_lists_without_padding(selector):
 #
 # Python 3.10 新增的 ``key`` 还有一处重要非对称：``bisect_*`` 只对数组元素调用
 # key，搜索值 ``x`` 应直接传比较键；``insort_*`` 则会用 ``key(x)`` 搜索，最终仍
-# 把完整的 x 对象插入列表。当前文件尚未经过 pytest 验证。
+# 把完整的 x 对象插入列表。
 
 # polyglot-covers: python.bisect.bisect-left python.bisect.bisect-right
 # polyglot-covers: python.bisect.bisect-alias python.bisect.partition-invariant
@@ -829,7 +829,7 @@ def test_insort_search_is_logarithmic_but_list_insertion_still_moves_a_suffix():
 # successor。一次性顺序使用 ``static_order``；并行/分批工作流则显式经历
 # ``prepare -> get_ready -> done`` 状态机。``CycleError`` 后仍可处理未被环阻塞的部分。
 #
-# 这些案例面向 Python 3.10；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10。
 
 # polyglot-covers: python.graphlib.TopologicalSorter python.graphlib.predecessor-graph
 # polyglot-covers: python.graphlib.add python.graphlib.add-union python.graphlib.implicit-nodes

@@ -3,8 +3,7 @@
 这些小模块都位于多媒体服务，但职责彼此独立：colorsys 变换数值空间，
 imghdr/sndhdr 只检查文件头，ossaudiodev 则暴露平台驱动接口。
 
-这些案例面向 Python 3.10 当前补丁系列；整个 Python 测试集尚未经过
-pytest 统一验证。
+这些案例面向 Python 3.10 当前补丁系列。
 """
 
 # polyglot-covers: python.stdlib.colorsys python.colorsys.rgb-yiq-roundtrip

@@ -4,7 +4,7 @@ os.path 以 str/bytes 做平台路径操作，许多函数只做词法变换；l
 才枚举真实目录。本文件所有磁盘行为均限制在 pytest tmp_path，并显式排序枚举结果。
 
 pathlib 的对象式接口已在 030 展示；本文件聚焦 os.PathLike、bytes path、DirEntry
-和可裁剪目录遍历等低层接口。当前文件尚未经过 pytest 验证。
+和可裁剪目录遍历等低层接口。
 """
 
 # polyglot-covers: python.stdlib.os python.stdlib.os.path python.os.PathLike
@@ -349,24 +349,30 @@ def test_makedirs_and_removedirs_create_and_prune_multiple_levels(tmp_path):
 # 只做字符串计算，不展开 shell 变量、不访问磁盘，也不能用 normpath 代替 symlink-aware
 # 安全校验。samefile/sameopenfile/samestat 才按 device/inode 判断真实文件 identity。
 #
-# 这些案例面向 Python 3.10；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10。
 
 # polyglot-covers: python.os.path python.posixpath python.ntpath
 # polyglot-covers: python.os.pathlike-input python.os.path-str-bytes-consistency
 # polyglot-covers: python.os.path.abspath python.os.path.cwd-dependency
 # polyglot-covers: python.os.path.basename python.os.path.dirname python.os.path.split
-# polyglot-covers: python.os.path.commonpath python.os.path.commonprefix python.os.path.security-prefix
+# polyglot-covers: python.os.path.commonpath python.os.path.commonprefix
+# polyglot-covers: python.os.path.security-prefix
 # polyglot-covers: python.os.path.exists python.os.path.open-file-descriptor
 # polyglot-covers: python.os.path.lexists python.os.path.broken-symlink
-# polyglot-covers: python.os.path.expanduser python.os.path.expandvars python.os.path.explicit-expansion
-# polyglot-covers: python.os.path.getsize python.os.path.getatime python.os.path.getmtime python.os.path.getctime
-# polyglot-covers: python.os.path.isabs python.os.path.isfile python.os.path.isdir python.os.path.islink
+# polyglot-covers: python.os.path.expanduser python.os.path.expandvars
+# polyglot-covers: python.os.path.explicit-expansion
+# polyglot-covers: python.os.path.getsize python.os.path.getatime
+# polyglot-covers: python.os.path.getmtime python.os.path.getctime
+# polyglot-covers: python.os.path.isabs python.os.path.isfile
+# polyglot-covers: python.os.path.isdir python.os.path.islink
 # polyglot-covers: python.os.path.ismount python.os.path.join
-# polyglot-covers: python.os.path.normcase python.os.path.normpath python.os.path.symlink-normalization-trap
+# polyglot-covers: python.os.path.normcase python.os.path.normpath
+# polyglot-covers: python.os.path.symlink-normalization-trap
 # polyglot-covers: python.os.path.realpath python.os.path.python310-realpath-strict
 # polyglot-covers: python.os.path.relpath python.os.path.lexical-relpath
 # polyglot-covers: python.os.path.samefile python.os.path.sameopenfile python.os.path.samestat
-# polyglot-covers: python.os.path.splitdrive python.os.path.splitext python.os.path.leading-dot-extension
+# polyglot-covers: python.os.path.splitdrive python.os.path.splitext
+# polyglot-covers: python.os.path.leading-dot-extension
 # polyglot-covers: python.os.path.supports_unicode_filenames
 
 

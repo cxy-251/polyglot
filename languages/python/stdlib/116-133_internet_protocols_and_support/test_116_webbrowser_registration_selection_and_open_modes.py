@@ -4,7 +4,7 @@
 constructor；仅传 constructor 时由 ``get()`` 按需创建。模块级 open/open_new/open_new_tab 最终
 把 new=0/1/2 交给 controller；返回 True 只表示启动请求被接受，不保证页面真的已呈现。
 
-这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+这些案例面向 Python 3.10 当前补丁系列。
 """
 
 # polyglot-covers: python.webbrowser.Error

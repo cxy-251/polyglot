@@ -5,7 +5,7 @@ stat、读写、枚举、重命名等系统调用。本文件所有有副作用�
 tmp_path 内。
 
 内容基于 Python 3.10 pathlib 和 os.PathLike 文档。built-in open 的 text/binary
-基础已在 029 展示；当前文件尚未经过 pytest 验证。
+基础已在 029 展示。
 """
 
 # polyglot-covers: python.stdlib.pathlib python.pathlib.PurePath python.pathlib.Path
@@ -416,9 +416,10 @@ def test_symlink_readlink_resolve_and_broken_link_have_distinct_observations(tmp
 # 它们会折叠冗余分隔符和单点，却刻意保留 ``..``，因为符号链接会让天真归一化改变含义。
 # 路径不可变、可哈希，并实现 os.PathLike；大小写与 drive/root 规则由 flavour 决定。
 #
-# 这些案例面向 Python 3.10；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10。
 
-# polyglot-covers: python.pathlib.PurePath python.pathlib.PurePosixPath python.pathlib.PureWindowsPath
+# polyglot-covers: python.pathlib.PurePath python.pathlib.PurePosixPath
+# polyglot-covers: python.pathlib.PureWindowsPath
 # polyglot-covers: python.pathlib.path-segments python.pathlib.os-PathLike
 # polyglot-covers: python.pathlib.absolute-segment-reset python.pathlib.windows-rooted-relative
 # polyglot-covers: python.pathlib.lexical-normalization python.pathlib.preserve-dotdot
@@ -732,13 +733,14 @@ def test_path_component_replacements_validate_names_and_suffix_shape():
 # 目录枚举不依赖系统返回顺序，权限只检查 chmod 后的 mode bits，不访问真实用户目录。
 # write_text/write_bytes 会覆盖同名文件，mkdir/touch/unlink 则通过选项明确幂等边界。
 #
-# 这些案例面向 Python 3.10；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10。
 
 # polyglot-covers: python.pathlib.Path python.pathlib.concrete-platform-flavour
 # polyglot-covers: python.pathlib.Path.cwd python.pathlib.Path.home python.pathlib.expanduser
 # polyglot-covers: python.pathlib.mkdir python.pathlib.mkdir-parents python.pathlib.mkdir-exist-ok
 # polyglot-covers: python.pathlib.open python.pathlib.open-modes
-# polyglot-covers: python.pathlib.write_text python.pathlib.read_text python.pathlib.python310-newline
+# polyglot-covers: python.pathlib.write_text python.pathlib.read_text
+# polyglot-covers: python.pathlib.python310-newline
 # polyglot-covers: python.pathlib.write_bytes python.pathlib.read_bytes python.pathlib.overwrite
 # polyglot-covers: python.pathlib.touch python.pathlib.touch-exist-ok
 # polyglot-covers: python.pathlib.exists python.pathlib.is_file python.pathlib.is_dir
@@ -1057,7 +1059,7 @@ def test_resolve_strict_controls_missing_remainder_handling(tmp_path):
 # symlink 的 ``exists`` 跟随 target，而 ``is_symlink``/lstat 检查 link 本身；hard link
 # 则是同一 inode 的另一个目录项。所有链接和遍历案例都局限在 pytest tmp_path。
 #
-# 这些案例面向 Python 3.10；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10。
 
 # polyglot-covers: python.pathlib.glob python.pathlib.glob-relative-pattern
 # polyglot-covers: python.pathlib.glob-hidden python.pathlib.glob-order

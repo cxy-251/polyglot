@@ -3,8 +3,7 @@
 前三个模块共享参数、帧和位置接口，但各容器能力不同。
 chunk 展示这些容器背后的 IFF 分块边界、填充和游标规则。
 
-这些案例面向 Python 3.10 当前补丁系列；整个 Python 测试集尚未经过
-pytest 统一验证。
+这些案例面向 Python 3.10 当前补丁系列。
 """
 
 # polyglot-covers: python.stdlib.wave python.wave.open-file-and-file-object

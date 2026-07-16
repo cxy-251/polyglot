@@ -7,7 +7,7 @@ import 同时完成“查找/加载 module”和“在当前作用域绑定名�
 
 动态案例只在 pytest ``tmp_path`` 创建独特模块，并显式清理 ``sys.modules``。
 内容基于 Python 3.10 Import statement / Import system、Modules data model、
-importlib、__import__ 与 runpy；当前文件尚未经过 pytest 验证。
+importlib、__import__ 与 runpy。
 """
 
 # polyglot-covers: python.statement.import python.statement.from-import

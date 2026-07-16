@@ -6,8 +6,7 @@
 继续分派，这正是菱形继承能够每层只执行一次的基础。
 
 内容基于 Python 3.10 Class definitions、Basic customization、内置
-type/isinstance/issubclass/super 和 MRO 指南。当前项目处于只编写、暂不执行的
-阶段，本文件尚未经过 pytest 验证。
+type/isinstance/issubclass/super 和 MRO 指南。
 """
 
 # polyglot-covers: python.statement.class python.class.namespace

@@ -4,7 +4,7 @@
 外部约定的 filter chain。高 preset 同时增加 CPU 与内存，preset 9 甚至可能占用约 800 MiB；
 案例只使用低/默认配置，不把“最高”误当普遍最佳实践。
 
-这些案例面向 Python 3.10；当前文件尚未经过 pytest 验证。
+这些案例面向 Python 3.10。
 """
 
 # polyglot-covers: python.lzma.compress python.lzma.decompress python.lzma.LZMAError
@@ -202,7 +202,7 @@ def test_one_shot_decompress_ignores_garbage_after_a_valid_stream():
 # 读取时透明连接多个 streams。已有 fileobj 的 ownership 留给 caller，``w`` 也不会 truncate；
 # 单个 LZMAFile 实例不是 thread-safe，并发使用要由应用加锁。
 #
-# 这些案例面向 Python 3.10；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10。
 
 # polyglot-covers: python.lzma.open python.lzma.LZMAFile python.lzma.path-like
 # polyglot-covers: python.lzma.binary-mode python.lzma.text-mode python.lzma.encoding
@@ -341,7 +341,7 @@ def test_detach_and_truncate_are_not_supported(tmp_path):
 # buffered output，一次只处理一个 stream。``check`` 可能在读到足够 header 前为 UNKNOWN，
 # transport 结束时还必须检查 ``eof``，否则 truncated stream 可能被当成成功。
 #
-# 这些案例面向 Python 3.10；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10。
 
 # polyglot-covers: python.lzma.LZMACompressor python.lzma.incremental-compress
 # polyglot-covers: python.lzma.Compressor.compress python.lzma.Compressor.flush

@@ -7,8 +7,7 @@ data descriptor、实例字典、non-data descriptor、普通类属性的顺序�
 也都建立在这些规则之上。
 
 内容基于 Python 3.10 Attribute references、Customizing attribute access、
-Implementing Descriptors 和 Descriptor Guide。当前项目处于只编写、暂不执行
-的阶段，本文件尚未经过 pytest 验证。
+Implementing Descriptors 和 Descriptor Guide。
 """
 
 # polyglot-covers: python.expression.attribute-reference

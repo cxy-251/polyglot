@@ -4,7 +4,7 @@ itertools 返回单次消费的 iterator；无限工具必须由 islice 等边�
 首轮输入，repeat 重复的是同一对象引用而不是副本。accumulate 保留每一步状态，
 chain 则按顺序惰性进入各输入，适合构造不产生中间列表的 iterator pipeline。
 
-这些案例面向 Python 3.10；当前文件尚未经过 pytest 验证。
+这些案例面向 Python 3.10。
 """
 
 # polyglot-covers: python.itertools.iterator-algebra python.itertools.lazy-consumption
@@ -257,7 +257,7 @@ def test_compress_stops_when_either_input_is_exhausted():
 # takewhile 会吃掉首个失败项，groupby 的组 iterator 共享同一输入，tee 用缓冲换取
 # 独立消费进度；忽略这些状态语义，常会得到数据无声丢失或内存意外增长。
 #
-# 这些案例面向 Python 3.10；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10。
 
 # polyglot-covers: python.itertools.dropwhile python.itertools.drop-prefix-only
 # polyglot-covers: python.itertools.takewhile python.itertools.takewhile-consumes-failure
@@ -515,7 +515,7 @@ def test_zip_longest_with_an_infinite_input_must_be_bounded_from_outside():
 # 它们按“位置”而非值判断元素是否重复。官方 recipes 展示 iterator algebra 的价值：
 # 用少量经过优化的构件组合出 powerset、滑动窗口、分块和保留边界项的前缀拆分。
 #
-# 这些案例面向 Python 3.10；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10。
 
 # polyglot-covers: python.itertools.product python.itertools.cartesian-product
 # polyglot-covers: python.itertools.product-repeat python.itertools.product-eager-pools
@@ -523,7 +523,8 @@ def test_zip_longest_with_an_infinite_input_must_be_bounded_from_outside():
 # polyglot-covers: python.itertools.combinations python.itertools.combination-order
 # polyglot-covers: python.itertools.combinations_with_replacement
 # polyglot-covers: python.itertools.position-identity python.itertools.zero-length-selection
-# polyglot-covers: python.itertools.invalid-selection-length python.itertools.combinatoric-cardinality
+# polyglot-covers: python.itertools.invalid-selection-length
+# polyglot-covers: python.itertools.combinatoric-cardinality
 # polyglot-covers: python.itertools.recipe-powerset python.itertools.recipe-sliding-window
 # polyglot-covers: python.itertools.recipe-grouper python.itertools.shared-iterator-chunking
 # polyglot-covers: python.itertools.recipe-before-and-after python.itertools.preserve-first-failure
@@ -739,7 +740,8 @@ def test_combinatoric_output_counts_match_closed_form_formulas():
     assert len(list(permutations(range(size), chosen))) == perm(size, chosen)
     assert len(list(permutations(range(size)))) == factorial(size)
     assert len(list(combinations(range(size), chosen))) == comb(size, chosen)
-    assert len(list(combinations_with_replacement(range(size), chosen))) == comb(size + chosen - 1, chosen)
+    replacement_items = combinations_with_replacement(range(size), chosen)
+    assert len(list(replacement_items)) == comb(size + chosen - 1, chosen)
 
 
 def test_product_builds_a_searchable_configuration_matrix():

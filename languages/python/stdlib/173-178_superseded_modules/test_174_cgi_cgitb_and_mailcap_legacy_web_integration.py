@@ -5,8 +5,7 @@ shell 命令。3.10 仍保留这些接口以兼容旧部署；案例覆盖解析
 但不会执行 mailcap 命令。现代服务应使用 Web 框架、email/urllib.parse 和
 显式进程参数。
 
-这些案例面向 Python 3.10 当前补丁系列；整个 Python 测试集尚未经过 pytest
-统一验证。
+这些案例面向 Python 3.10 当前补丁系列。
 """
 
 # polyglot-covers: python.stdlib.cgi python.cgi.field-storage
@@ -255,8 +254,13 @@ def sample_mailcap_text():
     )
 
 
+def read_sample_mailcap():
+    with pytest.warns(DeprecationWarning, match="readmailcapfile"):
+        return mailcap.readmailcapfile(sample_mailcap_text())
+
+
 def test_readmailcapfile_builds_a_list_of_entries_per_mime_type():
-    caps = mailcap.readmailcapfile(sample_mailcap_text())
+    caps = read_sample_mailcap()
 
     assert set(caps) == {"text/plain", "text/*", "application/x-demo"}
     assert caps["text/plain"] == [
@@ -285,7 +289,7 @@ def test_getcaps_merges_files_in_listmailcapfiles_order(tmp_path, monkeypatch):
 
 
 def test_findmatch_prefers_exact_type_then_wildcard_and_substitutes_fields():
-    caps = mailcap.readmailcapfile(sample_mailcap_text())
+    caps = read_sample_mailcap()
 
     exact_command, exact_entry = mailcap.findmatch(
         caps,
@@ -309,12 +313,12 @@ def test_findmatch_prefers_exact_type_then_wildcard_and_substitutes_fields():
 
 
 def test_findmatch_returns_none_pair_when_no_entry_matches():
-    caps = mailcap.readmailcapfile(sample_mailcap_text())
+    caps = read_sample_mailcap()
     assert mailcap.findmatch(caps, "image/png") == (None, None)
 
 
 def test_mailcap_commands_are_shell_text_and_must_not_be_executed_blindly():
-    caps = mailcap.readmailcapfile(sample_mailcap_text())
+    caps = read_sample_mailcap()
     with pytest.warns(mailcap.UnsafeMailcapInput, match="Refusing"):
         result = mailcap.findmatch(
             caps,

@@ -5,8 +5,7 @@
 副作用差异比记住几个便利方法更重要。
 
 Counter 的普通变更 API 可保留零/负 count，multiset 数学运算只输出正 count。本文
-锁定 Python 3.10 的 ``total()`` 和 rich comparison 语义。当前文件尚未经过 pytest
-验证。
+锁定 Python 3.10 的 ``total()`` 和 rich comparison 语义。
 """
 
 # polyglot-covers: python.stdlib.collections python.collections.Counter
@@ -429,7 +428,7 @@ def test_defaultdict_copy_merge_repr_and_plain_dict_conversion():
 # 多步业务协议，不能据此假设事务原子性。
 #
 # 现代 ``dict`` 已保证 insertion order。``OrderedDict`` 的主要学习价值是主动移动 key、
-# 两端 pop 和同类对象的 order-sensitive equality。当前文件尚未经过 pytest 验证。
+# 两端 pop 和同类对象的 order-sensitive equality。
 
 # polyglot-covers: python.collections.deque python.deque.construction
 # polyglot-covers: python.deque.append-pop python.deque.extend
@@ -820,8 +819,7 @@ def test_ordereddict_supports_a_small_deterministic_lru_cache():
 # 每个实例增加 ``__dict__``。
 #
 # 动态生成类的 pickle 依赖 ``module + typename`` 能在模块 globals 中重新找到同一类。
-# 该边界在子进程验证，避免依赖 pytest 的测试模块导入名。当前文件尚未经过 pytest
-# 验证。
+# 该边界在子进程验证，避免依赖 pytest 的测试模块导入名。
 
 # polyglot-covers: python.collections.ChainMap python.chainmap.maps
 # polyglot-covers: python.chainmap.lookup-precedence python.chainmap.first-map-writes

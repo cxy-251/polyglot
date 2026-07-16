@@ -6,8 +6,8 @@
 创建并初始化类对象，metaclass ``__call__`` 又包围日后的实例构造。
 
 内容基于 Python 3.10 Function/Class definitions、Customizing class creation、
-内置 type 和 functools.wraps。当前项目处于只编写、暂不执行的阶段，本文件
-尚未经过 pytest 验证。
+内置 type 和 functools.wraps。
+
 """
 
 # polyglot-covers: python.syntax.function-decorator python.syntax.class-decorator

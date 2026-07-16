@@ -5,8 +5,7 @@ wheel 引导 pip，``venv`` 创建可重建的隔离前缀，``zipapp`` 把纯 P
 应用封装为单文件归档。所有环境和归档均位于 ``tmp_path``，
 不联网、不升级 PyPI 依赖。
 
-这些案例面向 Python 3.10 当前补丁系列；整个 Python 测试集尚未经过 pytest
-统一验证。
+这些案例面向 Python 3.10 当前补丁系列。
 """
 
 # polyglot-covers: python.stdlib.ensurepip python.ensurepip.version

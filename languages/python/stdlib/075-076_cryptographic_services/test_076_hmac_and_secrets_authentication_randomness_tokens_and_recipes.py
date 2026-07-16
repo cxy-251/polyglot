@@ -4,7 +4,7 @@ HMAC 用 secret key 和 hash 构造 message authentication code，既验证完�
 同一 key；普通 hash 只能检测偶然变化，不能证明发送方。外部 tag 应使用
 ``compare_digest``，避免 ``==`` 按第一个不同位置提前返回所带来的 timing signal。
 
-这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+这些案例面向 Python 3.10 当前补丁系列。
 """
 
 # polyglot-covers: python.hmac.new python.hmac.required-digestmod
@@ -139,7 +139,7 @@ def test_compare_digest_supports_matching_ascii_or_bytes_like_types():
 # 随机源；``random`` 面向模拟，不能替代它。随机测试只验证不变量，
 # 不假设两次输出必然不同。token_* 参数表示 entropy bytes；默认长度可改变。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.secrets.SystemRandom python.secrets.os-randomness
 # polyglot-covers: python.secrets.choice python.secrets.empty-choice

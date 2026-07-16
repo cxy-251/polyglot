@@ -5,8 +5,7 @@
 ``codeop`` 提供这个编译状态机，``code`` 在它上面组合命名空间、异常展示、
 提示符和输入循环。本套使用内存输入输出，不启动真实终端。
 
-这些案例面向 Python 3.10 当前补丁系列；整个 Python 测试集尚未经过 pytest
-统一验证。
+这些案例面向 Python 3.10 当前补丁系列。
 """
 
 # polyglot-covers: python.stdlib.codeop python.codeop.compile-command

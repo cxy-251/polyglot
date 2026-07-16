@@ -4,7 +4,7 @@ run 是能满足大多数同步调用时应优先使用的入口：它启动子�
 退出码及可选捕获内容汇总成 CompletedProcess。默认不会捕获输出；PIPE、STDOUT 与
 DEVNULL 分别表示新管道、合并到 stdout，以及丢弃到操作系统空设备。
 
-这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+这些案例面向 Python 3.10 当前补丁系列。
 """
 
 # polyglot-covers: python.subprocess.run
@@ -97,7 +97,7 @@ def test_completed_process_check_returncode_raises_for_nonzero_status():
 # 因此不需要 shell quoting。stdin/stdout/stderr 默认为二进制；text、encoding 或 errors
 # 会在管道外包 TextIOWrapper。env 是子进程的整份环境映射，不是对父环境的增量补丁。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.subprocess.args-sequence
 # polyglot-covers: python.subprocess.shell-false-literal-arguments
@@ -210,7 +210,7 @@ def test_env_replaces_inheritance_and_cwd_accepts_path_like(tmp_path, monkeypatc
 # command、returncode 及已捕获的标准流。程序根本无法启动时则传播 OSError，而不是伪造
 # 一个退出码。capture_output/input 是 run 的便利参数，不能再同时手工指定对应 PIPE。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.subprocess.SubprocessError
 # polyglot-covers: python.subprocess.CalledProcessError
@@ -256,7 +256,9 @@ def test_call_check_call_and_check_output_express_distinct_policies():
     assert subprocess.check_call(_checked_python_command("pass")) == 0
 
     output = subprocess.check_output(
-        _checked_python_command("import sys; sys.stdout.buffer.write(sys.stdin.buffer.read().upper())"),
+        _checked_python_command(
+            "import sys; sys.stdout.buffer.write(sys.stdin.buffer.read().upper())"
+        ),
         input=b"hello",
     )
     assert output == b"HELLO"
@@ -288,7 +290,7 @@ def test_run_rejects_conflicting_convenience_and_stream_arguments():
 # 子进程，规范清理流程是 kill 后再次 communicate。第二次 communicate 不会丢失第一次已读
 # 输出。wait 超时也可安全重试。案例用 Event 或未关闭的 stdin 阻塞，不使用 sleep。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.subprocess.TimeoutExpired
 # polyglot-covers: python.subprocess.TimeoutExpired.cmd
@@ -376,7 +378,7 @@ def test_communicate_timeout_requires_kill_then_preserves_partial_output():
 # stdin、排空 stdout/stderr 并 wait，可避免多个 PIPE 互相填满造成死锁。Popen 作为 context
 # manager 退出时关闭标准流并等待子进程，适合把资源生命周期限制在一个代码块内。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.subprocess.Popen
 # polyglot-covers: python.subprocess.Popen.args
@@ -456,7 +458,7 @@ def test_popen_context_manager_closes_streams_and_waits_on_exit():
 # 否则 EOF/SIGPIPE 传播可能被延后。PIPE 有限，先 wait 再读大量 stdout/stderr 可能死锁；
 # communicate 会并行排空各流，但会把全部内容缓存在内存，只适合有界输出。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.subprocess.shell-free-pipeline
 # polyglot-covers: python.subprocess.pipeline-close-parent-copy
@@ -544,7 +546,7 @@ def test_devnull_can_supply_immediate_eof_to_child_stdin():
 # 终止时 returncode 为 -N，不是 shell 的 128+N。start_new_session=True 在 exec 前调用
 # setsid，常用于服务进程替代线程环境中不安全的 preexec_fn(os.setsid)。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.subprocess.Popen.send_signal
 # polyglot-covers: python.subprocess.Popen.terminate
@@ -576,6 +578,7 @@ def _blocking_child(*, start_new_session=False):
     if not readable:
         process.kill()
         process.wait()
+        process.stdout.close()
         raise AssertionError("child did not report readiness")
     line = process.stdout.readline()
     try:
@@ -586,6 +589,7 @@ def _blocking_child(*, start_new_session=False):
         if process.poll() is None:
             process.kill()
         process.wait()
+        process.stdout.close()
         raise AssertionError(f"invalid child readiness record: {line!r}") from None
     return process, identity
 
@@ -605,6 +609,7 @@ def test_start_new_session_makes_child_its_session_and_process_group_leader():
         if process.poll() is None:
             process.kill()
             process.wait()
+        process.stdout.close()
 
 
 @_section_260_pytestmark
@@ -617,6 +622,7 @@ def test_send_signal_and_kill_report_the_signal_as_negative_returncode():
         if terminated.poll() is None:
             terminated.kill()
             terminated.wait()
+        terminated.stdout.close()
 
     killed, _ = _blocking_child()
     try:
@@ -626,6 +632,7 @@ def test_send_signal_and_kill_report_the_signal_as_negative_returncode():
         if killed.poll() is None:
             killed.kill()
             killed.wait()
+        killed.stdout.close()
 
 
 @_section_260_pytestmark
@@ -643,7 +650,7 @@ def test_send_signal_is_a_noop_after_exit_has_been_observed():
 # 白名单并强制 close_fds=True，避免把 secret/socket 意外泄漏给 child。umask 在 child
 # exec 前生效而不改 parent。Python 3.10 的 pipesize 可在 Linux 调整 PIPE 容量。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.subprocess.Popen.close_fds
 # polyglot-covers: python.subprocess.Popen.pass_fds
@@ -656,7 +663,10 @@ def test_send_signal_is_a_noop_after_exit_has_been_observed():
 
 
 
-_section_261_pytestmark = pytest.mark.skipif(os.name != "posix", reason="案例使用 POSIX file descriptors")
+_section_261_pytestmark = pytest.mark.skipif(
+    os.name != "posix",
+    reason="案例使用 POSIX file descriptors",
+)
 
 
 @_section_261_pytestmark
@@ -757,6 +767,8 @@ def test_pipesize_requests_the_kernel_pipe_capacity():
         if process.poll() is None:
             process.kill()
             process.wait()
+        if not process.stdin.closed:
+            process.stdin.close()
 
 
 # 显式 shell、安全边界与 legacy shell helpers。
@@ -765,7 +777,7 @@ def test_pipesize_requests_the_kernel_pipe_capacity():
 # shell=True。此时 command string 的 quoting 完全由调用者负责，绝不能拼接不可信输入。
 # getstatusoutput/getoutput 也隐式使用 shell，只适合维护旧代码和受控的固定命令。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.subprocess.shell-true
 # polyglot-covers: python.subprocess.shell-expansion
@@ -834,7 +846,7 @@ def test_getoutput_ignores_status_and_combines_shell_stdout_and_stderr():
 # 入口。text=True、bufsize=1 产生 line-buffered stdin，可用于简单请求/响应协议。每次创建
 # 进程还会发出 subprocess.Popen audit event；审计 hook 不可移除，所以案例放在隔离子进程。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.subprocess.Popen.executable
 # polyglot-covers: python.subprocess.executable-does-not-rewrite-args
@@ -887,6 +899,9 @@ def test_text_line_buffering_flushes_a_newline_to_a_waiting_child():
         if process.poll() is None:
             process.kill()
             process.wait()
+        if not process.stdin.closed:
+            process.stdin.close()
+        process.stdout.close()
 
 
 def test_popen_audit_event_exposes_launch_boundary_in_isolated_interpreter():

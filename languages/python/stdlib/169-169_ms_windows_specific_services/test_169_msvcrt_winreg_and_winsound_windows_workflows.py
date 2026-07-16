@@ -6,8 +6,7 @@
 并在 finally 中删除；声音案例
 只测试停止、缺失资源与非法组合，不在自动测试中播放真实声音。
 
-这些案例面向 Python 3.10 当前补丁系列；整个 Python 测试集尚未经过 pytest
-统一验证。
+这些案例面向 Python 3.10 当前补丁系列。
 """
 
 # polyglot-covers: python.stdlib.msvcrt python.msvcrt.locking

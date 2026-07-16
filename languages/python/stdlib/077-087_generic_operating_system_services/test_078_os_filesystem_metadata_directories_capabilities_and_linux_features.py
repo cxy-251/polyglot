@@ -4,7 +4,7 @@
 这些能力并非所有平台都有，必须先查询 ``supports_dir_fd``、``supports_fd`` 与
 ``supports_follow_symlinks``；仅检查函数是否存在并不足够。
 
-这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+这些案例面向 Python 3.10 当前补丁系列。
 """
 
 # polyglot-covers: python.os.supports-dir-fd python.os.supports-fd
@@ -152,7 +152,7 @@ def test_access_is_a_snapshot_not_authorization_for_a_later_open(tmp_path):
 # hard link 是同一 inode 的另一个名称，symlink 保存目标路径文本。时间戳应优先
 # 使用 ``*_ns`` 整数成员，避免 float 丢失 filesystem 提供的精度。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.os.stat python.os.stat-result
 # polyglot-covers: python.os.stat-tuple python.os.stat-nanosecond-fields
@@ -261,7 +261,7 @@ def test_chmod_changes_permissions_and_truncate_changes_length(tmp_path):
 # ``replace`` 明确允许覆盖现有文件；``renames`` 还会创建新父目录并尝试清理
 # 旧父目录，因此失败时可能留下部分结构，不适合作为事务接口。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.os.mkdir python.os.mkdir-existing-error
 # polyglot-covers: python.os.rmdir python.os.rmdir-nonempty-error
@@ -361,7 +361,7 @@ def test_mkfifo_creates_rendezvous_node_without_opening_it(tmp_path):
 # ``pathconf_names``/``sysconf_names`` mapping 用于发现已知名称，而不是保证 kernel
 # 支持每一个值；未知名称与已知但不可用的名称会以不同异常表达。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.os.statvfs python.os.statvfs-result
 # polyglot-covers: python.os.ST_RDONLY python.os.ST_NOSUID
@@ -432,7 +432,7 @@ def test_major_minor_and_makedev_round_trip_stat_device_number(tmp_path):
 # 64-bit counter，常用于线程/进程或 event loop 通知。二者都返回普通 fd，必须
 # 关闭，且 Python 创建的 descriptor 默认不可跨 exec 继承。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.os.memfd-create python.os.MFD_CLOEXEC
 # polyglot-covers: python.os.memory-file-descriptor python.os.memfd-no-pathname
@@ -495,7 +495,7 @@ def test_eventfd_semaphore_mode_returns_one_and_decrements_counter():
 # 通常可由普通用户使用，但仍取决于 filesystem policy；本文件只对明确的能力型
 # 错误 skip，并严格检查 create-only 与 replace-only flags 的原子语义。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.os.setxattr python.os.getxattr
 # polyglot-covers: python.os.listxattr python.os.removexattr

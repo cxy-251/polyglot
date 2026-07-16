@@ -6,7 +6,7 @@ mapping table 变成单字符到字符串的函数。模块没有通用 ``prepar
 
 RFC 3454 与这里的表固定在 Unicode 3.2，且该 RFC 已由 PRECIS 框架取代。下面的小型
 profile 只用来演示 map → normalize → prohibit → bidi 的阶段关系，不冒充 Nameprep、
-SASLprep、IDNA 2008 或任何可部署协议。当前文件尚未经过 pytest 验证。
+SASLprep、IDNA 2008 或任何可部署协议。
 """
 
 # polyglot-covers: python.stdlib.stringprep python.stringprep.unicode-3.2

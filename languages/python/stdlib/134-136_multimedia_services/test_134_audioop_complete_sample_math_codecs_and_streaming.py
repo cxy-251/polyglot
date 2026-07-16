@@ -3,8 +3,7 @@
 audioop 处理的是无头部的有符号整数采样字节，不知道采样率、声道布局或
 文件格式。案例用 struct 明确样本值，避免混淆字节数和帧数。
 
-这些案例面向 Python 3.10 当前补丁系列；整个 Python 测试集尚未经过
-pytest 统一验证。
+这些案例面向 Python 3.10 当前补丁系列。
 """
 
 # polyglot-covers: python.stdlib.audioop python.audioop.signed-integer-fragments

@@ -5,8 +5,8 @@ classmethod、staticmethod 等类接口。它们不会让动态访问变成“�
 getattr/hasattr 仍会触发描述符和用户代码，dir 也只是面向交互使用的尽力清单。
 
 身份/相等、描述符、类构造和继承机制已在 002、007、011、013 展示；本文件聚焦
-内置函数的实际使用边界。内容基于 Python 3.10 Built-in Functions；当前文件
-尚未经过 pytest 验证。
+内置函数的实际使用边界。内容基于 Python 3.10 Built-in Functions。
+
 """
 
 # polyglot-covers: python.builtin.object python.builtin.id python.builtin.type

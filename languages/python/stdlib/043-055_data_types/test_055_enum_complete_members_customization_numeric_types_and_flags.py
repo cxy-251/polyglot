@@ -4,7 +4,7 @@
 但普通枚举刻意不等同于底层值。本文件还覆盖 ``EnumMeta`` 提供的迭代/查找、
 ``auto``、``_missing_``、``_ignore_``、函数式 API 与 ``__new__`` 创建协议。
 
-这些案例面向 Python 3.10；当前文件尚未经过 pytest 验证。
+这些案例面向 Python 3.10。
 """
 
 # polyglot-covers: python.enum.Enum python.enum.member-singleton
@@ -16,7 +16,8 @@
 # polyglot-covers: python.enum.identity-comparison python.enum.no-ordering python.enum.truthiness
 # polyglot-covers: python.enum.methods python.enum.descriptors python.enum.custom-str
 # polyglot-covers: python.enum.restricted-subclassing python.enum.behavior-mixin
-# polyglot-covers: python.enum.functional-api python.enum.functional-start python.enum.functional-type
+# polyglot-covers: python.enum.functional-api python.enum.functional-start
+# polyglot-covers: python.enum.functional-type
 # polyglot-covers: python.enum._missing_ python.enum._ignore_
 # polyglot-covers: python.enum.__new__ python.enum.__init__ python.enum._value_
 # polyglot-covers: python.enum.member-rebinding python.enum.mutable-value
@@ -423,8 +424,9 @@ def test_python_310_enum_containment_rejects_raw_values_instead_of_looking_them_
         RED = 1
 
     assert Color.RED in Color
-    with pytest.raises(TypeError):
-        1 in Color
+    with pytest.warns(DeprecationWarning, match="__contains__"):
+        with pytest.raises(TypeError):
+            1 in Color
 
 
 # ``IntEnum``、字符串 mixin、``Flag`` 与 ``IntFlag`` 的互操作语义。
@@ -433,7 +435,7 @@ def test_python_310_enum_containment_rejects_raw_values_instead_of_looking_them_
 # 同时也会让无关枚举通过底层值相等。``Flag`` 用位集合表达可组合选项，
 # ``IntFlag`` 再放宽为可与裸整数位运算。本文件明确这些选择的边界与陷阱。
 #
-# 这些案例面向 Python 3.10；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10。
 
 # polyglot-covers: python.enum.IntEnum python.int-enum.integer-subclass
 # polyglot-covers: python.int-enum.cross-type-equality python.int-enum.arithmetic-type-loss

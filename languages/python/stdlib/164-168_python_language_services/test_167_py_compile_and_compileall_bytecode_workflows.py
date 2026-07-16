@@ -6,8 +6,7 @@ py_compile 负责把单个源文件写成 PEP 3147/488/552 形式的 pyc，compi
 公开 pyc 头部与 marshal code object，讲清“编译成功”返回值、缓存命名、
 时间戳/哈希失效策略，以及安装阶段最常见的路径和符号链接陷阱。
 
-这些案例面向 Python 3.10 当前补丁系列；整个 Python 测试集尚未经过 pytest
-统一验证。
+这些案例面向 Python 3.10 当前补丁系列。
 """
 
 # polyglot-covers: python.stdlib.py-compile python.py-compile.compile
@@ -35,6 +34,7 @@ import compileall
 import importlib.util
 import marshal
 import os
+from pathlib import Path
 import py_compile
 import re
 import struct
@@ -54,7 +54,7 @@ def read_pyc(path):
 
 
 def cache_path(source, optimization=None):
-    return source.parent / os.path.basename(
+    return Path(
         importlib.util.cache_from_source(
             str(source),
             optimization=optimization,

@@ -4,7 +4,7 @@ Process 与 Thread API 相似，但 target 在独立 interpreter/process 中运�
 所选 start method。pid/sentinel 在 start 后可用，exitcode 在结束前为 None；``join`` 仍
 总返回 None。``close`` 释放 parent 侧 Process resources，不能用于仍存活的 child。
 
-这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+这些案例面向 Python 3.10 当前补丁系列。
 """
 
 # polyglot-covers: python.multiprocessing.Process
@@ -192,7 +192,7 @@ def test_process_subclass_overrides_run_and_uses_normal_lifecycle():
 # 传入 context。``set_start_method`` 是 process-global one-shot configuration。spawn 会
 # 重新 import main module，所以启动 child 的 top-level side effect 必须放在 main guard 内。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.multiprocessing.get_all_start_methods
 # polyglot-covers: python.multiprocessing.get_start_method
@@ -309,7 +309,7 @@ if __name__ == "__main__":
 # terminate/kill 不运行 finally，且可能破坏 child 正在使用的 queue/lock/pipe；本例只终止
 # 阻塞在专用 Pipe 的 disposable child。authkey 必须是 bytes，并默认由 parent 继承。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.multiprocessing.Process-exitcode-normal
 # polyglot-covers: python.multiprocessing.Process-exitcode-sys-exit
@@ -432,7 +432,7 @@ def test_process_inherits_authkey_and_setter_requires_bytes():
 # bytes message boundary。duplex=False 返回 receive-only/send-only 两端。不要让多个 writer
 # 并发使用同一 pipe end；frame 可能交错损坏。``connection.wait`` 可统一等待多个 endpoint。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.multiprocessing.Pipe python.multiprocessing.Pipe-duplex
 # polyglot-covers: python.multiprocessing.Pipe-simplex-end-order
@@ -569,7 +569,7 @@ def test_connection_wait_returns_only_ready_endpoints():
 # 尚未进入 pipe，因此 ``empty/qsize`` 只近似，且 producer 在 feeder flush 前退出会影响
 # join。SimpleQueue 没有 feeder，JoinableQueue 则以 task_done/join 追踪 unfinished tasks。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.multiprocessing.Queue
 # polyglot-covers: python.multiprocessing.Queue-pickle-copy
@@ -667,7 +667,7 @@ def test_joinable_queue_requires_one_task_done_per_get():
 # timeout 按零处理，unlocked Lock.release 抛 ValueError，RLock ownership 错误抛
 # AssertionError。对象必须来自与 Process 兼容的 context，才能安全跨 process 共享。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.multiprocessing.Lock
 # polyglot-covers: python.multiprocessing.Lock-acquire-block-parameter
@@ -809,7 +809,7 @@ def test_barrier_assigns_unique_indices_across_parent_and_children():
 # 三步，仍须显式 ``get_lock`` 包住整体。RawValue/RawArray 没有 lock。shared memory 中不可
 # 存放供另一 process 解引用的 native pointer，因为每个 process address space 不同。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.multiprocessing.Value python.multiprocessing.Array
 # polyglot-covers: python.multiprocessing.synchronized-wrapper

@@ -7,7 +7,7 @@
 
 测试保持普通 pytest 函数，由标准库 ``asyncio.run`` 驱动，不要求 pytest 的
 异步插件。内容基于 Python 3.10 Coroutine、Async for/with 和 Asynchronous
-generator 协议；当前文件尚未经过 pytest 验证。
+generator 协议。
 """
 
 # polyglot-covers: python.syntax.async-def python.expression.await

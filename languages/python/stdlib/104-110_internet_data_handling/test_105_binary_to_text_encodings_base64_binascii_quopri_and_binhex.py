@@ -4,7 +4,7 @@
 ``- _``，仍可能含 ``=`` padding，并不等于可直接去 padding 的 token 格式。b64decode 默认丢弃
 非字母字符；安全边界应使用 validate=True，避免被插入的隐藏字符悄悄忽略。
 
-这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+这些案例面向 Python 3.10 当前补丁系列。
 """
 
 # polyglot-covers: python.base64.b64encode
@@ -70,7 +70,7 @@ def test_altchars_must_be_a_two_byte_alphabet_description():
 # 1 映射 I 或 L，但默认因安全原因禁用，避免人眼凭据出现歧义。Extended Hex Base32 在 3.10 新增，
 # 0/1 本就是其字母表成员，不能做上述替换。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.base64.b16encode
 # polyglot-covers: python.base64.b16decode
@@ -136,7 +136,7 @@ def test_extended_hex_base32_has_its_own_unambiguous_alphabet():
 # 对应 dialect。Base85 使用另一套字母表，不与 Ascii85 互换。默认编码短尾块可无损还原；显式
 # pad=True 把 NUL 变成真实输入的一部分，完整五字符组无法让解码器知道它原本是 padding。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.base64.a85encode
 # polyglot-covers: python.base64.a85decode
@@ -193,7 +193,7 @@ def test_base85_short_tail_is_implicit_but_explicit_padding_is_data():
 # 不换行。decode 从 binary input 的 readline 逐行消费并写 binary output，不接受现代接口支持的
 # ASCII str。真正构造 MIME 邮件时应使用 email 包，让它同时维护 Content-Transfer-Encoding header。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.base64.encodebytes
 # polyglot-covers: python.base64.decodebytes
@@ -236,7 +236,7 @@ def test_legacy_encode_and_decode_stream_between_binary_file_objects():
 # 换行；b2a_base64 可关闭换行。a2b_* 可接收纯 ASCII str，而 b2a_* 要求 bytes-like。quoted-
 # printable 的 header=True 会把 underscore 当作空格，这与正文模式不同。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.binascii.b2a_uu
 # polyglot-covers: python.binascii.a2b_uu
@@ -288,7 +288,7 @@ def test_low_level_quoted_printable_header_mode_maps_spaces_and_underscores():
 # 字段布局很重要。unhexlify 要求纯十六进制且位数为偶数，比 bytes.fromhex 对空白更严格。crc32
 # 和 crc_hqx 可用前一段结果作为下一段 seed，但它们是误码 checksum，不是抗碰撞密码学 hash。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.binascii.hexlify
 # polyglot-covers: python.binascii.b2a_hex
@@ -348,7 +348,7 @@ def test_crc_algorithms_accept_the_previous_chunk_result_as_seed():
 # ``(data, done)``，冒号终止符才令 done 为真；RLE 的 0x90 是 repeat marker，孤立 marker 表示还
 # 需更多输入并抛 Incomplete，而不是把损坏数据误报为一般编程错误。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.binascii.b2a_hqx
 # polyglot-covers: python.binascii.a2b_hqx
@@ -398,7 +398,7 @@ def test_hqx_rle_round_trip_and_orphaned_marker_incomplete_error():
 # quotetabs 决定中间空白是否编码；header=True 把空格变 ``_``，并把原 underscore 编为 ``=5F``。
 # 长行用 ``=\n`` soft break 折行，解码时移除；流接口始终读写 binary file object。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.quopri.encodestring
 # polyglot-covers: python.quopri.decodestring
@@ -453,7 +453,7 @@ def test_long_lines_use_soft_breaks_and_stream_api_round_trips_binary_data():
 # 模块自 3.9 弃用，适合读取历史归档后迁往现代格式，不应成为新协议。binhex/hexbin 接受路径，
 # hexbin(output=None) 则信任归档内文件名并写到当前目录，调用前必须选定隔离目录。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.binhex.deprecated-since-3.9
 # polyglot-covers: python.binhex.binhex
@@ -499,5 +499,8 @@ def test_output_none_uses_embedded_name_inside_an_isolated_directory(tmp_path, m
 def test_invalid_binhex_document_raises_module_specific_error(tmp_path):
     invalid = tmp_path / "invalid.hqx"
     invalid.write_bytes(b"not binhex")
-    with pytest.raises(binhex.Error):
-        binhex.hexbin(str(invalid), str(tmp_path / "ignored.bin"))
+    with invalid.open("rb") as source:
+        with pytest.raises(binhex.Error):
+            binhex.hexbin(source, str(tmp_path / "ignored.bin"))
+    # 3.10 的 HexBin 若自行打开文件，会在找到起始冒号前的异常路径遗漏 close；
+    # 对不可信输入传入调用方管理的流，才能保证构造失败时也释放描述符。

@@ -4,8 +4,7 @@
 隔离地重复测量小片段。案例验证统计结构、排序/合并和计时器协议，
 不把当前机器上的绝对秒数或某次最快结果写成脆弱断言。
 
-这些案例面向 Python 3.10 当前补丁系列；整个 Python 测试集尚未经过 pytest
-统一验证。
+这些案例面向 Python 3.10 当前补丁系列。
 """
 
 # polyglot-covers: python.stdlib.profile python.stdlib.cprofile

@@ -4,7 +4,7 @@ fromstring/XML 返回根 Element，parse 返回持有根的 ElementTree；Elemen
 tree 的根并返回该 Element。fromstringlist 适合已经分块但完整的 XML。XMLID 额外收集普通
 ``id`` 属性。iselement 只检查 Element 协议而非严格类型，dump 只用于调试输出。
 
-这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+这些案例面向 Python 3.10 当前补丁系列。
 """
 
 # polyglot-covers: python.xml.etree.ElementTree.fromstring
@@ -80,7 +80,7 @@ def test_dump_writes_a_debug_serialization_to_standard_output(capsys):
 # 只创建同类节点而不挂树。text 位于开始/结束标签之间，tail 位于本元素结束标签之后，二者不能
 # 互换。Comment/PI 使用特殊 tag 哨兵，QName 用 ``{uri}local`` 形式表达扩展名。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.xml.etree.ElementTree.Element
 # polyglot-covers: python.xml.etree.ElementTree.Element.tag
@@ -141,7 +141,7 @@ def test_comment_processing_instruction_and_qname_serialize_as_markup_nodes():
 # extend/insert 和索引切片都直接管理 child 对象。copy.copy 复制容器和属性字典但仍共享 child；
 # clear 会删除 children/attributes 并把 text/tail 置 None。空 Element 在 3.10 中是假值，勿拿它判空缺。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.xml.etree.ElementTree.Element.get
 # polyglot-covers: python.xml.etree.ElementTree.Element.set
@@ -216,7 +216,7 @@ def test_clear_resets_complete_node_state_and_empty_element_is_false_in_310():
 # findtext 区分“未找到”与“找到了空元素”。XML namespace 在内存中是 ``{uri}local``，XPath 可用
 # prefix 映射或 3.8 起的 namespace wildcard；默认 namespace 也必须显式绑定一个查询前缀。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.xml.etree.ElementTree.Element.find
 # polyglot-covers: python.xml.etree.ElementTree.Element.findall
@@ -282,7 +282,7 @@ def test_namespace_queries_use_expanded_names_prefix_maps_and_wildcards():
 # ``[n]``、``[last()]``、``[last()-n]``。谓词必须跟在 tag、``*`` 或另一谓词后；绝对路径不能
 # 直接用于 Element。它不提供任意 XPath 函数、布尔运算或完整 XPath 1.0 引擎。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.xml.etree.ElementTree.xpath-attribute-exists
 # polyglot-covers: python.xml.etree.ElementTree.xpath-attribute-equality
@@ -340,7 +340,7 @@ def test_element_paths_are_relative_and_unsupported_absolute_form_raises():
 # 直接改变 children 会令遍历结果未定义，稳妥做法是先保存快照。``_setroot()`` 会整体替换树根；
 # ``indent()`` 通过改写 ``text``/``tail`` 加入空白，适合输出副本，不是无副作用的格式化视图。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.xml.etree.ElementTree.Element.remove
 # polyglot-covers: python.xml.etree.ElementTree.remove-compares-child-identity
@@ -410,7 +410,7 @@ def test_indent_pretty_prints_by_mutating_text_and_tail_whitespace():
 # 表达的是不同输出模型，空元素和 XML 声明也可独立控制。``write()`` 不替调用者适配二进制/文本
 # 流：编码为字节时写入 binary stream，编码为 unicode 时写入 text stream，否则在写入处报错。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.xml.etree.ElementTree.tostring
 # polyglot-covers: python.xml.etree.ElementTree.tostring.encoding
@@ -487,7 +487,7 @@ def test_write_requires_a_stream_matching_the_selected_encoding():
 # 相同前缀或 URI 的旧映射会被移除；测试必须隔离这种全局状态。``default_namespace`` 只能用于
 # 完全限定的名称，混入未限定 tag/属性会报错，不能把它当作自动补命名空间的开关。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.xml.etree.ElementTree.register_namespace
 # polyglot-covers: python.xml.etree.ElementTree.register_namespace-global-state
@@ -549,7 +549,7 @@ def test_default_namespace_removes_prefix_only_for_fully_qualified_names():
 # 事件只保证已读完 ``>``，属性可用，但 text、tail 和 children 尚无完成保证；读取完整节点应处理
 # end 事件。迭代器耗尽后 ``root`` 才是完整根节点，大文件可在消费 end 事件后 ``clear()``。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.xml.etree.ElementTree.iterparse
 # polyglot-covers: python.xml.etree.ElementTree.iterparse-default-end-event
@@ -620,7 +620,7 @@ def test_large_document_workflow_reads_complete_end_nodes_then_clears_them():
 # ``read_events()`` 只消费当前已排队事件，同一事件不会在下次调用中重复出现。start 事件仍只
 # 代表开始标签闭合；应在 end 事件读取完整内容。部分 3.10 修订版回移了 ``flush()``，需做能力检测。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.xml.etree.ElementTree.XMLPullParser
 # polyglot-covers: python.xml.etree.ElementTree.XMLPullParser.feed
@@ -698,7 +698,7 @@ def test_flush_is_used_only_when_the_running_310_patch_release_provides_it():
 # 所以 target 不一定构造 Element。默认 ``TreeBuilder`` 会跳过源文档中的注释和处理指令；显式
 # 开启 ``insert_comments``/``insert_pis`` 才把它们作为特殊节点保留，factory 可定制节点创建。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.xml.etree.ElementTree.XMLParser
 # polyglot-covers: python.xml.etree.ElementTree.XMLParser.feed
@@ -813,7 +813,7 @@ def test_treebuilder_factories_customize_created_elements_comments_and_pis():
 # 逐字节比较前的稳定表示；它不是普通 pretty printer。输入可来自字符串或文件，输出可返回
 # ``str`` 或写入 text stream。``C14NWriterTarget`` 则把解析事件直接流式写成相同规范形式。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.xml.etree.ElementTree.canonicalize
 # polyglot-covers: python.xml.etree.ElementTree.canonicalize-text-output
@@ -870,7 +870,7 @@ def test_c14n_writer_target_streams_canonical_text_from_parser_events():
 # tag/属性会改变文档含义，只适合调用方明确排除的元数据。``rewrite_prefixes`` 可消除原前缀选择
 # 差异；若 QName 写在文本或属性值中，必须声明 qname-aware 集合才能同步重写其词法前缀。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.xml.etree.ElementTree.C14NWriterTarget.with_comments
 # polyglot-covers: python.xml.etree.ElementTree.C14NWriterTarget.strip_text
@@ -930,7 +930,7 @@ def test_comments_are_retained_only_when_requested():
 # 并把原 include 的 tail 正确接回树。默认 loader 会访问文件系统；可复现测试和受控资源通常应
 # 传自定义 loader。``base_url`` 负责解析相对 href，``max_depth`` 与循环检测限制递归包含。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.xml.etree.ElementInclude.include
 # polyglot-covers: python.xml.etree.ElementInclude.default_loader
@@ -1046,7 +1046,7 @@ def test_depth_limit_and_circular_href_detection_stop_recursive_includes():
 # XML 解析器不是处理恶意 XML 的安全边界：实体会展开，巨量实体、深层嵌套和大 token 的防护还
 # 依赖当前链接的 Expat 修订版。这里只用一个微小实体说明机制，绝不构造资源耗尽载荷。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.xml.etree.ElementTree.ParseError
 # polyglot-covers: python.xml.etree.ElementTree.ParseError.code

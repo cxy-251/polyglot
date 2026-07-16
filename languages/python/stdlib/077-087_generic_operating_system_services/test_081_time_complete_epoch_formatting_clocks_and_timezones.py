@@ -4,7 +4,7 @@
 ``calendar.timegm``，local time 的逆变换才是 ``mktime``。混用两对 API 会把 timezone
 offset 错算一次，是跨时区程序中很常见的陷阱。
 
-这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+这些案例面向 Python 3.10 当前补丁系列。
 """
 
 # polyglot-covers: python.time.gmtime python.time.localtime
@@ -68,7 +68,7 @@ def test_asctime_has_no_trailing_newline_and_ctime_is_localtime_composition():
 # ``strptime`` 未给出的字段从 1900-01-01 defaults 补齐，并要求 input 全部消费；
 # 两位年份遵循固定 69/68 pivot，不是“离当前年份最近”的猜测。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.time.strftime python.time.strftime-directives
 # polyglot-covers: python.time.strptime python.time.strptime-struct-time
@@ -124,7 +124,7 @@ def test_percent_p_only_adjusts_hour_when_used_with_twelve_hour_directive():
 # waiting time。各 clock 的 reference point 都未定义，只能比较同一 clock 的差值。
 # 整数 nanoseconds 避免长期运行后 float 无法保存底层全部精度。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.time.time python.time.time-ns
 # polyglot-covers: python.time.monotonic python.time.monotonic-ns
@@ -213,7 +213,7 @@ def test_current_thread_cpu_clock_id_can_be_read_safely():
 # ``tzset`` 才可移植。测试暂时切到无 DST 的 ``UTC0`` 并在 finally 恢复，避免污染
 # pytest process。应用处理历史时区规则时应优先使用 ``zoneinfo``。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.time.tzset python.time.TZ-environment
 # polyglot-covers: python.time.timezone python.time.altzone

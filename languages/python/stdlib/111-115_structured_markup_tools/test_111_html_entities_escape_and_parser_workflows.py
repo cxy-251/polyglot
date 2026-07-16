@@ -4,7 +4,7 @@ escape 默认同时处理 ``&<>`` 和两种引号，适合放入带引号的 HTM
 普通文本节点。unescape 按 HTML5 规则接受命名、十进制、十六进制甚至部分缺分号引用，也会把
 历史数值区间映射和非法码点修正成 Unicode；它不是 XML 严格实体解析器。
 
-这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+这些案例面向 Python 3.10 当前补丁系列。
 """
 
 # polyglot-covers: python.html.escape
@@ -55,7 +55,7 @@ def test_unescape_applies_html5_error_recovery_instead_of_strict_unicode_decodin
 # 多个 Unicode 码点，不能假设总能用 chr() 表示。name2codepoint/codepoint2name 是 HTML4
 # 整数映射，entitydefs 则保留 XHTML 1.0 的替换文本，三者并非 html5 的可逆视图。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.html.entities.html5
 # polyglot-covers: python.html.entities.html5-semicolon-key
@@ -98,7 +98,7 @@ def test_global_entity_tables_should_be_copied_before_application_customization(
 # 仍保留原始大小写和空白，适合低损重写。``<tag/>`` 默认依次分派 start/end。解析器只做词法
 # 事件流，不校验开始结束标签是否配对，也不会按浏览器规则隐式补闭合标签。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.html.parser.HTMLParser
 # polyglot-covers: python.html.parser.HTMLParser.feed
@@ -178,7 +178,7 @@ def test_parser_reports_mismatched_source_events_without_repairing_the_tree():
 # handle_entityref/handle_charref。feed 可接任意 str 分块并缓存未完成 token，但 data 回调边界不是
 # 稳定文本分块协议，消费者应自行拼接。getpos 是当前事件起点，reset 会丢弃尚未处理的缓冲。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.html.parser.convert_charrefs-true
 # polyglot-covers: python.html.parser.convert_charrefs-false
@@ -255,7 +255,7 @@ def test_reset_discards_incomplete_buffer_and_feed_requires_text():
 # 末尾的 ``?`` 会留在 data 中。script/style 是 raw-text 元素，内部标签和字符引用都按原文交给
 # handle_data。3.10.20 新增 scripting 参数，使 noscript 内容在脚本启用时也按原文返回。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.html.parser.handle_comment
 # polyglot-covers: python.html.parser.handle_decl

@@ -4,8 +4,7 @@
 TestSuite、fixture 和 TestResult 组成可编程运行模型。两者都会产出 unittest
 兼容套件，因此合并为从轻量文档示例到结构化测试的完整工作流。
 
-这些案例面向 Python 3.10 当前补丁系列；整个 Python 测试集尚未经过 pytest
-统一验证。
+这些案例面向 Python 3.10 当前补丁系列。
 """
 
 # polyglot-covers: python.stdlib.doctest python.doctest.interactive-example-contract

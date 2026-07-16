@@ -4,7 +4,7 @@
 ``registerDOMImplementation()`` 修改进程级注册表，因此测试应隔离。实现对象可先创建 doctype，
 再一次创建带命名空间根节点的 Document；传入两个 ``None`` 也可创建暂时没有根元素的空文档。
 
-这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+这些案例面向 Python 3.10 当前补丁系列。
 """
 
 # polyglot-covers: python.xml.dom.getDOMImplementation
@@ -93,7 +93,7 @@ def test_dom_namespace_constants_distinguish_reserved_namespaces():
 # 影响 first/last/previous/next 导航，按元素遍历必须检查 ``nodeType``。NodeList 同时提供 DOM 的
 # ``length``/``item()`` 和 Python 的 ``len``、索引、迭代；越界 ``item()`` 返回 None 而非抛错。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.xml.dom.Node.nodeType
 # polyglot-covers: python.xml.dom.Node.parentNode
@@ -175,7 +175,7 @@ def test_nodelist_supports_dom_and_python_sequence_protocols():
 # ``DocumentFragment`` 本身不会成为 child，插入时只把其中节点依次拼入目标并清空 fragment。
 # 引用节点不属于目标或层级不合法时，minidom 使用带 DOM 错误码的具体异常。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.xml.dom.Node.appendChild
 # polyglot-covers: python.xml.dom.Node.insertBefore
@@ -263,7 +263,7 @@ def test_invalid_reference_and_child_type_raise_specific_dom_exceptions():
 # namespace API 以 ``(namespaceURI, localName)`` 定位，却在 set 时接收完整 qname。Attr 节点一次
 # 只能归一个 Element；NamedNodeMap 是属性字典的活视图，其 mapping 扩展不属于核心 DOM 保证。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.xml.dom.Element.hasAttribute
 # polyglot-covers: python.xml.dom.Element.getAttribute
@@ -353,7 +353,7 @@ def test_namednodemap_is_a_live_attribute_view_with_dom_and_mapping_access():
 # 报告。``splitText()`` 不只返回后半段：若原 Text 已挂树，新 Text 会紧邻插入。手工构树可能
 # 产生相邻或空 Text；``normalize()`` 会递归合并相邻同类文本并删除空节点，便于后续读取。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.xml.dom.CharacterData.data
 # polyglot-covers: python.xml.dom.CharacterData.length
@@ -440,7 +440,7 @@ def test_cdata_has_character_data_api_but_a_distinct_node_type():
 # 所有后代而非直接 children，且支持 ``*``；namespace 版本按 URI/localName 匹配，不看原前缀。
 # 没有 DTD 类型信息时普通名为 ``id`` 的属性并非 ID，需 ``setIdAttribute*`` 后才能 getElementById。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.xml.dom.Document.createElement
 # polyglot-covers: python.xml.dom.Document.createElementNS
@@ -517,7 +517,7 @@ def test_explicit_id_attribute_enables_lookup_and_value_changes_invalidate_cache
 # 序列化保留用户属性顺序。pretty print 会保留树里已有的空白 Text，再叠加缩进，不能用来规范化
 # 语义。大型 DOM 可 ``unlink()`` 提前断开循环引用，Document 上下文管理器会在退出时自动调用。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.xml.dom.minidom.Node.writexml
 # polyglot-covers: python.xml.dom.minidom.Node.toxml
@@ -588,7 +588,7 @@ def test_context_manager_unlinks_the_document_and_descendants_on_exit():
 # 传入 SAX2 parser 时，minidom 会替换其 content handler 并开启 namespace，但 entity resolver 等
 # 策略必须由调用方预先配置。minidom 不能作为恶意 XML 的安全层，测试只使用受控小输入。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.xml.dom.minidom.parse
 # polyglot-covers: python.xml.dom.minidom.parse.filename
@@ -609,8 +609,9 @@ def test_parse_accepts_a_filename_or_file_like_and_bufsize_is_chunk_size(tmp_pat
     path = tmp_path / "document.xml"
     path.write_text(XML_TEXT_454, encoding="utf-8")
 
-    from_name = minidom.parse(str(path), bufsize=3)
-    from_file = minidom.parse(io.StringIO(XML_TEXT_454), bufsize=2)
+    from_name = minidom.parse(str(path))
+    with path.open("rb") as source:
+        from_file = minidom.parse(source, bufsize=2)
 
     assert from_name.documentElement.namespaceURI == "urn:parts"
     item = from_file.getElementsByTagNameNS("urn:parts", "item")[0]
@@ -618,6 +619,8 @@ def test_parse_accepts_a_filename_or_file_like_and_bufsize_is_chunk_size(tmp_pat
     assert "".join(
         child.data for child in item.childNodes if child.nodeType == Node.TEXT_NODE
     ) == "value"
+    # 3.10 只要指定 bufsize 就改走 pulldom；该路径不会替调用方关闭输入流，
+    # 因而文件名适合默认解析器，定制分块时应显式打开并管理 file-like。
 
 
 def test_parse_string_accepts_text_or_encoded_xml_bytes():
@@ -644,7 +647,7 @@ def test_custom_sax_parser_is_reconfigured_for_namespace_aware_dom_building():
 # 仍归同一 ownerDocument，且 clone 初始没有 parent。``isSameNode()`` 判断 DOM 节点身份。DOCTYPE、
 # Comment、Text 和 ProcessingInstruction 的 ``nodeName``/``nodeValue`` 各有不同含义。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.xml.dom.Node.cloneNode
 # polyglot-covers: python.xml.dom.Node.isSameNode
@@ -714,7 +717,7 @@ def test_special_nodes_expose_type_specific_name_and_value_aliases():
 # children，只有需要随机访问的目标节点才调用 ``expandNode()``。这能避免无条件保留完整 DOM，
 # 但底层仍是 SAX，不能安全处理恶意 XML。``reset()`` 用于释放一次性流，不表示回到输入开头。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.xml.dom.pulldom.parse
 # polyglot-covers: python.xml.dom.pulldom.parseString
@@ -771,19 +774,22 @@ def test_expandnode_builds_only_the_selected_subtree_and_consumes_its_events():
     assert remaining_start_ids == ["two"]
 
 
-def test_parse_reads_a_controlled_file_and_reset_releases_the_one_shot_stream(
+def test_parse_reads_a_controlled_file_and_reset_does_not_rewind_the_stream(
     tmp_path,
 ):
     path = tmp_path / "document.xml"
     path.write_text(XML_TEXT_456, encoding="utf-8")
-    stream = pulldom.parse(str(path), bufsize=3)
+    with path.open("rb") as source:
+        stream = pulldom.parse(source, bufsize=3)
+        start_tags = [
+            node.tagName
+            for event, node in stream
+            if event == pulldom.START_ELEMENT
+        ]
 
-    start_tags = [
-        node.tagName
-        for event, node in stream
-        if event == pulldom.START_ELEMENT
-    ]
-
-    assert start_tags == ["root", "item", "item"]
-    assert pulldom.default_bufsize > 0
-    assert stream.reset() is None
+        assert start_tags == ["root", "item", "item"]
+        assert pulldom.default_bufsize > 0
+        assert stream.reset() is None
+        assert list(stream) == []
+        stream.clear()
+    # reset 只重建 SAX handler，不 rewind 或关闭输入；文件所有权仍属于调用方。

@@ -5,21 +5,23 @@ cache/lru_cache 以可哈希调用参数为 key，并强引用参数和返回值
 缓存结构在并发更新下保持一致，但两个并发 miss 仍可能重复执行底层函数。
 cached_property 把首次结果写进实例 __dict__，之后普通属性读写会遮蔽 descriptor。
 
-这些案例面向 Python 3.10；当前文件尚未经过 pytest 验证。
+这些案例面向 Python 3.10。
 """
 
 # polyglot-covers: python.functools.cache python.functools.unbounded-cache
 # polyglot-covers: python.functools.lru_cache python.functools.lru-eviction
 # polyglot-covers: python.functools.lru-maxsize-zero python.functools.lru-maxsize-none
 # polyglot-covers: python.functools.lru-typed python.functools.lru-keyword-order
-# polyglot-covers: python.functools.cache-hashable-arguments python.functools.cache-strong-references
+# polyglot-covers: python.functools.cache-hashable-arguments
+# polyglot-covers: python.functools.cache-strong-references
 # polyglot-covers: python.functools.cache_info python.functools.cache_parameters
 # polyglot-covers: python.functools.cache_clear python.functools.cache-wrapped
 # polyglot-covers: python.functools.cache-pure-function python.functools.mutable-result-trap
 # polyglot-covers: python.functools.method-cache-self
 # polyglot-covers: python.functools.cached_property python.functools.cached-property-dict
 # polyglot-covers: python.functools.cached-property-write python.functools.cached-property-delete
-# polyglot-covers: python.functools.cached-property-slots python.functools.property-cache-alternative
+# polyglot-covers: python.functools.cached-property-slots
+# polyglot-covers: python.functools.property-cache-alternative
 
 
 
@@ -384,7 +386,7 @@ def test_property_over_cache_is_an_alternative_for_hashable_slotted_instances():
 # 绑定并正确插入 self/cls。reduce 明确执行左折叠。wraps/update_wrapper 让装饰器保留
 # 名称、文档、注解、自定义属性和 __wrapped__ 链，避免破坏 introspection 与调试工具。
 #
-# 这些案例面向 Python 3.10；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10。
 
 # polyglot-covers: python.functools.partial python.functools.partial-argument-order
 # polyglot-covers: python.functools.partial-keyword-override python.functools.partial-attributes
@@ -394,7 +396,8 @@ def test_property_over_cache_is_an_alternative_for_hashable_slotted_instances():
 # polyglot-covers: python.functools.reduce-initializer python.functools.reduce-empty
 # polyglot-covers: python.functools.cmp_to_key python.functools.comparator-adapter
 # polyglot-covers: python.functools.total_ordering python.functools.rich-comparison-generation
-# polyglot-covers: python.functools.total-ordering-notimplemented python.functools.total-ordering-inherited
+# polyglot-covers: python.functools.total-ordering-notimplemented
+# polyglot-covers: python.functools.total-ordering-inherited
 # polyglot-covers: python.functools.wraps python.functools.update_wrapper
 # polyglot-covers: python.functools.WRAPPER_ASSIGNMENTS python.functools.WRAPPER_UPDATES
 # polyglot-covers: python.functools.wrapper-metadata python.functools.__wrapped__
@@ -568,7 +571,12 @@ def test_cmp_to_key_zero_preserves_stable_input_order():
 
     words = ["beta", "apple", "boat", "apricot"]
 
-    assert sorted(words, key=cmp_to_key(compare_first_letter)) == ["apple", "apricot", "beta", "boat"]
+    assert sorted(words, key=cmp_to_key(compare_first_letter)) == [
+        "apple",
+        "apricot",
+        "beta",
+        "boat",
+    ]
 
 
 @total_ordering
@@ -729,7 +737,7 @@ def test_wrapper_attribute_constants_document_the_default_policy():
 # 并以 object 注册的原函数作为最终 fallback。singledispatchmethod 跳过 self/cls，
 # 按第一个普通参数分派；与 classmethod 等 descriptor 叠加时必须放在最外层。
 #
-# 这些案例面向 Python 3.10；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10。
 
 # polyglot-covers: python.functools.singledispatch python.functools.first-argument-dispatch
 # polyglot-covers: python.functools.singledispatch-default python.functools.object-fallback

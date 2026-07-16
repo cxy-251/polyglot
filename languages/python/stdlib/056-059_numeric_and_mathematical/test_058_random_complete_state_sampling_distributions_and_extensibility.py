@@ -4,15 +4,17 @@
 这些案例只比较同 seed/同 state 的确定性结果，或验证 API 保证的集合与范围不变量；
 不以少量抽样频率证明概率分布。Mersenne Twister 也绝不能用于安全 token。
 
-这些案例面向 Python 3.10；当前文件尚未经过 pytest 验证。
+这些案例面向 Python 3.10。
 """
 
 # polyglot-covers: python.random.Random python.random.independent-instance
 # polyglot-covers: python.random.seed python.random.seed-version python.random.reproducibility
 # polyglot-covers: python.random.getstate python.random.setstate
-# polyglot-covers: python.random.random python.random.mersenne-twister python.random.not-cryptographic
+# polyglot-covers: python.random.random python.random.mersenne-twister
+# polyglot-covers: python.random.not-cryptographic
 # polyglot-covers: python.random.randbytes python.random.getrandbits
-# polyglot-covers: python.random.randrange python.random.randrange-step python.random.python310-randrange-float
+# polyglot-covers: python.random.randrange python.random.randrange-step
+# polyglot-covers: python.random.python310-randrange-float
 # polyglot-covers: python.random.randint python.random.inclusive-bounds
 # polyglot-covers: python.random.choice python.random.empty-choice
 # polyglot-covers: python.random.choices python.random.weighted-with-replacement
@@ -174,8 +176,9 @@ def test_python_310_randrange_integral_float_conversion_is_deprecated():
         value = generator.randrange(10.0)
     assert value in range(10)
 
-    with pytest.raises(ValueError):
-        generator.randrange(10.5)
+    with pytest.warns(DeprecationWarning, match="TypeError"):
+        with pytest.raises(ValueError):
+            generator.randrange(10.5)
 
 
 def test_randint_is_randrange_with_an_inclusive_upper_bound():
@@ -331,7 +334,7 @@ def test_sampling_a_range_is_space_efficient_and_large_k_errors_are_explicit():
 # 固定 seed 适合复现实验，但文档只承诺兼容 seeder 与 ``random()`` 序列的兼容性；
 # 其他分布算法可能随 Python 版本改变，持久化测试数据时不应把它们当跨版本协议。
 #
-# 这些案例面向 Python 3.10；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10。
 
 # polyglot-covers: python.random.uniform python.random.triangular
 # polyglot-covers: python.random.betavariate python.random.expovariate

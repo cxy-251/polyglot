@@ -4,7 +4,7 @@
 同时用 ``memo`` 处理环和重复引用。本文件也展示用户类型如何通过
 ``__copy__``、``__deepcopy__`` 以及 pickle/copyreg 协议控制复制边界。
 
-这些案例面向 Python 3.10；当前文件尚未经过 pytest 验证。
+这些案例面向 Python 3.10。
 """
 
 # polyglot-covers: python.copy.assignment-binding python.copy.shallow-copy
@@ -339,7 +339,7 @@ def test_copy_protocol_errors_propagate_to_the_caller():
 # ``reprlib`` 侧重为调试器、日志和自定义 ``__repr__`` 限制深度与长度。两者生成的
 # 都是诊断表示，不应代替 JSON、pickle 等明确的持久化格式。
 #
-# 这些案例面向 Python 3.10；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10。
 
 # polyglot-covers: python.pprint.pformat python.pprint.pprint python.pprint.pp
 # polyglot-covers: python.pprint.width python.pprint.indent python.pprint.compact

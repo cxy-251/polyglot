@@ -4,7 +4,7 @@ TemporaryFile/NamedTemporaryFile/TemporaryDirectory 用 context manager 管理�
 mkstemp/mkdtemp 只负责安全创建，把关闭和删除责任交给调用者。所有案例都显式使用
 pytest tmp_path 作为 dir，不污染系统临时目录。
 
-内容基于 Python 3.10 tempfile 文档；当前文件尚未经过 pytest 验证。
+内容基于 Python 3.10 tempfile 文档。
 """
 
 # polyglot-covers: python.stdlib.tempfile python.tempfile.TemporaryFile
@@ -297,7 +297,7 @@ def test_secure_creation_apis_create_unique_existing_paths(tmp_path):
 # 只负责安全创建，调用方仍必须关闭 descriptor 并删除路径。不要用已弃用的 ``mktemp``
 # 做“先取名字、再创建”流程：两步之间存在其他进程抢占路径的竞态。
 #
-# 这些案例面向 Python 3.10；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10。
 
 # polyglot-covers: python.tempfile.TemporaryFile python.tempfile.binary-default
 # polyglot-covers: python.tempfile.TemporaryFile.text-mode python.tempfile.context-manager

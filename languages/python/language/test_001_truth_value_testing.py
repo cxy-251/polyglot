@@ -6,7 +6,7 @@
 “你应当被视为真还是假”。
 
 内容基于 Python 3.10 的 Truth Value Testing、Boolean Operations 和 Data
-Model。当前项目处于只编写、暂不执行的阶段，本文件尚未经过 pytest 验证。
+Model。
 """
 
 # polyglot-covers: python.core.truth-value-testing

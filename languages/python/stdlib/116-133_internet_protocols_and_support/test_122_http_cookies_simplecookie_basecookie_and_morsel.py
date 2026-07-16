@@ -3,7 +3,7 @@
 SimpleCookie 把 Python 值转换成字符串，并把不适合直接出现在 Cookie 头中的字符转义。
 读取 ``value`` 得到逻辑文本，``coded_value`` 才是可以放在线路上的表示；不要自行拼接头部。
 
-这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+这些案例面向 Python 3.10 当前补丁系列。
 """
 
 # polyglot-covers: python.http.cookies.SimpleCookie

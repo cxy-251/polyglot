@@ -4,7 +4,7 @@ shelf 的 key 始终是 str，value 则通过 pickle 存为 bytes。读取 value
 ``writeback=False`` 时原地修改不会持久化，``writeback=True`` 虽方便，却会缓存并重写所有
 读取过的 entry。底层 DBM 格式与文件后缀依平台而异，始终通过 shelve 自己重新打开。
 
-这些案例面向 Python 3.10；当前文件尚未经过 pytest 验证。
+这些案例面向 Python 3.10。
 """
 
 # polyglot-covers: python.shelve.open python.shelve.context-manager
@@ -274,7 +274,7 @@ def test_bsd_db_shelf_exposes_optional_navigation_surface():
 # identity/递归引用。和 pickle 一样，
 # 不要读取不可信 marshal bytes；本文件只加载自己刚生成的隔离数据。
 #
-# 这些案例面向 Python 3.10；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10。
 
 # polyglot-covers: python.marshal.dumps python.marshal.loads python.marshal.binary-format
 # polyglot-covers: python.marshal.dump python.marshal.load python.marshal.binary-file
@@ -497,7 +497,7 @@ def test_invalid_or_empty_input_uses_more_than_one_failure_type():
 # 对象序列化；字符串会用默认编码隐式转成 bytes。具体后端取决于 Python 构建环境，所以
 # 案例只依赖文档承诺的交集，不假定文件扩展名或异常的某个具体 subclass。
 #
-# 这些案例面向 Python 3.10；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10。
 
 # polyglot-covers: python.dbm.open python.dbm.backend-selection python.dbm.whichdb
 # polyglot-covers: python.dbm.bytes-mapping python.dbm.string-coercion python.dbm.default-encoding
@@ -714,7 +714,7 @@ def test_whichdb_returns_empty_string_for_an_unknown_existing_format(tmp_path):
 # 不可用时明确 skip。``dbm.dumb`` 是纯 Python 最后备选，格式可移植但不面向高性能或
 # 数据库。三种格式彼此不兼容，业务代码通常应从通用 ``dbm.open`` 进入。
 #
-# 这些案例面向 Python 3.10；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10。
 
 # polyglot-covers: python.dbm.gnu python.dbm.gnu.optional python.dbm.gnu.open-flags
 # polyglot-covers: python.dbm.gnu.firstkey python.dbm.gnu.nextkey python.dbm.gnu.unsorted

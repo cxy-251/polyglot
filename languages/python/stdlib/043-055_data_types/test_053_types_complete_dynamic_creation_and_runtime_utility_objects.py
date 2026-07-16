@@ -5,7 +5,7 @@
 code、frame、descriptor 等没有独立 builtin 名称的运行时类型提供稳定的检查入口；
 直接实例化这些底层类型时则要注意签名可能随 Python 版本变化。
 
-当前文件尚未经过 pytest 验证。
+
 """
 
 # polyglot-covers: python.types.new-class python.types.exec-body
@@ -399,7 +399,7 @@ def test_generic_alias_constructor_matches_bracket_syntax_and_exposes_metadata()
 # ``DynamicClassAttribute`` 则让同名属性在 instance 和 class 上走不同分派。
 #
 # 最后一组案例展示 ``types.coroutine`` 对 generator function、返回 Generator 的普通
-# function 和其他返回值采用不同包装路径。当前文件尚未经过 pytest 验证。
+# function 和其他返回值采用不同包装路径。
 
 # polyglot-covers: python.types.MappingProxyType python.mapping-proxy.dynamic-view
 # polyglot-covers: python.mapping-proxy.read-only python.mapping-proxy.shallow-readonly

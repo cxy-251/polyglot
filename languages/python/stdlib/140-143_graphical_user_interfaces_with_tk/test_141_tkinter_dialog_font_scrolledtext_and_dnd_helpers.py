@@ -6,7 +6,7 @@
 字体与 ScrolledText 只有在真实 Tk 根窗口可用时运行；dnd 使用最小控件
 替身验证协议。
 
-案例面向 Python 3.10；整个 Python 测试集尚未经过 pytest 统一验证。
+案例面向 Python 3.10。
 """
 
 # polyglot-covers: python.stdlib.tkinter.commondialog python.tkinter.Dialog-show-hooks

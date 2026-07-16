@@ -4,8 +4,7 @@ UUID 是不可变的 128 位值；文本、网络字节序、Microsoft 小端字
 只是不同视图。随机与时间型入口只断言协议位及调用方可控字段，
 避免依赖宿主机。
 
-这些案例面向 Python 3.10 当前补丁系列；整个 Python 测试集尚未经过
-pytest 统一验证。
+这些案例面向 Python 3.10 当前补丁系列。
 """
 
 # polyglot-covers: python.stdlib.uuid python.uuid.UUID-hex-normalization

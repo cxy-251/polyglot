@@ -7,8 +7,7 @@
 或 ``__class_getitem__``。
 
 内容基于 Python 3.10 Expressions 6.3.2--6.3.3、Data Model 3.3.6 和
-Built-in Types 的映射协议。当前项目处于只编写、暂不执行的阶段，本文件尚未
-经过 pytest 验证。
+Built-in Types 的映射协议。
 """
 
 # polyglot-covers: python.expression.subscription python.expression.slicing

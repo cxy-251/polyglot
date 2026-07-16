@@ -6,7 +6,7 @@ builtins、显式 namespace 和对象属性适配成 ``complete(text, state)`` �
 
 本文件不启动 REPL、不读取 stdin，也不调用 ``redisplay()``。历史文件只写入 pytest
 临时目录；可读取的全局状态由 autouse fixture 恢复，没有 getter 的 hooks 在测试内
-用 finally 清除。当前文件尚未经过 pytest 验证。
+用 finally 清除。
 """
 
 # polyglot-covers: python.stdlib.readline python.readline.backend

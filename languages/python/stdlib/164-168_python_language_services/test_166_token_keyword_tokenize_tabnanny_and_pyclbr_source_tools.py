@@ -6,8 +6,7 @@
 源码检查工作流，
 并区分词法正确、缩进无歧义和语法/语义正确这几个经常被混淆的层次。
 
-这些案例面向 Python 3.10 当前补丁系列；整个 Python 测试集尚未经过 pytest
-统一验证。
+这些案例面向 Python 3.10 当前补丁系列。
 """
 
 # polyglot-covers: python.stdlib.token python.token.constants python.token.tok-name
@@ -380,7 +379,9 @@ def test_pyclbr_reads_top_level_and_nested_definitions_without_execution(tmp_pat
     base = tree["Base"]
     child = tree["Child"]
     assert isinstance(child, pyclbr.Class)
-    assert child.super == [base, "external.Mixin"]
+    assert child.super == [base]
+    # 3.10 的 pyclbr 能链接同一分析树里已解析的 Base，但会忽略无法解析的
+    # external.Mixin；它提供源码轮廓，不是完整、保真的 AST。
     assert child.methods == {"method": 11, "async_method": 13}
     assert child.children["method"].is_async is False
     assert child.children["async_method"].is_async is True

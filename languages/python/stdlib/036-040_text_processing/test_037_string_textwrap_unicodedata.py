@@ -5,7 +5,7 @@
 正规化操作。三者可以串成文本生成、排版和比较前规范化的常见工作流。
 
 需要特别区分“ASCII 集合”“Unicode code point”“grapheme cluster”和终端显示列宽；
-它们不是同一个计量单位。当前文件尚未经过 pytest 验证。
+它们不是同一个计量单位。
 """
 
 # polyglot-covers: python.stdlib.string python.string.constants

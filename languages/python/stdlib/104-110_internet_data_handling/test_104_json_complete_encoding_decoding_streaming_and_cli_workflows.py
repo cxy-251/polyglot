@@ -4,7 +4,7 @@ JSON 的 object/array/null/boolean/number 分别映射到 Python dict/list/None/
 编码后也变成 array，往返会得到 list。dumps/dump 始终产生或写入 str，load 则能从 text stream
 或包含 UTF-8/16/32 的 binary stream 读取。对象成员顺序在底层容器有序时保持。
 
-这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+这些案例面向 Python 3.10 当前补丁系列。
 """
 
 # polyglot-covers: python.json.dumps
@@ -74,7 +74,7 @@ def test_input_object_order_survives_encoding_and_decoding():
 # 报错，skipkeys=True 则静默丢弃。这个转换使 ``loads(dumps(mapping))`` 不保证等于原 mapping。
 # 格式选项只改变文本表示，不应被下游当成业务语义。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.json.ensure_ascii
 # polyglot-covers: python.json.ensure-ascii-false-emits-unicode
@@ -134,7 +134,7 @@ def test_supported_nonstring_keys_do_not_round_trip_their_types():
 # 让基类抛 TypeError，不能返回原对象再次形成循环。iterencode 产生若干 str chunk，适合逐块写入；
 # 它并不提供消息 framing。默认循环检查会把自引用容器转成 ValueError，关闭后可能递归至崩溃。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.json.default-callback
 # polyglot-covers: python.json.JSONEncoder
@@ -199,7 +199,7 @@ def test_circular_reference_check_reports_a_clear_error_before_recursion():
 # 同时提供时具有优先级，因此能发现重复名称。parse_float/parse_int 收到原始数字 token 字符串，
 # 可避免先经过二进制 float；parse_constant 只处理 NaN/Infinity 扩展，不处理 null/true/false。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.json.object_hook
 # polyglot-covers: python.json.object-hook-inner-before-outer
@@ -286,7 +286,7 @@ def test_parse_constant_can_reject_nonstandard_numeric_tokens():
 # 从缓冲区取一个值，但它不会自动越过开头空白。strict=False 仅允许字符串中的 U+0000..U+001F
 # 原始控制字符，不会放宽缺引号、尾逗号等其他语法。JSONDecodeError 保存原文和精确行列。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.json.JSONDecoder
 # polyglot-covers: python.json.JSONDecoder.decode
@@ -352,7 +352,7 @@ def test_decode_error_exposes_message_document_offset_line_and_column():
 # 编码侧 allow_nan=False，并在解码侧用 parse_constant 拒绝。重复成员默认保留最后值，可能掩盖
 # 恶意字段；需要 object_pairs_hook 才能检测。RFC 7159 允许顶层 scalar，模块从不强制 object/array。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.json.allow_nan
 # polyglot-covers: python.json.default-encodes-nan-infinity-extension
@@ -415,7 +415,7 @@ def test_top_level_value_may_be_a_scalar(document, expected):
 # 意外 BOM 而拒绝，UTF-8-SIG bytes 则在解码阶段剥离 BOM，这是输入类型造成的细微差异。模块不
 # 限制文档大小或嵌套深度，服务必须在解析前实施自己的字节上限以防资源耗尽。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.json.loads-str-bytes-bytearray
 # polyglot-covers: python.json.binary-input-utf8-utf16-utf32
@@ -469,7 +469,7 @@ def test_application_can_reject_large_untrusted_payload_before_json_parsing():
 # 记录，必须另定 framing；简单文本场景常用“一行一个紧凑 JSON”，逐行 loads。字符串内部换行会
 # 被转义，所以不会破坏行边界，但生产方仍需约定空行与最大行长。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.json.not-a-framed-protocol
 # polyglot-covers: python.json.repeated-dump-same-stream-invalid-document
@@ -510,7 +510,7 @@ def test_json_lines_adds_an_explicit_record_boundary():
 # 信息写到 stderr；--sort-keys 便于稳定 diff，--no-ensure-ascii 保留可读 Unicode，--json-lines
 # 逐行处理独立文档。案例使用 sys.executable，确保调用的正是运行测试的 Python 3.10。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.json.tool
 # polyglot-covers: python.json.tool-validates-and-pretty-prints

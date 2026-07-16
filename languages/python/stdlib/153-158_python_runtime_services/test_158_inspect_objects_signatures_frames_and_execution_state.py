@@ -6,8 +6,7 @@ traceback、生成器与 coroutine 属性整理成稳定查询接口。本套既
 用户代码、frame
 引用会形成环、字符串注解求值会运行表达式等真实边界。
 
-这些案例面向 Python 3.10 当前补丁系列；整个 Python 测试集尚未经过 pytest
-统一验证。
+这些案例面向 Python 3.10 当前补丁系列。
 """
 
 # polyglot-covers: python.stdlib.inspect python.inspect.getmembers

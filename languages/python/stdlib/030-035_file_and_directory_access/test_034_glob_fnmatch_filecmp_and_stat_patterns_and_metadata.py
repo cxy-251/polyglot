@@ -5,7 +5,7 @@ filecmp 则按 stat 签名或实际字节比较文件和目录树。三者层次
 通配符/文件名就混用。
 
 内容基于 Python 3.10 fnmatch、glob、filecmp 文档。所有磁盘案例均限制在 pytest
-tmp_path；当前文件尚未经过 pytest 验证。
+tmp_path。
 """
 
 # polyglot-covers: python.stdlib.fnmatch python.fnmatch.fnmatch
@@ -370,7 +370,7 @@ def test_dircmp_reports_human_readable_summary_and_recursive_closures(tmp_path, 
 # leading dot 有特殊规则；``fnmatch`` 只比较给定字符串，separator 与 leading dot 都是普通
 # 字符。结果顺序来自文件系统，递归 ``**`` 还可能昂贵、沿目录 symlink 重复发现内容。
 #
-# 这些案例面向 Python 3.10；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10。
 
 # polyglot-covers: python.glob.glob python.glob.star python.glob.question
 # polyglot-covers: python.glob.character-range python.glob.arbitrary-order
@@ -683,11 +683,12 @@ def test_fnmatch_supports_bytes_but_rejects_mixed_text_domains():
 # 失效的 process cache。``stat`` 则把一次 system call 的 mode 拆成 file type、普通权限与
 # set-id/sticky 特殊位，适合在不重复访问文件系统的前提下做多项判断。
 #
-# 这些案例面向 Python 3.10；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10。
 
 # polyglot-covers: python.filecmp.cmp python.filecmp.shallow-signature
 # polyglot-covers: python.filecmp.deep-content python.filecmp.shallow-fallback
-# polyglot-covers: python.filecmp.cache python.filecmp.clear-cache python.filecmp.mtime-resolution-trap
+# polyglot-covers: python.filecmp.cache python.filecmp.clear-cache
+# polyglot-covers: python.filecmp.mtime-resolution-trap
 # polyglot-covers: python.filecmp.cmpfiles python.filecmp.match-mismatch-errors
 # polyglot-covers: python.filecmp.dircmp python.filecmp.dircmp.lazy-attributes
 # polyglot-covers: python.filecmp.dircmp.left-right-only python.filecmp.dircmp.common

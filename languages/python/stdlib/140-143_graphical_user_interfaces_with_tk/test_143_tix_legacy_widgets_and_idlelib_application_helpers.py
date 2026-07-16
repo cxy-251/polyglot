@@ -6,7 +6,7 @@ IDLE 文档描述一个应用，
 而非稳定库 API。本文件仅展示 ``idlelib`` 中可独立复用的配置和段落格式化
 逻辑，不把私有编辑器内部穷举成公共接口。
 
-案例面向 Python 3.10；整个 Python 测试集尚未经过 pytest 统一验证。
+案例面向 Python 3.10。
 """
 
 # polyglot-covers: python.stdlib.tkinter.tix python.tix-deprecated-boundary

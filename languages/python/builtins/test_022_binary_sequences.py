@@ -5,8 +5,7 @@ protocol 上创建通常不复制数据的结构化视图。三者都处理 0--2
 Unicode 文本；编码和解码必须显式跨越 str/bytes 边界。
 
 通用订阅协议已在 005、str 编码入口已在 021 展示；本文件聚焦二进制类型自身。
-内容基于 Python 3.10 Binary Sequence Types 和 Memory Views；当前文件尚未经过
-pytest 验证。
+内容基于 Python 3.10 Binary Sequence Types 和 Memory Views。
 """
 
 # polyglot-covers: python.type.bytes python.type.bytearray python.type.memoryview

@@ -6,8 +6,7 @@
 特有的 fallback 单独标出，避免以后升级版本时把旧行为误当成永久保证。
 
 内容基于 Python 3.10 Expressions 6.6、Data Model 3.3.8、Built-in
-Functions、operator.index 和 math 的数论函数。当前项目处于只编写、暂不执行
-的阶段，本文件尚未经过 pytest 验证。
+Functions、operator.index 和 math 的数论函数。
 """
 
 # polyglot-covers: python.expression.unary-arithmetic

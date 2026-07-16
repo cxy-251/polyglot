@@ -7,8 +7,7 @@ turtle 的真实画布由 tkinter 提供，通常需要显示服务器。
 “移动时是否落笔”的真实协议。
 
 若容器没有可导入的 tkinter，pytest 会跳过本文件；它不会尝试安装依赖或
-打开窗口。这些案例面向 Python 3.10 当前补丁系列；整个 Python 测试集尚未
-经过 pytest 统一验证。
+打开窗口。这些案例面向 Python 3.10 当前补丁系列。
 """
 
 # polyglot-covers: python.stdlib.turtle python.turtle.tkinter-dependency

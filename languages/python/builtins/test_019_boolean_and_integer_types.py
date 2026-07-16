@@ -6,7 +6,7 @@
 
 通用真假协议、二元运算分派和 ``__index__`` 已分别在 001、003、004 展示；
 本文件聚焦内置类型自身。内容基于 Python 3.10 Built-in Types、int() 和整数
-字面量；当前文件尚未经过 pytest 验证。
+字面量。
 """
 
 # polyglot-covers: python.type.bool python.type.int

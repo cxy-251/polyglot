@@ -3,7 +3,7 @@
 XML-RPC 只支持一小组类型：tuple/list 在线路上都成为 array，返回时统一为 list；对象仅
 发送 __dict__。整数限定 32 位，dict 键必须是字符串，内置类型的子类也不会自动降级。
 
-这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+这些案例面向 Python 3.10 当前补丁系列。
 """
 
 # polyglot-covers: python.xmlrpc.client.dumps
@@ -112,7 +112,7 @@ def test_forbidden_xml_control_character_is_not_made_safe_by_xml_escaping():
 # 默认解码返回 Binary/DateTime 包装器；use_builtin_types=True 才返回 bytes/datetime。
 # None 不是基础规范的一部分，发送端必须显式 allow_none。bigdecimal 只支持从响应解码。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.xmlrpc.client.dumps-allow_none
 # polyglot-covers: python.xmlrpc.client.nil-extension
@@ -170,7 +170,7 @@ def test_additional_numeric_and_prefixed_nil_tags_are_unmarshaled():
 # 包装器是默认反序列化结果，也可显式传给 dumps。DateTime 保存无时区 ISO 字符串；
 # Binary.data 始终是 bytes，并用带换行的 MIME base64 写入 XML，不能用普通字符串代替。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.xmlrpc.client.DateTime
 # polyglot-covers: python.xmlrpc.client.DateTime-from-datetime
@@ -232,7 +232,7 @@ def test_binary_decode_and_encode_preserve_null_bytes_and_wrap_base64_lines():
 # Fault 表示 HTTP 成功响应内的远程调用失败，loads 会直接抛出它；ProtocolError 表示
 # HTTP 传输层状态失败。二者都继承 Error，但恢复策略和可观察字段完全不同。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.xmlrpc.client.Error
 # polyglot-covers: python.xmlrpc.client.Fault
@@ -289,7 +289,7 @@ def test_protocol_error_keeps_transport_metadata_separate_from_rpc_fault():
 # 属性访问只构造远程方法名，调用时才由 transport.request 发送 XML。响应仅含一个值时代理
 # 自动解包。URI userinfo 会生成 Basic 头；with 退出关闭复用连接，而不是关闭远程服务。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.xmlrpc.client.ServerProxy
 # polyglot-covers: python.xmlrpc.client.Server-alias
@@ -364,7 +364,7 @@ def test_transport_extracts_and_decodes_basic_auth_userinfo_from_host():
 # 调用 multicall.foo(...) 只记录描述并返回 None；真正调用 MultiCall 对象才发送一个请求。
 # 结果项必须是单元素列表或 fault dict，Fault 在访问对应项时抛出，不会抹掉之前的成功值。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.xmlrpc.client.MultiCall
 # polyglot-covers: python.xmlrpc.client.MultiCall-delayed-recording

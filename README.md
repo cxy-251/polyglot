@@ -10,20 +10,26 @@ Polyglot 用可阅读、可执行的测试案例学习 Python、C++、Node.js、
 - 官方语义中容易误解的行为和真实常见坑；
 - 示例逻辑是否能通过对应测试框架验证。
 
-例如 Python 中不仅要展示 `bool(value)`，还要展示真假值判断如何依次使用 `__bool__()` 和 `__len__()`；不仅展示 `for`，还要展示迭代协议和历史序列 fallback。
+例如 Python 中不仅要展示 `bool(value)`，还要展示真假值判断如何依次使用
+`__bool__()` 和 `__len__()`；不仅展示 `for`，还要展示迭代协议和历史序列
+fallback。
 
 ## 当前阶段
 
-当前进入 Python 3.10 测试套编写阶段。`ohdev` 容器中的解释器是 Python 3.10.12，官方内容来源锁定到 Python 3.10 文档系列。
+Python 3.10 基线已经完成统一验证。`ohdev` 容器中的解释器是 Python 3.10.12，
+官方内容来源锁定到 Python 3.10 文档系列。
 
-按照当前约定：
+当前验证证据：
 
-- 先连续编写 Python 测试套；
-- 测试文件使用三位数编号表达推荐阅读顺序，例如 `test_001_...py`；
-- 暂不运行 pytest；
-- Python 编写阶段结束后统一在 `ohdev` 中执行；
-- 当前所有 Python 文件都应视为 draft / unverified；
-- 可以按连贯主题创建本地 authoring checkpoint commit，但这些 commit 不代表测试通过。
+- `languages/python/` 有 178 个测试文件，编号从 `001` 连续到 `178`；
+- 每个文件都有 `polyglot-covers` 覆盖标记，`stdlib/` 分类目录与编号范围一致；
+- 所有测试代码按 Unicode 字符计数均不超过 100 列；
+- 严格全量命令 `./tools/run.sh python -q --timeout=30 -W error` 的结果为
+  `5012 passed, 52 skipped`；
+- 52 个 skip 都来自明确的平台或可选能力差异，例如 Windows API、Tk、
+  IANA zone data、特定 dbm backend 和 ensurepip，不是失败用例。
+
+下一阶段的唯一入口仍是 `NEXT.md`；不要从 README 推测并行任务。
 
 ## 新对话从哪里开始
 
@@ -57,16 +63,15 @@ languages/python/
   language/      语言语义、表达式、语句和数据模型
   builtins/      内置类型与内置函数
   stdlib/        标准库模块与跨 API 工作流
-    file_and_directory_access/  文件与目录访问
-    text_processing/            文本处理服务
+    030-035_file_and_directory_access/  文件与目录访问
+    036-040_text_processing/            文本处理服务
 ```
 
 主题允许跨层。例如真假值测试同时包含布尔表达式、`bool()`、`__bool__()` 和 `__len__()`，因为把它们放在一个测试套中更容易理解真实分派关系。
 
-`stdlib/` 会继续按 Python 3.10 官方标准库目录的服务类别扩展，例如
-`binary_data/`、`data_types/`、`concurrency/` 和 `networking/`。分类目录在写入
-第一个测试套时才创建；目录用于控制标准库规模，不改变文件编号规则，也不会细分成
-“每个模块一个文件夹”。跨模块工作流归入其主要学习目标所在的类别。
+`stdlib/` 已按 Python 3.10 官方标准库目录的服务类别组织。目录名前缀同时标明
+其中的测试编号范围；目录用于控制标准库规模，不改变全局文件编号规则，也不会
+细分成“每个模块一个文件夹”。跨模块工作流归入其主要学习目标所在的类别。
 
 同一学习阶段的文件按三位数连续编号，编号是稳定的推荐阅读顺序，主题后缀用于
 搜索。例如：
@@ -93,14 +98,15 @@ test_003_binary_operator_dispatch.py
     ↓ pytest / 编译器 / 对应测试框架
 ```
 
-Python 编写阶段结束后，统一执行：
+Python 严格全量验证执行：
 
 ```bash
 ./tools/run.sh doctor
-./tools/run.sh python
+./tools/run.sh python -q --timeout=30 -W error
 ```
 
-目前不要因为单个文件写完就运行测试；这一约定会在进入验证阶段时更新。
+以后修改 Python 文件时，先复跑受影响类别，再运行上述完整命令；只有两者都通过，
+才能继续称当前 Python 基线为 verified。
 
 ## 历史
 

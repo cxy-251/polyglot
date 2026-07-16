@@ -5,8 +5,7 @@ optparse 仍常见于尚未迁移到 argparse 的命令行程序；pipes 则把
 所需的动作、类型、回调、冲突处理与管道拓扑。pipes 案例只在 Unix 运行，
 实际命令只调用当前 Python 解释器。
 
-这些案例面向 Python 3.10 当前补丁系列；整个 Python 测试集尚未经过 pytest
-统一验证。
+这些案例面向 Python 3.10 当前补丁系列。
 """
 
 # polyglot-covers: python.stdlib.optparse python.optparse.option-parser

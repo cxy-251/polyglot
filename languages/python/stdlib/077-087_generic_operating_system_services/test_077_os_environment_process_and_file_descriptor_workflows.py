@@ -5,7 +5,7 @@
 反向更新 Python mapping。Unix 的 ``environb`` 与 text view 双向同步，并使用
 filesystem codec。
 
-这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+这些案例面向 Python 3.10 当前补丁系列。
 """
 
 # polyglot-covers: python.os.environ python.os.environment-mapping
@@ -111,7 +111,7 @@ def test_get_exec_path_rejects_ambiguous_text_and_bytes_path_keys():
 # ``try/finally`` 恢复。PID/UID/group/process-group 查询是 read-only introspection；
 # 会改变身份、session 或 scheduler 的 privileged setters 不适合普通测试进程演示。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.os.getpid python.os.getppid
 # polyglot-covers: python.os.getcwd python.os.getcwdb
@@ -240,7 +240,7 @@ def test_strerror_maps_errno_number_to_human_readable_platform_message():
 # Python file object 另有 userspace buffer，混用前必须 flush/seek。``fdopen`` 可把现有 fd
 # 包装成 file object，并由 ``closefd`` 决定 wrapper 是否取得 descriptor ownership。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.os.open python.os.open-flags
 # polyglot-covers: python.os.O_CREAT python.os.O_EXCL
@@ -427,7 +427,7 @@ def _descriptor_is_closed(fd):
 # fd，但两个 fd 指向同一个 open file description，所以共享 cursor。Python 3.4+
 # 创建的 fd 默认不可继承；若确需跨 exec 继承，必须显式设置并及时恢复。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.os.pipe python.os.pipe-eof
 # polyglot-covers: python.os.pipe-non-inheritable python.os.dup
@@ -584,7 +584,7 @@ def test_terminal_size_is_named_tuple_and_regular_file_query_fails(tmp_path):
 # ``copy_file_range`` 和 ``splice`` 让 kernel 搬运数据；可用性还取决于 kernel 与当前
 # filesystem。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.os.pread python.os.pwrite
 # polyglot-covers: python.os.positioned-io-offset python.os.positioned-io-shared-cursor
@@ -739,7 +739,7 @@ def test_splice_moves_bytes_from_pipe_to_file_without_userspace_buffer(tmp_path)
 # 和 bytes 为边界。“函数存在”不等于当前 filesystem 一定实现；能力差异
 # 应显式 skip，而不能误判为业务断言失败。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.os.posix-fallocate python.os.file-preallocation
 # polyglot-covers: python.os.posix-fadvise python.os.POSIX_FADV_SEQUENTIAL

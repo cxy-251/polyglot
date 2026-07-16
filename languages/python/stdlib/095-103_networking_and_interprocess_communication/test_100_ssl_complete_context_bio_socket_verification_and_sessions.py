@@ -4,7 +4,7 @@
 秘密，也绝不能用于真实服务。后续 TLS 案例把它写入 tmp_path，不依赖 openssl 命令或外部网络。
 PEM 是 base64 armor，DER 是同一 ASN.1 certificate 的二进制表示，可无损往返。
 
-这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+这些案例面向 Python 3.10 当前补丁系列。
 """
 
 # polyglot-covers: python.ssl.DER_cert_to_PEM_cert
@@ -160,7 +160,7 @@ def test_ssl_exceptions_share_the_documented_hierarchy_and_alias():
 # check_hostname 为 True 时不能降到 CERT_NONE，设置顺序本身是常见坑。minimum/maximum_version
 # 取代 OP_NO_TLS*；set_ciphers 只配置 TLS 1.2 及更早 cipher，不能关闭 TLS 1.3 cipher suites。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.ssl.SSLContext
 # polyglot-covers: python.ssl.PROTOCOL_TLS_CLIENT
@@ -267,7 +267,7 @@ def test_cipher_configuration_returns_descriptive_records():
 # 不是加载本端 identity。cadata 可直接给 PEM text。get_ca_certs(binary_form=False) 返回 decoded
 # dict，True 返回 DER；cert_store_stats 区分总 X.509、CA 和 CRL 数量。fixture 只写 tmp_path。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.ssl.SSLContext.load_cert_chain
 # polyglot-covers: python.ssl.cert-chain-private-key-must-match
@@ -333,7 +333,7 @@ def test_cafile_and_default_path_loading_are_separate_trust_sources(tmp_path):
 # bytes。framework 在每次 SSLWantRead/Write 后把数据搬到对端并按 readiness 重试。案例在内存中
 # 完成 certificate verification、hostname check、加密 application data 和连接 metadata 查询。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.ssl.MemoryBIO
 # polyglot-covers: python.ssl.MemoryBIO.pending
@@ -525,7 +525,7 @@ def test_negotiated_metadata_certificate_and_session_are_available_after_handsha
 # 按双方有序列表选一个共同 application protocol。信任链失败和 hostname mismatch 都在 handshake
 # 阶段抛 SSLCertVerificationError，并给出 verify_code/verify_message。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.ssl.SSLContext.set_servername_callback
 # polyglot-covers: python.ssl.sni-servername-callback-sslobj-name-context
@@ -625,7 +625,7 @@ def test_untrusted_self_signed_chain_fails_before_application_data(tmp_path):
 # 让调用者控制 handshake。两端 handshake/unwrap 都会互等 wire data，本例用线程并发推进但不访问
 # 网络。unwrap 完成 TLS close-notify 后返回新的 plain socket，后续不能继续使用原 SSL wrapper。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.ssl.SSLContext.wrap_socket
 # polyglot-covers: python.ssl.wrap-socket-stream-only
@@ -770,7 +770,7 @@ def test_concurrent_unwrap_returns_plain_sockets_for_further_cleartext(tmp_path)
 # 必须按异常等待对应 fd 后重试完整调用。sslsocket_class/sslobject_class 允许 framework 插入子类。
 # keylog_filename 仅用于调试且会泄露 session secrets；生产环境不能随意启用或提交其输出。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.ssl.nonblocking-ssl-want-read-write-not-blockingioerror
 # polyglot-covers: python.ssl.nonblocking-ssl-operation-direction-may-reverse
@@ -872,7 +872,7 @@ def test_context_exposes_session_tls13_and_hostname_policy_controls(tmp_path):
 # 获取 PEM 并可用 ca_certs 验证。module-level wrap_socket 不支持 SNI/hostname matching，且每次创建
 # 临时 context，3.7 起已弃用；新代码必须复用显式 SSLContext。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.ssl.get_server_certificate
 # polyglot-covers: python.ssl.get-server-certificate-pem
@@ -941,7 +941,7 @@ def test_module_level_wrap_socket_is_deprecated_and_creates_its_own_context():
 # 保持相同，才能命中其 session cache。TLS 1.3 ticket 在 handshake 后异步到达，演示更复杂；本例
 # 固定 TLS 1.2，使 session ID 在 handshake 完成时即可复用。session 不能跨不同 SSLContext 使用。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.ssl.wrap-bio-session-parameter
 # polyglot-covers: python.ssl.ssl-session-client-injection-before-handshake

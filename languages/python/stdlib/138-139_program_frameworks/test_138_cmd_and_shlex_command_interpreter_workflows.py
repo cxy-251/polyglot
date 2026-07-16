@@ -4,8 +4,7 @@
 命令查找、帮助和补全。二者经常一起用于管理脚本和小型 REPL，因此放在
 同一套案例中比按小模块拆开更便于查阅。
 
-这些案例面向 Python 3.10 当前补丁系列；整个 Python 测试集尚未经过
-pytest 统一验证。
+这些案例面向 Python 3.10 当前补丁系列。
 """
 
 # polyglot-covers: python.stdlib.cmd python.cmd.Cmd-subclass

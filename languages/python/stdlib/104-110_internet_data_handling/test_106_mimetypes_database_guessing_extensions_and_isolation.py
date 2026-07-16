@@ -4,7 +4,7 @@ guess_type 只看名称后缀，不读取文件内容；返回的 encoding 是 g
 Content-Encoding，不是 MIME Content-Transfer-Encoding。encoding suffix 大小写敏感，type suffix
 才会回退到不区分大小写。suffix_map 可先把 .tgz 这类复合简写展开，再分别识别 type 与 encoding。
 
-这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+这些案例面向 Python 3.10 当前补丁系列。
 """
 
 # polyglot-covers: python.mimetypes.guess_type
@@ -70,7 +70,7 @@ def test_builtin_tgz_mapping_reports_archive_type_and_transport_encoding():
 # 表，False 还包含 common/non-standard 表；add_type 可替换 extension 的旧 type，并同步反向索引。
 # mime.types 每行先写 type，后写一个或多个不带点的 extension，后加载的文件具有更高优先级。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.mimetypes.MimeTypes
 # polyglot-covers: python.mimetypes.MimeTypes-independent-database
@@ -136,7 +136,7 @@ def test_constructor_and_standalone_reader_load_a_type_file(tmp_path):
 # 调用。init(files=[]) 只装载内建 well-known 表，避免宿主系统 mime.types；init(None) 则完全重建
 # 并读取 knownfiles。库代码若不想产生跨测试/租户状态泄漏，应优先持有独立 MimeTypes 实例。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.mimetypes.init
 # polyglot-covers: python.mimetypes.init-empty-files-builtins-only

@@ -5,8 +5,7 @@ producer 队列。两者在 3.10 只为兼容旧程序保留，新代码应使�
 这些案例用于读懂遗留框架的回调、缓冲和关闭语义，
 不是推荐新项目采用它。
 
-这些案例面向 Python 3.10 当前补丁系列；整个 Python 测试集尚未经过 pytest
-统一验证。
+这些案例面向 Python 3.10 当前补丁系列。
 """
 
 # polyglot-covers: python.stdlib.asyncore python.asyncore.loop
@@ -25,9 +24,22 @@ producer 队列。两者在 3.10 只为兼容旧程序保留，新代码应使�
 
 import os
 import socket
+import warnings
 
-import asynchat
-import asyncore
+with warnings.catch_warnings():
+    warnings.filterwarnings(
+        "ignore",
+        message="The asynchat module is deprecated",
+        category=DeprecationWarning,
+    )
+    warnings.filterwarnings(
+        "ignore",
+        message="The asyncore module is deprecated",
+        category=DeprecationWarning,
+    )
+    import asynchat
+    import asyncore
+
 import pytest
 
 
@@ -91,8 +103,9 @@ def test_dispatcher_joins_a_custom_map_and_close_removes_it():
     left, right = socket_pair()
     channel = asyncore.dispatcher(left, map=channel_map)
     try:
-        assert channel.fileno() in channel_map
-        assert channel_map[channel.fileno()] is channel
+        descriptor = channel.socket.fileno()
+        assert descriptor in channel_map
+        assert channel_map[descriptor] is channel
         assert channel.readable() is True
         assert channel.writable() is True
         assert channel.connected is True
@@ -169,15 +182,15 @@ def test_dispatcher_with_send_buffers_unsent_suffixes():
     right.settimeout(1)
     channel = asyncore.dispatcher_with_send(left, map=channel_map)
     try:
-        sent_or_buffered = channel.send(b"hello")
-        assert 0 <= sent_or_buffered <= 5
+        assert channel.send(b"hello") is None
         while channel.out_buffer:
             asyncore.loop(timeout=0, map=channel_map, count=1)
         assert right.recv(5) == b"hello"
     finally:
         channel.close()
         right.close()
-    # send 的返回值可能小于输入长度；dispatcher_with_send 保存剩余部分。
+    # dispatcher_with_send.send 不返回底层 socket 的发送量；它先尝试发送，
+    # 再把未发送后缀保存在 out_buffer，由 writable 事件继续冲刷。
 
 
 def test_file_wrapper_duplicates_the_original_descriptor_on_unix():
@@ -289,9 +302,9 @@ def test_discard_buffers_clears_input_output_and_producer_state():
 
     assert chat.ac_in_buffer == b""
     assert list(chat.producer_fifo) == []
-    # discard_buffers 不知道子类自建的 incoming 属性；
-    # 业务缓冲仍需子类自行清理。
-    assert chat.incoming == [b"application fragment"]
+    assert chat.incoming == []
+    # incoming 是 async_chat 自身用于收集输入的列表；discard_buffers 会原地清空
+    # 它、ac_in_buffer 和 producer_fifo，适合紧急丢弃整条协议流水线的数据。
 
 
 def test_abstract_async_chat_callbacks_must_be_overridden():

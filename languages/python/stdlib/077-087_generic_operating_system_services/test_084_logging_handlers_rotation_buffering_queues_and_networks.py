@@ -4,7 +4,7 @@ WatchedFileHandler 通过 device/inode 发现外部轮转，适合 Unix 上由 l
 RotatingFileHandler 在写入前按预计尺寸轮转；TimedRotatingFileHandler 的旧文件清理依赖
 可排序 suffix。``namer``/``rotator`` 可定制名字和搬运方式，但必须保持快速、确定。
 
-这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+这些案例面向 Python 3.10 当前补丁系列。
 """
 
 # polyglot-covers: python.logging.handlers.WatchedFileHandler
@@ -159,7 +159,7 @@ def test_timed_rotation_computes_interval_and_deletes_oldest_matching_suffix(tmp
 # MemoryHandler 则把已缓存 record 依次交给 target，可由容量或 ``flushLevel`` 触发。
 # 它直接调用 target.handle，因此 target.level 不会像 Logger.callHandlers 中那样自动检查。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.logging.handlers.BufferingHandler
 # polyglot-covers: python.logging.handlers.BufferingHandler.capacity
@@ -287,7 +287,7 @@ def test_set_target_and_flush_on_close_control_final_delivery():
 # 不会被污染。QueueListener 在后台线程依次派发，``stop`` 写 sentinel 并 join，所以无需
 # sleep 也能确定此前的 FIFO record 已处理。是否检查目标 handler.level 由参数显式控制。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.logging.handlers.QueueHandler
 # polyglot-covers: python.logging.handlers.QueueHandler.prepare
@@ -425,7 +425,7 @@ def test_listener_without_level_respect_offers_every_record_to_every_handler():
 # 接收端应校验来源，因为 pickle 不能用于不可信数据。这里仅调用离线 ``makePickle``，
 # 不创建连接。SysLog 的 facility/priority 组合也可在不打开 socket 时验证。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.logging.handlers.SocketHandler
 # polyglot-covers: python.logging.handlers.SocketHandler.makePickle
@@ -505,7 +505,7 @@ def test_syslog_level_mapping_falls_back_to_warning_for_custom_names():
 # 不访问网络。生产代码还应考虑超时、凭据和失败降级；这些 handler 会通过 handleError
 # 报告失败而非提供持久重试队列。NTEventLogHandler 则依赖 pywin32 和 Windows registry。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.logging.handlers.HTTPHandler
 # polyglot-covers: python.logging.handlers.HTTPHandler.mapLogRecord

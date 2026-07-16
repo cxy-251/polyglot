@@ -6,8 +6,7 @@
 代码对象、数据、
 子目录前缀、3.10 新增方法及缓存失效。
 
-这些案例面向 Python 3.10 当前补丁系列；整个 Python 测试集尚未经过 pytest
-统一验证。
+这些案例面向 Python 3.10 当前补丁系列。
 """
 
 # polyglot-covers: python.stdlib.zipimport python.zipimport.automatic-path-hook
@@ -165,12 +164,16 @@ def test_create_module_and_exec_module_follow_modern_loader_protocol(tmp_path):
     assert "polyglot_zip_module" not in sys.modules
 
 
+@pytest.mark.filterwarnings("ignore:zipimporter.find_loader")
 def test_legacy_find_methods_still_delegate_but_are_deprecated_in_310(tmp_path):
     archive = build_archive(tmp_path / "modules.zip")
     importer = zipimport.zipimporter(str(archive))
 
-    assert importer.find_module("polyglot_zip_module") is importer
-    assert importer.find_module("missing_zip_module") is None
+    with pytest.warns(DeprecationWarning, match="find_module"):
+        assert importer.find_module("polyglot_zip_module") is importer
+        assert importer.find_module("missing_zip_module") is None
+    # find_loader 的 C 实现一次调用会重复发出同一弃用警告；本用例已通过
+    # find_module 显式断言旧协议会告警，故对重复噪声使用精确过滤器。
     loader, portions = importer.find_loader("polyglot_zip_module")
     assert loader is importer
     assert portions == []

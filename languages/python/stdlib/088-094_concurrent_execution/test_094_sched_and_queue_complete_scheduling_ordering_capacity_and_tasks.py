@@ -4,7 +4,7 @@ scheduler 把时间来源和等待策略注入构造器，因此业务代码可�
 使用 deterministic fake clock。较小 priority 数先执行；同一 time/priority 保持登记顺序。
 enter/enterabs 返回的 Event 是 cancel handle，queue 返回按执行顺序排列的快照。
 
-这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+这些案例面向 Python 3.10 当前补丁系列。
 """
 
 # polyglot-covers: python.sched.scheduler
@@ -102,7 +102,7 @@ def test_queue_is_an_ordered_snapshot_and_event_is_a_cancel_handle():
 # event loop。action 或 delayfunc 的异常会向上传播，但 queue 保持一致：已开始的失败 action
 # 不会重试，尚未弹出的事件仍保留。执行过慢只会落后，不会静默丢事件。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.sched.scheduler.run
 # polyglot-covers: python.sched.scheduler.run-blocking-false
@@ -204,7 +204,7 @@ def test_late_and_newly_inserted_events_are_reordered_but_not_dropped():
 # 近似快照，不能作为随后 get/put 不阻塞的并发保证；控制流应直接用 blocking operation、
 # timeout 或捕获 Empty/Full。PriorityQueue 的同优先级 payload 也必须可比较，或显式忽略。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.queue.Queue
 # polyglot-covers: python.queue.LifoQueue
@@ -302,7 +302,7 @@ def test_priority_payload_tie_needs_comparable_data_or_a_wrapper():
 # get 最终必须恰好一次 task_done。join 等计数归零而非 queue 变空。worker 应把 task_done
 # 放在 finally 中，否则异常路径会让 join 永久等待；多调用一次则以 ValueError 暴露失配。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.queue.Queue.task_done
 # polyglot-covers: python.queue.Queue.join
@@ -386,7 +386,7 @@ def test_task_done_more_times_than_put_is_rejected():
 # tracking。get 仍可阻塞。CPython 的 C 实现允许同线程的 put/get 被另一次 put 重入，因而
 # 可安全用于 __del__ 或 weakref callback；这是 implementation detail，不应假定其他实现相同。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.queue.SimpleQueue
 # polyglot-covers: python.queue.SimpleQueue.qsize

@@ -5,7 +5,7 @@
 读取元数据并做同类型往返，不应硬编码本机地址、字节序或 C long 的宽度。
 
 array 也直接导出可写 buffer；memoryview 存活期间可以原地改元素，但不能调整底层
-数组长度。当前文件尚未经过 pytest 验证。
+数组长度。
 """
 
 # polyglot-covers: python.array.typecodes python.array.itemsize

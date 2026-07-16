@@ -4,7 +4,7 @@ I/O category 由 text、buffered binary、raw binary 三层组成；具体 strea
 一部分操作。caller 应先理解 readable/writable/seekable 契约，并处理
 ``UnsupportedOperation``，而不是假设所有 file-like objects 都像磁盘文件。
 
-这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+这些案例面向 Python 3.10 当前补丁系列。
 """
 
 # polyglot-covers: python.io.IOBase python.io.RawIOBase
@@ -90,7 +90,7 @@ def test_writelines_does_not_insert_any_line_separator():
 # requested size。``peek`` 不推进 logical position，且返回量可能多于请求值；
 # ``read1`` 限制最多触发一次 raw read，适合在 buffer 之上实现协议 framing。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.io.RawIOBase.read python.io.RawIOBase.readall
 # polyglot-covers: python.io.RawIOBase.readinto python.io.raw-short-read
@@ -172,7 +172,7 @@ def test_read1_performs_at_most_one_raw_read_when_buffer_is_empty():
 # 预分配目标时，
 # ``readinto`` 可避免为结果再创建 bytes object。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.io.BytesIO python.io.BytesIO.getvalue
 # polyglot-covers: python.io.BytesIO.seek python.io.BytesIO.truncate
@@ -242,7 +242,7 @@ def test_getbuffer_view_mutates_owner_and_temporarily_prevents_resize_or_close()
 # 全部 input 后可暂存在 userspace，直到 flush/close。``detach`` 转移底层 raw stream
 # 所有权，原 buffer 随即不可用，caller 必须负责关闭返回对象。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.io.FileIO python.io.raw-file-io
 # polyglot-covers: python.io.FileIO.mode python.io.FileIO.name
@@ -355,7 +355,7 @@ def test_buffered_rw_pair_uses_distinct_reader_and_writer(tmp_path):
 # 参数同时控制 read recognition/translation 与 write translation；encoding 应显式给出，
 # 避免 locale-dependent defaults。detach 后 wrapper 不可用，binary buffer 归 caller。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.io.TextIOWrapper python.io.text-binary-layering
 # polyglot-covers: python.io.text-encoding python.io.text-errors
@@ -474,7 +474,7 @@ def test_line_buffering_flushes_when_write_contains_newline():
 # 会 overwrite 而非 append。``open_code`` 用 binary mode 表达“把文件当可执行代码”
 # 的意图；公开 API 接受 optional encoding 时可用 ``text_encoding`` 标出 locale choice。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.io.StringIO python.io.StringIO.getvalue
 # polyglot-covers: python.io.stringio-initial-position python.io.stringio-overwrite

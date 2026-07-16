@@ -4,7 +4,7 @@ ttk 把行为与外观分离。本文件用一个真实但隐藏的 Tk 根窗口
 样式数据库、状态规格和 ttk 独有控件；若容器没有显示服务器，
 仅跳过本文件而不伪造控件命令。
 
-案例面向 Python 3.10；整个 Python 测试集尚未经过 pytest 统一验证。
+案例面向 Python 3.10。
 """
 
 # polyglot-covers: python.stdlib.tkinter.ttk python.ttk.Widget-state-instate

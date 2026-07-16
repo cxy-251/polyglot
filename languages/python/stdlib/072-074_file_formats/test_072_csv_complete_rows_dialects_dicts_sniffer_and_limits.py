@@ -5,7 +5,7 @@ CSV 没有唯一标准；reader/writer 依靠 Dialect 组合 delimiter、quote�
 交给
 ``str``，并把 ``None`` 写为空字段，这对 DB-API 方便但不可逆。
 
-这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+这些案例面向 Python 3.10 当前补丁系列。
 """
 
 # polyglot-covers: python.csv.reader python.csv.writer python.csv.newline-empty
@@ -194,7 +194,7 @@ def test_registry_returns_an_immutable_dialect_and_can_unregister():
 # 临时修改必须恢复。strict 模式能报告未闭合 quote；reader 的输入 iterator
 # 必须返回 str 而非 bytes。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.csv.DictReader python.csv.DictReader.fieldnames
 # polyglot-covers: python.csv.dict-row-order python.csv.DictReader.restkey

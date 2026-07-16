@@ -7,8 +7,7 @@ iterable 能产生 iterator，iterator 则用 ``__next__`` 逐项推进并以
 ``yield from`` 的双向委托。
 
 内容基于 Python 3.10 For statement、Yield expressions、Generator-iterator
-methods、Iterator types 和内置 iter/reversed。当前项目处于只编写、暂不执行
-的阶段，本文件尚未经过 pytest 验证。
+methods、Iterator types 和内置 iter/reversed。
 """
 
 # polyglot-covers: python.statement.for python.statement.for-else

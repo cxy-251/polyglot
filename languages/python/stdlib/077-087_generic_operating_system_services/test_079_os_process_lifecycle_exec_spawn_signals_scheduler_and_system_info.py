@@ -4,7 +4,7 @@
 进入明确路径；发生错误也要以 ``_exit`` 终止，避免继续跑 pytest runner。
 parent 必须 reap child，否则会留下 zombie process。
 
-这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+这些案例面向 Python 3.10 当前补丁系列。
 """
 
 # polyglot-covers: python.os.fork python.os.fork-parent-child-return
@@ -91,7 +91,7 @@ def test_waitpid_wnohang_returns_zero_while_child_is_blocked_on_pipe():
 # fork 隔离 pytest parent，再把 child stdout 接到 pipe。``v`` 接受 argv sequence，
 # ``p`` 搜索 PATH，末尾 ``e`` 则用传入 mapping 完全替换 inherited environment。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.os.execv python.os.exec-process-replacement
 # polyglot-covers: python.os.exec-argv-zero python.os.exec-never-returns
@@ -183,7 +183,7 @@ def test_execvpe_searches_supplied_path_and_replaces_environment():
 # 旧 ``spawn*``、``popen`` 和 ``system`` 仍需理解，但新代码通常应使用
 # ``subprocess``；尤其 shell string 会引入 quoting/injection 和平台差异。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.os.posix-spawn python.os.posix-spawn-file-actions
 # polyglot-covers: python.os.POSIX_SPAWN_DUP2 python.os.POSIX_SPAWN_CLOSE
@@ -276,7 +276,7 @@ def test_popen_and_system_expose_legacy_shell_status_conventions():
 # ``WTERMSIG``。``WNOWAIT`` 可以观察 child 而不 reap，pidfd 则用稳定 descriptor 引用
 # process，避免 PID reuse race。案例用 pipe handshake，不依赖 sleep。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.os.kill python.os.WIFSIGNALED
 # polyglot-covers: python.os.WTERMSIG python.os.signal-negative-exitcode
@@ -396,7 +396,7 @@ def test_pidfd_open_returns_non_inheritable_process_descriptor():
 # priority、CPU affinity 和 timing。``sched_yield`` 是无返回值的调度提示，不保证
 # 另一 thread/process 一定立即获得 CPU。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.os.sched-getscheduler python.os.sched-getparam
 # polyglot-covers: python.os.sched-param python.os.sched-priority-range
@@ -479,7 +479,7 @@ def test_times_result_has_named_fields_and_legacy_five_tuple_view():
 # 名称来自 mapping，值仍由 host 决定。OS randomness 可用于加密，但应用层 token
 # 通常应优先使用 ``secrets``；``getrandom`` 还允许 short read，caller 必须累计。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.os.uname python.os.uname-result
 # polyglot-covers: python.os.confstr python.os.confstr-names

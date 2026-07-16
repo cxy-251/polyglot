@@ -4,8 +4,7 @@
 ``faulthandler`` 则在解释器故障或超时场景用更受限但更可靠的方式写出栈。
 案例使用内存命令流和临时日志，不进入人工交互，也不制造真正的崩溃。
 
-这些案例面向 Python 3.10 当前补丁系列；整个 Python 测试集尚未经过 pytest
-统一验证。
+这些案例面向 Python 3.10 当前补丁系列。
 """
 
 # polyglot-covers: python.stdlib.bdb python.bdb.breakpoint

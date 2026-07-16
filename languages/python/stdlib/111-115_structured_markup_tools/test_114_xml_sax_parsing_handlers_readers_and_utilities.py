@@ -4,7 +4,7 @@ SAX 不返回树：``parse*`` 返回 None，业务结果必须由 ContentHandler
 文件名、file-like、str 或 bytes；``make_parser()`` 返回 XMLReader。3.7.1 起外部通用实体默认
 关闭，但 SAX 整体仍不是恶意 XML 安全边界。格式错误通过带行列和底层异常的 SAXParseException。
 
-这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+这些案例面向 Python 3.10 当前补丁系列。
 """
 
 # polyglot-covers: python.xml.sax.make_parser
@@ -97,7 +97,7 @@ def test_malformed_xml_raises_sax_parse_exception_with_location_and_cause():
 # 回调期间位置准确，需立即复制行列。``characters()`` 的 chunk 边界没有语义保证，同一连续文本
 # 可能被拆成多次回调；消费方应累积后在 endElement 处解释，不能把一次回调当作完整字段。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.xml.sax.handler.ContentHandler
 # polyglot-covers: python.xml.sax.handler.ContentHandler.setDocumentLocator
@@ -194,7 +194,7 @@ def test_incremental_input_may_split_text_so_consumers_join_character_events():
 # 普通无前缀属性不继承默认命名空间。prefix mapping 事件包围对应元素，但多个 mapping 的相对
 # 嵌套顺序不保证；若 QName 出现在文本或属性值中，应用需利用 scope 事件自行解释。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.xml.sax.handler.feature_namespaces
 # polyglot-covers: python.xml.sax.handler.feature_namespace_prefixes
@@ -265,7 +265,7 @@ def test_namespace_mode_expands_names_and_reports_prefix_scope_separately():
 # 未知名称与实现不支持的值由两种 SAX 异常区分。增量 reader 可 ``feed`` 分块并以 ``close`` 检查
 # 文档结尾；close 后若要解析下一份文档必须先 ``reset``，直接复用的结果没有定义。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.xml.sax.xmlreader.XMLReader
 # polyglot-covers: python.xml.sax.xmlreader.XMLReader.setContentHandler
@@ -353,7 +353,7 @@ def test_incremental_parser_is_reset_before_reuse_for_a_second_document():
 # stream 存在，解析器会忽略 byte stream、其 encoding 以及自行打开 system ID；这是注入已解码
 # 受控输入、避免意外 I/O 的关键。``prepare_input_source`` 统一包装字符串、file-like 或已有对象。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.xml.sax.xmlreader.InputSource
 # polyglot-covers: python.xml.sax.xmlreader.InputSource.publicId
@@ -424,7 +424,7 @@ def test_prepare_input_source_preserves_existing_source_and_wraps_file_like():
 # 两者都实现 copy/get/contains/items/keys/values，以及 getLength/getNames/getType/getValue。属性对象
 # 可能被 parser 复用，因此需要长期保存时复制普通 dict，而不是持有回调参数本身。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.xml.sax.xmlreader.AttributesImpl
 # polyglot-covers: python.xml.sax.xmlreader.Attributes.getLength
@@ -477,7 +477,7 @@ def test_attributes_ns_maps_expanded_names_to_original_qualified_names():
 # 作为 ``property_lexical_handler`` 注册。DTDHandler 只处理 notation 和未解析实体声明。CDATA
 # 内容仍走 characters，词法回调只标记边界。案例只解析内部声明，不访问外部 system ID。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.xml.sax.handler.DTDHandler
 # polyglot-covers: python.xml.sax.handler.DTDHandler.notationDecl
@@ -573,7 +573,7 @@ def test_dtd_and_lexical_handlers_receive_declarations_comments_and_cdata_bounds
 # 映射到受控 InputSource；返回原 URL 会把 I/O 决策交还 parser。ErrorHandler 决定 warning/error/
 # fatalError 是否抛出；不可恢复错误通常记录后重新抛出传入 SAXParseException。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.xml.sax.handler.EntityResolver
 # polyglot-covers: python.xml.sax.handler.EntityResolver.resolveEntity
@@ -659,7 +659,7 @@ def test_custom_error_handler_can_record_then_propagate_fatal_parse_error():
 # 只认识 ``&amp;``/``&lt;``/``&gt;`` 和调用方规则，不是通用实体解析器。``quoteattr`` 连外层引号
 # 一起返回，并选择能减少转义的引号；双/单引号同时出现时使用双引号并转义其中的双引号。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.xml.sax.saxutils.escape
 # polyglot-covers: python.xml.sax.saxutils.escape.entities
@@ -704,7 +704,7 @@ def test_quoteattr_returns_delimiters_and_chooses_the_less_costly_quote_style():
 # 文本/属性并输出 encoding 声明；``short_empty_elements`` 只改变无内容元素的表层写法。namespace
 # 模式要先提供 prefix mapping，AttributesNS 同时携带扩展名与用于输出的 qname。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.xml.sax.saxutils.XMLGenerator
 # polyglot-covers: python.xml.sax.saxutils.XMLGenerator.startDocument
@@ -771,7 +771,7 @@ def test_namespace_generator_uses_mapping_and_attribute_qnames_for_output():
 # 透明透传；子类只覆盖关心的回调即可实现重命名、内容清洗或审计。filter 仍是流式模型，不能在
 # startElement 中向后查看尚未出现的内容；需要随机访问时应改用 DOM/ElementTree。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.xml.sax.saxutils.XMLFilterBase
 # polyglot-covers: python.xml.sax.saxutils.XMLFilterBase.parse

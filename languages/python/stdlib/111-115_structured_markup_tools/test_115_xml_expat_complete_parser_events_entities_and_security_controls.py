@@ -4,7 +4,7 @@
 stateful parser 通过属性安装回调，``Parse(data, isfinal)`` 可拼接同一文档的输入块，最后一块
 必须标 final。一个 parser 只能解析一份 XML；完成后应新建实例，不能把第二份文档继续喂入。
 
-这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+这些案例面向 Python 3.10 当前补丁系列。
 """
 
 # polyglot-covers: python.xml.parsers.expat.ParserCreate
@@ -75,7 +75,7 @@ def test_finished_parser_rejects_a_second_document():
 # ``ordered_attributes`` 改用扁平 name/value 列表保留源顺序；``specified_attributes`` 排除 DTD
 # 默认属性。``buffer_text`` 可减少字符回调次数但不能赋予 chunk 语义。显式 encoding 会覆盖声明。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.xml.parsers.expat.ParserCreate.encoding
 # polyglot-covers: python.xml.parsers.expat.ParserCreate.namespace_separator
@@ -169,7 +169,7 @@ def test_parser_encoding_argument_overrides_the_xml_declaration():
 # ``(type, quantifier, name, children)`` 递归元组，常量来自 ``expat.model``；Attlist 区分默认值
 # 与 required。内部、外部和 NDATA 实体在 EntityDecl 的参数组合不同，不能只看 entityName。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.xml.parsers.expat.xmlparser.XmlDeclHandler
 # polyglot-covers: python.xml.parsers.expat.xmlparser.StartDoctypeDeclHandler
@@ -257,7 +257,7 @@ def test_declaration_handlers_receive_typed_dtd_information():
 # 在对应 start element 前、end element 后出现。``DefaultHandler`` 会抑制内部实体展开并看到原
 # 引用；``DefaultHandlerExpand`` 允许展开。GetInputContext 和当前位置只应在事件回调内解释。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.xml.parsers.expat.xmlparser.ProcessingInstructionHandler
 # polyglot-covers: python.xml.parsers.expat.xmlparser.CommentHandler
@@ -350,7 +350,7 @@ def test_default_handler_expand_changes_internal_entity_dispatch():
 # ErrorLineNumber/ErrorColumnNumber/ErrorByteIndex 只在 Parse/ParseFile 抛错后有意义。errors 常量
 # 的值是消息字符串，不是数字；应经 ``errors.codes[constant]`` 比较，再用 messages/ErrorString 展示。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.xml.parsers.expat.ExpatError
 # polyglot-covers: python.xml.parsers.expat.error
@@ -391,7 +391,7 @@ def test_parse_error_matches_symbolic_code_and_all_location_views():
 # 实体，必须用 opaque context 创建 ExternalEntityParser、配置回调、提供受控内容并返回非零。
 # 参数实体和 foreign DTD 另有显式开关；这些都会扩大输入面，案例不读取网络或真实外部文件。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.xml.parsers.expat.xmlparser.SetBase
 # polyglot-covers: python.xml.parsers.expat.xmlparser.GetBase
@@ -467,7 +467,7 @@ def test_parameter_entity_and_foreign_dtd_controls_must_be_set_before_parsing():
 # 防护，本例只读取并保持当前值。3.10.20 又加入内存分配阈值和最大放大倍数。跨 3.10 patch
 # 运行必须 ``hasattr``，不能因主版本相同就假定 API 存在，也不能用真实攻击载荷验证安全机制。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.xml.parsers.expat.xmlparser.SetReparseDeferralEnabled-3.10.14
 # polyglot-covers: python.xml.parsers.expat.xmlparser.GetReparseDeferralEnabled-3.10.14

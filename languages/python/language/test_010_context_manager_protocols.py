@@ -7,8 +7,7 @@ exit 接收正常退出的三个 ``None``，或接收异常类型、实例与 tr
 进入、从右到左退出，并且只清理已经成功进入的部分。
 
 内容基于 Python 3.10 With statement、With Statement Context Managers 和
-Context Manager Types。当前项目处于只编写、暂不执行的阶段，本文件尚未经过
-pytest 验证。
+Context Manager Types。
 """
 
 # polyglot-covers: python.statement.with python.statement.with-as

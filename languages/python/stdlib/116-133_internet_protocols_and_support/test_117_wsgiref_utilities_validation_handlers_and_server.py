@@ -113,6 +113,7 @@ class ClosingIterable:
 def make_environ():
     environ = {}
     util.setup_testing_defaults(environ)
+    environ["QUERY_STRING"] = ""
     return environ
 
 

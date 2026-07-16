@@ -6,7 +6,7 @@
 比较和 ``in`` 的 fallback 顺序。
 
 内容基于 Python 3.10 Expressions 6.10 和 Data Model 的 rich comparison
-methods。当前项目处于只编写、暂不执行的阶段，本文件尚未经过 pytest 验证。
+methods。
 """
 
 # polyglot-covers: python.expression.value-comparisons

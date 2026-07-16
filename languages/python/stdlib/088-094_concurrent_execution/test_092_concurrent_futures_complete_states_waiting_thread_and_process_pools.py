@@ -4,7 +4,7 @@ Executor 通常创建 Future；官方也允许 unit test/Executor implementation
 cancel 只对尚未 running 的 work 成功。result/exception 根据 terminal state 返回或重抛；
 callback 按注册顺序执行，若注册时已完成则在 add_done_callback 调用内立即执行。
 
-这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+这些案例面向 Python 3.10 当前补丁系列。
 """
 
 # polyglot-covers: python.concurrent.futures.Future
@@ -125,7 +125,7 @@ def test_terminal_result_is_single_assignment_and_callbacks_preserve_order():
 # FIRST_EXCEPTION 只在 exception terminal state 出现时提前返回；as_completed 按完成顺序
 # yield，每个重复 Future 只 yield 一次。timeout 从创建 iterator 的原始调用时刻计算。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.concurrent.futures.wait
 # polyglot-covers: python.concurrent.futures.wait-duplicate-elimination
@@ -221,7 +221,7 @@ def test_as_completed_yields_each_future_once_when_all_are_done():
 # GIL。Executor.map 会立即收集 input iterables，却按 input order 产出结果。worker task
 # 等待同一小 pool 中另一 Future 容易 deadlock；应重构 dependency 或使用有界 timeout。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.concurrent.futures.Executor
 # polyglot-covers: python.concurrent.futures.Executor.submit
@@ -337,7 +337,7 @@ def test_invalid_worker_count_and_submit_after_context_shutdown_fail():
 # 批量取消 pending work，但 running work 仍完成。initializer 异常会使 executor broken，
 # 所有 pending Future 和后续 submit 都抛 BrokenThreadPool，不会换一个 thread 重试。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.concurrent.futures.Executor.shutdown
 # polyglot-covers: python.concurrent.futures.Executor-shutdown-wait-false
@@ -427,7 +427,7 @@ def test_initializer_failure_breaks_pending_and_future_submissions():
 # import。``mp_context`` 让 library 不强改 global start method。map 保持 input order，并用
 # chunksize 降低长 iterable 的 IPC overhead。普通 task exception 不会弄坏整个 pool。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.concurrent.futures.ProcessPoolExecutor
 # polyglot-covers: python.concurrent.futures.ProcessPoolExecutor-max_workers
@@ -532,7 +532,7 @@ def test_invalid_process_worker_count_is_rejected():
 # executor 无法确定 pool invariant，pending/subsequent work 改抛 BrokenProcessPool。
 # worker 内调用本 Executor/Future method 也会 deadlock，不能传入 parent executor 依赖。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.concurrent.futures.process.BrokenProcessPool
 # polyglot-covers: python.concurrent.futures.process-initializer-failure

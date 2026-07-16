@@ -6,7 +6,7 @@
 因为它还识别没有 ``__await__`` 方法的 generator-based coroutine。
 
 本文件的 asyncio 工作流都立即完成，不使用 sleep 或外部 I/O；创建的 native
-coroutine 都会被 event loop 消费或显式 close。当前文件尚未经过 pytest 验证。
+coroutine 都会被 event loop 消费或显式 close。
 """
 
 # polyglot-covers: python.collections.abc.Generator python.generator.abc-primitives
@@ -524,7 +524,7 @@ def test_generator_awaitable_and_coroutine_support_runtime_generic_aliases():
 # ``AsyncGenerator`` 又在 iterator 基础上增加发送、异常注入和显式异步关闭。
 #
 # 这里的所有 awaitable 都会立即完成；native async generator 会被耗尽或显式
-# ``aclose``。当前文件尚未经过 pytest 验证。
+# ``aclose``。
 
 # polyglot-covers: python.collections.abc.AsyncIterable python.async-iterable.primitive
 # polyglot-covers: python.collections.abc.AsyncIterator python.async-iterator.primitive

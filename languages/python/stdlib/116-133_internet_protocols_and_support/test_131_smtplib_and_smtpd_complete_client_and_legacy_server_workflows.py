@@ -4,8 +4,7 @@
 Python 3.10 仍提供的扩展点，不启动 asyncore 监听器。``smtpd`` 已弃用，
 实际新服务应迁移到 asyncio 方案。
 
-这些案例面向 Python 3.10 当前补丁系列；整个 Python 测试集尚未经过
-pytest 统一验证。
+这些案例面向 Python 3.10 当前补丁系列。
 """
 
 # polyglot-covers: python.stdlib.smtplib python.smtplib.SMTP-default-state
@@ -31,7 +30,26 @@ from email.message import EmailMessage
 from io import BytesIO
 
 import smtplib
-import smtpd
+import warnings
+
+with warnings.catch_warnings():
+    warnings.filterwarnings(
+        "ignore",
+        message="The smtpd module is deprecated",
+        category=DeprecationWarning,
+    )
+    warnings.filterwarnings(
+        "ignore",
+        message="The asyncore module is deprecated",
+        category=DeprecationWarning,
+    )
+    warnings.filterwarnings(
+        "ignore",
+        message="The asynchat module is deprecated",
+        category=DeprecationWarning,
+    )
+    import smtpd
+
 import pytest
 
 

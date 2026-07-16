@@ -4,8 +4,8 @@ Mapping 只要求 lookup、key iteration 和 length 三个 primitive。默认 mi
 ``get``、membership、equality 与三种 view；view 保存底层 mapping 引用，不是 list
 快照。Key/item view 继承 Set，而 value view 允许重复，只是普通 Collection。
 
-本文件同时区分 ABC 默认 view 和 Python 3.10 内置 dict view 的额外能力。当前文件
-尚未经过 pytest 验证。
+本文件同时区分 ABC 默认 view 和 Python 3.10 内置 dict view 的额外能力。
+
 """
 
 # polyglot-covers: python.collections.abc.Mapping python.mapping.abstract-primitives
@@ -391,7 +391,7 @@ def test_mapping_and_view_abcs_support_generic_alias_metadata():
 # 因此会触发具体实现的 hook，但不提供事务回滚或 built-in dict 的 LIFO popitem。
 #
 # 本文件的 dict-backed 辅助类型保留 insertion order 只为稳定展示调用路径；ABC 本身
-# 不承诺 popitem 顺序。当前文件尚未经过 pytest 验证。
+# 不承诺 popitem 顺序。
 
 # polyglot-covers: python.collections.abc.MutableMapping python.mutable-mapping.primitives
 # polyglot-covers: python.mutable-mapping.pop python.mutable-mapping.pop-default

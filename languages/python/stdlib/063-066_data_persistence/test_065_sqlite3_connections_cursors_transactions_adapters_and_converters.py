@@ -4,7 +4,7 @@ SQLite 是无独立服务进程的磁盘/内存数据库；``sqlite3`` 实现 DB
 程序给出，数据必须通过 qmark 或 named placeholder 绑定，不能用字符串拼接。默认只转换
 SQLite 的 NULL/INTEGER/REAL/TEXT/BLOB 五种存储类，自定义类型留给后续适配案例。
 
-这些案例面向 Python 3.10；当前文件尚未经过 pytest 验证。
+这些案例面向 Python 3.10。
 """
 
 # polyglot-covers: python.sqlite3.connect python.sqlite3.memory python.sqlite3.path-like
@@ -222,7 +222,7 @@ def test_operations_on_a_closed_connection_raise_programming_error():
 # ``executemany`` 针对 DML 重复绑定，``executescript`` 才负责脚本。``description``、
 # ``lastrowid`` 与 ``rowcount`` 各有不同更新时间，不能把它们当成统一的结果摘要。
 #
-# 这些案例面向 Python 3.10；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10。
 
 # polyglot-covers: python.sqlite3.Cursor.execute python.sqlite3.single-statement
 # polyglot-covers: python.sqlite3.Cursor.executemany python.sqlite3.parameter-iterable
@@ -453,7 +453,7 @@ def test_closed_cursor_rejects_future_operations_but_connection_survives():
 # SELECT/DDL 不会自行开启事务；``isolation_level=None`` 才把控制完全交给 SQLite
 # autocommit/显式 SQL。Connection 的 with 只负责 commit/rollback，既不 BEGIN 也不 close。
 #
-# 这些案例面向 Python 3.10；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10。
 
 # polyglot-covers: python.sqlite3.isolation-level python.sqlite3.deferred-default
 # polyglot-covers: python.sqlite3.in-transaction python.sqlite3.implicit-begin
@@ -721,7 +721,7 @@ def test_savepoint_can_rollback_part_of_an_explicit_transaction():
 # connect 启用 PARSE_DECLTYPES/PARSE_COLNAMES 才运行。converter 注册是进程级全局状态，
 # 因此案例使用本文件唯一的类型名，避免相互覆盖。
 #
-# 这些案例面向 Python 3.10；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10。
 
 # polyglot-covers: python.sqlite3.PrepareProtocol python.sqlite3.__conform__
 # polyglot-covers: python.sqlite3.register-adapter python.sqlite3.adapter-precedence

@@ -6,8 +6,8 @@ format spec 交给 ``__format__``，但 ``!s`` / ``!r`` / ``!a`` 会先把对象
 给出相同且在生命周期内稳定的 hash，否则查找结构会出现违反直觉的结果。
 
 内容基于 Python 3.10 Basic customization、Formatted string literals 和内置
-repr/str/ascii/format/bytes/hash。当前项目处于只编写、暂不执行的阶段，本文件
-尚未经过 pytest 验证。
+repr/str/ascii/format/bytes/hash。
+
 """
 
 # polyglot-covers: python.builtin.repr python.builtin.str python.builtin.ascii

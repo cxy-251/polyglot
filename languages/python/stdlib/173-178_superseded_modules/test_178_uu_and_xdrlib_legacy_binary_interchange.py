@@ -6,8 +6,7 @@ RFC 1014 风格的大端、四字节对齐规则打包数据。案例覆盖流�
 游标协议。新协议通常应选用仍在维护且自带模式定义、大小限制和
 安全审计的序列化方案。
 
-这些案例面向 Python 3.10 当前补丁系列；整个 Python 测试集尚未经过 pytest
-统一验证。
+这些案例面向 Python 3.10 当前补丁系列。
 """
 
 # polyglot-covers: python.stdlib.uu python.uu.encode python.uu.decode

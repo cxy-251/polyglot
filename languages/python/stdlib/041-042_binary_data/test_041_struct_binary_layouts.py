@@ -6,7 +6,7 @@
 
 本文件用带字段含义的小记录说明格式字符串，而不是穷举所有数值边界。``struct``
 不负责文本编码、消息分帧、校验或版本兼容，这些协议责任会在最后的长度前缀案例中
-明确展示。当前文件尚未经过 pytest 验证。
+明确展示。
 """
 
 # polyglot-covers: python.stdlib.struct python.struct.pack python.struct.unpack

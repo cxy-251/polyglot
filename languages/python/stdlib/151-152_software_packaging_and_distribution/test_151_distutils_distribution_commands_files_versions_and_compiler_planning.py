@@ -5,8 +5,7 @@
 纯本地工具，不实际调用 C 编译器或安装到解释器；新项目应采用当前
 PyPA 工具链。
 
-这些案例面向 Python 3.10 当前补丁系列；整个 Python 测试集尚未经过 pytest
-统一验证。
+这些案例面向 Python 3.10 当前补丁系列。
 """
 
 # polyglot-covers: python.stdlib.distutils python.distutils.deprecated-3.10
@@ -40,7 +39,15 @@ PyPA 工具链。
 # polyglot-covers: python.distutils.log-threshold python.distutils.dry-run
 # polyglot-covers: python.distutils.errors
 
-from distutils import log
+import warnings
+
+with warnings.catch_warnings():
+    warnings.filterwarnings(
+        "ignore",
+        message="The distutils package is deprecated",
+        category=DeprecationWarning,
+    )
+    from distutils import log
 from distutils.archive_util import ARCHIVE_FORMATS
 from distutils.archive_util import check_archive_formats
 from distutils.archive_util import make_archive
@@ -542,7 +549,13 @@ def test_file_directory_dependency_and_archive_utilities_form_a_local_workflow(
 
 
 def test_compiler_factory_and_option_generators_only_plan_commands(tmp_path):
-    compiler = new_compiler(compiler="unix", dry_run=True, force=True)
+    with warnings.catch_warnings():
+        warnings.filterwarnings(
+            "ignore",
+            message="The distutils.sysconfig module is deprecated",
+            category=DeprecationWarning,
+        )
+        compiler = new_compiler(compiler="unix", dry_run=True, force=True)
     compiler.add_include_dir(str(tmp_path / "include"))
     compiler.add_library_dir(str(tmp_path / "lib"))
     compiler.define_macro("FEATURE", "1")

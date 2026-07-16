@@ -4,7 +4,7 @@
 copy-on-write，映射内可见但不改变文件。length=0 在 Unix 表示映射调用时的整个非空文件。映射
 buffered file 前必须先 flush，否则 Python 缓冲区中的数据可能尚未到达可映射的文件。
 
-这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+这些案例面向 Python 3.10 当前补丁系列。
 """
 
 # polyglot-covers: python.mmap.mmap-file-backed
@@ -74,7 +74,7 @@ def test_buffered_file_is_flushed_before_mapping_its_current_contents(tmp_path):
 # 不能改变映射长度。它同时导出可写 buffer，可直接交给 memoryview 和 re；只要仍有导出的 view，
 # close 就会抛 BufferError，以防底层地址失效后留下悬空视图。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.mmap.bytearray-like-indexing
 # polyglot-covers: python.mmap.index-returns-int
@@ -131,7 +131,7 @@ def test_memoryview_and_regular_expression_operate_on_the_mapping_without_copy()
 # write_byte 都推进游标；切片访问不推进。write 不会自动扩容，越过映射末尾时整体失败并抛
 # ValueError。混用两套接口时必须显式管理 seek，不能把索引位置误当成当前文件位置。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.mmap.write
 # polyglot-covers: python.mmap.write-returns-byte-count
@@ -192,7 +192,7 @@ def test_cursor_operations_cannot_cross_the_fixed_mapping_end():
 # bytes-like object。move 在同一映射中复制固定数量字节，并按 memmove 语义正确处理源、目标重叠，
 # 不同于用可能已被覆盖的数据逐字节手写循环。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.mmap.find
 # polyglot-covers: python.mmap.find-start-end-slice-semantics
@@ -240,7 +240,7 @@ def test_move_cannot_mutate_a_read_only_mapping(tmp_path):
 # 长度，size() 则查询整个底层文件，两者在分段映射时不同。窗口中的索引从零开始，并不等于文件的
 # 绝对偏移，分块处理大文件时要单独保留 base offset。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.mmap.offset
 # polyglot-covers: python.mmap.offset-allocation-granularity-alignment
@@ -290,7 +290,7 @@ def test_unaligned_offset_is_rejected_and_unix_granularities_match(tmp_path):
 # 成功统一返回 None。范围 offset 必须按页或分配粒度对齐。关闭 mapping 不会关闭调用者传入的文件，
 # 而关闭后再使用 mapping 会抛 ValueError；with 能明确管理这两层独立所有权。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.mmap.flush
 # polyglot-covers: python.mmap.flush-success-none
@@ -347,7 +347,7 @@ def test_context_manager_closes_the_mapping_on_exit():
 # 仍导出底层地址时也不能 resize，因为移动映射会让 view 悬空。正确顺序是 release 所有视图，再
 # resize，最后重新取得新范围的 view。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.mmap.resize
 # polyglot-covers: python.mmap.resize-updates-mapping-length
@@ -404,7 +404,7 @@ def test_exported_memoryview_must_be_released_before_resize(tmp_path):
 # MAP_PRIVATE 与 PROT_READ/PROT_WRITE 精确描述映射；access 是跨平台的替代入口，不能同时再显式
 # 提供 flags/prot。MAP_* 的完整集合由操作系统决定，使用附加 flag 前应 hasattr 探测。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.mmap.anonymous-mapping-fileno-minus-one
 # polyglot-covers: python.mmap.anonymous-mapping-zero-initialized
@@ -465,7 +465,7 @@ def test_optional_map_constants_are_discovered_instead_of_assumed():
 # readahead/回收策略，不改变字节内容。可用 MADV_* 集合由系统决定；带 start 的范围在 Linux 上
 # 必须页对齐，因此分段提示也应以 PAGESIZE 为单位。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.mmap.madvise
 # polyglot-covers: python.mmap.MADV_NORMAL

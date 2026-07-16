@@ -4,7 +4,7 @@ logger 名称按点号形成层级；非 root logger 的 ``NOTSET`` 会继承首
 record 一旦由源 logger 接受，传播阶段会直接交给祖先的 handler，不再检查祖先 logger
 自身的 level/filter；handler 的 level/filter 仍然生效。这一区别常导致误判和重复日志。
 
-这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+这些案例面向 Python 3.10 当前补丁系列。
 """
 
 # polyglot-covers: python.logging.getLogger python.logging.logger-singleton-by-name
@@ -162,7 +162,7 @@ def test_module_disable_is_a_process_wide_gate_above_logger_levels():
 # ``msg % args``。低级别日志甚至不会创建 record，因此高成本值应保持惰性参数而非提前
 # 拼成 f-string。``extra`` 会直接并入 record 属性，不能覆盖内建字段。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.logging.LogRecord python.logging.LogRecord.getMessage
 # polyglot-covers: python.logging.lazy-percent-formatting
@@ -318,7 +318,7 @@ def test_record_factory_can_chain_and_add_cross_cutting_context():
 # 是否继续。Formatter 才把 record 转为文本，并支持三种模板 style。Python 3.10 的默认
 # LoggerAdapter 不合并调用处 ``extra``，而是用 adapter 的字典替换它，这是常见坑。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.logging.LoggerAdapter python.logging.LoggerAdapter.process
 # polyglot-covers: python.logging.LoggerAdapter-extra-replacement
@@ -477,7 +477,7 @@ def test_formatter_can_use_utc_and_formats_exception_information():
 # StreamHandler 的目标只需提供 ``write``/``flush``；FileHandler 的 ``delay=True`` 可把
 # 打开文件推迟到首次 emit。库代码应安装 NullHandler，而不是擅自配置应用 root logger。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.logging.Handler python.logging.Handler.emit
 # polyglot-covers: python.logging.Handler.setLevel python.logging.Handler.setFormatter
@@ -598,7 +598,7 @@ def test_null_handler_is_a_noop_with_no_thread_lock():
 # handler。由于它和 ``shutdown`` 会改变整个进程，本文件在隔离子进程中演示这两条路径，
 # 避免损坏 pytest 自身的捕获 handler。其他全局 hook 也都在 finally 中恢复。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.logging.basicConfig python.logging.basicConfig-noop
 # polyglot-covers: python.logging.basicConfig-force python.logging.basicConfig-stream
@@ -757,7 +757,7 @@ def test_set_logger_class_affects_future_get_logger_instances_only():
 # 可处理 record 时，``lastResort`` 只兜底 WARNING 以上事件。handler I/O 失败通常不会
 # 回抛给业务调用方；开发期的 ``raiseExceptions`` 只控制是否把诊断打印到 stderr。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.logging.captureWarnings python.logging.py-warnings-logger
 # polyglot-covers: python.logging.lastResort python.logging.no-handler-fallback
@@ -924,7 +924,7 @@ def test_get_child_builds_hierarchical_name_and_has_handlers_walks_ancestors():
 # ``ext://`` 解析外部对象，``cfg://`` 引用当前配置内部值，``'()'`` 调用用户 factory。
 # 这些动态解析能力很灵活，也意味着配置必须来自受信任来源。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.logging.config.dictConfig
 # polyglot-covers: python.logging.config.dictionary-schema-version
@@ -1133,7 +1133,7 @@ def test_dict_config_rejects_unknown_schema_version_before_reconfiguration():
 # ``listen`` 可创建接收线程，但启动后会使用 socket 且配置内容可能导入/执行对象；仓库禁止
 # 网络，所以这里只验证未启动的构造协议和 verify hook，不打开端口。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.logging.config.fileConfig
 # polyglot-covers: python.logging.config.fileConfig-file-like

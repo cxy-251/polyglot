@@ -5,8 +5,7 @@
 删除条目。``finalize`` 保存清理函数直到目标消失，但清理函数及参数绝不能反向强引用
 目标，否则会自己阻止回收。
 
-案例用 ``gc.collect()`` 完成确定的本地生命周期检查，不依赖 sleep。当前文件尚未
-经过 pytest 验证。
+案例用 ``gc.collect()`` 完成确定的本地生命周期检查，不依赖 sleep。
 """
 
 # polyglot-covers: python.weakref.ref python.weakref.referent-lifecycle

@@ -6,7 +6,7 @@ equality/hash 契约共同决定；keys/items/values 则是跟随原字典变化
 
 通用 equality/hash 协议和 dict display/comprehension 已在 002、014、017 展示；
 本文件聚焦内置映射类型自身。内容基于 Python 3.10 Mapping Types、Dictionary
-View Objects 和 PEP 584；当前文件尚未经过 pytest 验证。
+View Objects 和 PEP 584。
 """
 
 # polyglot-covers: python.type.dict python.builtin.dict python.literal.dict

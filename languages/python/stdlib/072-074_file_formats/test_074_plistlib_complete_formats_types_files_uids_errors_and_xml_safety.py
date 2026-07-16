@@ -5,7 +5,7 @@ list，bytearray 会读回 bytes。XML datetime 只保存到整秒，binary 则�
 ``loads`` 能自动识别 XML/binary；``load``/``dump`` 则要求 binary file object，
 不应套 text encoding。
 
-这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+这些案例面向 Python 3.10 当前补丁系列。
 """
 
 # polyglot-covers: python.plistlib.dumps python.plistlib.loads
@@ -149,7 +149,7 @@ def test_dict_type_is_used_for_every_mapping_created_by_parser():
 # 失败、binary 损坏、XML 语法错误分别有不同异常，调用方不应只捕获一个
 # 笼统错误。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.plistlib.string-keys-only python.plistlib.skipkeys
 # polyglot-covers: python.plistlib.skipkeys-sort-trap python.plistlib.unsupported-type

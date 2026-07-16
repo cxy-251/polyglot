@@ -4,7 +4,7 @@ zlib API 处理 bytes，不保证压缩后一定更小；level 只在速度/体�
 决定 DEFLATE window 与 zlib/raw/gzip wrapper，解压端必须匹配。Adler-32/CRC-32 用于
 意外损坏检测，不具备密码学认证能力。
 
-这些案例面向 Python 3.10；当前文件尚未经过 pytest 验证。
+这些案例面向 Python 3.10。
 """
 
 # polyglot-covers: python.zlib.compress python.zlib.decompress python.zlib.error
@@ -210,7 +210,7 @@ def test_build_and_runtime_zlib_versions_are_separate_strings():
 # ``flush()`` 后对象不可复用。``unused_data`` 是完整 stream 之后的外层数据，
 # ``unconsumed_tail`` 则是 max_length 暂未处理的压缩输入，两者不可混淆。
 #
-# 这些案例面向 Python 3.10；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10。
 
 # polyglot-covers: python.zlib.compressobj python.zlib.Compress.compress
 # polyglot-covers: python.zlib.Compress.flush python.zlib.Z-FINISH
@@ -410,7 +410,7 @@ def test_wrong_predefined_dictionary_is_rejected():
 # 和 text mode；append 会增加 gzip member，reader 自动拼接 member 的解压内容。``GzipFile``
 # 关闭时故意不关闭传入的 fileobj，便于从 BytesIO 取结果或继续写外层数据。
 #
-# 这些案例面向 Python 3.10；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10。
 
 # polyglot-covers: python.gzip.compress python.gzip.decompress python.gzip.one-shot
 # polyglot-covers: python.gzip.mtime python.gzip.reproducible-output python.gzip.header

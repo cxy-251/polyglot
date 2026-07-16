@@ -4,7 +4,7 @@ select 不传输数据，只报告哪些对象执行下一次 read、write 或�
 调用者传入的对象，而不是把它们统一替换成整数 fd；这使带 fileno() 的轻量包装对象也能携带
 应用状态。timeout=0 是一次非阻塞轮询，不代表等待到事件出现。
 
-这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+这些案例面向 Python 3.10 当前补丁系列。
 """
 
 # polyglot-covers: python.select.select
@@ -89,7 +89,7 @@ def test_empty_poll_and_pipe_buf_portability_contract():
 # 第二份订阅；unregister 未注册对象则抛 KeyError。POLLHUP/POLLERR 等错误位可能在没有显式订阅
 # 时仍由内核返回，所以实际循环不能只比较 ``mask == POLLIN``。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.select.poll
 # polyglot-covers: python.select.poll.register
@@ -164,7 +164,7 @@ def test_poll_hangup_is_a_bit_that_must_be_tested_independently():
 # 持续读到 BlockingIOError，否则缓冲区中剩余数据可能没有新的通知。EPOLLONESHOT 报告一次后会
 # 禁用该订阅，必须用 modify 重新 armed；它适合把同一连接交给单个 worker。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.select.epoll
 # polyglot-covers: python.select.epoll.register
@@ -245,7 +245,7 @@ def test_oneshot_subscription_must_be_rearmed_with_modify():
 # 控制 fd 的所有权，并不会自动 dup；若两个 Python 对象包装同一个 fd，任意一方 close 都会让另一方
 # 失效。本例先 os.dup，明确分离所有权。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.select.epoll.context-manager
 # polyglot-covers: python.select.epoll.close
@@ -321,7 +321,7 @@ def test_unregistering_an_already_closed_watched_fd_reports_ebadf():
 # SelectorKey，既保存原 fileobj 和规范化 fd，也可附带任意业务 data。select 返回 ``(key, mask)``，
 # 事件循环因此无需另外维护 fd 到连接状态的并行字典。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.selectors.DefaultSelector
 # polyglot-covers: python.selectors.BaseSelector.register
@@ -387,7 +387,7 @@ def test_duplicate_file_and_empty_interest_are_rejected():
 # 改变。unregister 返回移除前的 key，缺失时抛 KeyError。文件对象必须在 close 前注销，因为 close
 # 后 fileno() 通常变成 -1，selector 无法再由该对象找回原注册项。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.selectors.BaseSelector.modify
 # polyglot-covers: python.selectors.modify-returns-new-key
@@ -464,7 +464,7 @@ def test_unregister_can_recover_a_closed_registered_object_by_identity():
 # epoll。底层带独立控制 fd 的 selector 还公开 fileno。第二个案例用 key.data 保存连接状态，并在
 # 读阶段后用 modify 切换到写阶段，展示小型事件循环的核心结构。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.selectors.SelectSelector
 # polyglot-covers: python.selectors.PollSelector

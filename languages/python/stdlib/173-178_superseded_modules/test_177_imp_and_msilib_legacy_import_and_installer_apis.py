@@ -5,8 +5,7 @@ imp 是 importlib 出现前的底层导入门面；msilib 是仅 Windows 提供�
 可在临时目录完成的 MSI 表、Record 与 CAB 元数据工作流。新代码应改用
 importlib；安装器项目则应先评估仍在维护的专用工具链。
 
-这些案例面向 Python 3.10 当前补丁系列；整个 Python 测试集尚未经过 pytest
-统一验证。
+这些案例面向 Python 3.10 当前补丁系列。
 """
 
 # polyglot-covers: python.stdlib.imp python.imp.new-module python.imp.sys-modules
@@ -25,10 +24,18 @@ importlib；安装器项目则应先评估仍在维护的专用工具链。
 import gc
 import importlib.machinery
 import importlib.util
-import imp
 import os
 import re
 import sys
+import warnings
+
+with warnings.catch_warnings():
+    warnings.filterwarnings(
+        "ignore",
+        message="the imp module is deprecated",
+        category=DeprecationWarning,
+    )
+    import imp
 
 import pytest
 

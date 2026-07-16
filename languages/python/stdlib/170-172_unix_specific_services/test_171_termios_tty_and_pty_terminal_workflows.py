@@ -5,8 +5,7 @@ termios 暴露 POSIX tty 的七段属性结构，tty 提供 raw/cbreak 配方，
 每次修改都在
 finally 中精确恢复并关闭描述符，不依赖宿主的 stdin 是否连接真实终端。
 
-这些案例面向 Python 3.10 当前补丁系列；整个 Python 测试集尚未经过 pytest
-统一验证。
+这些案例面向 Python 3.10 当前补丁系列。
 """
 
 # polyglot-covers: python.stdlib.termios python.termios.tcgetattr
@@ -132,8 +131,10 @@ def test_termios_rejects_regular_files_and_invalid_descriptors(tmp_path):
         with pytest.raises(termios.error):
             termios.tcgetattr(file_object)
 
-    with pytest.raises(termios.error):
+    with pytest.raises(ValueError, match="negative"):
         termios.tcgetattr(-1)
+    # 合法 fd 但不是终端由系统调用报告 termios.error；负数还没进入系统调用，
+    # 参数转换阶段就会抛 ValueError。
 
 
 def test_tty_setraw_disables_line_discipline_and_sets_byte_reads():
@@ -191,7 +192,7 @@ def test_openpty_returns_a_named_slave_and_bidirectional_byte_channel():
 def test_pty_fork_gives_child_a_controlling_terminal_and_parent_a_master_fd():
     pid, master = pty.fork()
     if pid == 0:
-        os.write(sys.stdout.fileno(), b"child-on-pty\n")
+        os.write(1, b"child-on-pty\n")
         os._exit(7)
 
     chunks = []
@@ -219,21 +220,22 @@ def test_pty_fork_gives_child_a_controlling_terminal_and_parent_a_master_fd():
 def test_pty_spawn_callbacks_must_return_bytes_and_empty_bytes_signal_eof():
     captured = []
 
-    def read_once(descriptor):
+    def capture_output(descriptor):
         data = os.read(descriptor, 1024)
         captured.append(data)
-        return b""
+        return data
 
     def no_parent_input(_descriptor):
         return b""
 
     status = pty.spawn(
         [sys.executable, "-c", "print('spawned-on-pty')"],
-        master_read=read_once,
+        master_read=capture_output,
         stdin_read=no_parent_input,
     )
 
     assert os.waitstatus_to_exitcode(status) == 0
     assert b"spawned-on-pty" in b"".join(captured)
-    # 返回 str 是协议错误；返回 b"" 后该回调不会再次调用，
-    # 子进程必须能自行退出。
+    # 回调必须返回 bytes；stdin_read 的 b"" 只停止继续转发父进程输入，
+    # master 仍会读到子进程输出，直到子进程自行退出。若 master_read 过早返回
+    # b""，spawn 会关闭 PTY，尚未退出的子进程还可能收到 SIGHUP。

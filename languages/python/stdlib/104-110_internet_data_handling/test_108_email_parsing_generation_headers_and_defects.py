@@ -4,7 +4,7 @@
 不传 policy 在 3.10 仍默认为 compat32/Message，未来会改变。HeaderParser 只解析 header，把整个 MIME
 body 留作原始 payload，适合只做路由信息但不能据此判断真实 multipart 子树。
 
-这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+这些案例面向 Python 3.10 当前补丁系列。
 """
 
 # polyglot-covers: python.email.parser.BytesParser
@@ -105,7 +105,7 @@ def test_header_only_parser_does_not_build_multipart_subparts():
 # 只有 close 才返回根消息。适合 socket 等阻塞来源，但 feed 本身不负责网络读取。_factory 每创建
 # 一个 root 或 MIME subpart 调用一次；显式 policy 仍决定 header 与 message 类型。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.email.parser.BytesFeedParser
 # polyglot-covers: python.email.parser.FeedParser
@@ -172,7 +172,7 @@ def test_text_feed_parser_accepts_str_but_is_best_reserved_for_ascii_messages():
 # 邮件。mangle_from_=True 只转义正文行首精确的 ``From ``，供 mbox 使用。flatten 可覆盖 unixfrom
 # 和 linesep；clone 保留所有生成选项但换用独立 output stream，适合递归/并行目标。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.email.generator.BytesGenerator
 # polyglot-covers: python.email.generator.BytesGenerator.flatten
@@ -232,7 +232,7 @@ def test_text_generator_writes_str_and_bytes_generator_restores_surrogate_bytes(
 # 可能重折长 header，所以需要原样签名/归档时应显式选择 refold_source=none。DecodedGenerator 不
 # 生成可发送 MIME：它解码 text，并用模板占位非文本 part，适合日志或终端摘要。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.email.bytes-parser-generator-roundtrip
 # polyglot-covers: python.email.policy.refold_source
@@ -287,7 +287,7 @@ def test_decoded_generator_replaces_binary_attachment_with_metadata_template():
 # Message”当作输入有效。某些 transfer-encoding 问题只在解码 payload 时发现。strict policy 把
 # handle_defect 改为直接抛对应 MessageDefect，适合拒绝式入口，但会失去宽容迁移能力。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.email.errors.MessageDefect
 # polyglot-covers: python.email.message.defects
@@ -369,7 +369,7 @@ def test_email_error_hierarchy_separates_parse_and_structure_failures():
 # display_name/username/domain，并生成合法 addr_spec；Group 保留收件人组边界，而 ``addresses``
 # 提供扁平视图。Date header 接受 aware datetime 并能无损取回时区信息。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.email.headerregistry.BaseHeader
 # polyglot-covers: python.email.headerregistry.Address
@@ -444,7 +444,7 @@ def test_address_rejects_an_addr_spec_that_cannot_be_fully_parsed():
 # split(';') 解析带引号参数。HeaderRegistry 按字段名选择 mixin；未知字段使用 UnstructuredHeader，
 # map_to_type 可为私有字段注册语义类。Unique mixin 的 max_count=1 会参与程序化赋值校验。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.email.headerregistry.ContentTypeHeader
 # polyglot-covers: python.email.headerregistry.ContentDispositionHeader

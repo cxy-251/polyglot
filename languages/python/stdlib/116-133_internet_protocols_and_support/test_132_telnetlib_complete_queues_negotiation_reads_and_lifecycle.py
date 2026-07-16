@@ -3,8 +3,7 @@
 Telnet 是字节协议，不负责终端文本编码。案例直接向协议队列喂入字节，
 并用内存 socket 展示读取方法背后的状态机；不连接外部服务或进入 stdin。
 
-这些案例面向 Python 3.10 当前补丁系列；整个 Python 测试集尚未经过
-pytest 统一验证。
+这些案例面向 Python 3.10 当前补丁系列。
 """
 
 # polyglot-covers: python.stdlib.telnetlib python.telnetlib.Telnet-default-state

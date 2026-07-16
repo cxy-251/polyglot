@@ -4,7 +4,7 @@ Mailbox 像映射但 key 由邮箱分配；add 可接收 Message、str、bytes �
 迭代 Mailbox 得到的是消息而不是 key，这是与 dict 最容易混淆的差异。get_message/get_bytes/
 get_string/get_file 则让调用方明确选择对象、线格式或二进制流表示。
 
-这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+这些案例面向 Python 3.10 当前补丁系列。
 """
 
 # polyglot-covers: python.mailbox.Mailbox
@@ -114,7 +114,7 @@ def test_factory_controls_mapping_reads_without_changing_explicit_raw_getters(tm
 # discard 则适合面对并发删除。update 也不能创建新 key，且失败前已完成的替换不会回滚，因此它
 # 不是事务。pop/popitem/clear 与映射类似，但返回值仍经过邮箱 factory。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.mailbox.Mailbox.__setitem__
 # polyglot-covers: python.mailbox.replace-preserves-format-state
@@ -215,7 +215,7 @@ def test_pop_popitem_and_clear_remove_entries_with_mapping_like_results(tmp_path
 # flags 按字母排序；实验性 info 不解释为 flags，add_flag 会把它覆盖成标准 ``2,`` 格式。
 # delivery date 最终由消息文件 mtime 表示，因此比较时要考虑文件系统时间精度。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.mailbox.MaildirMessage
 # polyglot-covers: python.mailbox.MaildirMessage.get_subdir
@@ -288,7 +288,7 @@ def test_maildir_persists_format_state_in_filename_and_file_metadata(tmp_path):
 # 文件，本例用固定旧时间戳而不 sleep。Maildir 每次变更立即落盘，不保持打开文件，也不需要
 # 邮箱级锁，所以 flush/lock/unlock/close 都是兼容通用接口的 no-op。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.mailbox.Maildir
 # polyglot-covers: python.mailbox.Maildir-create-layout
@@ -374,7 +374,7 @@ def test_maildir_colon_separator_can_be_overridden_per_instance(tmp_path):
 # 这是格式要求，不是正文业务转义。状态 flags 分布在 Status/X-Status headers。单文件邮箱修改前
 # 应 lock，flush 才保证待处理替换写回磁盘，get_file 视图不能跨 flush/close 长期保存。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.mailbox.mbox
 # polyglot-covers: python.mailbox.mboxMessage
@@ -458,7 +458,7 @@ def test_mbox_workflow_locks_flushes_and_mangles_body_from_lines(tmp_path):
 # 字符组成的行分隔消息。CPython 3.10 的 MMDF 与 mbox 共用 writer，仍会把正文 ``From `` 写成
 # ``>From ``；读取这种原始格式时不能假定只因有 Control-A 分隔就不会出现 mbox 风格转义。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.mailbox.MMDF
 # polyglot-covers: python.mailbox.MMDFMessage
@@ -531,7 +531,7 @@ def test_mmdf_file_workflow_persists_control_a_delimiters_and_format_state(tmp_p
 # 一次重写 ``.mh_sequences``；pack 消除编号空洞并同步 sequence，但会让此前发出的旧 key 失效。
 # MH 删除立即发生，不采用传统的逗号前缀软删除；普通内容改动也即时落盘。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.mailbox.MH
 # polyglot-covers: python.mailbox.MHMessage
@@ -630,7 +630,7 @@ def test_mh_remove_del_and_discard_all_delete_message_files_immediately(tmp_path
 # Babyl.get_labels 汇总。3.10 的 BabylMessage 写入分支有 visible-buffer 游标陷阱；普通 Message
 # 分支的 get_file 会复制成 BytesIO，所以即使邮箱关闭，已取得的视图仍独立。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.mailbox.Babyl
 # polyglot-covers: python.mailbox.BabylMessage
@@ -717,7 +717,7 @@ def test_babyl_mailbox_reports_custom_labels_and_file_view_survives_close(tmp_pa
 # R/F/A/D，cur 对应 O。反向转换时 Status/X-Status 被消费并从普通 headers 移除；mbox 与
 # MMDF 的 From 行和五种 flags 则可直接互转。不了解这一步会造成“复制后状态 header 消失”的误判。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.mailbox.format-state-conversion
 # polyglot-covers: python.mailbox.MaildirMessage-from-mboxMessage
@@ -771,7 +771,7 @@ def test_mbox_and_mmdf_state_converts_back_to_maildir_without_status_headers():
 # 标准库只转换有公认对应关系的状态：例如 Maildir 无 S 变 MH/Babyl unseen，P 只在 Babyl 中成为
 # forwarded。自定义 sequence/label 没有通用映射，会在跨格式转换中丢失。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.mailbox.MHMessage-from-MaildirMessage
 # polyglot-covers: python.mailbox.BabylMessage-from-MaildirMessage
@@ -824,7 +824,7 @@ def test_mh_sequences_convert_to_maildir_mbox_and_babyl_standard_state_only():
 # 复制而不是共享 headers。mailbox 专用异常区分路径不存在、目录非空、外部锁冲突和格式损坏；
 # 处理邮件正文解析错误时不要误把这些存储层异常都吞成同一种失败。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.mailbox.Message
 # polyglot-covers: python.mailbox.Message-from-email-message

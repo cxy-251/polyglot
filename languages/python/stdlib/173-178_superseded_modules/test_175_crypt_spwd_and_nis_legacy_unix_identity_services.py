@@ -6,8 +6,7 @@
 也绝不输出密码散列。新代码应优先采用维护中的密码散列库和
 明确的身份目录客户端。
 
-这些案例面向 Python 3.10 当前补丁系列；整个 Python 测试集尚未经过 pytest
-统一验证。
+这些案例面向 Python 3.10 当前补丁系列。
 """
 
 # polyglot-covers: python.stdlib.crypt python.crypt.methods python.crypt.method
@@ -53,12 +52,16 @@ def test_crypt_methods_are_ordered_strongest_first_and_describe_hash_layout():
     }
     for method in crypt.methods:
         assert method.name
-        assert isinstance(method.ident, str)
+        if method is getattr(crypt, "METHOD_CRYPT", None):
+            assert method.ident is None
+        else:
+            assert isinstance(method.ident, str)
         assert method.salt_chars >= 2
         assert method.total_size >= method.salt_chars
 
     # methods 反映当前 C 库真正支持的算法，不同 Unix 镜像的成员可能不同。
-    # 顺序由强到弱，不能把 DES、MD5 等历史算法的存在误当成推荐使用。
+    # 模块化 crypt 格式有字符串 ident，传统 METHOD_CRYPT 没有标识前缀，
+    # ident 为 None；顺序由强到弱，不能把历史算法的存在误当成推荐使用。
 
 
 def test_mksalt_and_crypt_form_a_store_then_verify_workflow():

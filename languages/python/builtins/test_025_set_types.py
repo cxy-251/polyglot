@@ -4,7 +4,7 @@ set 是可变的唯一元素集合，frozenset 是不可变且可 hash 的集合
 可依赖的位置顺序；比较运算表达包含关系的偏序，而不是按元素数量或字典序排序。
 
 通用比较、二元运算和 hash 协议已在 002、003、014 展示；本文件聚焦内置集合
-类型自身。内容基于 Python 3.10 Set Types；当前文件尚未经过 pytest 验证。
+类型自身。内容基于 Python 3.10 Set Types。
 """
 
 # polyglot-covers: python.type.set python.type.frozenset

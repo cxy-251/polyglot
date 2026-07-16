@@ -7,8 +7,7 @@ AST 回答“源码写了什么结构”，symtable 则回答
 comprehension 引入的 namespace。本套也专门讲清“赋值使整个函数域变成局部”
 以及“类体不是方法的闭包外层”这两个常见陷阱。
 
-这些案例面向 Python 3.10 当前补丁系列；整个 Python 测试集尚未经过 pytest
-统一验证。
+这些案例面向 Python 3.10 当前补丁系列。
 """
 
 # polyglot-covers: python.stdlib.symtable python.symtable.generate
@@ -124,10 +123,12 @@ def test_function_summary_partitions_parameters_locals_and_globals():
     assert table.get_parameters() == (
         "first",
         "second",
-        "items",
         "flag",
+        "items",
         "options",
     )
+    # get_parameters 按编译器符号表顺序返回：普通参数、仅关键字参数、
+    # *args、**kwargs；它不是 inspect.signature 的源码展示顺序。
     assert set(table.get_locals()) == {
         "first",
         "second",

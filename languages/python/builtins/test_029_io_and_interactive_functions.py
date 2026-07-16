@@ -5,7 +5,7 @@ open 连接路径与 text/binary stream；print/input 使用标准流；breakpoi
 替换为记录器，不进入真实交互环境。
 
 内容基于 Python 3.10 Built-in Functions 和 io 文档。更完整的 pathlib、io、
-文件格式工作流留给标准库主题；当前文件尚未经过 pytest 验证。
+文件格式工作流留给标准库主题。
 """
 
 # polyglot-covers: python.builtin.open python.open.mode python.open.encoding

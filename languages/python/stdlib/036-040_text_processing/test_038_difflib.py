@@ -5,7 +5,7 @@
 ``get_close_matches`` 复用相似度思想，但各自有不同的输出契约与安全边界。
 
 本文件用固定小序列解释 opcode 坐标、缓存、autojunk 和 newline；它不是 patch
-解析器或拼写纠正质量基准。当前文件尚未经过 pytest 验证。
+解析器或拼写纠正质量基准。
 """
 
 # polyglot-covers: python.stdlib.difflib python.difflib.SequenceMatcher

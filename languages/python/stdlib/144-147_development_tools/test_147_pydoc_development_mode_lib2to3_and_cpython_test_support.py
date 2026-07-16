@@ -5,8 +5,7 @@
 以及理解 CPython 自身测试辅助包的适用边界。案例不启动 pydoc HTTP 服务，
 也不扫描全机模块。
 
-这些案例面向 Python 3.10 当前补丁系列；整个 Python 测试集尚未经过 pytest
-统一验证。
+这些案例面向 Python 3.10 当前补丁系列。
 """
 
 # polyglot-covers: python.stdlib.pydoc python.pydoc.describe

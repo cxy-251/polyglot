@@ -6,8 +6,7 @@ Python 的算术符号不仅服务于数字：``+`` 也能拼接序列，``*`` �
 ``NotImplemented``、增强赋值和内置类型中容易误解的行为。
 
 内容基于 Python 3.10 Expressions 6.5--6.9、Simple Statements 7.2.1 和
-Data Model 3.3.8。当前项目处于只编写、暂不执行的阶段，本文件尚未经过
-pytest 验证。
+Data Model 3.3.8。
 """
 
 # polyglot-covers: python.expression.power
@@ -16,7 +15,8 @@ pytest 验证。
 # polyglot-covers: python.expression.bitwise-operations
 # polyglot-covers: python.statement.augmented-assignment
 # polyglot-covers: python.protocol.__add__ python.protocol.__sub__ python.protocol.__mul__
-# polyglot-covers: python.protocol.__matmul__ python.protocol.__truediv__ python.protocol.__floordiv__
+# polyglot-covers: python.protocol.__matmul__ python.protocol.__truediv__
+# polyglot-covers: python.protocol.__floordiv__
 # polyglot-covers: python.protocol.__mod__ python.protocol.__divmod__ python.protocol.__pow__
 # polyglot-covers: python.protocol.__lshift__ python.protocol.__rshift__
 # polyglot-covers: python.protocol.__and__ python.protocol.__xor__ python.protocol.__or__

@@ -6,8 +6,7 @@
 涉及 ``.pth``、审计钩子和 ``__main__`` 的案例都放进子进程，避免污染 pytest
 进程；子进程仍使用运行测试的同一个 Python 3.10 容器解释器。
 
-这些案例面向 Python 3.10 当前补丁系列；整个 Python 测试集尚未经过 pytest
-统一验证。
+这些案例面向 Python 3.10 当前补丁系列。
 """
 
 # polyglot-covers: python.stdlib.sys python.sys.version-info

@@ -4,7 +4,7 @@ Pool methods 只能由创建它的 process 调用。``map`` 保序，``imap`` la
 ``imap_unordered`` 不保证顺序；函数/参数需可 pickle。Pool 必须显式 close+join/terminate，
 或用 context manager，不能依赖 garbage collection。``maxtasksperchild`` 可回收长期 worker。
 
-这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+这些案例面向 Python 3.10 当前补丁系列。
 """
 
 # polyglot-covers: python.multiprocessing.Pool
@@ -122,7 +122,7 @@ def test_maxtasksperchild_replaces_worker_after_configured_task_count():
 # parent 的 result-handler thread 运行，必须快速且不能抛出。用 initializer 注入 Event，
 # 可确定制造 pending result 并测试 TimeoutError，不用 sleep 猜 worker 调度。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.multiprocessing.Pool.apply_async
 # polyglot-covers: python.multiprocessing.Pool.map_async
@@ -245,7 +245,7 @@ def test_map_async_returns_ordered_list_and_pool_terminate_is_explicit():
 # 类型和远端共享，但通常慢于 shared memory。普通 mutable object 嵌在 proxy container 中时，
 # 取出后原地修改只改本地 copy；要重新赋值，或从一开始嵌套另一个 managed proxy。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.multiprocessing.Manager
 # polyglot-covers: python.multiprocessing.managers.SyncManager
@@ -357,7 +357,7 @@ def test_nested_managed_proxy_propagates_inner_mutation():
 # 可调用的 public methods；未列入 exposed 的 API 不会穿透 proxy。authkey 用 HMAC 验证
 # 同一 secret 的双方身份，但不加密 payload。案例使用 address=None 的本地最快 IPC family。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.multiprocessing.managers.BaseManager
 # polyglot-covers: python.multiprocessing.BaseManager.register
@@ -459,7 +459,7 @@ def test_separate_client_connects_with_matching_key_and_rejects_wrong_key():
 # pytest 临时目录中的 AF_UNIX socket，不访问外部网络。auth challenge 验证共享 key，之后
 # ``recv`` 仍会 unpickle 数据；认证不等于加密，也不能让恶意 authenticated peer 变安全。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.multiprocessing.connection.Listener
 # polyglot-covers: python.multiprocessing.connection.Listener-address
@@ -554,7 +554,7 @@ def test_challenge_mismatch_raises_authentication_error_on_both_sides():
 # ``cpu_count`` 是机器 CPU 数，不一定等于 affinity 可用数。multiprocessing logger 不与普通
 # root logger 传播。``multiprocessing.dummy`` 复用 Pool API 但执行于 threads，可接受 lambda。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.multiprocessing.active_children
 # polyglot-covers: python.multiprocessing.active-children-reaps-finished
@@ -695,7 +695,7 @@ def test_dummy_pool_uses_threads_shares_pid_and_accepts_lambda():
 # handle，``unlink`` 才请求销毁全局 block，而且所有参与者中只调用一次。``buf`` 是 live
 # memoryview，close 前必须释放外部 view；否则 exported pointers 会触发 BufferError。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.multiprocessing.shared_memory
 # polyglot-covers: python.multiprocessing.shared_memory.SharedMemory
@@ -834,7 +834,7 @@ def test_external_memoryview_must_be_released_before_shared_memory_close():
 # 新 list。元素可换类型，但 str/bytes 不能超过该 slot 初始化时预留容量。按 name attach 或
 # pickle round trip 得到的是同一 backing block 的新 handle，不是 list snapshot。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.multiprocessing.shared_memory.ShareableList
 # polyglot-covers: python.multiprocessing.ShareableList-supported-types
@@ -948,7 +948,7 @@ def test_name_attachment_and_pickle_round_trip_alias_same_backing_block():
 # SharedMemory/ShareableList backing blocks 调 unlink，再关闭 manager；这适合集中 ownership，
 # 避免多个 worker 争抢谁最后 unlink。返回对象仍是直接 shared-memory handle，不是 RPC proxy。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.multiprocessing.managers.SharedMemoryManager
 # polyglot-covers: python.multiprocessing.SharedMemoryManager.start

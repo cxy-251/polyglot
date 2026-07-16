@@ -4,7 +4,7 @@
 Fraction；混合数值类型的行为没有定义，真实数据应先统一类型。排序类统计遇到 NaN
 也会产生意外结果，应把 NaN 当缺失值显式清洗，而不是期待函数自动忽略。
 
-这些案例面向 Python 3.10；当前文件尚未经过 pytest 验证。
+这些案例面向 Python 3.10。
 """
 
 # polyglot-covers: python.statistics.mean python.statistics.exact-numeric-types
@@ -259,7 +259,7 @@ def test_statistics_error_is_a_specialized_value_error():
 # 数据代表完整总体还是总体的样本。双变量函数按位置配对输入，长度、常量序列和样本量
 # 都有明确约束，不能让 zip 式静默截断掩盖脏数据。
 #
-# 这些案例面向 Python 3.10；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10。
 
 # polyglot-covers: python.statistics.pvariance python.statistics.population-denominator
 # polyglot-covers: python.statistics.variance python.statistics.sample-bessel-correction
@@ -339,7 +339,13 @@ def test_population_variance_preserves_fraction_and_decimal_results():
     """方差与 mean 一样支持同类精确数值；不需要为方便而先损失成 float。"""
 
     fractions = [Fraction(1, 4), Fraction(5, 4), Fraction(1, 2)]
-    decimals = [Decimal("27.5"), Decimal("30.25"), Decimal("30.25"), Decimal("34.5"), Decimal("41.75")]
+    decimals = [
+        Decimal("27.5"),
+        Decimal("30.25"),
+        Decimal("30.25"),
+        Decimal("34.5"),
+        Decimal("41.75"),
+    ]
 
     fraction_result = pvariance(fractions)
     decimal_result = pvariance(decimals)
@@ -354,7 +360,13 @@ def test_sample_variance_preserves_fraction_and_decimal_results():
     """N-1 校正不要求浮点运算，Fraction 与 Decimal 仍可保留各自精度模型。"""
 
     fractions = [Fraction(1, 6), Fraction(1, 2), Fraction(5, 3)]
-    decimals = [Decimal("27.5"), Decimal("30.25"), Decimal("30.25"), Decimal("34.5"), Decimal("41.75")]
+    decimals = [
+        Decimal("27.5"),
+        Decimal("30.25"),
+        Decimal("30.25"),
+        Decimal("34.5"),
+        Decimal("41.75"),
+    ]
 
     assert variance(fractions) == Fraction(67, 108)
     assert variance(decimals) == Decimal("31.01875")
@@ -464,10 +476,11 @@ def test_python_310_relationship_arguments_are_positional_only(function):
 # 两个 NormalDist 相加或相减时按“随机变量相互独立”合成方差；对象没有协方差信息，
 # 因此不能用它表达相关变量相消。seeded samples 适合可重现实验，但仍不是跨版本数据协议。
 #
-# 这些案例面向 Python 3.10；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10。
 
 # polyglot-covers: python.statistics.NormalDist python.statistics.normal-properties
-# polyglot-covers: python.statistics.NormalDist-negative-sigma python.statistics.NormalDist-read-only
+# polyglot-covers: python.statistics.NormalDist-negative-sigma
+# polyglot-covers: python.statistics.NormalDist-read-only
 # polyglot-covers: python.statistics.NormalDist.from_samples python.statistics.NormalDist.samples
 # polyglot-covers: python.statistics.NormalDist.pdf python.statistics.density-not-probability
 # polyglot-covers: python.statistics.NormalDist.cdf python.statistics.interval-probability
@@ -476,7 +489,8 @@ def test_python_310_relationship_arguments_are_positional_only(function):
 # polyglot-covers: python.statistics.NormalDist.zscore python.statistics.standard-score
 # polyglot-covers: python.statistics.NormalDist-translate python.statistics.NormalDist-scale
 # polyglot-covers: python.statistics.NormalDist-add python.statistics.NormalDist-subtract
-# polyglot-covers: python.statistics.independent-normal-variables python.statistics.uncertainty-propagation
+# polyglot-covers: python.statistics.independent-normal-variables
+# polyglot-covers: python.statistics.uncertainty-propagation
 
 
 

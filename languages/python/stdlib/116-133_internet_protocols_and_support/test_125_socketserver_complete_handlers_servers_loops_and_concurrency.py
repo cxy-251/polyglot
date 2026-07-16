@@ -3,7 +3,7 @@
 构造处理器就会立即完成一次请求，不应把 __init__ 当作普通数据对象初始化。handle 抛出时
 finish 仍执行；setup 尚未成功时则不会调用 finish，因为可清理资源还没有建立。
 
-这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+这些案例面向 Python 3.10 当前补丁系列。
 """
 
 from io import BytesIO
@@ -110,7 +110,7 @@ def test_finish_is_not_called_when_setup_itself_never_completes():
 # 默认 rfile 是缓冲二进制流，wfile 则用 sendall 实现 BufferedIOBase 写接口；write 返回完整
 # 字节数而不是底层 send 的部分结果。启用缓冲输出时 finish 会 flush 并关闭两端文件对象。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.socketserver.StreamRequestHandler
 # polyglot-covers: python.socketserver.StreamRequestHandler.connection
@@ -210,7 +210,7 @@ def test_configured_stream_applies_socket_options_and_flushes_buffered_output():
 # UDP 没有连接流：setup 把输入数据复制进 BytesIO rfile，另建 wfile；finish 把完整输出作为
 # 一个数据报 sendto 到 client_address。它和 StreamRequestHandler 的 request 类型不同。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.socketserver.DatagramRequestHandler
 # polyglot-covers: python.socketserver.datagram-request-packet-socket-pair
@@ -255,7 +255,7 @@ def test_datagram_handler_buffers_one_packet_and_sends_one_addressed_reply():
 # 默认 process_request 同步实例化处理器，然后 shutdown_request；finish_request 的“调用
 # 构造器”会连带执行完整 handler 生命周期。with 退出只调用 server_close，不会自行 shutdown。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.socketserver.BaseServer
 # polyglot-covers: python.socketserver.BaseServer.server_address
@@ -319,7 +319,7 @@ def test_context_manager_returns_server_and_closes_it_on_exit():
 # 选择器确认可读后，内部管线按 get→verify→process 运行。拒绝请求会直接 shutdown；
 # process 的 Exception 交给 handle_error 后清理，BaseException 则只清理并继续向外传播。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.socketserver.BaseServer._handle_request_noblock
 # polyglot-covers: python.socketserver.BaseServer.get_request
@@ -403,7 +403,7 @@ def test_exception_is_reported_then_shutdown_but_baseexception_is_reraised():
 # TCPServer 把 socket 生命周期拆成可覆盖钩子。allow_reuse_address 只影响 bind 前的选项；
 # shutdown_request 即使 SHUT_WR 失败仍会 close，避免把“未连接”异常变成资源泄漏。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.socketserver.TCPServer
 # polyglot-covers: python.socketserver.TCPServer.address_family
@@ -508,7 +508,7 @@ def test_shutdown_request_closes_even_when_half_close_reports_oserror():
 # UDPServer 复用 TCPServer 的大部分框架，却把 socket_type 改为 SOCK_DGRAM。get_request
 # 返回 ((data, server_socket), client_address)；没有 listen、半关闭或逐请求 socket 可清理。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.socketserver.UDPServer
 # polyglot-covers: python.socketserver.UDPServer-inherits-TCPServer
@@ -568,7 +568,7 @@ def test_udp_activation_and_per_request_cleanup_do_not_touch_socket():
 # ThreadingMixIn 必须放在同步服务器类之前才能覆盖 process_request。非守护线程默认会被
 # 跟踪，并在 server_close 时 join；无论 handler 成败，线程入口最终都 shutdown_request。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.socketserver.ThreadingMixIn
 # polyglot-covers: python.socketserver.ThreadingMixIn-first-in-mro
@@ -673,7 +673,7 @@ def test_daemon_thread_is_not_retained_for_server_close_join(monkeypatch):
 # serve_forever 使用 poll_interval 而忽略 server.timeout，每轮即使没有请求也调用
 # service_actions。退出时会复位 shutdown 标志并通知等待者；shutdown 必须由另一线程调用。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.socketserver.BaseServer.serve_forever
 # polyglot-covers: python.socketserver.serve-forever-selector
@@ -755,7 +755,7 @@ def test_service_actions_runs_even_when_no_descriptor_is_ready(monkeypatch):
 # handle_request 取 socket 超时与 server.timeout 的较小值。选择器无事件却提前返回时会按
 # 截止时间重算剩余时间，而不是立即调用 handle_timeout；真正到期才执行超时钩子。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.socketserver.BaseServer.handle_request
 # polyglot-covers: python.socketserver.BaseServer.timeout
@@ -845,7 +845,7 @@ def test_early_empty_wakeup_recomputes_deadline_then_calls_timeout(
 # POSIX 上 fork 父进程只记录子 PID 并关闭自己的请求副本，实际处理发生在子进程；
 # service_actions/超时负责回收。mixin 必须位于 TCPServer/UDPServer 前才能覆盖同步方法。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.socketserver.ForkingMixIn
 # polyglot-covers: python.socketserver.ForkingMixIn.max_children

@@ -1,50 +1,48 @@
 # NEXT
 
-Status: `in_progress`
+Status: `ready`
 
 ## Current task
 
-继续 Python 3.10 全量 Docker 验证。先复跑并修正 internet data 与 structured markup
-这一批，然后依据全量 pytest 的剩余失败继续按标准库服务类别修复。
-
-整个 `languages/python/` 测试集尚未统一验证通过，不能称为 verified 或完成。
+启动 C++ 阶段的环境与资料锁定。在写第一个 C++ 教学测试前，先让 `ohdev` 中的
+GoogleTest/CMake 测试入口可复现，再把 C++ 版本和权威资料写入 `sources.lock`。
 
 ## Official references
 
-- Python 3.10 Standard Library：`base64`、`binascii`、`mimetypes`、`email`、`mailbox`
-- Python 3.10 Standard Library：`html.parser`、`xml.dom`、`xml.dom.minidom`、
-  `xml.dom.pulldom`、`xml.sax`、`xml.parsers.expat`
-- 解释器和资料系列以 `sources.lock` 为准
+- GCC 11.4 官方手册
+- C++20 标准草案或等价的稳定规范入口
+- GoogleTest 官方文档
+- 选定版本和固定 URL 必须落入 `sources.lock`，以后测试套不反复重新选来源
 
 ## Target files
 
-- `104-110_internet_data_handling/`：`test_105_*`、`test_106_*`、`test_107_*`
-- `104-110_internet_data_handling/`：`test_108_*`、`test_109_*`、`test_110_*`
-- `111-115_structured_markup_tools/`：`test_111_*`、`test_113_*`、`test_114_*`、
-  `test_115_*`
+- `sources.lock`
+- `project.json`
+- `tools/run-in-container.sh`
+- `languages/cpp/` 下最小 CMake/GoogleTest 骨架；环境验证前不要开始大批案例
 
 ## Coverage and cases
 
-- 保留每个案例原来的教学覆盖，不用放宽断言来掩盖真实语义。
-- 精确区分 Python 3.10 的返回类型、异常类型、全局状态前置条件和补丁版本差异。
-- 对 SAX/DOM 的分块文本、属性对象生命周期、locator 可用时机和 Expat 回调分流给出中文说明。
-- 修复后先做本类别复跑，再回到完整测试集，不把局部通过外推成全量通过。
+- 先确认 C++20 与 GCC 11.4 的可用边界，不把较新标准特性误写进基础套。
+- GoogleTest 只作为测试框架；教学 API 仍限 C++ 语言和标准库。
+- 宿主机不安装编译器或测试框架，不使用联网 `FetchContent` 作为每次测试的隐式前置。
+- 骨架必须提供 `./tools/run.sh cpp`，并让新对话能从容器命令得到明确缺依赖诊断。
 
 ## Handoff
 
-1. 全量初始基线：`5059` 个 pytest item，`175 failed, 4838 passed, 51 skipped`。
-2. 前两批共 `59` 个失败已在 ohdev 的 Python 3.10.12 中复跑清零，并提交为
-   `9abb5b5 Fix initial Python 3.10 validation batches`。
-3. 当前第三批已准确复现 `27 failed, 289 passed`；对应修复已写入上列 10 个文件，
-   `git diff --check` 与改动行 100 字符检查均通过，但尚未再次运行 pytest。
-4. 复跑命令：
+1. Python 3.10 已完成：178 个文件、编号 `001`–`178` 连续、无重复或缺号，
+   每个文件都有 `polyglot-covers`，分类目录范围一致，Unicode 100 列审计为零。
+2. 最终严格命令：
 
    ```bash
-   ./tools/run.sh python -q --tb=short --timeout=30 \
-     languages/python/stdlib/104-110_internet_data_handling \
-     languages/python/stdlib/111-115_structured_markup_tools
+   ./tools/run.sh python -q --tb=short --timeout=30 -W error
    ```
-5. 当前 Codex 外部执行额度已用尽，Docker 命令被系统拒绝，并提示到
-   `2026-07-22 16:06 Asia/Shanghai` 后再试；不要改用宿主机 Python 绕过容器边界。
-6. 本类别清零后重新运行全量 pytest，继续处理其余约 89 个基线失败；最终必须以完整
-   `languages/python/` 一次通过、静态覆盖审计通过为完成证据。
+
+   结果为 `5012 passed, 52 skipped`；52 个 skip 均是 Tk/Windows/zone data/dbm/
+   ensurepip 等明确环境能力差异。
+3. `ohdev` 当前有 `g++ 11.4.0` 和 `cmake 3.22.1`，没有检测到 pkg-config
+   GoogleTest 或 `/usr/src/googletest`。
+4. 优先为容器建立可复现的 GoogleTest 供应方式；不要把 GoogleTest 源码直接塞进
+   本仓库，也不要让普通测试运行临时联网下载。若必须修改容器外部配置，先向用户说明。
+5. 环境入口通过后，锁定 C++20 资料并创建第一个 `test_001_...`；C++ 文件编号在
+   `languages/cpp/` 内独立连续。

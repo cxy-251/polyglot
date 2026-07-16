@@ -4,7 +4,7 @@ email.mime 属于 compat32 API：MIMEBase 自动补 Content-Type 和 MIME-Versio
 把子消息保存在 list payload 中，并延迟生成 boundary；non-multipart 则主动禁止 attach。
 现代代码通常优先使用 EmailMessage.set_content/add_attachment，但维护旧邮件代码仍需读懂这些类。
 
-这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+这些案例面向 Python 3.10 当前补丁系列。
 """
 
 # polyglot-covers: python.email.mime.MIMEBase
@@ -99,7 +99,7 @@ def test_nonmultipart_rejects_attach_instead_of_silently_corrupting_payload_shap
 # 从内容猜 subtype，但不认识的字节必须显式给出 subtype；MIMEMessage 的 payload 必须是
 # Message。_encoder 是扩展点，负责同时改 payload 和 Content-Transfer-Encoding header。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.email.mime.MIMEApplication
 # polyglot-covers: python.email.mime.MIMEApplication-default-subtype
@@ -167,7 +167,7 @@ def test_specialized_class_accepts_a_custom_encoder_protocol():
 # 兼容行为是：已有 Content-Transfer-Encoding 时，set_payload(..., charset=...) 假定 payload
 # 已正确编码而不再转换。若要重新编码，必须先删除旧 CTE header，或改用现代 set_content。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.email.mime.MIMEText
 # polyglot-covers: python.email.mime.MIMEText-default-subtype
@@ -211,7 +211,7 @@ def test_existing_transfer_encoding_must_be_removed_before_set_payload_reencodes
 # 因此必须对子 part 编码而不能对容器编码。它们属于已弃用的 compat32 API，现代代码应通过
 # set_content(..., cte=...) 选择编码，但旧消息构造器仍在内部使用相同协议。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.email.encoders.encode_base64
 # polyglot-covers: python.email.encoders.encode_quopri
@@ -277,7 +277,7 @@ def test_encoder_must_be_applied_to_leaf_parts_not_a_multipart_container():
 # 源字符集，encode 控制线长与换行符，decode_header 则只拆成 bytes/charset 对而不替调用方
 # 统一解码。现代 EmailMessage 会自动完成这些工作，Header 主要用于旧代码或精确编码控制。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.email.header.Header
 # polyglot-covers: python.email.header.Header.append
@@ -343,7 +343,7 @@ def test_bytes_piece_is_decoded_using_its_declared_charset():
 # header/body 的传输编码和输出 charset。utf-8 header 可在 QP/base64 中选较短者，body 固定
 # base64；us-ascii 则保持 7bit。多字节 header 应使用 header_encode_lines 避免在字节中间切断。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.email.charset.Charset
 # polyglot-covers: python.email.charset.Charset-alias-normalization
@@ -405,7 +405,7 @@ def test_charset_encodes_headers_and_bodies_according_to_different_constraints()
 # 在测试和长进程中很容易泄漏。本文件用 monkeypatch 替换为副本后再演示注册流程。SHORTEST
 # 只允许用于 header，body 必须选择明确编码或不编码。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.email.charset.add_alias
 # polyglot-covers: python.email.charset.ALIASES-registry
@@ -464,7 +464,7 @@ def test_shortest_strategy_is_rejected_for_message_bodies(monkeypatch):
 # 不只是 Content-Type 文本。attach 从 None 建立 list，get_payload 返回的 list 是活对象。旧式
 # set_charset 会补 MIME headers 并编码 payload，现代 EmailMessage 则应使用 set_content。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.email.compat32.Message
 # polyglot-covers: python.email.compat32.Message-default-policy
@@ -539,7 +539,7 @@ def test_set_charset_adds_mime_metadata_encodes_payload_and_can_remove_parameter
 # 任意转义器。parseaddr/getaddresses 是 compat32 字符串解析器；3.10.15 起默认 strict=True，
 # 会拒绝畸形输入。结构化 headerregistry.Address 是新代码更可靠的选择。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.email.utils.make_msgid
 # polyglot-covers: python.email.utils.make-msgid-domain
@@ -601,7 +601,7 @@ def test_parseaddr_and_getaddresses_handle_single_and_multiple_header_values():
 # mktime_tz 将其规范化成 UTC timestamp。-0000 表示“UTC 时间但来源时区未知”，因此解析成
 # naive datetime；+0000/GMT 才保留 aware UTC。测试只用固定时间，不读取当前时钟。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.email.utils.parsedate
 # polyglot-covers: python.email.utils.parsedate-invalid-none
@@ -673,7 +673,7 @@ def test_localtime_converts_zone_but_preserves_the_instant():
 # charset/language/value，不负责 percent decoding；decode_params 会合并带 * 的连续参数，最后
 # 由 collapse_rfc2231_value 按声明字符集生成 str。不要把任一中间元组直接展示给用户。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.email.utils.encode_rfc2231
 # polyglot-covers: python.email.utils.encode-rfc2231-charset-language
@@ -721,7 +721,7 @@ def test_decode_params_and_collapse_form_the_complete_unicode_pipeline():
 # set_payload(bytes) 也可能先规范化成 str。typed_subpart_iterator 才按 maintype/subtype 过滤
 # walk 结果。_structure 很适合人工诊断 MIME 树，但它是私有调试接口，业务逻辑不能依赖格式。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.email.iterators.body_line_iterator
 # polyglot-covers: python.email.iterators.body-line-iterator-skips-headers

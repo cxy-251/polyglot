@@ -5,8 +5,7 @@ AST 是 Python 语法结构的稳定编程入口，但不是原始文本的无�
 的真实输入。本套覆盖解析模式、3.10 模式匹配节点、访问器、变换器、
 位置工具、literal_eval、unparse 和回译 code object 的完整工作流。
 
-这些案例面向 Python 3.10 当前补丁系列；整个 Python 测试集尚未经过 pytest
-统一验证。
+这些案例面向 Python 3.10 当前补丁系列。
 """
 
 # polyglot-covers: python.stdlib.ast python.ast.ast-base python.ast.abstract-grammar

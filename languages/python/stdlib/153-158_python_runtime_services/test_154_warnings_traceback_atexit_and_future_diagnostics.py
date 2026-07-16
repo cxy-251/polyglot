@@ -6,8 +6,7 @@
 上下文恢复和
 子解释器隔离，避免影响其他测试。
 
-这些案例面向 Python 3.10 当前补丁系列；整个 Python 测试集尚未经过 pytest
-统一验证。
+这些案例面向 Python 3.10 当前补丁系列。
 """
 
 # polyglot-covers: python.stdlib.warnings python.warnings.warn

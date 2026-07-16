@@ -5,8 +5,7 @@ posix 是 os 在 Unix 上使用的底层实现，
 pwd/grp 返回具名元组形式的系统账户记录；案例只读取
 当前进程对应的记录，不打开真实用户目录，也不修改系统账户数据库。
 
-这些案例面向 Python 3.10 当前补丁系列；整个 Python 测试集尚未经过 pytest
-统一验证。
+这些案例面向 Python 3.10 当前补丁系列。
 """
 
 # polyglot-covers: python.stdlib.posix python.posix.os-backend
@@ -63,7 +62,7 @@ def test_posix_file_calls_accept_large_offsets_without_legacy_32_bit_variants(
     )
     try:
         offset = 2**31 + 7
-        assert posix.lseek(descriptor, offset, posix.SEEK_SET) == offset
+        assert posix.lseek(descriptor, offset, os.SEEK_SET) == offset
         assert posix.write(descriptor, b"X") == 1
         stat_result = posix.fstat(descriptor)
     finally:
@@ -84,19 +83,22 @@ def test_posix_reports_oserror_subclasses_for_system_call_failures(tmp_path):
         posix.close(-1)
 
 
-def test_posix_environ_is_a_stale_bytes_snapshot_not_the_os_mapping(monkeypatch):
+def test_posix_environ_is_the_bytes_storage_shared_by_os_environb(monkeypatch):
     text_key = f"POLYGLOT_POSIX_{uuid.uuid4().hex}"
     byte_key = os.fsencode(text_key)
     monkeypatch.setenv(text_key, "updated")
 
     assert os.environ[text_key] == "updated"
     assert os.environb[byte_key] == b"updated"
-    assert byte_key not in posix.environ
+    assert posix.environ[byte_key] == b"updated"
+    assert os.environb._data is posix.environ
     assert all(
         isinstance(key, bytes) and isinstance(value, bytes)
         for key, value in list(posix.environ.items())[:5]
     )
-    # 修改 posix.environ 也不会调用 putenv；不要把它当作 os.environb 的替代品。
+    # os.environ/os.environb 是负责编码和 putenv/unsetenv 同步的公开包装；
+    # posix.environ 是它们共享的 bytes 存储。直接改底层 dict 不会调用 putenv，
+    # 因而仍不应把它当作 os.environb 的替代品。
 
 
 def test_pwd_current_user_record_supports_indexes_and_named_fields():

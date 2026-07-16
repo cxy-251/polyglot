@@ -6,8 +6,7 @@ CPython 以引用计数处理大多数对象，并用分代循环垃圾回收器
 回调案例都用
 ``finally`` 恢复，避免一个内存管理示例改变后续测试环境。
 
-这些案例面向 Python 3.10 当前补丁系列；整个 Python 测试集尚未经过 pytest
-统一验证。
+这些案例面向 Python 3.10 当前补丁系列。
 """
 
 # polyglot-covers: python.stdlib.gc python.gc.reference-counting-and-cycles

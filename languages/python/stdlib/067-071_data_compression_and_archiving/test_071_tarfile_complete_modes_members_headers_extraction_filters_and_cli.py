@@ -4,7 +4,7 @@
 blocks，可连接 pipe、socket 或 tape-like 对象。append 只适用于未压缩 TAR，caller 提供的
 fileobj 不由 TarFile 关闭。模式字符串决定格式，不能只依赖文件扩展名。
 
-这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+这些案例面向 Python 3.10 当前补丁系列。
 """
 
 # polyglot-covers: python.tarfile.open python.tarfile.path-like
@@ -219,7 +219,7 @@ def test_stream_reader_rejects_random_access_to_an_earlier_member():
 # 或排除成员/整棵目录。``gettarinfo`` 与 ``addfile`` 把 metadata 和 payload 分离，适合
 # 内存或生成式数据。``dereference`` 决定记录链接本身还是目标内容。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.tarfile.TarFile.add python.tarfile.add-arcname
 # polyglot-covers: python.tarfile.add-recursive python.tarfile.add-sorted
@@ -445,7 +445,7 @@ def test_repeated_inode_can_be_stored_as_a_tar_hard_link(tmp_path):
 # header 支持长名称，PAX 用 UTF-8 key-value header 表达可移植 metadata，并且是 3.8+
 # 默认写格式。``replace`` 可在解压过滤器中复制并消除不可信 metadata。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.tarfile.TarInfo python.tarfile.TarInfo-metadata
 # polyglot-covers: python.tarfile.TarInfo.tobuf python.tarfile.TarInfo.frombuf
@@ -661,7 +661,7 @@ def test_isfile_and_isreg_are_aliases_for_regular_members():
 # 物理顺序。``extractfile`` 只返回 file-like payload，不写磁盘，并能解析 hard-link target。
 # ``ignore_zeros`` 可恢复拼接或部分损坏归档，但不应作为默认容错策略。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.tarfile.getmember python.tarfile.duplicate-members
 # polyglot-covers: python.tarfile.getmembers python.tarfile.getnames
@@ -850,7 +850,7 @@ def test_tarinfo_constructor_argument_customizes_read_member_objects():
 # 链接和目录。extractall 在 children 完成后再设置目录 metadata，避免只读目录阻断写入。
 # 重复成员按顺序覆盖。安全策略必须显式传 filter，本文件使用可信或 data 场景。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.tarfile.extract python.tarfile.extract-return-none
 # polyglot-covers: python.tarfile.extractall python.tarfile.extract-subset-generator
@@ -1027,7 +1027,7 @@ def test_data_filter_allows_links_that_stay_inside_destination(tmp_path):
 # 能力，``tar`` 阻止明显路径越界并收紧 mode，``data`` 进一步限制链接、特殊文件和 owner
 # metadata。filter 不是 DoS 沙箱；文件数/总体积等预算仍需应用补充，失败后也可能已部分解压。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.tarfile.extraction-filter python.tarfile.filter-availability
 # polyglot-covers: python.tarfile.fully-trusted-filter python.tarfile.tar-filter
@@ -1313,7 +1313,7 @@ def test_stateful_filter_enforces_count_and_total_size_budgets(tmp_path):
 # 有效。它适合轻量脚本，不替代应用级资源预算。测试通过 ``sys.executable`` 调用相同容器
 # 解释器；宿主机仍只使用仓库统一 Docker 入口。
 #
-# 这些案例面向 Python 3.10 当前补丁系列；当前文件尚未经过 pytest 验证。
+# 这些案例面向 Python 3.10 当前补丁系列。
 
 # polyglot-covers: python.tarfile.cli python.tarfile.python-m-tarfile
 # polyglot-covers: python.tarfile.cli-create python.tarfile.cli-suffix-compression

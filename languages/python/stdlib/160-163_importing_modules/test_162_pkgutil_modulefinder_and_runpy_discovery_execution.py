@@ -7,8 +7,7 @@
 全局兼容映射的
 旧 API 放入子进程隔离。
 
-这些案例面向 Python 3.10 当前补丁系列；整个 Python 测试集尚未经过 pytest
-统一验证。
+这些案例面向 Python 3.10 当前补丁系列。
 """
 
 # polyglot-covers: python.stdlib.pkgutil python.pkgutil.module-info
@@ -324,7 +323,9 @@ def test_modulefinder_excludes_named_modules_from_analysis(tmp_path):
 
     assert "json" in finder.modules
     assert "decimal" not in finder.modules
-    assert "decimal" not in finder.badmodules
+    assert "__main__" in finder.badmodules["decimal"]
+    # excludes 阻止加载和递归分析，但源码里的 import 仍会作为未满足依赖
+    # 记入 badmodules；它不是“假装该 import 不存在”的过滤器。
 
 
 def test_modulefinder_replace_paths_rewrites_recorded_code_filenames(tmp_path):
@@ -372,7 +373,12 @@ def test_modulefinder_global_compatibility_maps_are_isolated_in_child(tmp_path):
         "import legacy_alias\n",
         encoding="utf-8",
     )
-    (main_root / "legacy_alias.py").write_text("VALUE = 'alias'\n", encoding="utf-8")
+    alias_package = main_root / "legacy_alias"
+    alias_package.mkdir()
+    (alias_package / "__init__.py").write_text(
+        "VALUE = 'alias'\n",
+        encoding="utf-8",
+    )
     program = """
 import json
 import modulefinder
@@ -404,6 +410,8 @@ print(json.dumps({
     )
     result = json.loads(completed.stdout)
     assert result == {"has_extra": True, "has_old": False, "has_new": True}
+    # ReplacePackage 只在 load_package 路径生效，普通 .py 模块不会被改名；
+    # 两个兼容映射还是模块级全局状态，所以放在子进程中避免污染其他案例。
 
 
 def test_run_module_executes_in_fresh_namespace_and_preserves_input_mapping(

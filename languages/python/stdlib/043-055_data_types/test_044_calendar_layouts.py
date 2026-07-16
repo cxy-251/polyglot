@@ -5,7 +5,7 @@
 
 实例 ``Calendar`` 适合局部配置周起点。模块级 first weekday 是进程全局状态，由
 autouse fixture 恢复；Locale*Calendar 会临时修改全局 locale，只在子进程示范。
-当前文件尚未经过 pytest 验证。
+
 """
 
 # polyglot-covers: python.stdlib.calendar python.calendar.weekday-constants

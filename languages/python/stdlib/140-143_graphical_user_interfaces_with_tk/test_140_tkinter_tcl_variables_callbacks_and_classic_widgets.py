@@ -5,8 +5,7 @@ tkinter 是 Python 对 Tcl/Tk 的薄封装。``Tcl()`` 不创建窗口，适合�
 本文件将二者放在一起，但用 ``tk_root`` 夹具只跳过确实需要窗口的案例。
 
 这些案例不会进入 ``mainloop``，不会等待真实时间，也不会留下窗口。
-它们面向 Python 3.10 当前补丁系列；整个 Python 测试集尚未经过
-pytest 统一验证。
+它们面向 Python 3.10 当前补丁系列。
 """
 
 # polyglot-covers: python.stdlib.tkinter python.tkinter.Tcl-headless-interpreter
