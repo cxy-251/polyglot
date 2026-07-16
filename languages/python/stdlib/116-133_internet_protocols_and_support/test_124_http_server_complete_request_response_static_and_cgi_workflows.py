@@ -742,7 +742,8 @@ def test_directory_without_slash_redirects_and_preserves_query(tmp_path):
     head, body = split_directory_response(handler)
     assert head.startswith(b"HTTP/1.1 301 Moved Permanently\r\n")
     assert b"Location: /docs/?view=compact\r\n" in head
-    assert b"Content-Length: 0\r\n" in head
+    # split 已移除 header/body 分隔符，最后一个 header 后不再含 CRLF。
+    assert b"Content-Length: 0" in head
     assert body == b""
 
 

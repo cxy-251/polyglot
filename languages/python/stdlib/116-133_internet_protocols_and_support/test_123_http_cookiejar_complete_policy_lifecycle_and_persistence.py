@@ -252,18 +252,24 @@ def make_foreign_cookie():
     )
 
 
-def test_default_make_cookies_ignores_cookie2_and_downgrades_rfc2109():
+def test_make_cookies_returns_candidates_before_extract_applies_default_policy():
     jar = CookieJar()
+    response = VersionedCookieResponse()
+    request = Request("http://example.test/")
 
-    cookies = jar.make_cookies(
-        VersionedCookieResponse(),
-        Request("http://example.test/"),
-    )
+    cookies = jar.make_cookies(response, request)
 
+    # make_cookies 只解析候选，不调用 policy.set_ok，因此仍能看到 Set-Cookie2；真正写入 jar
+    # 的 extract_cookies 才按默认 rfc2965=False 丢弃 modern，并降级 RFC 2109 candidate。
     assert len(jar) == 0
-    assert [cookie.name for cookie in cookies] == ["legacy"]
-    assert cookies[0].version == 0
-    assert cookies[0].rfc2109
+    assert [(cookie.name, cookie.version) for cookie in cookies] == [
+        ("modern", 1),
+        ("legacy", 0),
+    ]
+    assert cookies[1].rfc2109
+
+    jar.extract_cookies(response, request)
+    assert [cookie.name for cookie in jar] == ["legacy"]
 
 
 def test_opted_in_policy_parses_both_version_one_header_families():

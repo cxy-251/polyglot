@@ -21,6 +21,7 @@ pytest 统一验证。
 # polyglot-covers: python.telnetlib.open-timeout-zero python.telnetlib.context-manager
 
 import re
+from socket import socketpair
 
 import telnetlib
 import pytest
@@ -147,11 +148,16 @@ def test_telnet_read_until_returns_through_match_and_keeps_trailing_bytes():
 def test_telnet_expect_uses_first_matching_pattern_and_returns_match_object():
     client = telnetlib.Telnet()
     client.cookedq = b"status=READY code=200 tail"
-
-    index, match, data = client.expect(
-        [re.compile(br"status=(\w+)"), re.compile(br"code=(\d+)")],
-        timeout=0,
-    )
+    peer, client.sock = socketpair()
+    try:
+        # expect 在检查已有 cookedq 前就向 selector 注册连接，因此仍需要真实、可 select 的 fd。
+        index, match, data = client.expect(
+            [re.compile(br"status=(\w+)"), re.compile(br"code=(\d+)")],
+            timeout=0,
+        )
+    finally:
+        client.close()
+        peer.close()
 
     assert index == 0
     assert match.group(1) == b"READY"
@@ -236,10 +242,8 @@ def test_telnet_context_manager_closes_socket_but_does_not_consume_buffered_byte
         assert entered.get_socket() is socket
 
     assert socket.closed is True
-    # 3.10 的 close 用假值 0 标记已经断开的 socket；
-    # 因此调用方应通过真假值或 get_socket 判断连接状态，而不是依赖 None。
-    assert client.sock == 0
-    assert client.get_socket() == 0
+    assert client.sock is None
+    assert client.get_socket() is None
     # close 只终止传输并复位 IAC 子状态；
     # 尚未读取的应用数据仍可用于故障诊断。
     assert client.rawq == b"pending"

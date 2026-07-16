@@ -406,7 +406,7 @@ def test_control_characters_cannot_inject_request_lines_or_headers(
 # polyglot-covers: python.http.client.HTTPResponse.status
 # polyglot-covers: python.http.client.HTTPResponse.reason
 # polyglot-covers: python.http.client.HTTPResponse.version
-# polyglot-covers: python.http.client.HTTPResponse.url
+# polyglot-covers: python.http.client.HTTPResponse-url-argument-not-exposed-3.10
 # polyglot-covers: python.http.client.HTTPResponse.headers
 # polyglot-covers: python.http.client.HTTPResponse.msg
 # polyglot-covers: python.http.client.HTTPResponse.getheader
@@ -483,7 +483,8 @@ def test_fixed_length_response_exposes_metadata_and_buffered_reads():
     )
 
     assert (response.status, response.reason, response.version) == (200, "OK", 11)
-    assert response.url == "https://example.test/resource"
+    # 3.10 接受 url 构造参数供兼容调用，但没有公开 response.url；不能把后续版本属性前移。
+    assert not hasattr(response, "url")
     assert isinstance(response.headers, HTTPMessage)
     assert response.msg is response.headers
     assert response.getheader("X-Tag") == "first, second"
@@ -686,7 +687,7 @@ def test_bounded_read_keeps_legacy_short_eof_behavior_without_exception():
 # polyglot-covers: python.http.client.connect-tunnel-success-200
 # polyglot-covers: python.http.client.connect-tunnel-non200-oserror
 # polyglot-covers: python.http.client.set-tunnel-after-connect-runtime-error
-# polyglot-covers: python.http.client.tunnel-host-control-char-rejected
+# polyglot-covers: python.http.client.tunnel-host-control-char-validation-missing-3.10.12
 
 
 class SharedReader:
@@ -866,11 +867,15 @@ def test_tunnel_must_be_configured_before_socket_exists():
         connection.set_tunnel("origin.test", 443)
 
 
-def test_tunnel_target_rejects_control_characters_before_sending():
-    connection = TunnelConnection(b"")
+def test_python_31012_tunnel_target_does_not_reject_control_characters():
+    connection = TunnelConnection(
+        b"HTTP/1.0 200 Connection established\r\n\r\n",
+    )
     connection.set_tunnel("origin.test\r\nX-Evil: yes", 443)
 
-    with pytest.raises(ValueError):
-        connection.connect()
+    connection.connect()
 
-    assert connection.transport.sent == []
+    # 3.10.12 尚未在 set_tunnel/_tunnel 复用 host 控制字符校验；这里只向内存 socket 写入，
+    # 明确记录旧补丁版本风险。真实程序应先验证代理目标或升级到包含修复的补丁版本。
+    wire = b"".join(connection.transport.sent)
+    assert b"\r\nX-Evil: yes" in wire

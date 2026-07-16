@@ -23,7 +23,7 @@ pytest 统一验证。
 # polyglot-covers: python.poplib.user-pass-stat-list-retr-dele-noop-rset-quit
 # polyglot-covers: python.poplib.top-uidl-capa python.poplib.apop
 # polyglot-covers: python.poplib.stls-capability-gate python.poplib.POP3_SSL
-# polyglot-covers: python.poplib.timeout-zero-rejected python.poplib.context-manager
+# polyglot-covers: python.poplib.timeout-zero-rejected python.poplib.explicit-quit-3.10
 
 from hashlib import md5
 from io import BytesIO, StringIO
@@ -83,7 +83,18 @@ class TransferFTP(ftplib.FTP):
         super().__init__()
         self.data_socket = data_socket
         self.transfer_calls = []
+        self.commands = []
         self.void_responses = 0
+
+    def voidcmd(self, command):
+        # 传输方法会先在控制连接切换 TYPE；内存替身也必须覆盖这一公开状态机步骤。
+        self.commands.append(command)
+        return "200 type set"
+
+    def sendcmd(self, command):
+        # retrlines 使用 sendcmd(TYPE A)，而 binary/upload 路径使用 voidcmd。
+        self.commands.append(command)
+        return "200 type set"
 
     def transfercmd(self, command, rest=None):
         self.transfer_calls.append((command, rest))
@@ -198,7 +209,7 @@ def test_ftp_text_download_decodes_and_removes_protocol_line_endings():
     assert socket.closed is True
 
 
-def test_ftp_binary_upload_reads_blocks_calls_progress_and_half_closes_socket():
+def test_ftp_binary_upload_reads_blocks_calls_progress_and_closes_data_socket():
     socket = MemoryDataSocket()
     client = TransferFTP(socket)
     uploaded = []
@@ -215,9 +226,10 @@ def test_ftp_binary_upload_reads_blocks_calls_progress_and_half_closes_socket():
     assert socket.sent == [b"abc", b"def", b"gh"]
     assert uploaded == socket.sent
     assert client.transfer_calls == [("STOR payload.bin", 2)]
-    # storbinary 在发送结束后用 SHUT_WR 表达 EOF；
-    # 不要把它误解成关闭控制连接。
-    assert socket.shutdown_calls
+    # 3.10 不额外 shutdown(SHUT_WR)，而是由 data socket 上下文管理器直接关闭来表达 EOF；
+    # 这仍不会关闭 FTP 控制连接。
+    assert socket.shutdown_calls == []
+    assert socket.closed is True
 
 
 def test_ftp_text_upload_normalizes_lf_but_does_not_duplicate_existing_crlf():
@@ -300,6 +312,7 @@ def test_ftp_convenience_methods_build_commands_and_parse_size():
                 "PWD": '257 "/srv/data" is current directory',
                 "MKD reports": '257 "/srv/data/reports" created',
                 "RMD archive": "250 removed",
+                "RNTO new.txt": "250 renamed",
             }
             return responses[command]
 
@@ -308,7 +321,6 @@ def test_ftp_convenience_methods_build_commands_and_parse_size():
             responses = {
                 "SIZE payload.bin": "213 4096",
                 "RNFR old.txt": "350 ready for destination",
-                "RNTO new.txt": "250 renamed",
                 "DELE old.bin": "250 deleted",
             }
             return responses[command]
@@ -364,6 +376,8 @@ class RecordingPOP3(poplib.POP3):
     def __init__(self):
         self.encoding = "UTF-8"
         self.welcome = b"+OK <stamp@example.test> ready"
+        self._debugging = 0
+        self._tls_established = False
         self.short = []
         self.long = []
         self.closed = False
@@ -388,7 +402,7 @@ class RecordingPOP3(poplib.POP3):
         }
         return responses[command]
 
-    def _close(self):
+    def close(self):
         self.closed = True
 
 
@@ -419,7 +433,8 @@ def test_pop3_long_response_removes_dot_stuffing_and_excludes_terminator():
 
     assert response == b"+OK follows"
     assert lines == [b"alpha", b".leading-dot"]
-    assert octets == len(b"alpha\r\n..leading-dot\r\n")
+    # 返回 octets 按去掉 dot-stuffing 后的逻辑响应行计数，并保留每行协议 CRLF。
+    assert octets == len(b"alpha\r\n.leading-dot\r\n")
 
 
 def test_pop3_public_commands_select_short_or_multiline_protocol_forms():
@@ -443,11 +458,14 @@ def test_pop3_public_commands_select_short_or_multiline_protocol_forms():
     assert "RETR 1" in client.long
 
 
-def test_pop3_context_manager_quits_and_closes_protocol_state():
+def test_pop3_310_requires_explicit_quit_and_closes_protocol_state():
     client = RecordingPOP3()
 
-    with client as entered:
-        assert entered is client
+    assert not hasattr(client, "__enter__")
+    try:
+        assert client.noop() == b"+OK"
+    finally:
+        client.quit()
 
     assert client.short[-1] == "QUIT"
     assert client.closed is True
@@ -475,7 +493,7 @@ def test_pop3_apop_requires_a_timestamp_challenge():
     client = RecordingPOP3()
     client.welcome = b"+OK no challenge"
 
-    with pytest.raises(poplib.error_proto, match="timestamp"):
+    with pytest.raises(poplib.error_proto, match="APOP not supported"):
         client.apop("reader", "secret")
 
 

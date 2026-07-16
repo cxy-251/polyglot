@@ -98,7 +98,8 @@ def test_unknown_method_and_python_exception_become_fault_responses():
     with pytest.raises(Fault) as failed:
         wire_call(dispatcher, "fail")
     assert failed.value.faultCode == 1
-    assert "ValueError:bad lesson" in failed.value.faultString
+    assert "ValueError" in failed.value.faultString
+    assert failed.value.faultString.endswith(":bad lesson")
 
 
 def test_explicit_fault_keeps_application_code_and_message():
@@ -219,7 +220,7 @@ def test_instance_dispatch_hook_receives_unresolved_name_and_parameter_tuple():
 # polyglot-covers: python.xmlrpc.server.system.multicall
 # polyglot-covers: python.xmlrpc.server.multicall-success-singleton-list
 # polyglot-covers: python.xmlrpc.server.multicall-failure-fault-dict
-# polyglot-covers: python.xmlrpc.server.multicall-recursion-rejected
+# polyglot-covers: python.xmlrpc.server.multicall-nested-call-singleton-wrapping
 
 
 def call_introspection_dispatcher(dispatcher, method, *params):
@@ -275,11 +276,13 @@ def test_multicall_keeps_successes_and_faults_in_corresponding_result_slots():
 
     assert results[0] == [5]
     assert results[1]["faultCode"] == 1
-    assert "ValueError:planned failure" in results[1]["faultString"]
+    assert "ValueError" in results[1]["faultString"]
+    assert results[1]["faultString"].endswith(":planned failure")
     assert results[2]["faultCode"] == 1
     assert "not supported" in results[2]["faultString"]
-    assert results[3]["faultCode"] == 1
-    assert "recursive" in results[3]["faultString"].lower()
+    # 3.10 注册后的 system.multicall 也能作为普通 method 被嵌套调用；每层成功值都按协议
+    # 再包一层 singleton list，所以空的内层批次得到 ``[[]]``，并非 recursion Fault。
+    assert results[3] == [[]]
 
 
 # SimpleXMLRPCServer 构造参数传递、延迟绑定，以及请求路径/Accept-Encoding 解析。
@@ -562,7 +565,7 @@ def test_bad_gzip_and_unknown_encoding_return_empty_http_errors():
         head, response_body = split_gzip_response(handler)
 
         assert head.startswith(status)
-        assert b"Content-length: 0\r\n" in head
+        assert b"Content-length: 0" in head
         assert response_body == b""
 
 

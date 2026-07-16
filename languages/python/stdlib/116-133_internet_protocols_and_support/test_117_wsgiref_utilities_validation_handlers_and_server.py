@@ -136,9 +136,10 @@ def test_setup_testing_defaults_fills_contract_without_overwriting_values():
     assert environ["wsgi.url_scheme"] == "http"
     assert isinstance(environ["wsgi.input"], io.BytesIO)
     assert isinstance(environ["wsgi.errors"], io.StringIO)
-    assert environ["wsgi.multithread"] is False
-    assert environ["wsgi.multiprocess"] is False
-    assert environ["wsgi.run_once"] is False
+    # testing defaults 沿用 CGI 风格的整数假值 0；WSGI 应用只依赖真假性，不要用 ``is False``。
+    assert environ["wsgi.multithread"] == 0
+    assert environ["wsgi.multiprocess"] == 0
+    assert environ["wsgi.run_once"] == 0
 
 
 def test_guess_scheme_recognizes_only_the_cgi_https_markers():

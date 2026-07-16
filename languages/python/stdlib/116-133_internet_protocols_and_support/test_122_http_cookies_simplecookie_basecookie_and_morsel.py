@@ -36,22 +36,23 @@ def test_assignment_builds_morsels_and_stringifies_non_string_values():
     assert cookie["visits"].coded_value == "7"
 
 
-def test_values_needing_quotes_are_encoded_and_can_be_loaded_back():
+def test_values_needing_quotes_round_trip_but_control_characters_are_rejected():
     cookie = SimpleCookie()
-    cookie["note"] = "space, semicolon; and ünicode\n"
+    cookie["note"] = "space, semicolon; and ünicode"
 
     coded = cookie["note"].coded_value
 
-    # 控制字符和分隔符若原样进入头部，可能截断或注入新的头字段。模块会生成带引号的
-    # Cookie 表示，并使用反斜杠转义，而逻辑 value 仍保留原字符串。
+    # 分隔符和非 ASCII 会生成带引号、反斜杠转义的 wire value，逻辑 value 仍保留原字符串。
     assert coded.startswith('"') and coded.endswith('"')
-    assert "\n" not in coded
-    assert cookie["note"].value == "space, semicolon; and ünicode\n"
+    assert cookie["note"].value == "space, semicolon; and ünicode"
 
     parsed = SimpleCookie()
     parsed.load(f"note={coded}")
 
     assert parsed["note"].value == cookie["note"].value
+    # 3.10.12 已拒绝 CR/LF 等控制字符，不能依赖转义来消除 header injection 风险。
+    with pytest.raises(CookieError, match="Control characters"):
+        cookie["unsafe"] = "line one\nline two"
 
 
 def test_output_supports_custom_header_separator_and_deterministic_key_order():
@@ -244,7 +245,8 @@ def test_output_can_filter_attributes_and_omits_false_flags():
     morsel["secure"] = False
     morsel["httponly"] = True
 
-    selected = morsel.OutputString(attrs=["PATH", "secure"])
+    # Morsel 属性赋值大小写不敏感，但 attrs 过滤器直接匹配内部小写 key。
+    selected = morsel.OutputString(attrs=["path", "secure"])
     header = morsel.output(header="Set-Cookie:", attrs=["path", "httponly"])
 
     assert selected == "session=abc; Path=/app"

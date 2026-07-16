@@ -28,6 +28,7 @@ pytest 统一验证。
 # polyglot-covers: python.nntplib.post-dot-stuffing python.nntplib.context-manager
 
 from datetime import datetime, timezone
+from io import BytesIO
 
 import imaplib
 import nntplib
@@ -205,7 +206,8 @@ def test_imap_response_consumes_saved_untagged_data_and_recent_can_poll():
     client = RecordingIMAP()
     client.untagged_responses = {"UIDNEXT": [b"42"], "RECENT": [b"3"]}
 
-    assert client.response("uidnext") == ("UIDNEXT", [b"42"])
+    # response 用大写 key 查找缓存，但返回元组保留调用方传入的名称大小写。
+    assert client.response("uidnext") == ("uidnext", [b"42"])
     assert "UIDNEXT" not in client.untagged_responses
     assert client.recent() == ("OK", [b"3"])
 
@@ -266,6 +268,7 @@ class RecordingNNTP(nntplib.NNTP):
         self.errors = "surrogateescape"
         self.commands = []
         self.put_lines = []
+        self.file = BytesIO()
         self.closed = False
         self._caps = {"VERSION": ["2"], "OVER": []}
         self._cachedoverviewfmt = nntplib._DEFAULT_OVERVIEW_FMT[:]
@@ -441,13 +444,9 @@ def test_nntp_post_normalizes_lines_dot_stuffs_and_writes_terminator():
     client = RecordingNNTP()
 
     assert client.post(b"Subject: demo\n\n.leading\nbody\n") == "240 article received"
-    assert client.put_lines == [
-        b"Subject: demo",
-        b"",
-        b"..leading",
-        b"body",
-        b".",
-    ]
+    assert client.file.getvalue() == (
+        b"Subject: demo\r\n\r\n..leading\r\nbody\r\n.\r\n"
+    )
 
 
 def test_nntp_context_manager_quits_and_closes_connection():

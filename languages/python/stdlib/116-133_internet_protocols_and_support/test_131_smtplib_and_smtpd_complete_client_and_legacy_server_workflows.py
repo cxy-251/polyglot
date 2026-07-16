@@ -38,9 +38,13 @@ import pytest
 class MemorySMTPSocket:
     def __init__(self):
         self.sent = []
+        self.closed = False
 
     def sendall(self, data):
         self.sent.append(data)
+
+    def close(self):
+        self.closed = True
 
 
 def test_smtp_default_state_and_exception_payloads_are_explicit():
@@ -263,6 +267,8 @@ def test_smtp_auth_helpers_build_plain_login_and_cram_md5_responses():
 
     assert client.auth_plain() == "\0reader\0secret"
     assert client.auth_login() == "reader"
+    # LOGIN helper 根据 auth() 维护的 challenge 次数切换用户名/密码，不解析 challenge 文本。
+    client._auth_challenge_count = 2
     assert client.auth_login(b"Password:") == "secret"
 
     cram = client.auth_cram_md5(b"<challenge@example.test>")
