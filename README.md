@@ -19,8 +19,8 @@ fallback。
 Python 3.10 基线已经完成统一验证。`ohdev` 容器中的解释器是 Python 3.10.12，
 官方内容来源锁定到 Python 3.10 文档系列。
 
-C++20 阶段已经开始。当前基线是 GCC/libstdc++ 11.4.0、CMake 3.22.1，以及
-`ohdev` 中 OpenHarmony 工作区自带的 GoogleTest 1.16.0。构建输出位于
+C++20 基线也已完成统一验证。当前工具链是 GCC/libstdc++ 11.4.0、CMake 3.22.1，
+以及 `ohdev` 中 OpenHarmony 工作区自带的 GoogleTest 1.16.0。构建输出位于
 `/tmp/polyglot-cpp-build`，普通测试运行不下载依赖。
 
 当前验证证据：
@@ -32,6 +32,12 @@ C++20 阶段已经开始。当前基线是 GCC/libstdc++ 11.4.0、CMake 3.22.1�
   `5012 passed, 52 skipped`；
 - 52 个 skip 都来自明确的平台或可选能力差异，例如 Windows API、Tk、
   IANA zone data、特定 dbm backend 和 ensurepip，不是失败用例。
+- `languages/cpp/` 有 160 个测试文件，编号从 `001` 连续到 `160`；语言语义
+  独立成区，C++20 标准库按 17 个连续服务分区组织，每个文件都有唯一覆盖标记；
+- 全部 C++ 源码通过仓库 `.clangd` 的主机静态诊断，测试代码按 Unicode 字符计数
+  均不超过 100 列；
+- 全量命令 `./tools/run.sh cpp` 的结果为 `1409 passed, 15 skipped`；15 个 skip
+  都明确记录了 GCC/libstdc++ 11、标准模块、平台行为或已知实现缺陷的能力边界。
 
 下一阶段的唯一入口仍是 `NEXT.md`；不要从 README 推测并行任务。
 
