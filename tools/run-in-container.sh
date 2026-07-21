@@ -10,6 +10,7 @@ Usage:
   ./tools/run-in-container.sh doctor
   ./tools/run-in-container.sh python [pytest arguments...]
   ./tools/run-in-container.sh cpp [ctest arguments...]
+  ./tools/run-in-container.sh nodejs [node --test arguments or test files...]
 
 Host entry point:
   ./tools/run.sh <command>
@@ -29,6 +30,8 @@ doctor() {
   need_cmd g++
   need_cmd cmake
   need_cmd ctest
+  need_cmd node
+  need_cmd npm
   printf 'workspace: %s\n' "$ROOT"
   printf 'python: '
   python3 --version
@@ -40,6 +43,10 @@ doctor() {
   cmake --version | sed -n '1p'
   printf 'ctest: '
   ctest --version | sed -n '1p'
+  printf 'node: '
+  node --version
+  printf 'npm: '
+  npm --version
 }
 
 run_python() {
@@ -78,6 +85,44 @@ run_cpp() {
     "$@"
 }
 
+run_nodejs() {
+  need_cmd node
+
+  local expected_version="v24.18.0"
+  local actual_version
+  actual_version="$(node --version)"
+  if [[ "$actual_version" != "$expected_version" ]]; then
+    echo "Node.js 版本不匹配: 需要 $expected_version，实际 $actual_version" >&2
+    echo "请在 ohdev 中运行 ./tools/bootstrap-node-in-container.sh。" >&2
+    exit 1
+  fi
+
+  local -a test_files=()
+  if [[ $# -gt 0 && "$1" != -* ]]; then
+    test_files=("$@")
+    set --
+  else
+    mapfile -d '' test_files < <(
+      find languages/nodejs \
+        -type f \
+        -name 'test_[0-9][0-9][0-9]_*.mjs' \
+        -print0 | sort -z
+    )
+  fi
+
+  if [[ ${#test_files[@]} -eq 0 ]]; then
+    echo "languages/nodejs 中没有发现 test_NNN_*.mjs。" >&2
+    exit 1
+  fi
+
+  NODE_OPTIONS="--unhandled-rejections=strict --trace-warnings" \
+    node \
+      --test \
+      --test-concurrency=1 \
+      "$@" \
+      "${test_files[@]}"
+}
+
 main() {
   local command_name="${1:-}"
   case "$command_name" in
@@ -91,6 +136,10 @@ main() {
     cpp|c++)
       shift
       run_cpp "$@"
+      ;;
+    nodejs|node|js)
+      shift
+      run_nodejs "$@"
       ;;
     ""|-h|--help|help)
       usage

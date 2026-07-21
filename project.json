@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
   "project": "polyglot-stdlib-by-example",
-  "mission": "Teach syntax, language protocols, advanced semantics, and standard-library workflows through readable runnable tests.",
-  "phase": "cpp20-authoring",
-  "current_milestone": "cpp-language-foundations",
+  "mission": "Teach language semantics and standard libraries through readable, runnable tests.",
+  "phase": "nodejs-authoring",
+  "current_milestone": "nodejs-runtime-and-language-foundations",
   "continuation_source": "NEXT.md",
   "source_lock": "sources.lock",
   "legacy_tip": "662e0d1",
@@ -66,6 +66,8 @@
     "generated_handoff_sources": false,
     "committed_generated_inventories": false,
     "temporary_output_root": "/tmp/polyglot-*",
-    "one_coherent_task_per_change": true
+    "one_coherent_task_per_change": true,
+    "local_commits_only": true,
+    "remote_push_allowed": false
   }
 }
