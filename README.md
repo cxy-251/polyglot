@@ -23,6 +23,10 @@ C++20 基线也已完成统一验证。当前工具链是 GCC/libstdc++ 11.4.0�
 以及 `ohdev` 中 OpenHarmony 工作区自带的 GoogleTest 1.16.0。构建输出位于
 `/tmp/polyglot-cpp-build`，普通测试运行不下载依赖。
 
+Node.js 基线已完成统一验证。运行时锁定为 Node.js 24.18.0 LTS，语言规范锁定到
+ECMAScript 2025 与 ECMA-402 12th edition，包管理器为随运行时提供的 npm 11.16.0。
+测试使用内置 `node:test`，普通执行不安装依赖、不访问公网。
+
 当前验证证据：
 
 - `languages/python/` 有 178 个测试文件，编号从 `001` 连续到 `178`；
@@ -38,6 +42,11 @@ C++20 基线也已完成统一验证。当前工具链是 GCC/libstdc++ 11.4.0�
   均不超过 100 列；
 - 全量命令 `./tools/run.sh cpp` 的结果为 `1409 passed, 15 skipped`；15 个 skip
   都明确记录了 GCC/libstdc++ 11、标准模块、平台行为或已知实现缺陷的能力边界。
+- `languages/nodejs/` 有 107 个测试文件，编号从 `001` 连续到 `107`；内容分为
+  ECMAScript 语言、Node 核心与 Web API、npm 和包工作流三个学习分区；
+- Node.js 每个文件都有唯一 `polyglot-covers` 标记，全部测试代码按 Unicode 字符
+  计数均不超过 100 列；
+- 全量命令 `./tools/run.sh nodejs` 的结果为 `935 passed`，没有失败或跳过案例。
 
 下一阶段的唯一入口仍是 `NEXT.md`；不要从 README 推测并行任务。
 
@@ -63,6 +72,7 @@ sources.lock                语言版本和权威资料入口
 project.json                稳定语言范围与测试框架
 languages/python/           Python 教学测试
 languages/cpp/              C++20 教学测试与 CMake 入口
+languages/nodejs/           ECMAScript、Node.js 与 npm 教学测试
 tools/run.sh                宿主机 Docker 入口
 tools/run-in-container.sh   容器内测试入口
 ```
@@ -128,6 +138,17 @@ C++ 阶段验证执行：
 
 第一个命令配置、增量编译并运行全部 CTest；第二个命令用于按文件编号筛选已发现的
 GoogleTest 案例。C++ 测试在小批次和类别边界提前验证，不等全部测试套写完后首次编译。
+
+Node.js 全量与单文件验证执行：
+
+```bash
+./tools/run.sh nodejs
+./tools/run.sh nodejs \
+  languages/nodejs/01_language/test_001_primitive_values_numeric_models_and_equality.mjs
+```
+
+Node.js 测试固定使用容器内的 Node.js 24.18.0 和内置 `node:test`。单文件路径必须作为
+第一个附加参数传入；测试仍由宿主机入口转交给 `ohdev`，不直接调用宿主机 Node.js。
 
 主机阅读 C++ 代码使用仓库根目录的 `.clangd`。它让主机已有的 clangd 读取 macOS SDK，
 并把 Docker 挂载对应的 GoogleTest 头文件加入索引；这只提供跳转、补全和静态诊断，

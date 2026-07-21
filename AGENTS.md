@@ -41,6 +41,12 @@ Polyglot 是一个通过测试代码学习编程语言的案例仓库，固定�
   实现能力、平台行为或已知缺陷原因。
 - C++ 基线是 GCC 11.4.0、libstdc++ 11.4.0、CMake 3.22.1，以及 `ohdev` 中
   OpenHarmony 工作区提供的 GoogleTest 1.16.0；准确路径和提交见 `sources.lock`。
+- Node.js 24.18.0 测试套 `001`–`107` 已在锁定容器工具链中统一验证；全量命令
+  `./tools/run.sh nodejs` 当前结果为 `935 passed`，没有失败或跳过案例。
+- Node.js 基线包含 ECMAScript 2025、ECMA-402 12th edition、npm 11.16.0 和内置
+  `node:test`；准确实现组件、官方资料和归档校验值见 `sources.lock`。
+- 以后修改 Node.js 测试时，先复跑受影响分区，再跑全量；两者通过后才能保持
+  verified 状态。
 - 下一阶段只看 `NEXT.md`；不要在同一任务中并行开始多门语言。
 - 默认完成一个连贯语言分区或标准库服务类别后再统一做本地阶段性 commit，
   不要为每个测试套单独提交。提交前做文本、diff 和对应测试审阅。
