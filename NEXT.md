@@ -4,8 +4,8 @@ Status: `ready`
 
 ## Current task
 
-启动 Julia 阶段。先审计 `ohdev` 容器是否已有 Julia 及其准确版本、路径和标准库，
-再锁定相应官方资料、设计隔离执行方式，并建立最小容器测试入口与首个编号测试套。
+启动 Julia 阶段。Julia 1.12.6 已安装并锁定；下一步设计隔离执行方式，建立最小容器
+测试入口与首个编号测试套。
 
 ## Official references
 
@@ -19,7 +19,6 @@ Status: `ready`
 
 ## Target files
 
-- `sources.lock`：新增 Julia 版本、实现组件、官方手册和标准库资料入口
 - `tools/run.sh`、`tools/run-in-container.sh`：增加并验证统一的 Julia 容器入口
 - `languages/julia/test_001_runtime_test_framework_and_execution_model.jl`：验证运行时、
   `Test`、失败报告、临时目录和清理边界的首个测试套
@@ -28,8 +27,7 @@ Status: `ready`
 
 ## Coverage and cases
 
-- 先只读确认容器内 `julia` 的实际路径、版本、系统镜像和 `Test` 标准库可用性；
-  不从宿主机状态推断，也不先安装第三方测试框架。
+- 使用已锁定的 Julia 1.12.6 和随运行时提供的 `Test` 标准库，不安装第三方测试框架。
 - 明确 Julia 项目环境、depot、startup file、预编译缓存和环境变量的隔离策略，避免
   测试读取真实用户配置或把缓存写进仓库。
 - 确认 `.jl` 文件的加载方式、模块边界、退出码和异常报告，再确定测试发现策略；
@@ -46,6 +44,9 @@ Status: `ready`
    `935 passed`，没有失败或跳过；npm 11.16.0 工作流也包含在该基线中。
 4. Node.js 最后一批 npm 测试是 `102`–`107`，本地提交为 `4173846`；整个 Node.js
    分区的版本和官方资料已在 `sources.lock` 锁定。
-5. Julia 尚未开始。第一步是在 `ohdev` 中只读审计 `julia`，若缺失则记录证据，
-   再设计可复现的容器供应方式；不要在宿主机安装 Julia。
-6. 仓库虽然已连接远程，但用户只授权维护本地提交；不得 push、创建远程分支或 PR。
+5. `ohdev` 已安装 Julia 1.12.6、R 4.6.1、Go 1.26.5 和 Rust 1.97.1；版本、
+   官方归档与 SHA-256 已写入 `sources.lock`，可用
+   `tools/bootstrap-language-toolchains-in-container.sh` 重建。Julia 的 `Test`、R 的
+   `Matrix`、Go 工具链以及 Rust 的 Cargo、rustfmt、Clippy 均已完成冒烟验证。
+6. Julia 测试代码尚未开始；下一步直接实现隔离的 Julia 容器入口和 `test_001`。
+7. 仓库虽然已连接远程，但用户只授权维护本地提交；不得 push、创建远程分支或 PR。

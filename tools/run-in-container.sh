@@ -32,6 +32,14 @@ doctor() {
   need_cmd ctest
   need_cmd node
   need_cmd npm
+  need_cmd julia
+  need_cmd R
+  need_cmd Rscript
+  need_cmd go
+  need_cmd gofmt
+  need_cmd rustc
+  need_cmd cargo
+  need_cmd rustfmt
   printf 'workspace: %s\n' "$ROOT"
   printf 'python: '
   python3 --version
@@ -47,6 +55,18 @@ doctor() {
   node --version
   printf 'npm: '
   npm --version
+  printf 'julia: '
+  julia --startup-file=no --history-file=no --version
+  printf 'R: '
+  R --version | sed -n '1p'
+  printf 'go: '
+  go version
+  printf 'rustc: '
+  rustc --version
+  printf 'cargo: '
+  cargo --version
+  printf 'rustfmt: '
+  rustfmt --version
 }
 
 run_python() {
