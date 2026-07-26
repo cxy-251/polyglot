@@ -3,8 +3,8 @@
   "project": "polyglot-concepts-by-example",
   "mission": "Compare how languages solve shared problems through readable, executable tests.",
   "architecture": "dual-axis",
-  "phase": "three-concept-pilot-verified",
-  "current_milestone": "select-one-fourth-concept",
+  "phase": "four-concept-foundation-verified",
+  "current_milestone": "implement-005-iteration-protocol",
   "continuation_source": "NEXT.md",
   "source_lock": "sources.lock",
   "legacy_tip": "662e0d1",
@@ -25,10 +25,11 @@
       "test_pattern": "test_name",
       "validate_one": "./tools/run.sh concept NNN_name",
       "validate_all": "./tools/run.sh concepts",
-      "pilots": [
+      "verified_concepts": [
         "001_truthiness",
         "002_equality",
-        "003_argument_passing"
+        "003_argument_passing",
+        "004_resource_cleanup"
       ]
     }
   },

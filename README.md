@@ -58,13 +58,18 @@ concepts/
     python/test_argument_passing.py
     cpp/test_argument_passing.cpp
     nodejs/test_argument_passing.mjs
+  004_resource_cleanup/
+    python/test_resource_cleanup.py
+    cpp/test_resource_cleanup.cpp
+    nodejs/test_resource_cleanup.mjs
 ```
 
-当前三个试点分别比较：
+当前四个概念分别比较：
 
 - `truthiness`：零、空文本、空集合、空值、自定义对象和逻辑运算结果；
 - `equality`：数值转换、NaN、负零、集合内容、对象身份和自定义值语义；
-- `argument_passing`：调用参数数量、对象修改与重新绑定、默认值求值和灵活参数。
+- `argument_passing`：调用参数数量、对象修改与重新绑定、默认值求值和灵活参数；
+- `resource_cleanup`：正常与异常退出、逆序清理、触发机制、异常抑制和清理错误。
 
 概念测试使用局部名称，不占用语言课程编号。每个文件通过 `polyglot-related` 指向深入
 讲解该语言的完整课程文件，不建立额外 JSON、YAML 或 Markdown 映射表。
@@ -95,7 +100,7 @@ concepts/
 横向概念验证：
 
 ```bash
-./tools/run.sh concept 001_truthiness
+./tools/run.sh concept 004_resource_cleanup
 ./tools/run.sh concepts
 ```
 
@@ -122,11 +127,11 @@ concepts/
 
 ## 当前验证基线
 
-- Python 3.10.12：课程 `5036 passed, 39 skipped`；
+- Python 3.10.12：课程 `5025 passed, 39 skipped`；
 - GCC/libstdc++ 11.4.0、C++20、GoogleTest 1.16.0：课程
   `1409 passed, 15 skipped`；
 - Node.js 24.18.0：课程 `935 passed`；
-- 三个横向概念：Python `11 passed`、C++ `11 passed`、Node.js `11 passed`。
+- 四个横向概念：Python `16 passed`、C++ `15 passed`、Node.js `16 passed`。
 
 所有 skip 都必须说明实现能力、平台行为或可选依赖原因。准确工具链、官方资料、归档
 校验值和实现提交记录在 `sources.lock`。

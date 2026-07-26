@@ -4,51 +4,53 @@ Status: `ready`
 
 ## Current task
 
-评审三个双轴试点，并从“迭代协议”与“资源清理”中只选择一个建立 `004_*` 横向概念。
-不要迁移任何语言课程文件，不继续文件系统概念，也不启动 Julia。
+只建立一个新的横向概念：
 
-## Official references
+```text
+concepts/005_iteration_protocol/
+```
 
-- Python 3.10 Data Model、Expressions 与相关标准库文档；
-- ISO C++20 / WG21 工作草案及 libstdc++ 11.4 手册；
-- ECMAScript 2025、Node.js 24.18.0 API 文档与对应源码；
-- 版本与固定入口继续使用 `sources.lock`。
+保持 `languages/` 课程不动，不启动 Julia、R、Go 或 Rust，也不同时开始其他概念。
 
-先阅读相关完整课程，只有存在清晰共同问题矩阵时才实施一个新概念。
+## Research first
 
-## Candidate course files
+先使用 `sources.lock` 锁定的 Python 3.10、C++20 和 ECMAScript 2025 官方资料，逐门核对
+迭代器取得、推进、结束信号、单次消费与提前退出语义。只有确认共同问题矩阵后才写测试，
+不要把名称相似但语义不同的机制强行等同。
 
-迭代协议：
+优先阅读：
 
 - `languages/python/language/test_008_iteration_and_generator_protocols.py`
-- C++：
-  `languages/cpp/standard_library/08_iterators/`
+- `languages/cpp/language/test_005_statements_control_flow_and_range_for.cpp`
+- `languages/cpp/standard_library/08_iterators/`
   `test_071_iterator_traits_concepts_indirect_access_and_customization_points.cpp`
 - `languages/nodejs/language/test_016_iterables_iterators_generators_and_iterator_closing.mjs`
 
-资源清理：
+## Target files
 
-- `languages/python/language/test_010_context_manager_protocols.py`
-- `languages/cpp/language/test_012_exceptions_raii_and_noexcept.cpp`
-- `languages/nodejs/language/test_027_explicit_resource_management_and_disposable_stacks.mjs`
+```text
+concepts/005_iteration_protocol/python/test_iteration_protocol.py
+concepts/005_iteration_protocol/cpp/test_iteration_protocol.cpp
+concepts/005_iteration_protocol/nodejs/test_iteration_protocol.mjs
+```
+
+每个文件使用 `polyglot-concept: iteration_protocol`，并通过 `polyglot-related` 指向同语言
+最直接的完整课程。概念只处理同步迭代，不扩展到异步迭代器。
 
 ## Acceptance
 
-- 先比较两个候选的共同问题是否足够具体，再选择对照价值更高的一项。
-- 只新增 `concepts/004_name/{language}/test_name.<ext>`，不移动、裁剪课程文件。
-- 各语言使用相同问题矩阵；缺失机制使用注释，不编造等价能力。
-- 每个概念文件保持精简，并用 `polyglot-related` 指回对应课程。
-- 运行单概念、概念全量、三门语言受影响课程及统一结构门禁。
+- 三门语言围绕同一组已核实的问题组织精简断言。
+- 明确表达取得迭代器、逐步推进、完成信号以及提前退出时是否存在关闭协议。
+- 语言不存在对应机制时用准确注释说明，不编造等价能力。
+- 不移动、拆分或改写语言课程，不复制完整课程的大量案例。
+- 运行单概念、概念全量、三门语言全量和统一结构门禁。
 
 ## Handoff
 
-1. Python `001`–`178`、C++ `001`–`160`、Node.js `001`–`107` 已全部恢复到各自
-   `languages/` 主线；语言课程不再分散到 `concepts/`。
-2. 横向层只包含 `001_truthiness`、`002_equality`、`003_argument_passing` 三个试点，
-   每个概念为三门语言各一个局部命名测试。
-3. `./tools/run.sh concept NNN_name` 运行单个概念；`./tools/run.sh concepts` 运行全部。
-4. `./tools/run.sh check` 分别检查纵向课程和横向概念，并验证 `polyglot-related`。
-5. 不要批量恢复原先十个宽泛概念，也不要把标准库课程迁入横向层。
-6. 2026-07-27 已在 `ohdev` 完成最终验证：Python `5036 passed, 39 skipped`；
-   C++ `1409 passed, 15 skipped`；Node.js `935 passed`；三个概念在每门语言中均
-   `11 passed`；统一结构门禁通过。
+1. `004_resource_cleanup` 已完成，覆盖正常退出、异常退出、LIFO、触发机制和异常冲突。
+2. 单概念结果：Python `5 passed`、C++ `4 passed`、Node.js `5 passed`。
+3. 全部四个概念：Python `16 passed`、C++ `15 passed`、Node.js `16 passed`。
+4. 纵向课程：Python `5025 passed, 39 skipped`；C++ `1409 passed, 15 skipped`；
+   Node.js `935 passed`。
+5. Python 运行器已修正：带 pytest 选项的课程命令仍限定在 `languages/python`；
+   显式课程文件路径仍可单独运行。
