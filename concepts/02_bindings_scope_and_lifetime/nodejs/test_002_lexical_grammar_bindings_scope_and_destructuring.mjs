@@ -7,6 +7,9 @@
 // - nodejs.language.binding-default-initializers
 // - nodejs.language.rest-binding
 
+// 跨语言迁移提示：let / const 有词法作用域和暂时性死区，var 则提升到函数作用域；
+// Python 由代码块内是否赋值决定 local，C++ 的声明位置、存储期与捕获方式又是另一套规则。
+
 import assert from 'node:assert/strict';
 import test from 'node:test';
 

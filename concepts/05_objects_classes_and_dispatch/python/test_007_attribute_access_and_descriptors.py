@@ -20,6 +20,9 @@ Implementing Descriptors 和 Descriptor Guide。
 # polyglot-covers: python.protocol.__delete__ python.protocol.__set_name__
 # polyglot-covers: python.protocol.bound-method python.class.__slots__
 
+# 跨语言迁移提示：Python 属性读取由描述符、实例字典和类层次共同分派；JavaScript
+# 沿原型链读取属性并受 descriptor / Proxy 约束，C++ 成员访问不是运行期属性查找。
+
 import pytest
 
 

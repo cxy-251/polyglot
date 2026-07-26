@@ -19,6 +19,9 @@ Nonlocal statements、Comprehensions 和内置 locals/globals。
 # polyglot-covers: python.builtin.locals python.builtin.globals
 # polyglot-covers: python.builtin.compile python.builtin.__import__
 
+# 跨语言迁移提示：Python 闭包捕获可变的 cell，而不是自动复制当前值；JavaScript
+# 闭包也观察词法绑定，C++ 则必须在捕获列表中选择按值或按引用，并自行保证引用生命周期。
+
 import builtins
 
 import pytest

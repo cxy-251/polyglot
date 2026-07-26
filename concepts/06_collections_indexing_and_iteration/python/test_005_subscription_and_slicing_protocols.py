@@ -18,6 +18,9 @@ Built-in Types 的映射协议。
 # polyglot-covers: python.protocol.__class_getitem__
 # polyglot-covers: python.protocol.metaclass.__getitem__
 
+# 跨语言迁移提示：Python 把索引或 slice 对象交给容器协议，并由序列决定是否解释负索引；
+# JavaScript 数组索引仍是属性键，空洞也不同于值为 undefined，不能照搬 Python 序列模型。
+
 import operator
 
 import pytest

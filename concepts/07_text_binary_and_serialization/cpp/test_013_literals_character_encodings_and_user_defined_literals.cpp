@@ -5,6 +5,9 @@
 // - cpp.language.embedded-null-characters
 // - cpp.language.user-defined-literals
 
+// 跨语言迁移提示：C++ 字符串字面量的元素类型与源/执行字符集相关，只保存 code unit；
+// Python str 按 code point 建模，JavaScript 字符串按 UTF-16 code unit 索引，长度含义并不相同。
+
 #include <gtest/gtest.h>
 
 #include <cstddef>

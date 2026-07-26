@@ -6,6 +6,9 @@
 // - cpp.language.coroutine-frame-lifetime
 // - cpp.language.coroutine-exception-propagation
 
+// 跨语言迁移提示：C++ coroutine 是可定制的编译期变换，不自带 Promise、事件循环或线程；
+// Python 与 JavaScript 的同名语法由各自运行时调度，不能把 await 直接等同于并发。
+
 #include <gtest/gtest.h>
 
 #include <coroutine>

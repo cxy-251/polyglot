@@ -6,6 +6,9 @@
 // - cpp.language.overloaded-function-address
 // - cpp.language.deleted-functions
 
+// 跨语言迁移提示：C++ 的默认实参和重载选择发生在调用点的静态类型语境；Python
+// 运行期执行签名绑定，JavaScript 则允许缺少或多出实参，三者的“同名调用”约束不同。
+
 #include <gtest/gtest.h>
 
 #include <string>

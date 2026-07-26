@@ -8,6 +8,9 @@
 // - nodejs.language.object-integrity-levels
 // - nodejs.language.in-and-object-has-own
 
+// 跨语言迁移提示：JavaScript 属性由键、描述符和原型链定义，并可被 Proxy 拦截；
+// Python 使用属性钩子与 descriptor 协议，C++ 成员布局和虚分派则在静态类型系统中建立。
+
 import assert from 'node:assert/strict';
 import test from 'node:test';
 

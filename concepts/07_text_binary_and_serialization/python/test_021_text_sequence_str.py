@@ -20,6 +20,9 @@ HOWTO。
 # polyglot-covers: python.str.casefold python.str.character-classification
 # polyglot-covers: python.str.alignment python.str.encode python.str.format
 
+# 跨语言迁移提示：Python str 按 Unicode code point 建模、bytes 明确保存字节；JavaScript
+# 字符串按 UTF-16 code unit 索引，C++ 字符与字符串只提供 code unit 类型和存储，不自动完成文本语义。
+
 import keyword
 import unicodedata
 

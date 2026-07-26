@@ -7,6 +7,9 @@
 // - cpp.language.initializer-list-overload-preference
 // - cpp.language.most-vexing-parse
 
+// 跨语言迁移提示：C++ 的类型和转换在编译期参与重载与初始化检查；Python 与 JavaScript
+// 主要在运行期决定转换。C++ 容器没有“空即假”协议，不能照搬 Python 的条件判断。
+
 #include <gtest/gtest.h>
 
 #include <array>

@@ -5,6 +5,9 @@
 // - cpp.language.automatic-static-thread-and-dynamic-storage-duration
 // - cpp.language.block-static-initialization
 
+// 跨语言迁移提示：C++ 把作用域、链接和存储期分成不同维度；Python 与 JavaScript
+// 的名字可见性不能直接推导对象寿命，C++ 的按引用捕获还可能在作用域结束后悬空。
+
 #include <gtest/gtest.h>
 
 #include <array>

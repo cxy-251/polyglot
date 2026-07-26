@@ -8,6 +8,9 @@
 // - nodejs.language.array-construction-and-conversion
 // - nodejs.language.array-concat-spreadability-and-species
 
+// 跨语言迁移提示：JavaScript 数组是带 length 规则的对象，索引本质上是属性键；
+// Python 序列通过 __getitem__ 解释整数和 slice，数组空洞也不能类比为 Python 的 None。
+
 import assert from 'node:assert/strict';
 import test from 'node:test';
 

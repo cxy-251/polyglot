@@ -8,6 +8,9 @@
 // - nodejs.language.recursion-and-named-function-expression
 // - nodejs.language.new-target
 
+// 跨语言迁移提示：JavaScript 调用通常用 undefined 填补缺参并保留多余实参；
+// Python 会按签名报错，C++ 会在编译期筛选重载。默认参数求值时机也不能跨语言类推。
+
 import assert from 'node:assert/strict';
 import test from 'node:test';
 

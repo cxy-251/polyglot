@@ -6,6 +6,9 @@
 // - cpp.language.function-argument-order
 // - cpp.language.conditional-and-comma-operators
 
+// 跨语言迁移提示：内置 && / || 返回 bool，但重载版本不再短路；Python 和 JavaScript
+// 的 and / or、&& / || 会返回被选中的操作数。三者也不能互相套用函数实参求值顺序。
+
 #include <gtest/gtest.h>
 
 #include <algorithm>

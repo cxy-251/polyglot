@@ -19,6 +19,9 @@
 # polyglot-covers: python.exception.__suppress_context__
 # polyglot-covers: python.control-flow.finally-return
 
+# 跨语言迁移提示：Python 用 try/finally 或 with 明确表达清理；C++ RAII 把清理绑定到
+# 对象析构，JavaScript 的 using 绑定到 disposable 协议。三者都不能依赖垃圾回收时机释放资源。
+
 import traceback
 
 import pytest

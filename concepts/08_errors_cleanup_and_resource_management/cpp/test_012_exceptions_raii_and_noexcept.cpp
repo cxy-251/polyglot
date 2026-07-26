@@ -6,6 +6,9 @@
 // - cpp.language.noexcept-operator-and-function-type
 // - cpp.language.exception-safety-commit-rollback
 
+// 跨语言迁移提示：C++ 栈展开会析构已构造的自动对象，因此 RAII 不需要额外语法；
+// Python 的 with 和 JavaScript 的 using 是显式协议入口，垃圾回收本身都不提供同等保证。
+
 #include <gtest/gtest.h>
 
 #include <stdexcept>

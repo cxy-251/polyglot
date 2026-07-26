@@ -19,6 +19,9 @@
 # polyglot-covers: python.function.annotations python.function.closure-late-binding
 # polyglot-covers: python.protocol.__call__ python.builtin.callable
 
+# 跨语言迁移提示：Python 按签名在运行期绑定参数并拒绝多余调用；JavaScript 通常忽略
+# 多余实参、用 undefined 补缺，C++ 则先在编译期做重载解析再按值或引用传参。
+
 import pytest
 
 

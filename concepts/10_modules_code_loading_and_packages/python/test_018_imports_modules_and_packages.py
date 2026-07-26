@@ -18,6 +18,9 @@ importlib、__import__ 与 runpy。
 # polyglot-covers: python.package.__all__ python.stdlib.importlib.import_module
 # polyglot-covers: python.stdlib.importlib.reload python.stdlib.runpy.run_path
 
+# 跨语言迁移提示：Python import 在运行期执行模块并缓存 module object；JavaScript ESM
+# 暴露 live binding，C++ 翻译单元和模块主要受编译、链接与 ODR 约束，不是运行期模块缓存。
+
 import importlib
 import runpy
 import sys

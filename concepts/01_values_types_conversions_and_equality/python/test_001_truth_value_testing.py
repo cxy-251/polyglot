@@ -16,6 +16,9 @@ Model。
 # polyglot-covers: python.protocol.__len__
 # polyglot-covers: python.data-model.special-method-lookup
 
+# 跨语言迁移提示：Python 允许对象用 __bool__ / __len__ 定义真假，空容器通常为假；
+# JavaScript 的对象（包括空数组）始终为真，C++ 则使用数值、指针或 explicit operator bool 的上下文转换。
+
 import pytest
 
 

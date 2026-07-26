@@ -7,6 +7,9 @@
 // - nodejs.language.resizable-arraybuffer
 // - nodejs.language.arraybuffer-transfer
 
+// 跨语言迁移提示：ArrayBuffer 是原始字节存储，TypedArray 与 DataView 只是不同视图；
+// Python bytes / memoryview 和 C++ 字节容器虽能解决相似问题，但共享、切片与端序语义不同。
+
 import assert from 'node:assert/strict';
 import test from 'node:test';
 

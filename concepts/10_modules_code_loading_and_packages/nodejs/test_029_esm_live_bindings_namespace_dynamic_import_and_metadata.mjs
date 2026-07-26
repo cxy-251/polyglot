@@ -8,6 +8,9 @@
 // - nodejs.language.import-attributes
 // - nodejs.language.import-meta-url-and-resolve
 
+// 跨语言迁移提示：ESM 在运行期实例化一次并暴露 live binding；Python 缓存 module
+// object 但 from-import 绑定不自动跟随重赋值，C++ import 则属于编译期可见性与 ODR 模型。
+
 import assert from 'node:assert/strict';
 import test from 'node:test';
 

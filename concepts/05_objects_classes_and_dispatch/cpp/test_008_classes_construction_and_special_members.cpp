@@ -6,6 +6,9 @@
 // - cpp.language.defaulted-and-deleted-special-members
 // - cpp.language.rule-of-zero
 
+// 跨语言迁移提示：C++ 类对象具有确定的构造、析构、复制与移动语义；Python 和
+// JavaScript 的对象模型围绕动态属性查找，垃圾回收也不能替代 C++ 式确定性析构。
+
 #include <gtest/gtest.h>
 
 #include <memory>

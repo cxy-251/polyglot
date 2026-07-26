@@ -23,6 +23,9 @@ Data Model 3.3.8。
 # polyglot-covers: python.protocol.reflected-binary-operations
 # polyglot-covers: python.protocol.inplace-binary-operations
 
+# 跨语言迁移提示：Python 运算符可通过特殊方法返回 NotImplemented 触发反向分派；
+# C++ 在编译期完成重载解析，JavaScript 通常先执行抽象强制转换，三者的 fallback 不等价。
+
 import operator
 
 import pytest

@@ -6,6 +6,9 @@
 // - cpp.language.module-declaration-export-import-and-reachability
 // - cpp.implementation.gcc11-modules-ts-gap
 
+// 跨语言迁移提示：C++ 翻译单元在编译/链接阶段通过声明、定义与 ODR 组合程序；
+// Python 与 JavaScript 模块在运行期实例化并缓存，所谓 import 并不是同一种加载机制。
+
 #include <gtest/gtest.h>
 
 #include "support/support_020_odr.hpp"

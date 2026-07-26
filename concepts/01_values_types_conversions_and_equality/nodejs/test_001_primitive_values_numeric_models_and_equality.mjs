@@ -10,6 +10,9 @@
 // - nodejs.language.nullish-values
 // - nodejs.language.symbols-and-symbol-registry
 
+// 跨语言迁移提示：ToBoolean 不调用对象协议，空数组和空对象仍为真；这不同于 Python
+// 的空容器规则。JavaScript 还要区分 ===、Object.is 与会强制转换的 ==，不能套用 C++ 比较模型。
+
 import assert from 'node:assert/strict';
 import test from 'node:test';
 

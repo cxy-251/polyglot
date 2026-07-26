@@ -7,6 +7,9 @@
 // - nodejs.language.async-iterator-closing
 // - nodejs.language.sync-iterable-fallback-in-for-await
 
+// 跨语言迁移提示：JavaScript Promise job 与事件循环推进 async 代码，Python 由
+// coroutine 加具体事件循环驱动；C++ coroutine 本身只生成状态机，不提供调度器。
+
 import assert from 'node:assert/strict';
 import test from 'node:test';
 

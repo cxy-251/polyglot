@@ -22,6 +22,9 @@ generator 协议。
 # polyglot-covers: python.async-generator.asend python.async-generator.athrow
 # polyglot-covers: python.async-generator.aclose
 
+# 跨语言迁移提示：Python 与 JavaScript 的 async/await 通常由运行时事件循环调度；
+# C++ coroutine 只规定状态机与 awaiter 协议，不自带事件循环、线程或并发执行。
+
 import asyncio
 
 import pytest

@@ -8,6 +8,9 @@
 // - nodejs.language.bitwise-operators
 // - nodejs.language.assignment-and-comma-expressions
 
+// 跨语言迁移提示：&& / || 返回操作数并按 ToBoolean 选择分支，类似 Python 但真假集合不同；
+// C++ 内置逻辑运算返回 bool，而重载逻辑运算符甚至不保留短路语义。
+
 import assert from 'node:assert/strict';
 import test from 'node:test';
 

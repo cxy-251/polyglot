@@ -6,6 +6,9 @@
 // - nodejs.language.async-disposable-stack
 // - nodejs.language.suppressed-error
 
+// 跨语言迁移提示：using / await using 依赖 Symbol.dispose 协议并按逆序清理；
+// Python 对应 with 协议，C++ 对应 RAII 析构。JavaScript 垃圾回收不会自动调用这些清理钩子。
+
 import assert from 'node:assert/strict';
 import test from 'node:test';
 
