@@ -10,6 +10,7 @@ __pycache__/
 /languages/cpp/build/
 /languages/rust/target/
 /languages/nodejs/node_modules/
+/concepts/*/nodejs/node_modules/
 
 # Language session state.
 .Rhistory

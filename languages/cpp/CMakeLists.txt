@@ -31,18 +31,25 @@ add_subdirectory(
 
 include(GoogleTest)
 
+get_filename_component(
+  POLYGLOT_REPOSITORY_ROOT
+  "${CMAKE_CURRENT_SOURCE_DIR}/../.."
+  ABSOLUTE
+)
+
 file(
   GLOB_RECURSE POLYGLOT_CPP_TEST_SOURCES
   CONFIGURE_DEPENDS
-  "${CMAKE_CURRENT_SOURCE_DIR}/test_[0-9][0-9][0-9]_*.cpp"
-  "${CMAKE_CURRENT_SOURCE_DIR}/*/test_[0-9][0-9][0-9]_*.cpp"
-  "${CMAKE_CURRENT_SOURCE_DIR}/*/*/test_[0-9][0-9][0-9]_*.cpp"
+  "${POLYGLOT_REPOSITORY_ROOT}/concepts/*/cpp/test_[0-9][0-9][0-9]_*.cpp"
+  "${CMAKE_CURRENT_SOURCE_DIR}/language_specific/test_[0-9][0-9][0-9]_*.cpp"
+  "${CMAKE_CURRENT_SOURCE_DIR}/standard_library/*/test_[0-9][0-9][0-9]_*.cpp"
 )
 
 file(
   GLOB_RECURSE POLYGLOT_CPP_SUPPORT_SOURCES
   CONFIGURE_DEPENDS
-  "${CMAKE_CURRENT_SOURCE_DIR}/support_*.cpp"
+  "${POLYGLOT_REPOSITORY_ROOT}/concepts/*/cpp/support/support_*.cpp"
+  "${CMAKE_CURRENT_SOURCE_DIR}/language_specific/support/support_*.cpp"
 )
 
 if(NOT POLYGLOT_CPP_TEST_SOURCES)

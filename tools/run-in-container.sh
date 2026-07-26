@@ -11,6 +11,7 @@ Usage:
   ./tools/run-in-container.sh python [pytest arguments...]
   ./tools/run-in-container.sh cpp [ctest arguments...]
   ./tools/run-in-container.sh nodejs [node --test arguments or test files...]
+  ./tools/run-in-container.sh check
 
 Host entry point:
   ./tools/run.sh <command>
@@ -72,7 +73,7 @@ doctor() {
 run_python() {
   need_cmd python3
   if [[ $# -eq 0 ]]; then
-    python3 -m pytest languages/python
+    python3 -m pytest concepts languages/python
   else
     python3 -m pytest "$@"
   fi
@@ -123,7 +124,7 @@ run_nodejs() {
     set --
   else
     mapfile -d '' test_files < <(
-      find languages/nodejs \
+      find concepts languages/nodejs \
         -type f \
         -name 'test_[0-9][0-9][0-9]_*.mjs' \
         -print0 | sort -z
@@ -131,7 +132,7 @@ run_nodejs() {
   fi
 
   if [[ ${#test_files[@]} -eq 0 ]]; then
-    echo "languages/nodejs 中没有发现 test_NNN_*.mjs。" >&2
+    echo "concepts/ 和 languages/nodejs/ 中没有发现 Node.js 测试。" >&2
     exit 1
   fi
 
@@ -141,6 +142,10 @@ run_nodejs() {
       --test-concurrency=1 \
       "$@" \
       "${test_files[@]}"
+}
+
+run_checks() {
+  ./tools/check-structure.sh
 }
 
 main() {
@@ -160,6 +165,10 @@ main() {
     nodejs|node|js)
       shift
       run_nodejs "$@"
+      ;;
+    check|structure|lint)
+      shift
+      run_checks "$@"
       ;;
     ""|-h|--help|help)
       usage

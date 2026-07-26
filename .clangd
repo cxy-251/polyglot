@@ -1,5 +1,5 @@
 If:
-  PathMatch: languages/cpp/.*\.(cpp|hpp|h|cppm)
+  PathMatch: (concepts/.*/cpp|languages/cpp)/.*\.(cpp|hpp|h|cppm)
 
 CompileFlags:
   Compiler: /Library/Developer/CommandLineTools/usr/bin/clang++
