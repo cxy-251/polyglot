@@ -1,22 +1,43 @@
 {
-  "schema_version": 2,
+  "schema_version": 3,
   "project": "polyglot-concepts-by-example",
   "mission": "Compare how languages solve shared problems through readable, executable tests.",
-  "phase": "cross-language-foundation",
-  "current_milestone": "filesystem-concept-pilot",
+  "architecture": "dual-axis",
+  "phase": "three-concept-pilot-verified",
+  "current_milestone": "select-one-fourth-concept",
   "continuation_source": "NEXT.md",
   "source_lock": "sources.lock",
   "legacy_tip": "662e0d1",
-  "shared_concept_root": "concepts",
+  "layers": {
+    "language_courses": {
+      "root": "languages",
+      "purpose": "complete vertical learning paths",
+      "validate": [
+        "./tools/run.sh python",
+        "./tools/run.sh cpp",
+        "./tools/run.sh nodejs"
+      ]
+    },
+    "cross_language_concepts": {
+      "root": "concepts",
+      "purpose": "focused horizontal comparisons",
+      "directory_pattern": "NNN_name",
+      "test_pattern": "test_name",
+      "validate_one": "./tools/run.sh concept NNN_name",
+      "validate_all": "./tools/run.sh concepts",
+      "pilots": [
+        "001_truthiness",
+        "002_equality",
+        "003_argument_passing"
+      ]
+    }
+  },
   "languages": [
     {
       "id": "python",
       "name": "Python",
       "status": "verified",
-      "test_roots": [
-        "concepts/*/python",
-        "languages/python"
-      ],
+      "course_root": "languages/python",
       "test_framework": "pytest",
       "validate": "./tools/run.sh python"
     },
@@ -24,10 +45,7 @@
       "id": "cpp",
       "name": "C++",
       "status": "verified",
-      "test_roots": [
-        "concepts/*/cpp",
-        "languages/cpp"
-      ],
+      "course_root": "languages/cpp",
       "test_framework": "GoogleTest via CMake/CTest",
       "validate": "./tools/run.sh cpp"
     },
@@ -35,10 +53,7 @@
       "id": "nodejs",
       "name": "Node.js",
       "status": "verified",
-      "test_roots": [
-        "concepts/*/nodejs",
-        "languages/nodejs"
-      ],
+      "course_root": "languages/nodejs",
       "test_framework": "node:test",
       "validate": "./tools/run.sh nodejs"
     },
@@ -72,12 +87,12 @@
     }
   ],
   "policies": {
-    "cross_language_concepts_first": true,
+    "complete_courses_stay_in_languages": true,
+    "concepts_are_independent_minimal_tests": true,
     "force_all_languages_per_concept": false,
+    "move_course_files_into_concepts": false,
     "standard_library_paths_preserved": true,
-    "direct_repository_writes": true,
     "single_current_task": true,
-    "generated_handoff_sources": false,
     "committed_generated_inventories": false,
     "temporary_output_root": "/tmp/polyglot-*",
     "unicode_line_length": 120,
