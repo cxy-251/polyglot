@@ -20,8 +20,9 @@
 > Polyglot 通过可执行测试，对照学习不同语言如何解决相同问题，理解它们的共同概念、
 > 语义差异、底层机制和迁移陷阱。
 
-当前用 Python、C++ 和 Node.js 建立双轴学习结构；Julia、R、Go 和 Rust 保留在规划
-范围，但暂停新增语言，直到 `NEXT.md` 明确改变阶段。
+Python、C++ 和 Node.js 的双轴学习结构已完成：三门纵向课程保持完整，横向层包含
+10 个 family、49 个经过统一验证的 topic。Julia、R、Go 和 Rust 保留在规划范围，
+但不得自动开始；只有用户为 `NEXT.md` 指定新阶段后才接入。
 
 测试代码是主要产品。不要建立大型 Markdown/JSON checklist、Dash 对象快照、数据库
 快照、完整覆盖清单或 `chatgpt-sources/`。
@@ -51,30 +52,35 @@ languages/nodejs/{language,node_core,npm_and_package_workflows}/
 两位编号表示稳定章节，二级两位编号表示章节内的具体主题。一个主题只回答一个明确问题；
 至少两门语言存在真实对照价值时才建立，不要求机械补齐所有语言。
 
-顶层预计保持约 10–15 个章节，不要求预先确定精确数量；主题总数不设固定上限。只有
-出现首个主题时才创建章节，不预建空目录。同类新主题在已有章节内递增编号。
+当前 10 个章节已经构成稳定主轴，主题总数不设固定上限，也不预建空目录。同类新主题
+在已有章节内递增编号；只有无法归入现有十章的稳定问题域才允许增加顶层章节。
 
-每个语言子目录默认只有一个局部命名测试：
+每个语言子目录使用连续的局部测试编号：
 
 ```text
-concepts/01_values_and_comparison/01_truthiness/python/test_truthiness.py
-concepts/01_values_and_comparison/01_truthiness/cpp/test_truthiness.cpp
-concepts/01_values_and_comparison/01_truthiness/nodejs/test_truthiness.mjs
+concepts/01_values_and_comparison/01_truthiness/python/test_01_core.py
+concepts/01_values_and_comparison/01_truthiness/cpp/test_01_core.cpp
+concepts/01_values_and_comparison/01_truthiness/nodejs/test_01_core.mjs
 ```
 
 概念测试必须：
 
 - 在顶部用两三行列出共同问题矩阵；
 - 使用 `polyglot-family: <name>`，名称与顶层章节一致；
-- 使用 `polyglot-concept: <name>`，名称与目录和文件一致；
+- 使用 `polyglot-concept: <name>`，名称与主题目录一致；
 - 使用 `polyglot-related: languages/<language>/...` 指向真实完整课程；
 - 围绕相同输入类别和观察点组织断言；
 - 对缺失机制、编译期非法、未定义行为或规范差异使用必要注释；
 - 只复制比较所需的最小代表案例，不复刻完整课程。
 
-概念局部文件名不使用语言课程编号，不声明 `polyglot-covers`，不计入语言课程文件数。
-测试入口保持唯一的 `test_<topic>`；语言目录允许按需增加 `fixtures/` 或 `support/`。
-少量语义重复是双轴设计的一部分，不要以“去重”为理由重新移动课程文件。
+概念局部文件使用 `test_NN_name.<ext>`，编号在当前 topic 的当前语言中从 `01` 连续递增，
+不使用语言课程编号、不声明 `polyglot-covers`、不计入语言课程文件数。简单主题优先一个
+`test_01_core`；只有内容已形成可独立查阅的子问题时才增加文件。语言目录允许按需增加
+`fixtures/` 或 `support/`，不得把普通辅助代码伪装成额外测试入口。
+
+关联课程路径超过行宽时写成 `polyglot-related: <directory>/` 与紧邻的
+`polyglot-related+: <filename>`；结构门禁会拼接并验证真实文件。少量语义重复是双轴
+设计的一部分，不要以“去重”为理由重新移动课程文件。
 
 标准库默认留在语言主线。只有具体问题值得比较时才另写精简概念测试；禁止把一组标准库
 课程文件整体迁入 `concepts/`。
@@ -111,6 +117,7 @@ concepts/01_values_and_comparison/01_truthiness/nodejs/test_truthiness.mjs
 ./tools/run.sh concept 01_values_and_comparison/01_truthiness
 ./tools/run.sh family 01_values_and_comparison
 ./tools/run.sh concepts
+./tools/run.sh list-concepts
 ```
 
 结构门禁：
@@ -119,10 +126,9 @@ concepts/01_values_and_comparison/01_truthiness/nodejs/test_truthiness.mjs
 ./tools/run.sh check
 ```
 
-门禁分别验证语言路径、课程连续编号和覆盖标记、章节与主题连续编号、唯一测试入口、
-至少两门语言、`polyglot-family`、`polyglot-concept`、`polyglot-related` 目标和
-Unicode 120 字符行宽。它不能替代人工语义审阅；提交主题时还要确认各语言确实回答
-同一问题。
+门禁分别验证语言路径、课程连续编号和覆盖标记、章节与主题连续编号、主题内测试连续
+编号、至少两门语言、`polyglot-family`、`polyglot-concept`、课程关联目标和 Unicode
+120 字符行宽。它不能替代人工语义审阅；提交主题时还要确认各语言确实回答同一问题。
 
 修改测试时先跑受影响课程或单个概念，再跑对应全量。只有两者都通过才能称为 verified。
 
@@ -133,7 +139,8 @@ Unicode 120 字符行宽。它不能替代人工语义审阅；提交主题时�
   GoogleTest 1.16.0；`1409 passed, 15 skipped`。
 - Node.js：课程 `001`–`107`；Node.js 24.18.0、ECMAScript 2025、
   ECMA-402 12th edition、npm 11.16.0；`935 passed`。
-- 横向层有三个章节、四个主题：Python `16 passed`、C++ `15 passed`、Node.js `16 passed`。
+- 横向层有 10 个章节、49 个主题，每门语言 49 个测试入口：Python `199 passed`、
+  C++ `200 passed`、Node.js `196 passed`。
 
 所有 skip 必须说明实现能力、平台行为或可选依赖原因。工具链和资料版本见
 `sources.lock`。
@@ -188,6 +195,11 @@ Node.js 使用内置 `node:test` 和 ESM `.mjs`；普通测试不安装 npm 依�
 默认完成一个连贯改动后做一个本地提交。大规模移动、概念内容、运行器和文档尽量分开。
 默认不得 push、创建远程分支或 PR；只有用户明确授权当前任务时才执行。禁止 force push
 和整体 squash，保留工作树中的用户改动。
+
+当前横向课程已经闭合。没有用户新决策时，不得自行增加 topic、family 或新语言。后续
+维护采用以下顺序：优先修正或深化现有 topic；新增共同问题优先归入现有 family；只有
+无法归类的稳定问题域才建立新 family；接入新语言时优先补充现有 49 个 topic，而不是
+复制一套新的平行课程。不要把一次具体任务机械转换成一个新 topic。
 
 旧 checklist-first 实现截止于 commit `662e0d1`。查证历史时使用 `git show`，不要恢复
 旧生成数据。

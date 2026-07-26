@@ -1,10 +1,11 @@
 {
-  "schema_version": 4,
+  "schema_version": 5,
   "project": "polyglot-concepts-by-example",
   "mission": "Compare how languages solve shared problems through readable, executable tests.",
   "architecture": "dual-axis",
-  "phase": "family-topic-structure-verified",
-  "current_milestone": "implement-04-collections-and-iteration-01-iteration-protocol",
+  "phase": "cross-language-concept-curriculum-complete",
+  "current_milestone": null,
+  "concept_curriculum_complete": true,
   "continuation_source": "NEXT.md",
   "source_lock": "sources.lock",
   "legacy_tip": "662e0d1",
@@ -13,29 +14,54 @@
       "root": "languages",
       "purpose": "complete vertical learning paths",
       "validate": [
-        "./tools/run.sh python",
+        "./tools/run.sh python -q --timeout=30 -W error",
         "./tools/run.sh cpp",
         "./tools/run.sh nodejs"
-      ]
+      ],
+      "verified_results": {
+        "python": {
+          "passed": 5025,
+          "skipped": 39
+        },
+        "cpp": {
+          "passed": 1409,
+          "skipped": 15
+        },
+        "nodejs": {
+          "passed": 935,
+          "skipped": 0
+        }
+      }
     },
     "cross_language_concepts": {
       "root": "concepts",
       "purpose": "focused horizontal comparisons",
       "family_pattern": "NN_family",
       "topic_pattern": "NN_topic",
-      "test_pattern": "test_topic",
-      "expected_family_count": "approximately 10-15",
+      "test_pattern": "test_NN_name",
+      "family_count": 10,
+      "topic_count": 49,
       "fixed_topic_total": false,
       "precreate_empty_families": false,
+      "allow_multiple_test_files_per_language": true,
       "validate_one": "./tools/run.sh concept NN_family/NN_topic",
       "validate_family": "./tools/run.sh family NN_family",
       "validate_all": "./tools/run.sh concepts",
-      "verified_topics": [
-        "01_values_and_comparison/01_truthiness",
-        "01_values_and_comparison/02_equality",
-        "02_functions_and_calls/01_argument_passing",
-        "03_errors_and_resources/01_resource_cleanup"
-      ]
+      "list": "./tools/run.sh list-concepts",
+      "verified_results": {
+        "python": {
+          "test_files": 49,
+          "passed": 199
+        },
+        "cpp": {
+          "test_files": 49,
+          "passed": 200
+        },
+        "nodejs": {
+          "test_files": 49,
+          "passed": 196
+        }
+      }
     }
   },
   "languages": [
@@ -45,7 +71,7 @@
       "status": "verified",
       "course_root": "languages/python",
       "test_framework": "pytest",
-      "validate": "./tools/run.sh python"
+      "validate": "./tools/run.sh python -q --timeout=30 -W error"
     },
     {
       "id": "cpp",
@@ -98,6 +124,8 @@
     "force_all_languages_per_concept": false,
     "move_course_files_into_concepts": false,
     "standard_library_paths_preserved": true,
+    "new_topics_prefer_existing_families": true,
+    "new_languages_prefer_existing_topics": true,
     "single_current_task": true,
     "committed_generated_inventories": false,
     "temporary_output_root": "/tmp/polyglot-*",
