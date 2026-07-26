@@ -1,166 +1,140 @@
-# Polyglot：通过测试学习编程语言
+# Polyglot：通过可执行测试进行跨语言学习
 
-Polyglot 用可阅读、可执行的测试案例学习 Python、C++、Node.js、Julia、R、Go 和 Rust。
+> Polyglot 通过可执行测试，对照学习不同语言如何解决相同问题，理解它们的共同概念、
+> 语义差异、底层机制和迁移陷阱。
 
-项目不仅展示“一个 API 怎么调用”，还要讲清楚：
+仓库当前用 Python、C++ 和 Node.js 建立跨语言框架；Julia、R、Go 和 Rust 保留在规划
+范围内，但在前三门语言的框架稳定前暂停扩展。项目的完成指标不是文件数量，而是同一
+问题能否被并排阅读、真实语义是否得到断言验证、语言经验能否安全迁移。
 
-- 基础语法和常见工作流；
-- 高阶语言机制；
-- 表层语法、内置函数与底层协议之间的关系；
-- 官方语义中容易误解的行为和真实常见坑；
-- 示例逻辑是否能通过对应测试框架验证。
+测试代码是主要内容。能用代码和断言表达的语义直接写在测试中；编译期错误、未定义行为、
+实现差异和平台限制使用必要注释或 skip 表达。仓库不维护大型 Markdown/JSON checklist、
+对象快照、数据库快照或 `chatgpt-sources/`。
 
-例如 Python 中不仅要展示 `bool(value)`，还要展示真假值判断如何依次使用
-`__bool__()` 和 `__len__()`；不仅展示 `for`，还要展示迭代协议和历史序列
-fallback。
+## 组织方式
 
-## 当前阶段
+仓库采用“共同概念 + 各语言完整路径”的混合结构：
 
-Python 3.10 基线已经完成统一验证。`ohdev` 容器中的解释器是 Python 3.10.12，
-官方内容来源锁定到 Python 3.10 文档系列。
+```text
+concepts/
+  01_values_types_conversions_and_equality/
+    python/
+    cpp/
+    nodejs/
+  02_bindings_scope_and_lifetime/
+  ...
+  10_modules_code_loading_and_packages/
 
-C++20 基线也已完成统一验证。当前工具链是 GCC/libstdc++ 11.4.0、CMake 3.22.1，
-以及 `ohdev` 中 OpenHarmony 工作区自带的 GoogleTest 1.16.0。构建输出位于
-`/tmp/polyglot-cpp-build`，普通测试运行不下载依赖。
+languages/
+  python/
+    language_specific/
+    stdlib/
+  cpp/
+    language_specific/
+    standard_library/
+  nodejs/
+    language_specific/
+    node_core/
+    npm_and_package_workflows/
+```
 
-Node.js 基线已完成统一验证。运行时锁定为 Node.js 24.18.0 LTS，语言规范锁定到
-ECMAScript 2025 与 ECMA-402 12th edition，包管理器为随运行时提供的 npm 11.16.0。
-测试使用内置 `node:test`，普通执行不安装依赖、不访问公网。
+`concepts/` 围绕共同问题组织测试，例如真假值、作用域、函数调用、对象分派、资源清理
+和模块加载。同一目录中的测试解决相近问题，但不暗示语法或语义相同；代表测试顶部的
+“跨语言迁移提示”指出最容易误套经验的边界。
 
-当前验证证据：
+共同概念不要求三门语言齐全。只有两门语言存在真实对照价值时也可以建立概念；缺少合理
+对应项时保持缺席。模板元编程、C++ 值类别等特有机制留在
+`languages/<language>/language_specific/`，标准库、Node 核心模块和 npm 工作流继续留在
+各语言目录中，保证每门语言仍有完整的独立学习路径。
 
-- `languages/python/` 有 178 个测试文件，编号从 `001` 连续到 `178`；
-- 每个文件都有 `polyglot-covers` 覆盖标记，`stdlib/` 分类目录与编号范围一致；
-- 所有测试代码按 Unicode 字符计数均不超过 100 列；
-- 严格全量命令 `./tools/run.sh python -q --timeout=30 -W error` 的结果为
-  `5012 passed, 52 skipped`；
-- 52 个 skip 都来自明确的平台或可选能力差异，例如 Windows API、Tk、
-  IANA zone data、特定 dbm backend 和 ensurepip，不是失败用例。
-- `languages/cpp/` 有 160 个测试文件，编号从 `001` 连续到 `160`；语言语义
-  独立成区，C++20 标准库按 17 个连续服务分区组织，每个文件都有唯一覆盖标记；
-- 全部 C++ 源码通过仓库 `.clangd` 的主机静态诊断，测试代码按 Unicode 字符计数
-  均不超过 100 列；
-- 全量命令 `./tools/run.sh cpp` 的结果为 `1409 passed, 15 skipped`；15 个 skip
-  都明确记录了 GCC/libstdc++ 11、标准模块、平台行为或已知实现缺陷的能力边界。
-- `languages/nodejs/` 有 107 个测试文件，编号从 `001` 连续到 `107`；内容分为
-  ECMAScript 语言、Node 核心与 Web API、npm 和包工作流三个学习分区；
-- Node.js 每个文件都有唯一 `polyglot-covers` 标记，全部测试代码按 Unicode 字符
-  计数均不超过 100 列；
-- 全量命令 `./tools/run.sh nodejs` 的结果为 `935 passed`，没有失败或跳过案例。
+测试编号仍属于语言，而不是概念。Python `001`–`178`、C++ `001`–`160`、Node.js
+`001`–`107` 分别在 `concepts/` 和对应 `languages/` 目录之间保持全局唯一、连续和稳定；
+三门语言的相同编号不要求表达相同概念。
 
-下一阶段的唯一入口仍是 `NEXT.md`；不要从 README 推测并行任务。
+## 当前基线
+
+- Python 3.10：178 个测试文件；锁定解释器为 Python 3.10.12；严格全量基线为
+  `5012 passed, 52 skipped`。
+- C++20：160 个测试文件；GCC/libstdc++ 11.4.0、CMake 3.22.1、GoogleTest 1.16.0；
+  全量基线为 `1409 passed, 15 skipped`。
+- Node.js：107 个测试文件；Node.js 24.18.0、ECMAScript 2025、ECMA-402 12th edition、
+  npm 11.16.0；全量基线为 `935 passed`。
+
+所有 skip 都必须说明平台、实现能力或可选依赖原因。准确版本、官方资料、归档校验值和
+实现提交记录在 `sources.lock`。
 
 ## 新对话从哪里开始
 
-只需要读取：
+新对话按顺序查看 Git 状态和最近提交，然后读取：
 
 ```text
-AGENTS.md
+README.md
 sources.lock
 NEXT.md
 ```
 
-`NEXT.md` 永远只保存一个下一步任务。完整标准库对象清单、临时数据库和覆盖报告以后按需生成到 `/tmp`，不进入 Git。
+`AGENTS.md` 是执行契约；`NEXT.md` 是唯一的当前任务入口，只保存一项可接续工作。历史
+决策由 Git 提交保留，不在交接文件中累积任务清单。
 
-## 仓库结构
+## 在容器中执行
 
-```text
-AGENTS.md                   跨对话执行契约
-README.md                   项目目标和当前阶段
-NEXT.md                     唯一的当前任务
-sources.lock                语言版本和权威资料入口
-project.json                稳定语言范围与测试框架
-languages/python/           Python 教学测试
-languages/cpp/              C++20 教学测试与 CMake 入口
-languages/nodejs/           ECMAScript、Node.js 与 npm 教学测试
-tools/run.sh                宿主机 Docker 入口
-tools/run-in-container.sh   容器内测试入口
-```
-
-Python 测试按学习主题组织，而不是按官方文档的每个对象机械生成：
-
-```text
-languages/python/
-  language/      语言语义、表达式、语句和数据模型
-  builtins/      内置类型与内置函数
-  stdlib/        标准库模块与跨 API 工作流
-    030-035_file_and_directory_access/  文件与目录访问
-    036-040_text_processing/            文本处理服务
-```
-
-主题允许跨层。例如真假值测试同时包含布尔表达式、`bool()`、`__bool__()` 和 `__len__()`，因为把它们放在一个测试套中更容易理解真实分派关系。
-
-`stdlib/` 已按 Python 3.10 官方标准库目录的服务类别组织。目录名前缀同时标明
-其中的测试编号范围；目录用于控制标准库规模，不改变全局文件编号规则，也不会
-细分成“每个模块一个文件夹”。跨模块工作流归入其主要学习目标所在的类别。
-
-同一学习阶段的文件按三位数连续编号，编号是稳定的推荐阅读顺序，主题后缀用于
-搜索。例如：
-
-```text
-test_001_truth_value_testing.py
-test_002_comparison_semantics.py
-test_003_binary_operator_dispatch.py
-```
-
-编号在整个 `languages/python/` 中全局连续，不会在子目录中重新从 001 开始。
-新增文件必须先查看所有 Python 子目录已有的最大编号，再使用下一个编号；不要
-为了插入新主题批量重排已提交编号。若后来发现遗漏，优先补充到原主题文件，
-确实需要独立文件时追加新编号，并在注释中说明它依赖的前置主题。
-
-## 执行模型
-
-宿主机不直接运行 Python 或其他语言工具：
+宿主机只用于阅读代码和发起 Docker 命令，不直接运行任何目标语言的解释器、编译器或
+测试框架：
 
 ```text
 ./tools/run.sh
     ↓ docker exec ohdev
 ./tools/run-in-container.sh
-    ↓ pytest / 编译器 / 对应测试框架
+    ↓ pytest / CMake + CTest / node:test
 ```
 
-Python 严格全量验证执行：
+常用命令：
 
 ```bash
 ./tools/run.sh doctor
+./tools/run.sh check
 ./tools/run.sh python -q --timeout=30 -W error
+./tools/run.sh cpp
+./tools/run.sh nodejs
 ```
 
-以后修改 Python 文件时，先复跑受影响类别，再运行上述完整命令；只有两者都通过，
-才能继续称当前 Python 基线为 verified。
+`./tools/run.sh check` 在 `ohdev` 中验证允许的目录结构、`polyglot-covers` 标记、各语言
+连续且唯一的编号、共同概念至少包含两门语言，以及仓库内未忽略文本每行不超过 120 个
+Unicode 字符。修改测试时先运行受影响范围，再运行对应语言全量；只有两者都通过才能
+保持 verified 状态。
 
-C++ 阶段验证执行：
+Python 与 Node.js 的单文件命令直接使用当前路径，例如：
 
 ```bash
-./tools/run.sh cpp
+./tools/run.sh python \
+  concepts/01_values_types_conversions_and_equality/python/test_001_truth_value_testing.py
+
+./tools/run.sh nodejs \
+  concepts/01_values_types_conversions_and_equality/nodejs/test_001_primitive_values_numeric_models_and_equality.mjs
+```
+
+C++ 可用 CTest 正则按目标名筛选：
+
+```bash
 ./tools/run.sh cpp -R '^test_001_'
 ```
 
-第一个命令配置、增量编译并运行全部 CTest；第二个命令用于按文件编号筛选已发现的
-GoogleTest 案例。C++ 测试在小批次和类别边界提前验证，不等全部测试套写完后首次编译。
+主机阅读 C++ 使用仓库根目录的 `.clangd`；它同时匹配 `concepts/*/cpp/` 与
+`languages/cpp/`，提供跳转、补全和静态诊断，但不改变编译只在 `ohdev` 中执行的边界。
 
-Node.js 全量与单文件验证执行：
+## 新内容如何归类
 
-```bash
-./tools/run.sh nodejs
-./tools/run.sh nodejs \
-  languages/nodejs/01_language/test_001_primitive_values_numeric_models_and_equality.mjs
-```
+开始移动或新增内容前先回答三个问题：
 
-Node.js 测试固定使用容器内的 Node.js 24.18.0 和内置 `node:test`。单文件路径必须作为
-第一个附加参数传入；测试仍由宿主机入口转交给 `ohdev`，不直接调用宿主机 Node.js。
+1. 它是否在回答一个语言无关的共同问题？
+2. 至少两门语言之间是否存在值得解释的真实对应关系或迁移陷阱？
+3. 放在同一目录是否会帮助比较，而不是制造“看起来相似”的假等价？
 
-主机阅读 C++ 代码使用仓库根目录的 `.clangd`。它让主机已有的 clangd 读取 macOS SDK，
-并把 Docker 挂载对应的 GoogleTest 头文件加入索引；这只提供跳转、补全和静态诊断，
-不改变所有编译与测试仍在 `ohdev` 中执行的边界。
+三个答案都成立时进入 `concepts/`；否则进入对应语言的特有机制、标准库、核心模块或
+包工作流目录。先审计已有测试再建立目录，不预建空分类，不为达到数量或语言齐全而迁移。
+移动优先使用 `git mv`，保留原编号、覆盖标记、断言、注释和可追踪历史。
 
 ## 历史
 
-重置前的 checklist、Dash 快照、审计脚本和 handoff source 保留在 commit `662e0d1`：
-
-```bash
-git show 662e0d1:checklists/python/language.checklist.json
-git show 662e0d1:checklists/python/stdlib.tasks.json
-```
-
-这些资料可以用于查证，但不是当前仓库结构。
+旧 checklist-first 实现截止于 commit `662e0d1`。需要查证历史判断时使用
+`git show 662e0d1:<path>`，不要把旧生成数据恢复到当前工作树。

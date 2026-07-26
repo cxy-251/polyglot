@@ -1,73 +1,88 @@
 {
-  "schema_version": 1,
-  "project": "polyglot-stdlib-by-example",
-  "mission": "Teach language semantics and standard libraries through readable, runnable tests.",
-  "phase": "julia-authoring",
-  "current_milestone": "julia-toolchain-and-language-foundations",
+  "schema_version": 2,
+  "project": "polyglot-concepts-by-example",
+  "mission": "Compare how languages solve shared problems through readable, executable tests.",
+  "phase": "cross-language-foundation",
+  "current_milestone": "filesystem-concept-pilot",
   "continuation_source": "NEXT.md",
   "source_lock": "sources.lock",
   "legacy_tip": "662e0d1",
+  "shared_concept_root": "concepts",
   "languages": [
     {
       "id": "python",
       "name": "Python",
-      "root": "languages/python",
+      "status": "verified",
+      "test_roots": [
+        "concepts/*/python",
+        "languages/python"
+      ],
       "test_framework": "pytest",
       "validate": "./tools/run.sh python"
     },
     {
       "id": "cpp",
       "name": "C++",
-      "root": "languages/cpp",
+      "status": "verified",
+      "test_roots": [
+        "concepts/*/cpp",
+        "languages/cpp"
+      ],
       "test_framework": "GoogleTest via CMake/CTest",
       "validate": "./tools/run.sh cpp"
     },
     {
       "id": "nodejs",
       "name": "Node.js",
-      "root": "languages/nodejs",
+      "status": "verified",
+      "test_roots": [
+        "concepts/*/nodejs",
+        "languages/nodejs"
+      ],
       "test_framework": "node:test",
       "validate": "./tools/run.sh nodejs"
     },
     {
       "id": "julia",
       "name": "Julia",
+      "status": "planned_paused",
       "root": "languages/julia",
-      "test_framework": "Test",
-      "validate": "./tools/run.sh julia"
+      "test_framework": "Test"
     },
     {
       "id": "r",
       "name": "R",
+      "status": "planned_paused",
       "root": "languages/r",
-      "test_framework": "base stopifnot()",
-      "validate": "./tools/run.sh r"
+      "test_framework": "base stopifnot()"
     },
     {
       "id": "go",
       "name": "Go",
+      "status": "planned_paused",
       "root": "languages/go",
-      "test_framework": "testing",
-      "validate": "./tools/run.sh go"
+      "test_framework": "testing"
     },
     {
       "id": "rust",
       "name": "Rust",
+      "status": "planned_paused",
       "root": "languages/rust",
-      "test_framework": "cargo test",
-      "validate": "./tools/run.sh rust"
+      "test_framework": "cargo test"
     }
   ],
   "policies": {
-    "standard_library_only": true,
+    "cross_language_concepts_first": true,
+    "force_all_languages_per_concept": false,
+    "standard_library_paths_preserved": true,
     "direct_repository_writes": true,
     "single_current_task": true,
-    "defer_python_tests_until_authoring_complete": false,
     "generated_handoff_sources": false,
     "committed_generated_inventories": false,
     "temporary_output_root": "/tmp/polyglot-*",
+    "unicode_line_length": 120,
     "one_coherent_task_per_change": true,
-    "local_commits_only": true,
-    "remote_push_allowed": false
+    "local_commits_only_by_default": true,
+    "force_push_allowed": false
   }
 }

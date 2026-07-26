@@ -1,199 +1,163 @@
 # Agent Contract
 
-这个仓库必须让一场全新的对话只依靠工作树就能继续，不依赖之前的聊天记录。
+这个仓库必须让一场全新的对话只依靠工作树继续，不依赖以前的聊天记录。
 
 ## 开始工作
 
-每场对话按顺序执行：
+每场对话只执行一次以下启动流程：
 
 1. 查看 `git status --short` 和最近的 Git commit。
 2. 阅读 `README.md`、`sources.lock` 和 `NEXT.md`。
-3. `NEXT.md` 是唯一的当前任务入口；不要寻找或创建完整任务清单。
-4. 先阅读任务列出的官方资料、目标文件、覆盖点和案例，再开始写代码。
-5. 如果工作中断，把准确的剩余步骤写进 `NEXT.md` 的 `Handoff`。
+3. 只把 `NEXT.md` 作为当前任务入口，不寻找或创建完整任务清单。
+4. 先阅读任务列出的官方资料、目标文件、覆盖点和已有案例，再修改代码。
+5. 工作中断时，把准确剩余步骤写入 `NEXT.md` 的 `Handoff`。
 
-以上启动流程在一场对话中只执行一次。上下文压缩、自动续写和同一 goal 内切换到
-下一个测试套都不算新对话；除非文件被外部修改，否则不要重复读取这些启动文件。
+上下文压缩、自动续写和同一 goal 内的阶段提交不算新对话；文件未被外部修改时，不要
+反复读取启动文件。
 
 ## 项目目标
 
-Polyglot 是一个通过测试代码学习编程语言的案例仓库，固定覆盖 Python、C++、Node.js、Julia、R、Go 和 Rust。
+> Polyglot 通过可执行测试，对照学习不同语言如何解决相同问题，理解它们的共同概念、
+> 语义差异、底层机制和迁移陷阱。
 
-案例应当同时展示：
+当前用 Python、C++ 和 Node.js 建立稳定框架；Julia、R、Go 和 Rust 保留在规划范围，
+但暂停新增语言，直到 `NEXT.md` 明确改变阶段。
 
-- 基础语法和正常用法；
-- 容易忽略的高级语义；
-- 表层操作对应的数据模型、协议或语言机制；
-- 标准库中可复用的实际工作流；
-- 真实、常见且有教学价值的陷阱。
+测试代码是主要产品。案例应展示基础语法、正常用法、高阶语义、隐式机制、实际工作流
+和真实陷阱。不要重新建立大型 Markdown/JSON checklist、Dash 对象快照、数据库快照、
+完整覆盖清单或 `chatgpt-sources/`。
 
-测试代码是项目的主要产品。不要重新建立庞大的 Markdown/JSON checklist、Dash 对象快照、数据库快照或 `chatgpt-sources/`。
+## 混合目录结构
 
-## 当前阶段
+`concepts/NN_name/<language>/` 围绕共同问题并排保存各语言测试；
+`languages/<language>/` 保留无法合理对照的语言特有机制及完整标准库路径。
 
-- Python 3.10 测试套 `001`–`178` 已在 `ohdev` 的 Python 3.10.12 中统一验证。
-- 严格基线命令是 `./tools/run.sh python -q --timeout=30 -W error`；当前结果为
-  `5012 passed, 52 skipped`，所有 skip 都有明确的平台或可选能力原因。
-- 以后修改 Python 测试时，先复跑受影响类别，再跑严格全量；两者通过后才能保持
-  verified 状态。
-- C++20 测试套 `001`–`160` 已在锁定的容器工具链中统一验证；全量命令
-  `./tools/run.sh cpp` 当前结果为 `1409 passed, 15 skipped`，所有 skip 都有明确的
-  实现能力、平台行为或已知缺陷原因。
-- C++ 基线是 GCC 11.4.0、libstdc++ 11.4.0、CMake 3.22.1，以及 `ohdev` 中
-  OpenHarmony 工作区提供的 GoogleTest 1.16.0；准确路径和提交见 `sources.lock`。
-- Node.js 24.18.0 测试套 `001`–`107` 已在锁定容器工具链中统一验证；全量命令
-  `./tools/run.sh nodejs` 当前结果为 `935 passed`，没有失败或跳过案例。
-- Node.js 基线包含 ECMAScript 2025、ECMA-402 12th edition、npm 11.16.0 和内置
-  `node:test`；准确实现组件、官方资料和归档校验值见 `sources.lock`。
-- 以后修改 Node.js 测试时，先复跑受影响分区，再跑全量；两者通过后才能保持
-  verified 状态。
-- 下一阶段只看 `NEXT.md`；不要在同一任务中并行开始多门语言。
-- 默认完成一个连贯语言分区或标准库服务类别后再统一做本地阶段性 commit，
-  不要为每个测试套单独提交。提交前做文本、diff 和对应测试审阅。
-- 阶段提交只维护在本地仓库；不得 push 到远程仓库，也不得创建远程分支或 PR，
-  除非用户以后明确改变这项授权边界。
+内容进入 `concepts/` 必须同时满足：
 
-## Python 内容来源
+1. 回答语言无关的共同问题；
+2. 至少两门语言存在真实对照价值；
+3. 并排阅读有助于理解语义差异或迁移陷阱。
 
-`sources.lock` 锁定当前解释器和官方资料系列。来源优先级为：
+不要求每个概念拥有三门语言，不把相似但不等价的机制强行对齐，不机械迁移全部核心
+语义文件。先逐文件审计再建立目录，不预建空分类。模板、值类别等语言特有机制留在
+`language_specific/`；Python 标准库、C++ 标准库、Node 核心模块及 npm 工作流仍留在
+各自 `languages/` 路径。
 
-1. Python Language Reference：语法和核心语义主目录；
-2. Python Data Model：特殊方法、协议和隐式分派；
-3. Built-in Functions / Built-in Types：内置函数和核心类型行为；
-4. Python Standard Library Reference：标准库模块工作流；
-5. PEP：仅补充版本演进或参考手册没有充分解释的设计背景。
+能够执行的差异使用测试和断言表达；编译期错误、未定义行为、规范差异和平台差异使用
+必要注释、特性检测或有理由的 skip。跨语言提示解释机制差异，不重复逐行代码。
 
-Dash 和对象索引以后只用于发现遗漏，不决定测试结构和学习优先级。
+移动现有内容优先使用 `git mv`，保留原编号、`polyglot-covers` ID、断言、注释和历史。
+大规模移动与内容修改分开提交。
 
-## Python 测试规范
+## 通用测试规范
 
-- 使用 pytest；被演示的 API 必须来自 Python 语言本身或标准库。
-- Python 测试分为 `language/`（语言语义和数据模型）、`builtins/`（内置类型和函数）、
-  `stdlib/`（标准库工作流）；协议示例与触发它的语法或 API 放在一起，不单独拆散。
-- `stdlib/` 内按 Python 3.10 标准库目录的服务类别分文件夹，例如
-  `text_processing/`、`binary_data/` 和 `file_and_directory_access/`；只在该类别
-  出现第一个测试文件时建目录，不为每个模块单独建目录，也不预建空分类。
-- 文件名使用 `test_NNN_topic.py`，其中 `NNN` 是整个 `languages/python/` 范围内
-  全局唯一的三位数推荐阅读顺序；新文件取所有 Python 子目录中当前最大编号的
-  下一个值，不重排已提交编号。
-- 一个测试文件围绕一个连贯主题，文件名和测试名必须便于以后搜索。
-- 测试文件按连贯学习分区组织，不机械对应包或模块边界：一个中小模块通常集中为一个文件，
-  多个相关的小模块或小包也可以合在同一文件。数百行甚至接近千行本身不是拆分理由。
-- 只有单文件已经明显妨碍阅读、搜索或 fixture 组织时，才按能够独立查阅的核心抽象拆成
-  尽可能少的两三个文件；不按单个方法、文档小节、异常分支或为了保持短文件而拆分。
-- 不足 100 行的相邻同类文件是需要复查合并的强信号；合并必须保留原有
-  `polyglot-covers` ID 和教学案例。
-- 中文注释要详细但必要：解释协议分派、求值顺序、返回值语义、版本差异和陷阱，不逐行复述代码。
-- 每行按 Unicode 字符数不超过 100；编写时主动换行，不留到多轮审阅后机械整改。
-- “覆盖全面”指覆盖官方正常语义、协议入口、关键 fallback、常用工作流和真实陷阱；不要制造穷举式边界矩阵。
-- 有常见坑时必须用案例和注释讲清楚；没有值得讲的坑时不要硬加“注意事项”。
-- 自定义协议类型保持最小，只实现当前主题需要的方法。
-- 每个文件顶部使用 `polyglot-covers` 注释声明稳定的覆盖 ID；完成状态以后由工具扫描测试代码得出。
-- 不使用网络、sleep、真实用户目录或持久机器状态；文件案例使用 pytest 临时目录。
+- 文件名使用 `test_NNN_topic.<ext>`；`NNN` 在同一语言跨 `concepts/` 和 `languages/`
+  全局唯一、连续且稳定，与其他语言编号无关。
+- 新文件使用该语言当前最大编号的下一个值；不为插入主题批量重排已提交编号。
+- 一个文件围绕一个连贯学习主题；相关小模块可以合并，数百行本身不是拆分理由。
+- 不足 100 行的相邻同类文件是复查合并的强信号；合并必须保留覆盖 ID 和教学案例。
+- 中文注释详细但必要，解释分派、求值顺序、生命周期、返回语义、版本差异和陷阱，
+  不逐行复述代码。
+- 每行按 Unicode 字符数不超过 120；编写时主动换行，不留到多轮审查后机械整改。
+- “覆盖全面”指正常语义、协议入口、关键 fallback、常用工作流和真实陷阱，不制造
+  穷举式输入或类型组合矩阵。
+- 每个测试文件声明稳定的 `polyglot-covers` ID；状态由工具扫描代码得出。
+- 不依赖公网、sleep、真实用户目录或持久机器状态；临时资源写入 `/tmp/polyglot-*`
+  或测试框架临时目录，并可靠清理。
 
-## C++ 内容来源
+提交前在 `ohdev` 中运行 `./tools/run.sh check`。该门禁验证合法路径、覆盖标记、连续
+编号、共同概念至少含两门语言，以及仓库内未忽略文本的 Unicode 120 字符行宽。
 
-`sources.lock` 锁定 C++20、实现和测试工具的准确版本。来源优先级为：
+## 当前已验证基线
 
-1. ISO/IEC 14882:2020 与对应 WG21 工作草案：语言及标准库语义；
-2. WG21 提案、缺陷报告和编辑报告：设计背景与版本演进；
-3. GCC 11.4 与 libstdc++ 11.4 手册：实现支持、编译选项和扩展差异；
-4. C++ Core Guidelines：真实工程陷阱和惯用法的补充来源；
-5. CMake 与 GoogleTest 官方文档：只决定构建和测试行为，不决定 C++ 语义。
+- Python 3.10：`001`–`178`；Python 3.10.12；严格命令
+  `./tools/run.sh python -q --timeout=30 -W error`；结果 `5012 passed, 52 skipped`。
+- C++20：`001`–`160`；GCC/libstdc++ 11.4.0、CMake 3.22.1、GoogleTest 1.16.0；
+  `./tools/run.sh cpp` 结果 `1409 passed, 15 skipped`。
+- Node.js：`001`–`107`；Node.js 24.18.0、ECMAScript 2025、ECMA-402 12th edition、
+  npm 11.16.0；`./tools/run.sh nodejs` 结果 `935 passed`。
 
-cppreference 可以帮助定位术语和标准章节，但不作为语义争议的最终依据。Boost、
-POSIX 和其他第三方 API 不属于当前 C++ 标准库覆盖范围。
+所有 skip 都有明确的实现能力、平台行为或可选依赖原因。修改测试时先跑受影响范围，
+再跑对应语言全量；两者通过后才能继续称为 verified。准确工具链与官方资料见
+`sources.lock`。
 
-## C++ 测试规范
+## Python 内容来源与规范
 
-- 使用 C++20、GoogleTest 和 CTest；宿主机入口是 `./tools/run.sh cpp`。
-- CMake 对 `ohdev` 已有的 GoogleTest 源码做 `/tmp` 外部构建；不复制依赖进仓库，
-  不使用 FetchContent，也不让普通测试运行依赖网络。
-- 测试先分为 `01_language/` 和 `02_standard_library/`；标准库继续使用带顺序前缀的
-  服务类别目录，只在出现首个测试文件时创建，不预建空目录。
-- 文件名使用 `test_NNN_topic.cpp`；`NNN` 在 `languages/cpp/` 中全局唯一并连续，
-  与 Python 编号相互独立。新文件取当前最大编号的下一个值，不重排已提交编号。
-- 一个测试文件覆盖一个连贯主题，不机械对应单个头文件、类、函数或标准小节；
-  多个相关的小设施放在一起。数百行本身不是拆分理由，不足 100 行的相邻同类文件
-  是需要复查合并的强信号。
-- 中文注释解释对象生命周期、值类别、重载解析、隐式转换、模板实例化、异常保证、
-  并发关系、实现差异和陷阱，不逐行复述代码。每行按 Unicode 字符数不超过 100。
-- 每个文件顶部声明稳定的 `polyglot-covers` ID；正常语义、隐式机制、关键 fallback、
-  常用工作流和真实陷阱应放在一起理解，不制造穷举式类型组合矩阵。
-- 不执行未定义行为来“证明”未定义行为。优先使用 `requires`、type traits、
-  `static_assert`、受控编译检查和必要注释表达非法或不可靠代码。
-- GCC 11.4 缺失的 C++20 能力必须通过特性检测和明确注释保留覆盖，不得静默删除；
-  如果缺失范围妨碍主要学习目标，再升级容器工具链并同步更新 `sources.lock`。
-- 首批少量测试必须立即验证编译模式；之后每 10–15 个测试套或每个连贯类别执行
-  一次阶段验证，不把全部 C++ 文件留到最后第一次编译。
-- 测试目标使用 `-Wall -Wextra -Wpedantic -Werror`。编写时直接消除警告、长行和
-  不稳定假设，不留到多轮集中整改。
-- 不使用网络、sleep、真实用户目录或持久机器状态；临时文件放在
-  `/tmp/polyglot-cpp-*` 并由 fixture 清理。
+来源优先级：
 
-## Node.js 内容来源
+1. Python Language Reference；
+2. Python Data Model；
+3. Built-in Functions / Built-in Types；
+4. Python Standard Library Reference；
+5. 仅用于补充版本演进或设计背景的 PEP。
 
-`sources.lock` 锁定 Node.js 24.18.0 LTS、ECMAScript 2025 和实现组件版本。来源优先级为：
+使用 pytest。共同语义可位于 `concepts/*/python/`；特有机制位于
+`languages/python/language_specific/`；标准库按官方服务类别留在
+`languages/python/stdlib/`，不为每个模块单独建目录。
 
-1. ECMA-262 16th edition：JavaScript 语法、执行模型、内置对象和抽象操作；
-2. ECMA-402 12th edition：国际化对象与区域敏感行为；
-3. Node.js 24.18.0 API 文档与对应源码：Node 核心模块、事件循环和运行时行为；
-4. Node.js 官方指南：跨模块工作流、诊断和性能实践；
-5. TC39 提案、Node.js issue 和变更记录：只补充版本演进、实现差异或规范未定能力。
+协议示例与触发它的语法或 API 放在一起。自定义协议类型保持最小；文件案例使用 pytest
+临时目录。Dash 和对象索引只用于发现遗漏，不决定测试结构或学习优先级。
 
-MDN 可以帮助定位概念和产生教学案例，但不作为语义争议的最终依据。Test262 只用于
-发现遗漏和核对边界，不复制其穷举矩阵，也不让仓库测试依赖外部源码。
+## C++ 内容来源与规范
 
-## Node.js 测试规范
+来源优先级：
 
-- 使用 Node.js 24.18.0 LTS 自带的 `node:test` 和 `node:assert/strict`；普通测试不安装
-  npm 依赖，也不提交 `node_modules/`。
-- JavaScript 源文件以 ESM `.mjs` 为主；CommonJS、包入口和互操作主题可以在临时目录
-  创建 `.cjs`、`.mjs` 与 `package.json` fixture，不把两套模块语义含混在一起。
-- 测试先分为 `01_language/` 和 `02_node_core/`；Node 核心模块继续按带顺序前缀的服务
-  类别建目录，只在出现首个测试文件时创建，不预建空目录。
-- 文件名使用 `test_NNN_topic.mjs`；`NNN` 在 `languages/nodejs/` 中全局唯一并连续，
-  与其他语言编号相互独立。新文件取当前最大编号的下一个值，不重排已提交编号。
-- 一个文件覆盖一个连贯学习主题，不机械对应单个类、函数或文档小节；相关小模块可以
-  合在同一文件。数百行本身不是拆分理由，不足 100 行的相邻同类文件是复查合并信号。
-- 中文注释解释类型强制转换、属性描述符、原型查找、迭代协议、Promise job、事件循环、
-  Buffer 视图、流背压、错误优先回调、模块缓存、资源释放和实现差异，不逐行复述代码。
-- 每行按 Unicode 字符数不超过 100；编写时直接处理长行、未处理 rejection、资源泄漏
-  和不稳定时序，不留到末尾集中整改。
-- 每个文件顶部声明稳定的 `polyglot-covers` ID；ID 分为 `nodejs.language.*`、
-  `nodejs.core.*` 和必要的 `nodejs.implementation.*`。正常语义、隐式机制、关键
-  fallback、常用工作流和真实陷阱放在一起理解，不制造穷举式输入组合。
-- 不污染或依赖真实用户目录、持久环境变量、进程级监听器和全局对象；确需修改时使用
-  `t.after()` 或 `try/finally` 恢复。临时文件放在 `/tmp/polyglot-nodejs-*` 并清理。
-- 网络案例只允许监听回环地址并使用系统分配的动态端口；禁止公网、固定端口和 `sleep`。
-  异步测试必须等待明确的事件、Promise 或资源关闭，不以时间延迟猜测完成状态。
-- 当前运行时缺失或依赖平台的能力必须用特性检测、明确注释和有理由的 skip 保留覆盖，
-  不得静默删除；若缺失范围妨碍主要学习目标，再升级锁定版本并同步 `sources.lock`。
-- 首批测试立即验证 ESM、严格 rejection 和测试框架行为；之后每 10–15 个测试套或每个
-  连贯类别做阶段验证。提交前先跑受影响类别，最终再执行 `./tools/run.sh nodejs` 全量。
+1. ISO/IEC 14882:2020 与对应 WG21 工作草案；
+2. WG21 提案、缺陷报告和编辑报告；
+3. GCC 11.4 与 libstdc++ 11.4 手册；
+4. C++ Core Guidelines；
+5. 只决定构建行为的 CMake 与 GoogleTest 官方文档。
+
+cppreference 只帮助定位术语和标准章节，不作为语义争议的最终依据。Boost、POSIX 和
+第三方 API 不属于当前标准库覆盖范围。
+
+使用 C++20、GoogleTest 和 CTest。共同语义可位于 `concepts/*/cpp/`；特有机制位于
+`languages/cpp/language_specific/`；标准库留在 `languages/cpp/standard_library/`。
+CMake 使用 `ohdev` 已有 GoogleTest 源码，不复制依赖、不使用 FetchContent。
+
+不执行未定义行为来“证明”未定义行为；优先使用 `requires`、type traits、
+`static_assert`、受控编译检查和注释。GCC 11.4 缺失能力必须通过特性检测与说明保留。
+测试目标使用 `-Wall -Wextra -Wpedantic -Werror`。
+
+## Node.js 内容来源与规范
+
+来源优先级：
+
+1. ECMA-262 16th edition；
+2. ECMA-402 12th edition；
+3. Node.js 24.18.0 API 文档与对应源码；
+4. Node.js 官方指南；
+5. 仅补充演进和实现差异的 TC39 提案、Node.js issue 与变更记录。
+
+MDN 只帮助定位概念，Test262 只用于发现遗漏，不作为争议的最终依据或复制来源。
+
+使用内置 `node:test` 和 `node:assert/strict`，以 ESM `.mjs` 为主。共同语义可位于
+`concepts/*/nodejs/`；特有机制、Node 核心和 npm 工作流分别位于
+`languages/nodejs/language_specific/`、`node_core/` 和 `npm_and_package_workflows/`。
+普通测试不安装 npm 依赖、不提交 `node_modules/`。
+
+修改进程级监听器、环境变量或全局对象时用 `t.after()` 或 `try/finally` 恢复。网络案例
+只监听回环地址和动态端口；异步测试等待明确事件、Promise 或资源关闭，不用时间延迟猜测。
 
 ## 单任务接续
 
-`NEXT.md` 是交接文件，始终只包含一个需要下一场对话接续的当前任务：
+`NEXT.md` 始终只包含一个任务：
 
-- `ready`：下一场对话可以直接开始；
+- `ready`：下一场对话可直接开始；
 - `in_progress`：已有代码或分析，`Handoff` 必须写清剩余步骤；
-- `blocked`：必须写出证据和解除条件。
+- `blocked`：写出证据和解除条件。
 
-同一场对话连续完成 goal 时，不要在每个测试套后重写或重新读取 `NEXT.md`；本地
-阶段性 commit 也不等同于交接。只有准备暂停或结束对话、工作 blocked、用户明确
-要求交接，或者整个 goal 完成时，才把 `NEXT.md` 覆盖为准确的接续任务，并写明
-带编号的目标文件和 `Handoff`。Git 历史保存已经发生的过程，`NEXT.md` 不累积历史任务。
+只有准备暂停、任务 blocked、用户要求交接或整个 goal 完成时才更新 `NEXT.md`。Git 历史
+保存已经发生的过程，`NEXT.md` 不累积历史任务。阶段提交只表示一个连贯改动完成，不等于
+测试已通过。
 
-阶段性 commit 只表示测试代码已经完成首轮编写，不表示测试通过。只有对应容器内的
-类别验证和最终统一验证都通过后，才能把相应范围称为 verified。
+## 执行与 Git 边界
 
-## 执行边界
+- 宿主机不安装或直接调用目标语言运行时；所有解释器、编译器和测试框架位于 `ohdev`。
+- 宿主机入口是 `./tools/run.sh`，容器入口是 `./tools/run-in-container.sh`。
+- 默认完成一个连贯概念或语言服务类别后做一个本地提交，不为单文件频繁提交。
+- 默认不得 push、创建远程分支或 PR；只有用户明确授权当前任务时才可执行相应远程操作。
+- 不 force push，不整体 squash；工作树中已有的用户改动必须保留。
 
-- 宿主机不安装或直接调用各语言运行时。
-- 所有运行时、编译器和测试框架都位于 `ohdev` Docker 容器。
-- 宿主机统一入口是 `./tools/run.sh`；它在容器外使用 `docker exec`。
-- 容器内入口是 `./tools/run-in-container.sh`。
-- 构建缓存和临时状态写入 `/tmp/polyglot-*` 或测试框架的临时目录。
-
-旧 checklist-first 实现截止于 commit `662e0d1`。需要查证历史判断时使用 `git show`，不要把旧生成数据恢复到当前工作树。
+旧 checklist-first 实现截止于 commit `662e0d1`。查证历史时使用 `git show`，不要恢复
+旧生成数据。

@@ -142,11 +142,13 @@ check_concepts() {
 }
 
 check_unicode_line_lengths() {
-  local -a tracked_files=()
+  local -a checked_files=()
   local path
   while IFS= read -r -d '' path; do
-    tracked_files+=("$path")
-  done < <(git ls-files -z)
+    if [[ -f "$path" ]]; then
+      checked_files+=("$path")
+    fi
+  done < <(git ls-files --cached --others --exclude-standard -z)
 
   if ! POLYGLOT_MAX_LINE_LENGTH="$MAX_LINE_LENGTH" perl -Mutf8 -e '
     use strict;
@@ -171,7 +173,7 @@ check_unicode_line_lengths() {
       close $file;
     }
     exit $failed;
-  ' "${tracked_files[@]}"; then
+  ' "${checked_files[@]}"; then
     report_failure "存在超过 $MAX_LINE_LENGTH 个 Unicode 字符的行"
   fi
 }
