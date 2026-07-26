@@ -37,36 +37,62 @@ get_filename_component(
   ABSOLUTE
 )
 
-file(
-  GLOB_RECURSE POLYGLOT_CPP_TEST_SOURCES
-  CONFIGURE_DEPENDS
-  "${POLYGLOT_REPOSITORY_ROOT}/concepts/*/cpp/test_[0-9][0-9][0-9]_*.cpp"
-  "${CMAKE_CURRENT_SOURCE_DIR}/language_specific/test_[0-9][0-9][0-9]_*.cpp"
-  "${CMAKE_CURRENT_SOURCE_DIR}/standard_library/*/test_[0-9][0-9][0-9]_*.cpp"
+set(
+  POLYGLOT_TEST_LAYER
+  "course"
+  CACHE STRING
+  "Test layer to build: course or concepts"
 )
+set_property(CACHE POLYGLOT_TEST_LAYER PROPERTY STRINGS course concepts)
 
-file(
-  GLOB_RECURSE POLYGLOT_CPP_SUPPORT_SOURCES
-  CONFIGURE_DEPENDS
-  "${POLYGLOT_REPOSITORY_ROOT}/concepts/*/cpp/support/support_*.cpp"
-  "${CMAKE_CURRENT_SOURCE_DIR}/language_specific/support/support_*.cpp"
-)
+if(POLYGLOT_TEST_LAYER STREQUAL "course")
+  file(
+    GLOB_RECURSE POLYGLOT_CPP_TEST_SOURCES
+    CONFIGURE_DEPENDS
+    "${CMAKE_CURRENT_SOURCE_DIR}/language/test_[0-9][0-9][0-9]_*.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/standard_library/*/test_[0-9][0-9][0-9]_*.cpp"
+  )
+  file(
+    GLOB_RECURSE POLYGLOT_CPP_SUPPORT_SOURCES
+    CONFIGURE_DEPENDS
+    "${CMAKE_CURRENT_SOURCE_DIR}/language/support/support_*.cpp"
+  )
+elseif(POLYGLOT_TEST_LAYER STREQUAL "concepts")
+  file(
+    GLOB_RECURSE POLYGLOT_CPP_TEST_SOURCES
+    CONFIGURE_DEPENDS
+    "${POLYGLOT_REPOSITORY_ROOT}/concepts/[0-9][0-9][0-9]_*/cpp/test_*.cpp"
+  )
+  set(POLYGLOT_CPP_SUPPORT_SOURCES)
+else()
+  message(FATAL_ERROR "POLYGLOT_TEST_LAYER must be course or concepts")
+endif()
 
 if(NOT POLYGLOT_CPP_TEST_SOURCES)
-  message(FATAL_ERROR "No C++ test_NNN_topic.cpp files were found")
+  message(FATAL_ERROR "No C++ tests were found for layer: ${POLYGLOT_TEST_LAYER}")
 endif()
 
 foreach(test_source IN LISTS POLYGLOT_CPP_TEST_SOURCES)
-  get_filename_component(test_target "${test_source}" NAME_WE)
+  get_filename_component(test_name "${test_source}" NAME_WE)
+  set(test_support_sources)
 
-  string(REGEX MATCH "^test_([0-9][0-9][0-9])_" test_name_match "${test_target}")
-  if(NOT test_name_match)
-    message(FATAL_ERROR "Invalid C++ test target name: ${test_target}")
+  if(POLYGLOT_TEST_LAYER STREQUAL "course")
+    set(test_target "${test_name}")
+    string(REGEX MATCH "^test_([0-9][0-9][0-9])_" test_name_match "${test_target}")
+    if(NOT test_name_match)
+      message(FATAL_ERROR "Invalid C++ course test name: ${test_target}")
+    endif()
+    set(test_number "${CMAKE_MATCH_1}")
+    set(test_support_sources ${POLYGLOT_CPP_SUPPORT_SOURCES})
+    list(FILTER test_support_sources INCLUDE REGEX "support_${test_number}_.+\\.cpp$")
+    set(test_labels "polyglot-language")
+  else()
+    get_filename_component(test_language_directory "${test_source}" DIRECTORY)
+    get_filename_component(test_concept_directory "${test_language_directory}" DIRECTORY)
+    get_filename_component(test_concept "${test_concept_directory}" NAME)
+    set(test_target "concept_${test_concept}_${test_name}")
+    set(test_labels "polyglot-concept")
   endif()
-  set(test_number "${CMAKE_MATCH_1}")
-
-  set(test_support_sources ${POLYGLOT_CPP_SUPPORT_SOURCES})
-  list(FILTER test_support_sources INCLUDE REGEX "support_${test_number}_.+\\.cpp$")
 
   add_executable("${test_target}" "${test_source}" ${test_support_sources})
   target_link_libraries("${test_target}" PRIVATE GTest::gtest_main)
@@ -86,5 +112,6 @@ foreach(test_source IN LISTS POLYGLOT_CPP_TEST_SOURCES)
     "${test_target}"
     TEST_PREFIX "${test_target}::"
     DISCOVERY_TIMEOUT 30
+    PROPERTIES LABELS "${test_labels}"
   )
 endforeach()
