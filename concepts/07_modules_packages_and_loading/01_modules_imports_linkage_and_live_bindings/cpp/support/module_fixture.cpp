@@ -18,4 +18,3 @@ int initialization_count() {
 }
 
 }  // namespace module_fixture
-

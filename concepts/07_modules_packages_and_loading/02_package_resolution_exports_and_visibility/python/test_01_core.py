@@ -72,4 +72,3 @@ def test_underscore_is_a_visibility_convention_not_access_control(tmp_path, monk
 
     assert core._private == 2
     clear_package()
-

@@ -59,4 +59,3 @@ def test_all_controls_star_import_not_direct_attribute_access(tmp_path, monkeypa
     assert module.__all__ == ["public"]
     assert module._private == 2
     sys.modules.pop("exports", None)
-

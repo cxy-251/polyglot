@@ -65,4 +65,3 @@ def test_unrelated_types_do_not_gain_an_arbitrary_total_order():
         sorted([1, "1"])
 
     # JavaScript 默认 sort 会先字符串化；Python 3 要求元素真正支持所需次序关系。
-

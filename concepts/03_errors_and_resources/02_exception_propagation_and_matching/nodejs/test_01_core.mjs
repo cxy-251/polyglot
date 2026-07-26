@@ -73,4 +73,3 @@ test('finally 的 return 会覆盖先前的异常完成', () => {
 
   assert.equal(override(), 'replacement');
 });
-

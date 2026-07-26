@@ -72,4 +72,3 @@ def test_python_310_has_no_builtin_exception_group():
     assert not hasattr(builtins, "ExceptionGroup")
 
     # Python 3.11 才增加 ExceptionGroup；锁定的 3.10 需要领域容器或第三方方案表达多错误。
-

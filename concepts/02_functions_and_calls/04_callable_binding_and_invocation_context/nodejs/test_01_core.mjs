@@ -48,4 +48,3 @@ test('箭头函数捕获外围 this，call 无法替换它', () => {
   assert.equal(read(), 10);
   assert.equal(read.call({ value: 20 }), 10);
 });
-

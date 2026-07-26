@@ -41,4 +41,3 @@ test('比较器通过负数、零、正数表达顺序', () => {
 
   // Python key 通常每项只调用一次；JavaScript comparator 可对同一元素调用多次。
 });
-

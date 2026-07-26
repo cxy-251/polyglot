@@ -62,4 +62,3 @@ def test_immutability_wrappers_are_often_shallow():
     value[0].append("changed")
 
     assert value == (["mutable", "changed"],)
-

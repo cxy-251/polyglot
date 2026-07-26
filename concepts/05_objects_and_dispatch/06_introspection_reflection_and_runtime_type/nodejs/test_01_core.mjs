@@ -53,4 +53,3 @@ test('Proxy 让反射操作本身触发用户代码', () => {
   assert.equal(service.run(2), 4);
   assert.deepEqual(events, ['run']);
 });
-

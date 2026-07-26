@@ -72,4 +72,3 @@ def test_finalization_is_gc_driven_not_scope_bound():
     assert events == ["finalized"]
 
     # CPython 常会立即引用计数回收，但语言级资源清理应使用 with，不依赖 __del__ 时点。
-

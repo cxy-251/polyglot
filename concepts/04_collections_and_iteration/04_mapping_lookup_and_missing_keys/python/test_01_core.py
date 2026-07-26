@@ -54,4 +54,3 @@ def test_missing_protocol_can_compute_a_value_without_inserting():
 
     assert labels["unknown"] == "<unknown>"
     assert "unknown" not in labels
-

@@ -39,4 +39,3 @@ test('Number 与 BigInt 不能隐式混合算术', () => {
 
   // JavaScript 不会像 Python 一样把这两种整数模型自动提升到共同类型。
 });
-

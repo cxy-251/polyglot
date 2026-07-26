@@ -56,4 +56,3 @@ def test_cycle_can_observe_a_partially_initialized_module(tmp_path, monkeypatch)
 def test_dynamic_import_reports_missing_module():
     with pytest.raises(ModuleNotFoundError):
         importlib.import_module("polyglot_missing_module")
-

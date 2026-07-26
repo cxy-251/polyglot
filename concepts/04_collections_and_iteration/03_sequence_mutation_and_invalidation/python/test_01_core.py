@@ -57,4 +57,3 @@ def test_copy_before_mutation_provides_a_stable_iteration_snapshot():
             values.remove(value)
 
     assert values == [2]
-

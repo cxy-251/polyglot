@@ -64,4 +64,3 @@ TEST(NumericModelsConcept, UsualArithmeticConversionsAndDivisionUseStaticTypes) 
 }
 
 }  // namespace
-

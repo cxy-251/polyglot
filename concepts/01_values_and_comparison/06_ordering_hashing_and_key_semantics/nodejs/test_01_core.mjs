@@ -55,4 +55,3 @@ test('现代数组排序稳定保留同键元素的输入顺序', () => {
   const sorted = records.toSorted((left, right) => left.group - right.group);
   assert.deepEqual(sorted.map(({ id }) => id), ['b', 'a', 'c']);
 });
-

@@ -61,4 +61,3 @@ TEST(InheritanceDispatchConcept, OverrideContractIsCheckedAtCompileTime) {
 }
 
 }  // namespace
-

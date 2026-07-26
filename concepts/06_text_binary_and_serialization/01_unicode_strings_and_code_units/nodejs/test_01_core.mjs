@@ -36,4 +36,3 @@ test('grapheme cluster 仍可能包含多个 code point', () => {
   assert.equal([...text].length, 2);
   assert.equal(segments.length, 1);
 });
-

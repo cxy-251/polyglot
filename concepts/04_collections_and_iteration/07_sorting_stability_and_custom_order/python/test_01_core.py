@@ -45,4 +45,3 @@ def test_unrelated_values_without_order_raise_type_error():
         sorted([1, "2"])
 
     # JavaScript 默认 sort 会字符串化；Python 不会静默建立跨类型字典序。
-

@@ -68,4 +68,3 @@ TEST(CallableAdaptationConcept, AdaptedSignatureIsCheckedAtCompileTime) {
 }
 
 }  // namespace
-

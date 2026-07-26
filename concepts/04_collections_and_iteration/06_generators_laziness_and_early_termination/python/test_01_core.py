@@ -58,4 +58,3 @@ def test_generator_expression_is_single_pass_and_composes_lazily():
     assert calls == [0]
     assert list(doubled) == [2, 4]
     assert list(doubled) == []
-

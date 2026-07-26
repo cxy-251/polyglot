@@ -57,4 +57,3 @@ def test_coroutine_object_cannot_be_awaited_twice_after_completion():
 
     with pytest.raises(RuntimeError, match="cannot reuse"):
         asyncio.run(coroutine)
-

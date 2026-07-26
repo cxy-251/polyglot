@@ -46,4 +46,3 @@ test('TypedArray 元素赋值按位宽转换', () => {
 
   assert.deepEqual([...values], [0, 255, 1]);
 });
-

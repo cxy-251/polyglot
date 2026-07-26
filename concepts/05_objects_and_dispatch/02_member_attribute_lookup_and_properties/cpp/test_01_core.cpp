@@ -68,4 +68,3 @@ TEST(MemberLookupConcept, PrivateStorageCannotBeShadowedByDynamicProperties) {
 }
 
 }  // namespace
-

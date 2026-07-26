@@ -60,4 +60,3 @@ test('getter 提供只读表面，方法仍可受控更新私有状态', () => {
   account.deposit(5);
   assert.equal(account.balance, 15);
 });
-

@@ -62,4 +62,3 @@ test('class 只支持单一 extends，组合通常使用 mixin 或委托', () =>
   assert.deepEqual(value.describe(), ['base']);
   assert.equal(value.timestamp(), 1);
 });
-

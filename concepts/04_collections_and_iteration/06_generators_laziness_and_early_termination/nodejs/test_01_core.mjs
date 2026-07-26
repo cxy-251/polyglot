@@ -62,4 +62,3 @@ test('generator 与 iterator helper 都是单次游标', () => {
   assert.deepEqual(iterator.toArray(), [2, 4]);
   assert.deepEqual(iterator.toArray(), []);
 });
-

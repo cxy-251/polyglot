@@ -61,4 +61,3 @@ def test_comprehension_target_does_not_leak_into_enclosing_scope():
 
     assert values == [0, 2, 4]
     assert item == "outside"
-

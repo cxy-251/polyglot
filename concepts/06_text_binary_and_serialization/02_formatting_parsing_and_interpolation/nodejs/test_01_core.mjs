@@ -41,4 +41,3 @@ test('数字格式方法显式选择精度与进制', () => {
   assert.equal((12.345).toFixed(2), '12.35');
   assert.equal((255).toString(16), 'ff');
 });
-

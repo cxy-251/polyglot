@@ -53,4 +53,3 @@ def test_isinstance_tracks_the_complete_inheritance_graph():
     assert isinstance(value, Left)
     assert isinstance(value, Right)
     assert isinstance(value, Base)
-

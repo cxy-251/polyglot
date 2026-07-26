@@ -69,4 +69,3 @@ def test_getattr_runs_only_after_normal_lookup_fails():
 
     assert product.price == 5
     assert product.unknown == "missing:unknown"
-

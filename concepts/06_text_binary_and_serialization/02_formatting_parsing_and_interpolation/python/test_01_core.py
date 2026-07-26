@@ -39,4 +39,3 @@ def test_float_parsing_accepts_whitespace_but_not_a_numeric_prefix():
 
     with pytest.raises(ValueError):
         float("1.25px")
-

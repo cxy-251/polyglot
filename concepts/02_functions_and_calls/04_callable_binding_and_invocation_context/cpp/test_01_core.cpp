@@ -62,4 +62,3 @@ TEST(InvocationContextConcept, StaticInvocabilityCanRejectMissingReceiver) {
 }
 
 }  // namespace
-

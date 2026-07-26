@@ -46,4 +46,3 @@ test('Proxy 可以观察属性键但语言没有 slice 协议对象', () => {
   assert.equal(value[0], 1);
   assert.equal(keys[0], '0');
 });
-

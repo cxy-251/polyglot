@@ -56,4 +56,3 @@ test('Proxy get trap 可以定制缺失属性', () => {
   assert.equal(value.present, 1);
   assert.equal(value.unknown, 'missing:unknown');
 });
-

@@ -48,4 +48,3 @@ def test_getitem_receives_index_or_slice_object():
     assert value[2] == 2
     assert value[1:5:2] == slice(1, 5, 2)
     assert value.keys == [2, slice(1, 5, 2)]
-

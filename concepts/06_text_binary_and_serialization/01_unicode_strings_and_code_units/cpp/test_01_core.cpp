@@ -47,4 +47,3 @@ TEST(UnicodeStringsConcept, CharacterTypesRepresentDifferentCodeUnitWidths) {
 }
 
 }  // namespace
-

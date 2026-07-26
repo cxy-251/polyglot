@@ -54,4 +54,3 @@ def test_signature_and_static_attribute_lookup_avoid_or_expose_dispatch():
     assert inspect.isfunction(raw)
 
     # getattr 会运行 descriptor/property；getattr_static 用于检查定义而不触发动态访问。
-

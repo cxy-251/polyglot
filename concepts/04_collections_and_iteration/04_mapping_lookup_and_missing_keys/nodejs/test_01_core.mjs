@@ -47,4 +47,3 @@ test('JavaScript Map 没有用户可定制的缺失键协议', () => {
   assert.deepEqual(getOrCreate(mapping, 'items', () => []), []);
   assert.equal(mapping.has('items'), true);
 });
-

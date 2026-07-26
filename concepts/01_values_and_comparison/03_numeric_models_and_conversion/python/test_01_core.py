@@ -48,4 +48,3 @@ def test_mixed_numeric_operations_promote_but_division_modes_remain_distinct():
     assert 7 / 2 == 3.5
     assert -7 // 2 == -4
     assert -7 % 2 == 1
-

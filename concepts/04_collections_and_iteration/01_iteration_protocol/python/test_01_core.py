@@ -61,4 +61,3 @@ def test_break_does_not_call_arbitrary_iterator_close_method():
 
     assert events == []
     # JavaScript IteratorClose 会在 for-of 提前退出时调用 return；Python for 不调用任意 close。
-

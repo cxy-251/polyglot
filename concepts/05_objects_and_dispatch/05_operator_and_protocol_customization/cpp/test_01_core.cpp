@@ -63,4 +63,3 @@ TEST(OperatorCustomizationConcept, BuiltinOperatorRulesCannotBeReplacedGlobally)
 }
 
 }  // namespace
-

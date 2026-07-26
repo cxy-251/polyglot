@@ -64,4 +64,3 @@ def test_special_methods_are_looked_up_on_the_type():
 
     assert (value + Distance(3)).meters == 5
     assert value.__add__(Distance(3)).meters == 100
-

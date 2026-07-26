@@ -52,4 +52,3 @@ test('普通对象没有确定的作用域析构时点', () => {
 
   // FinalizationRegistry 回调时点不可预测；同步资源应使用 using/Symbol.dispose，不依赖 GC。
 });
-

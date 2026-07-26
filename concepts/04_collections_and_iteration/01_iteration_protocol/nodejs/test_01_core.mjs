@@ -56,4 +56,3 @@ test('for-of 提前退出会调用 iterator.return', () => {
 
   assert.deepEqual(events, ['closed']);
 });
-

@@ -43,4 +43,3 @@ test('可选链短路 nullish 接收者但不会隐藏 getter 异常', () => {
   };
   assert.throws(() => value?.profile?.name, /getter failed/);
 });
-

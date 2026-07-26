@@ -74,4 +74,3 @@ TEST(ScopeLookupConcept, LifetimeStartsAfterInitializationCompletes) {
 }
 
 }  // namespace
-

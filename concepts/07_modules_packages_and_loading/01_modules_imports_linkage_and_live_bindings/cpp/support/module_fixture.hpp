@@ -12,4 +12,3 @@ inline int doubled(int value) {
 }
 
 }  // namespace module_fixture
-

@@ -48,4 +48,3 @@ test('模块 namespace 是不可扩展的专用对象', async () => {
   assert.equal(Object.isExtensible(namespace), false);
   assert.equal(Object.getPrototypeOf(namespace), null);
 });
-

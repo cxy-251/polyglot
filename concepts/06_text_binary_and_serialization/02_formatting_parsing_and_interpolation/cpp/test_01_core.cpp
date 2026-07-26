@@ -54,4 +54,3 @@ TEST(TextFormattingConcept, InvalidPrefixUsesErrorCodeNotException) {
 }
 
 }  // namespace
-

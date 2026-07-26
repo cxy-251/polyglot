@@ -50,4 +50,3 @@ def test_bytes_slice_copies_while_memoryview_slice_remains_a_view():
 
     assert copied == b"bc"
     assert bytes(shared) == b"zc"
-

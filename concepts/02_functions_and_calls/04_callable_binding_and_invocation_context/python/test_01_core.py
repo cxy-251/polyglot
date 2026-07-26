@@ -67,4 +67,3 @@ def test_classmethod_and_staticmethod_use_distinct_descriptor_rules():
     assert counter.describe() == "counter"
     assert Counter.describe.__self__ is Counter
     assert counter.identity("value") == "value"
-

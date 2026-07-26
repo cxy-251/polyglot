@@ -43,4 +43,3 @@ test('Promise 可被多个观察者重复 await', async () => {
   assert.equal(await result, 42);
   assert.equal(await result, 42);
 });
-

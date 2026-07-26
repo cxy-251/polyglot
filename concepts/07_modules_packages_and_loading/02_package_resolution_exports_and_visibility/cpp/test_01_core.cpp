@@ -58,4 +58,3 @@ TEST(PackageVisibilityConcept, IncludePathDoesNotCreateARuntimePackageObject) {
 }
 
 }  // namespace
-

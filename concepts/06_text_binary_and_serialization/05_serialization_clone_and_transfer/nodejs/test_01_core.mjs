@@ -51,4 +51,3 @@ test('transfer 移交 ArrayBuffer 并分离原存储', () => {
   assert.equal(original.byteLength, 0);
   assert.equal(new Uint8Array(cloned)[0], 9);
 });
-

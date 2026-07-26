@@ -52,4 +52,3 @@ test('对象不能覆盖 ToBoolean', () => {
   assert.equal(Boolean(zero), true);
   assert.equal(Number(zero), 0);
 });
-

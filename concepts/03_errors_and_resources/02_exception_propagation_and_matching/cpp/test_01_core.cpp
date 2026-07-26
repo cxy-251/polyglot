@@ -90,4 +90,3 @@ TEST(ExceptionPropagationConcept, CppCanThrowNonExceptionValuesButTypedCatchIsEx
 }
 
 }  // namespace
-

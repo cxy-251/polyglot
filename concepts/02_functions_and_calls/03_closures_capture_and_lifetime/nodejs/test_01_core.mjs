@@ -49,4 +49,3 @@ test('函数参数可以显式保存创建时快照', () => {
   assert.equal(snapshot(), 'before');
   assert.equal(readBinding(), 'after');
 });
-

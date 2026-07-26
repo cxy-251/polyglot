@@ -44,4 +44,3 @@ test('可变对象可以成为成员，后续修改不改变其身份键', () =>
   assert.equal(values.has(value), true);
   // Python set/C++ unordered_set 的值变更可能破坏哈希契约；JS 对象键始终按身份。
 });
-

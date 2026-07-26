@@ -46,4 +46,3 @@ TEST(ModuleInitializationConcept, StandardCppHasNoRuntimeImportByString) {
 }
 
 }  // namespace
-

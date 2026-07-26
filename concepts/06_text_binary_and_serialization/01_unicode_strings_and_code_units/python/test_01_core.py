@@ -45,4 +45,3 @@ def test_decode_error_policy_is_explicit():
     with pytest.raises(UnicodeDecodeError):
         invalid.decode("utf-8")
     assert invalid.decode("utf-8", errors="replace") == "\ufffd"
-

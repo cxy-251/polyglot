@@ -47,4 +47,3 @@ def test_none_check_does_not_replace_valid_falsy_values():
     assert (0 or 10) == 10
 
     # JavaScript 的 nullish 合并有专用运算符；Python 应显式用 `is None` 表达同一意图。
-

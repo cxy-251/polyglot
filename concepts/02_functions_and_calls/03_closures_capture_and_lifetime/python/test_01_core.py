@@ -56,4 +56,3 @@ def test_each_factory_call_creates_an_independent_cell():
     assert first("b") == "a"
     assert first("c") == "b"
     assert second("y") == "x"
-

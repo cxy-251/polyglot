@@ -39,4 +39,3 @@ def test_pattern_reuse_does_not_keep_a_global_last_index():
     assert pattern.search("1").group() == "1"
 
     # JavaScript global/sticky RegExp 会修改 lastIndex；Python Pattern 查询由每次调用参数定位。
-

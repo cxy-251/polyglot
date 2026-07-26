@@ -47,4 +47,3 @@ def test_python_type_annotations_do_not_enforce_calls_at_runtime():
     assert double("a") == "aa"
 
     # 与 C++ concepts/static_assert 不同，普通 Python 注解只提供元数据，检查需要额外工具。
-

@@ -48,4 +48,3 @@ def test_custom_equal_objects_collapse_when_hashes_match():
             return hash(self.value)
 
     assert len({Key(1), Key(1)}) == 1
-

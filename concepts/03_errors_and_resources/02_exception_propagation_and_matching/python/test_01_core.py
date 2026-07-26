@@ -76,4 +76,3 @@ def test_exception_else_runs_only_when_try_body_completes_normally():
         events.append("else")
 
     assert events == ["body", "else"]
-

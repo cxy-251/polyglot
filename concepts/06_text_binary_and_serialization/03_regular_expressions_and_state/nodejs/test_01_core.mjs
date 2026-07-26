@@ -42,4 +42,3 @@ test('global 正则复用时会修改 lastIndex', () => {
   assert.equal(pattern.test('1'), false);
   assert.equal(pattern.lastIndex, 0);
 });
-
