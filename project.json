@@ -1,10 +1,10 @@
 {
-  "schema_version": 3,
+  "schema_version": 4,
   "project": "polyglot-concepts-by-example",
   "mission": "Compare how languages solve shared problems through readable, executable tests.",
   "architecture": "dual-axis",
-  "phase": "four-concept-foundation-verified",
-  "current_milestone": "implement-005-iteration-protocol",
+  "phase": "family-topic-structure-verified",
+  "current_milestone": "implement-04-collections-and-iteration-01-iteration-protocol",
   "continuation_source": "NEXT.md",
   "source_lock": "sources.lock",
   "legacy_tip": "662e0d1",
@@ -21,15 +21,20 @@
     "cross_language_concepts": {
       "root": "concepts",
       "purpose": "focused horizontal comparisons",
-      "directory_pattern": "NNN_name",
-      "test_pattern": "test_name",
-      "validate_one": "./tools/run.sh concept NNN_name",
+      "family_pattern": "NN_family",
+      "topic_pattern": "NN_topic",
+      "test_pattern": "test_topic",
+      "expected_family_count": "approximately 10-15",
+      "fixed_topic_total": false,
+      "precreate_empty_families": false,
+      "validate_one": "./tools/run.sh concept NN_family/NN_topic",
+      "validate_family": "./tools/run.sh family NN_family",
       "validate_all": "./tools/run.sh concepts",
-      "verified_concepts": [
-        "001_truthiness",
-        "002_equality",
-        "003_argument_passing",
-        "004_resource_cleanup"
+      "verified_topics": [
+        "01_values_and_comparison/01_truthiness",
+        "01_values_and_comparison/02_equality",
+        "02_functions_and_calls/01_argument_passing",
+        "03_errors_and_resources/01_resource_cleanup"
       ]
     }
   },
