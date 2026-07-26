@@ -11,7 +11,8 @@ Usage:
   ./tools/run-in-container.sh python [pytest arguments...]
   ./tools/run-in-container.sh cpp [ctest arguments...]
   ./tools/run-in-container.sh nodejs [node --test arguments or test files...]
-  ./tools/run-in-container.sh concept NNN_name
+  ./tools/run-in-container.sh concept NN_family/NN_topic
+  ./tools/run-in-container.sh family NN_family
   ./tools/run-in-container.sh concepts
   ./tools/run-in-container.sh check
 
@@ -173,8 +174,8 @@ run_nodejs_files() {
 
 validate_concept_name() {
   local concept_name="$1"
-  if [[ ! "$concept_name" =~ ^[0-9]{3}_[a-z0-9_]+$ ]]; then
-    echo "概念名必须使用 NNN_name 格式: $concept_name" >&2
+  if [[ ! "$concept_name" =~ ^[0-9]{2}_[a-z0-9_]+/[0-9]{2}_[a-z0-9_]+$ ]]; then
+    echo "概念名必须使用 NN_family/NN_topic 格式: $concept_name" >&2
     exit 2
   fi
   if [[ ! -d "concepts/$concept_name" ]]; then
@@ -197,8 +198,9 @@ run_concept_cpp() {
   if [[ -d "concepts/$concept_name/cpp" ]]; then
     printf '\n== %s / C++ ==\n' "$concept_name"
     local build_dir="${POLYGLOT_CPP_CONCEPT_BUILD_DIR:-/tmp/polyglot-cpp-concepts-build}"
+    local concept_target="${concept_name//\//_}"
     run_cpp_layer concepts "$build_dir" '^polyglot-concept$' \
-      -R "^concept_${concept_name}_"
+      -R "^concept_${concept_target}_"
   fi
 }
 
@@ -228,6 +230,38 @@ run_concept() {
   run_concept_python "$concept_name"
   run_concept_cpp "$concept_name"
   run_concept_nodejs "$concept_name"
+}
+
+validate_family_name() {
+  local family_name="$1"
+  if [[ ! "$family_name" =~ ^[0-9]{2}_[a-z0-9_]+$ ]]; then
+    echo "章节名必须使用 NN_family 格式: $family_name" >&2
+    exit 2
+  fi
+  if [[ ! -d "concepts/$family_name" ]]; then
+    echo "概念章节不存在: concepts/$family_name" >&2
+    exit 2
+  fi
+}
+
+run_family() {
+  local family_name="${1:-}"
+  local topic_directory
+  local topic_count=0
+  validate_family_name "$family_name"
+
+  for topic_directory in "concepts/$family_name"/[0-9][0-9]_*; do
+    if [[ ! -d "$topic_directory" ]]; then
+      continue
+    fi
+    topic_count=$((topic_count + 1))
+    run_concept "$family_name/${topic_directory##*/}"
+  done
+
+  if ((topic_count == 0)); then
+    echo "概念章节没有发现主题: concepts/$family_name" >&2
+    exit 1
+  fi
 }
 
 run_concepts() {
@@ -293,6 +327,10 @@ main() {
     concept)
       shift
       run_concept "$@"
+      ;;
+    family)
+      shift
+      run_family "$@"
       ;;
     concepts)
       shift

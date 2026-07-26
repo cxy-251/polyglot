@@ -4,6 +4,7 @@
 逻辑运算符返回布尔值还是原操作数。
 """
 
+# polyglot-family: values_and_comparison
 # polyglot-concept: truthiness
 # polyglot-related: languages/python/language/test_001_truth_value_testing.py
 

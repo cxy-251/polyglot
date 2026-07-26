@@ -108,126 +108,178 @@ check_language() {
   printf '%s: %d 个测试文件，编号 001–%03d\n' "$language" "$count" "$maximum"
 }
 
+check_concept_language() {
+  local family_slug="$1"
+  local topic_slug="$2"
+  local language="$3"
+  local extension="$4"
+  local language_directory="$5"
+  local test_file="$language_directory/test_${topic_slug}.${extension}"
+  local test_count
+  local related_path
+  local related_count=0
+
+  test_count=$(
+    find "$language_directory" \
+      -maxdepth 1 \
+      -type f \
+      -name "test_*.${extension}" \
+      -print | wc -l | tr -d ' '
+  )
+
+  if ((test_count != 1)) || [[ ! -f "$test_file" ]]; then
+    report_failure "$language_directory 必须有且仅有测试入口 test_${topic_slug}.${extension}"
+    return
+  fi
+
+  if ! grep -Eq "polyglot-family:[[:space:]]*$family_slug[[:space:]]*$" "$test_file"; then
+    report_failure "概念章节标记不匹配: $test_file"
+  fi
+  if ! grep -Eq "polyglot-concept:[[:space:]]*$topic_slug[[:space:]]*$" "$test_file"; then
+    report_failure "概念主题标记不匹配: $test_file"
+  fi
+
+  while IFS= read -r related_path; do
+    related_count=$((related_count + 1))
+    case "$related_path" in
+      languages/"$language"/*)
+        ;;
+      *)
+        report_failure "$test_file 的 polyglot-related 未指向 $language 主线"
+        ;;
+    esac
+    if [[ ! -f "$related_path" ]]; then
+      report_failure "$test_file 指向不存在的课程文件: $related_path"
+    fi
+  done < <(
+    sed -n 's/^.*polyglot-related:[[:space:]]*//p' "$test_file"
+  )
+
+  if ((related_count == 0)); then
+    report_failure "概念测试缺少 polyglot-related: $test_file"
+  fi
+}
+
 check_concepts() {
-  local concept
-  local concept_name
-  local concept_number
-  local concept_index
-  local concept_slug
-  local expected_index=1
-  local found_concept=0
+  local family
+  local family_name
+  local family_number
+  local family_index
+  local family_slug
+  local expected_family_index=1
+  local found_family=0
+  local topic
+  local topic_name
+  local topic_number
+  local topic_index
+  local topic_slug
+  local expected_topic_index
+  local topic_count
   local language
   local extension
   local language_directory
   local language_count
-  local test_file
-  local test_count
-  local related_path
-  local related_count
   local child
   local child_name
 
-  for concept in concepts/*; do
-    if [[ ! -d "$concept" ]]; then
+  for family in concepts/*; do
+    if [[ ! -d "$family" ]]; then
       continue
     fi
-    found_concept=1
-    concept_name="${concept##*/}"
-    if [[ ! "$concept_name" =~ ^[0-9]{3}_[a-z0-9_]+$ ]]; then
-      report_failure "概念目录必须使用 NNN_name 格式: $concept_name"
+    found_family=1
+    family_name="${family##*/}"
+    if [[ ! "$family_name" =~ ^[0-9]{2}_[a-z0-9_]+$ ]]; then
+      report_failure "概念章节必须使用 NN_family 格式: $family_name"
       continue
     fi
-    concept_number="${concept_name%%_*}"
-    concept_index=$((10#$concept_number))
-    concept_slug="${concept_name#*_}"
+    family_number="${family_name%%_*}"
+    family_index=$((10#$family_number))
+    family_slug="${family_name#*_}"
 
-    if ((concept_index != expected_index)); then
-      printf -v concept_number '%03d' "$expected_index"
-      report_failure "概念目录编号不连续，期望 $concept_number，实际为 $concept_name"
-      expected_index=$concept_index
+    if ((family_index != expected_family_index)); then
+      printf -v family_number '%02d' "$expected_family_index"
+      report_failure "概念章节编号不连续，期望 $family_number，实际为 $family_name"
+      expected_family_index=$family_index
     fi
-    expected_index=$((expected_index + 1))
+    expected_family_index=$((expected_family_index + 1))
 
-    language_count=0
-    for language in python cpp nodejs; do
-      case "$language" in
-        python)
-          extension=py
-          ;;
-        cpp)
-          extension=cpp
-          ;;
-        nodejs)
-          extension=mjs
-          ;;
-      esac
-
-      language_directory="$concept/$language"
-      if [[ ! -d "$language_directory" ]]; then
+    expected_topic_index=1
+    topic_count=0
+    for topic in "$family"/*; do
+      if [[ ! -d "$topic" ]]; then
         continue
       fi
-
-      test_count=$(
-        find "$language_directory" \
-          -maxdepth 1 \
-          -type f \
-          -name 'test_*' \
-          -print | wc -l | tr -d ' '
-      )
-      test_file="$language_directory/test_${concept_slug}.${extension}"
-
-      if ((test_count != 1)) || [[ ! -f "$test_file" ]]; then
-        report_failure "$language_directory 必须只有 test_${concept_slug}.${extension}"
+      topic_count=$((topic_count + 1))
+      topic_name="${topic##*/}"
+      if [[ ! "$topic_name" =~ ^[0-9]{2}_[a-z0-9_]+$ ]]; then
+        report_failure "$family_name 中的主题必须使用 NN_topic 格式: $topic_name"
         continue
       fi
+      topic_number="${topic_name%%_*}"
+      topic_index=$((10#$topic_number))
+      topic_slug="${topic_name#*_}"
 
-      language_count=$((language_count + 1))
-      if ! grep -Eq "polyglot-concept:[[:space:]]*$concept_slug[[:space:]]*$" "$test_file"; then
-        report_failure "概念测试标记不匹配: $test_file"
+      if ((topic_index != expected_topic_index)); then
+        printf -v topic_number '%02d' "$expected_topic_index"
+        report_failure "$family_name 主题编号不连续，期望 $topic_number，实际为 $topic_name"
+        expected_topic_index=$topic_index
       fi
+      expected_topic_index=$((expected_topic_index + 1))
 
-      related_count=0
-      while IFS= read -r related_path; do
-        related_count=$((related_count + 1))
-        case "$related_path" in
-          languages/"$language"/*)
+      language_count=0
+      for language in python cpp nodejs; do
+        case "$language" in
+          python)
+            extension=py
             ;;
-          *)
-            report_failure "$test_file 的 polyglot-related 未指向 $language 主线"
+          cpp)
+            extension=cpp
+            ;;
+          nodejs)
+            extension=mjs
             ;;
         esac
-        if [[ ! -f "$related_path" ]]; then
-          report_failure "$test_file 指向不存在的课程文件: $related_path"
+
+        language_directory="$topic/$language"
+        if [[ ! -d "$language_directory" ]]; then
+          continue
         fi
-      done < <(
-        sed -n 's/^.*polyglot-related:[[:space:]]*//p' "$test_file"
-      )
-      if ((related_count == 0)); then
-        report_failure "概念测试缺少 polyglot-related: $test_file"
+
+        language_count=$((language_count + 1))
+        check_concept_language \
+          "$family_slug" \
+          "$topic_slug" \
+          "$language" \
+          "$extension" \
+          "$language_directory"
+      done
+
+      if ((language_count < 2)); then
+        report_failure "$topic 只有 $language_count 门语言，不能构成跨语言主题"
       fi
+
+      for child in "$topic"/*; do
+        if [[ ! -d "$child" ]]; then
+          continue
+        fi
+        child_name="${child##*/}"
+        case "$child_name" in
+          python|cpp|nodejs)
+            ;;
+          *)
+            report_failure "$topic 包含未知语言目录: $child_name"
+            ;;
+        esac
+      done
     done
 
-    if ((language_count < 2)); then
-      report_failure "$concept 只有 $language_count 门语言，不能构成跨语言概念"
+    if ((topic_count == 0)); then
+      report_failure "$family 没有发现 NN_topic 格式的横向主题"
     fi
-
-    for child in "$concept"/*; do
-      if [[ ! -d "$child" ]]; then
-        continue
-      fi
-      child_name="${child##*/}"
-      case "$child_name" in
-        python|cpp|nodejs)
-          ;;
-        *)
-          report_failure "$concept 包含未知语言目录: $child_name"
-          ;;
-      esac
-    done
   done
 
-  if ((found_concept == 0)); then
-    report_failure "没有发现 NNN_name 格式的共同概念目录"
+  if ((found_family == 0)); then
+    report_failure "没有发现 NN_family 格式的概念章节"
   fi
 }
 
@@ -279,5 +331,5 @@ if ((failure_count > 0)); then
   exit 1
 fi
 
-printf '语言主线、横向概念、关联标记、连续编号和 Unicode %d 字符行宽检查通过。\n' \
+printf '语言主线、概念章节与主题、关联标记、连续编号和 Unicode %d 字符行宽检查通过。\n' \
   "$MAX_LINE_LENGTH"

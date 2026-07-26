@@ -4,6 +4,7 @@
 清理由什么机制触发；清理失败与原始异常如何交互。
 """
 
+# polyglot-family: errors_and_resources
 # polyglot-concept: resource_cleanup
 # polyglot-related: languages/python/language/test_010_context_manager_protocols.py
 

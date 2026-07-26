@@ -2,6 +2,7 @@
 // 共同问题：缺少或多余实参如何处理；修改与重新绑定是否影响调用者；
 // 默认表达式何时求值；如何表达命名选项和可变参数。
 //
+// polyglot-family: functions_and_calls
 // polyglot-concept: argument_passing
 // polyglot-related: languages/nodejs/language/test_005_functions_parameters_arguments_and_closures.mjs
 

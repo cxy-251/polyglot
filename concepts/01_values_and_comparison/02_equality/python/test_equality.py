@@ -4,6 +4,7 @@
 自定义类型如何提供值语义。
 """
 
+# polyglot-family: values_and_comparison
 # polyglot-concept: equality
 # polyglot-related: languages/python/language/test_002_comparison_semantics.py
 

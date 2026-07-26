@@ -2,6 +2,7 @@
 // 共同问题：数值零、空文本、空集合和空指针如何判断；自定义对象能否定义真假；
 // 逻辑运算符返回布尔值还是原操作数。
 //
+// polyglot-family: values_and_comparison
 // polyglot-concept: truthiness
 // polyglot-related: languages/cpp/language/test_010_operator_overloading_conversions_and_spaceship.cpp
 

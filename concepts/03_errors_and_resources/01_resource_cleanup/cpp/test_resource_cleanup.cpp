@@ -2,6 +2,7 @@
 // 共同问题：正常退出是否清理；异常退出是否清理；多个资源是否逆序清理；
 // 清理由什么机制触发；清理失败与原始异常如何交互。
 //
+// polyglot-family: errors_and_resources
 // polyglot-concept: resource_cleanup
 // polyglot-related: languages/cpp/language/test_012_exceptions_raii_and_noexcept.cpp
 

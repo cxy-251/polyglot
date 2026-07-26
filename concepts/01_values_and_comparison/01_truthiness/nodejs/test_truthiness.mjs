@@ -2,6 +2,7 @@
 // 共同问题：数值零、空文本、空集合和空值如何判断；自定义对象能否定义真假；
 // 逻辑运算符返回布尔值还是原操作数。
 //
+// polyglot-family: values_and_comparison
 // polyglot-concept: truthiness
 // polyglot-related: languages/nodejs/language/test_001_primitive_values_numeric_models_and_equality.mjs
 

@@ -2,6 +2,7 @@
 // 共同问题：跨数值类型是否转换；NaN 和负零如何比较；集合按内容还是身份比较；
 // 自定义对象能否提供值语义。
 //
+// polyglot-family: values_and_comparison
 // polyglot-concept: equality
 // polyglot-related: languages/nodejs/language/test_001_primitive_values_numeric_models_and_equality.mjs
 
