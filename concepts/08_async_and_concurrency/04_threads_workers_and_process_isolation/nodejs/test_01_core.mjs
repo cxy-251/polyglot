@@ -4,7 +4,8 @@
 //
 // polyglot-family: async_and_concurrency
 // polyglot-concept: threads_workers_and_process_isolation
-// polyglot-related: languages/nodejs/language/test_030_shared_array_buffer_atomics_and_memory_coordination.mjs
+// polyglot-related: languages/nodejs/node_core/08_concurrency/
+// polyglot-related+: test_068_worker_threads_metadata_environment_output_errors_and_termination.mjs
 
 import assert from 'node:assert/strict';
 import { once } from 'node:events';

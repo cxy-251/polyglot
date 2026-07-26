@@ -4,7 +4,8 @@
 //
 // polyglot-family: async_and_concurrency
 // polyglot-concept: cancellation_timeouts_and_cleanup
-// polyglot-related: languages/nodejs/language/test_019_async_functions_await_microtasks_and_concurrency.mjs
+// polyglot-related: languages/nodejs/node_core/01_modules_and_runtime/
+// polyglot-related+: test_034_runtime_globals_web_apis_abort_and_timer_handles.mjs
 
 import assert from 'node:assert/strict';
 import test from 'node:test';

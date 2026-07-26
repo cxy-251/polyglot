@@ -4,7 +4,8 @@
 //
 // polyglot-family: async_and_concurrency
 // polyglot-concept: shared_memory_atomics_and_synchronization
-// polyglot-related: languages/cpp/language/test_011_object_lifetime_references_and_storage_reuse.cpp
+// polyglot-related: languages/cpp/standard_library/17_concurrency/
+// polyglot-related+: test_157_atomic_types_exchange_compare_exchange_and_fetch_operations.cpp
 
 #include <gtest/gtest.h>
 

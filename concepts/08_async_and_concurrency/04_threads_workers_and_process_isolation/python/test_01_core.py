@@ -6,7 +6,8 @@
 
 # polyglot-family: async_and_concurrency
 # polyglot-concept: threads_workers_and_process_isolation
-# polyglot-related: languages/python/language/test_015_async_functions_and_protocols.py
+# polyglot-related: languages/python/stdlib/088-094_concurrent_execution/
+# polyglot-related+: test_088_threading_complete_threads_locks_coordination_introspection_and_low_level_api.py
 
 import multiprocessing
 import os

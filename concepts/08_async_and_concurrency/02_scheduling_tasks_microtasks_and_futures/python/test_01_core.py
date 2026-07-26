@@ -6,7 +6,8 @@
 
 # polyglot-family: async_and_concurrency
 # polyglot-concept: scheduling_tasks_microtasks_and_futures
-# polyglot-related: languages/python/language/test_015_async_functions_and_protocols.py
+# polyglot-related: languages/python/stdlib/095-103_networking_and_interprocess_communication/
+# polyglot-related+: test_095_asyncio_coroutines_tasks_futures_threads_and_errors.py
 
 import asyncio
 

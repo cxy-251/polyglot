@@ -4,7 +4,8 @@
 //
 // polyglot-family: async_and_concurrency
 // polyglot-concept: cancellation_timeouts_and_cleanup
-// polyglot-related: languages/cpp/language/test_012_exceptions_raii_and_noexcept.cpp
+// polyglot-related: languages/cpp/standard_library/17_concurrency/
+// polyglot-related+: test_148_stop_token_source_callback_and_jthread_cancellation.cpp
 
 #include <gtest/gtest.h>
 

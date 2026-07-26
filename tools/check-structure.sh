@@ -199,7 +199,30 @@ check_concept_language() {
         report_failure "$path 指向不存在的课程文件: $related_path"
       fi
     done < <(
-      sed -n 's/^.*polyglot-related:[[:space:]]*//p' "$path"
+      awk '
+        /polyglot-related:[[:space:]]*/ {
+          value = $0
+          sub(/^.*polyglot-related:[[:space:]]*/, "", value)
+          if (value ~ /\/$/) {
+            prefix = value
+          } else {
+            print value
+            prefix = ""
+          }
+          next
+        }
+        /polyglot-related\+:[[:space:]]*/ {
+          value = $0
+          sub(/^.*polyglot-related\+:[[:space:]]*/, "", value)
+          print prefix value
+          prefix = ""
+        }
+        END {
+          if (prefix != "") {
+            print prefix
+          }
+        }
+      ' "$path"
     )
 
     if ((related_count == 0)); then

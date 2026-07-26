@@ -4,7 +4,8 @@
 //
 // polyglot-family: async_and_concurrency
 // polyglot-concept: threads_workers_and_process_isolation
-// polyglot-related: languages/cpp/language/test_011_object_lifetime_references_and_storage_reuse.cpp
+// polyglot-related: languages/cpp/standard_library/17_concurrency/
+// polyglot-related+: test_147_thread_creation_arguments_ids_join_detach_and_this_thread.cpp
 
 #include <gtest/gtest.h>
 

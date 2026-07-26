@@ -4,7 +4,8 @@
 //
 // polyglot-family: async_and_concurrency
 // polyglot-concept: scheduling_tasks_microtasks_and_futures
-// polyglot-related: languages/cpp/language/test_021_coroutines_promise_awaiter_and_generator.cpp
+// polyglot-related: languages/cpp/standard_library/17_concurrency/
+// polyglot-related+: test_154_promise_future_shared_state_results_errors_and_waiting.cpp
 
 #include <gtest/gtest.h>
 
