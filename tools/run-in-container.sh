@@ -74,8 +74,8 @@ doctor() {
 
 run_python() {
   need_cmd python3
-  if [[ $# -eq 0 ]]; then
-    python3 -m pytest languages/python
+  if [[ $# -eq 0 || "$1" == -* ]]; then
+    python3 -m pytest languages/python "$@"
   else
     python3 -m pytest "$@"
   fi
