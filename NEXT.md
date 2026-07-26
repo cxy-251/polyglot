@@ -49,3 +49,6 @@ Status: `ready`
 3. `./tools/run.sh concept NNN_name` 运行单个概念；`./tools/run.sh concepts` 运行全部。
 4. `./tools/run.sh check` 分别检查纵向课程和横向概念，并验证 `polyglot-related`。
 5. 不要批量恢复原先十个宽泛概念，也不要把标准库课程迁入横向层。
+6. 2026-07-27 已在 `ohdev` 完成最终验证：Python `5036 passed, 39 skipped`；
+   C++ `1409 passed, 15 skipped`；Node.js `935 passed`；三个概念在每门语言中均
+   `11 passed`；统一结构门禁通过。

@@ -122,7 +122,7 @@ concepts/
 
 ## 当前验证基线
 
-- Python 3.10.12：课程 `5025 passed, 39 skipped`；
+- Python 3.10.12：课程 `5036 passed, 39 skipped`；
 - GCC/libstdc++ 11.4.0、C++20、GoogleTest 1.16.0：课程
   `1409 passed, 15 skipped`；
 - Node.js 24.18.0：课程 `935 passed`；

@@ -120,7 +120,7 @@ concepts/001_truthiness/nodejs/test_truthiness.mjs
 
 ## 当前基线
 
-- Python 3.10：课程 `001`–`178`；Python 3.10.12；`5025 passed, 39 skipped`。
+- Python 3.10：课程 `001`–`178`；Python 3.10.12；`5036 passed, 39 skipped`。
 - C++20：课程 `001`–`160`；GCC/libstdc++ 11.4.0、CMake 3.22.1、
   GoogleTest 1.16.0；`1409 passed, 15 skipped`。
 - Node.js：课程 `001`–`107`；Node.js 24.18.0、ECMAScript 2025、
