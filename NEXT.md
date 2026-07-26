@@ -42,3 +42,5 @@ Status: `ready`
    均保留；运行器、CMake、`.clangd` 与 `.gitignore` 已适配混合目录。
 3. `./tools/run.sh check` 是统一结构与 Unicode 120 字符门禁。
 4. 当前任务应先逐文件审计上述 18 个测试，不要直接整体迁移，也不要启动新语言。
+5. 重组后全量结果：Python `5025 passed, 39 skipped`；C++ `1409 passed, 15 skipped`；
+   Node.js `935 passed`。三门语言均无失败。

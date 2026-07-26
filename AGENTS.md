@@ -71,7 +71,7 @@
 ## 当前已验证基线
 
 - Python 3.10：`001`–`178`；Python 3.10.12；严格命令
-  `./tools/run.sh python -q --timeout=30 -W error`；结果 `5012 passed, 52 skipped`。
+  `./tools/run.sh python -q --timeout=30 -W error`；结果 `5025 passed, 39 skipped`。
 - C++20：`001`–`160`；GCC/libstdc++ 11.4.0、CMake 3.22.1、GoogleTest 1.16.0；
   `./tools/run.sh cpp` 结果 `1409 passed, 15 skipped`。
 - Node.js：`001`–`107`；Node.js 24.18.0、ECMAScript 2025、ECMA-402 12th edition、

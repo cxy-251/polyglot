@@ -54,7 +54,7 @@ languages/
 ## 当前基线
 
 - Python 3.10：178 个测试文件；锁定解释器为 Python 3.10.12；严格全量基线为
-  `5012 passed, 52 skipped`。
+  `5025 passed, 39 skipped`。
 - C++20：160 个测试文件；GCC/libstdc++ 11.4.0、CMake 3.22.1、GoogleTest 1.16.0；
   全量基线为 `1409 passed, 15 skipped`。
 - Node.js：107 个测试文件；Node.js 24.18.0、ECMAScript 2025、ECMA-402 12th edition、
