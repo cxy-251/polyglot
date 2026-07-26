@@ -259,6 +259,8 @@ validate_family_name() {
 
 run_family() {
   local family_name="${1:-}"
+  local -a python_test_files=()
+  local -a nodejs_test_files=()
   local topic_directory
   local topic_count=0
   validate_family_name "$family_name"
@@ -268,12 +270,46 @@ run_family() {
       continue
     fi
     topic_count=$((topic_count + 1))
-    run_concept "$family_name/${topic_directory##*/}"
   done
 
   if ((topic_count == 0)); then
     echo "概念章节没有发现主题: concepts/$family_name" >&2
     exit 1
+  fi
+
+  mapfile -d '' python_test_files < <(
+    find "concepts/$family_name" \
+      -type f \
+      -path '*/python/test_[0-9][0-9]_*.py' \
+      -print0 | sort -z
+  )
+  mapfile -d '' nodejs_test_files < <(
+    find "concepts/$family_name" \
+      -type f \
+      -path '*/nodejs/test_[0-9][0-9]_*.mjs' \
+      -print0 | sort -z
+  )
+
+  if [[ ${#python_test_files[@]} -gt 0 ]]; then
+    need_cmd python3
+    printf '\n== %s / Python ==\n' "$family_name"
+    python3 -m pytest --import-mode=importlib "${python_test_files[@]}"
+  fi
+
+  if find "concepts/$family_name" \
+    -type f \
+    -path '*/cpp/test_[0-9][0-9]_*.cpp' \
+    -print \
+    -quit | grep -q .; then
+    printf '\n== %s / C++ ==\n' "$family_name"
+    local build_dir="${POLYGLOT_CPP_CONCEPT_BUILD_DIR:-/tmp/polyglot-cpp-concepts-build}"
+    run_cpp_layer concepts "$build_dir" '^polyglot-concept$' \
+      -R "^concept_${family_name}_"
+  fi
+
+  if [[ ${#nodejs_test_files[@]} -gt 0 ]]; then
+    printf '\n== %s / Node.js ==\n' "$family_name"
+    run_nodejs_files "${nodejs_test_files[@]}"
   fi
 }
 
