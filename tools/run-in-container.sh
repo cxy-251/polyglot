@@ -14,6 +14,7 @@ Usage:
   ./tools/run-in-container.sh concept NN_family/NN_topic
   ./tools/run-in-container.sh family NN_family
   ./tools/run-in-container.sh concepts
+  ./tools/run-in-container.sh list-concepts
   ./tools/run-in-container.sh check
 
 Host entry point:
@@ -186,10 +187,22 @@ validate_concept_name() {
 
 run_concept_python() {
   local concept_name="$1"
+  local -a test_files=()
   if [[ -d "concepts/$concept_name/python" ]]; then
+    mapfile -d '' test_files < <(
+      find "concepts/$concept_name/python" \
+        -maxdepth 1 \
+        -type f \
+        -name 'test_[0-9][0-9]_*.py' \
+        -print0 | sort -z
+    )
+    if [[ ${#test_files[@]} -eq 0 ]]; then
+      echo "概念缺少 Python 测试: $concept_name" >&2
+      exit 1
+    fi
     need_cmd python3
     printf '\n== %s / Python ==\n' "$concept_name"
-    python3 -m pytest "concepts/$concept_name/python"
+    python3 -m pytest --import-mode=importlib "${test_files[@]}"
   fi
 }
 
@@ -212,7 +225,7 @@ run_concept_nodejs() {
       find "concepts/$concept_name/nodejs" \
         -maxdepth 1 \
         -type f \
-        -name 'test_*.mjs' \
+        -name 'test_[0-9][0-9]_*.mjs' \
         -print0 | sort -z
     )
     if [[ ${#test_files[@]} -eq 0 ]]; then
@@ -270,25 +283,25 @@ run_concepts() {
   mapfile -d '' python_test_files < <(
     find concepts \
       -type f \
-      -path '*/python/test_*.py' \
+      -path '*/python/test_[0-9][0-9]_*.py' \
       -print0 | sort -z
   )
   mapfile -d '' nodejs_test_files < <(
     find concepts \
       -type f \
-      -path '*/nodejs/test_*.mjs' \
+      -path '*/nodejs/test_[0-9][0-9]_*.mjs' \
       -print0 | sort -z
   )
 
   if [[ ${#python_test_files[@]} -gt 0 ]]; then
     need_cmd python3
     printf '\n== all concepts / Python ==\n'
-    python3 -m pytest "${python_test_files[@]}"
+    python3 -m pytest --import-mode=importlib "${python_test_files[@]}"
   fi
 
   if find concepts \
     -type f \
-    -path '*/cpp/test_*.cpp' \
+    -path '*/cpp/test_[0-9][0-9]_*.cpp' \
     -print \
     -quit | grep -q .; then
     printf '\n== all concepts / C++ ==\n'
@@ -300,6 +313,56 @@ run_concepts() {
     printf '\n== all concepts / Node.js ==\n'
     run_nodejs_files "${nodejs_test_files[@]}"
   fi
+}
+
+list_concepts() {
+  local family_directory
+  local topic_directory
+  local language
+  local extension
+  local count
+  local -a language_counts=()
+
+  printf '%-38s %-46s %s\n' "FAMILY" "TOPIC" "LANGUAGES / TEST FILES"
+  for family_directory in concepts/[0-9][0-9]_*; do
+    if [[ ! -d "$family_directory" ]]; then
+      continue
+    fi
+    for topic_directory in "$family_directory"/[0-9][0-9]_*; do
+      if [[ ! -d "$topic_directory" ]]; then
+        continue
+      fi
+      language_counts=()
+      for language in python cpp nodejs; do
+        case "$language" in
+          python)
+            extension=py
+            ;;
+          cpp)
+            extension=cpp
+            ;;
+          nodejs)
+            extension=mjs
+            ;;
+        esac
+        if [[ ! -d "$topic_directory/$language" ]]; then
+          continue
+        fi
+        count=$(
+          find "$topic_directory/$language" \
+            -maxdepth 1 \
+            -type f \
+            -name "test_[0-9][0-9]_*.${extension}" \
+            -print | wc -l | tr -d ' '
+        )
+        language_counts+=("$language:$count")
+      done
+      printf '%-38s %-46s %s\n' \
+        "${family_directory##*/}" \
+        "${topic_directory##*/}" \
+        "${language_counts[*]}"
+    done
+  done
 }
 
 run_checks() {
@@ -335,6 +398,10 @@ main() {
     concepts)
       shift
       run_concepts "$@"
+      ;;
+    list-concepts)
+      shift
+      list_concepts "$@"
       ;;
     check|structure|lint)
       shift

@@ -61,7 +61,7 @@ elseif(POLYGLOT_TEST_LAYER STREQUAL "concepts")
   file(
     GLOB_RECURSE POLYGLOT_CPP_TEST_SOURCES
     CONFIGURE_DEPENDS
-    "${POLYGLOT_REPOSITORY_ROOT}/concepts/[0-9][0-9]_*/[0-9][0-9]_*/cpp/test_*.cpp"
+    "${POLYGLOT_REPOSITORY_ROOT}/concepts/[0-9][0-9]_*/[0-9][0-9]_*/cpp/test_[0-9][0-9]_*.cpp"
   )
   set(POLYGLOT_CPP_SUPPORT_SOURCES)
 else()
@@ -93,6 +93,11 @@ foreach(test_source IN LISTS POLYGLOT_CPP_TEST_SOURCES)
     get_filename_component(test_topic "${test_topic_directory}" NAME)
     get_filename_component(test_family "${test_family_directory}" NAME)
     set(test_target "concept_${test_family}_${test_topic}_${test_name}")
+    file(
+      GLOB test_support_sources
+      CONFIGURE_DEPENDS
+      "${test_language_directory}/support/*.cpp"
+    )
     set(test_labels "polyglot-concept")
   endif()
 

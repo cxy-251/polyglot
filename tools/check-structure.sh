@@ -114,50 +114,127 @@ check_concept_language() {
   local language="$3"
   local extension="$4"
   local language_directory="$5"
-  local test_file="$language_directory/test_${topic_slug}.${extension}"
-  local test_count
+  local -a test_files=()
+  local -a seen_numbers=()
+  local path
+  local filename
+  local number
+  local number_index
+  local maximum=0
+  local test_count=0
   local related_path
-  local related_count=0
+  local related_count
+  local marker_count
+  local child
+  local child_name
 
-  test_count=$(
+  while IFS= read -r -d '' path; do
+    test_files+=("$path")
+  done < <(
     find "$language_directory" \
       -maxdepth 1 \
       -type f \
-      -name "test_*.${extension}" \
-      -print | wc -l | tr -d ' '
+      -name "test_[0-9][0-9]_*.${extension}" \
+      -print0 | sort -z
   )
 
-  if ((test_count != 1)) || [[ ! -f "$test_file" ]]; then
-    report_failure "$language_directory 必须有且仅有测试入口 test_${topic_slug}.${extension}"
+  if [[ ${#test_files[@]} -eq 0 ]]; then
+    report_failure "$language_directory 至少需要一个 test_NN_name.${extension}"
     return
   fi
 
-  if ! grep -Eq "polyglot-family:[[:space:]]*$family_slug[[:space:]]*$" "$test_file"; then
-    report_failure "概念章节标记不匹配: $test_file"
-  fi
-  if ! grep -Eq "polyglot-concept:[[:space:]]*$topic_slug[[:space:]]*$" "$test_file"; then
-    report_failure "概念主题标记不匹配: $test_file"
-  fi
-
-  while IFS= read -r related_path; do
-    related_count=$((related_count + 1))
-    case "$related_path" in
-      languages/"$language"/*)
-        ;;
-      *)
-        report_failure "$test_file 的 polyglot-related 未指向 $language 主线"
-        ;;
-    esac
-    if [[ ! -f "$related_path" ]]; then
-      report_failure "$test_file 指向不存在的课程文件: $related_path"
+  while IFS= read -r -d '' path; do
+    if [[ ! "$path" =~ /test_[0-9]{2}_[a-z0-9_]+[.]${extension}$ ]]; then
+      report_failure "概念测试必须使用 test_NN_name.${extension}: $path"
     fi
   done < <(
-    sed -n 's/^.*polyglot-related:[[:space:]]*//p' "$test_file"
+    find "$language_directory" \
+      -maxdepth 1 \
+      -type f \
+      -name 'test_*' \
+      -print0 | sort -z
   )
 
-  if ((related_count == 0)); then
-    report_failure "概念测试缺少 polyglot-related: $test_file"
+  for path in "${test_files[@]}"; do
+    filename="${path##*/}"
+    number="${filename#test_}"
+    number="${number%%_*}"
+    number_index=$((10#$number))
+    test_count=$((test_count + 1))
+
+    if [[ -n "${seen_numbers[$number_index]:-}" ]]; then
+      report_failure "$language_directory 测试编号 $number 重复"
+    else
+      seen_numbers[$number_index]="$path"
+    fi
+    if ((number_index > maximum)); then
+      maximum=$number_index
+    fi
+
+    marker_count=$(
+      grep -Ec "polyglot-family:[[:space:]]*$family_slug[[:space:]]*$" "$path" || true
+    )
+    if ((marker_count != 1)); then
+      report_failure "概念章节标记必须唯一且匹配目录: $path"
+    fi
+
+    marker_count=$(
+      grep -Ec "polyglot-concept:[[:space:]]*$topic_slug[[:space:]]*$" "$path" || true
+    )
+    if ((marker_count != 1)); then
+      report_failure "概念主题标记必须唯一且匹配目录: $path"
+    fi
+
+    related_count=0
+    while IFS= read -r related_path; do
+      related_count=$((related_count + 1))
+      case "$related_path" in
+        languages/"$language"/*)
+          ;;
+        *)
+          report_failure "$path 的 polyglot-related 未指向 $language 主线"
+          ;;
+      esac
+      if [[ ! -f "$related_path" ]]; then
+        report_failure "$path 指向不存在的课程文件: $related_path"
+      fi
+    done < <(
+      sed -n 's/^.*polyglot-related:[[:space:]]*//p' "$path"
+    )
+
+    if ((related_count == 0)); then
+      report_failure "概念测试缺少 polyglot-related: $path"
+    fi
+  done
+
+  local expected
+  for ((expected = 1; expected <= maximum; expected += 1)); do
+    printf -v number '%02d' "$expected"
+    if [[ -z "${seen_numbers[$expected]:-}" ]]; then
+      report_failure "$language_directory 缺少连续测试编号 $number"
+    fi
+  done
+
+  if ((test_count != maximum)); then
+    report_failure "$language_directory 文件数 $test_count 与最大编号 $maximum 不一致"
   fi
+
+  for child in "$language_directory"/*; do
+    if [[ ! -d "$child" ]]; then
+      continue
+    fi
+    if git check-ignore -q "$child"; then
+      continue
+    fi
+    child_name="${child##*/}"
+    case "$child_name" in
+      fixtures|support)
+        ;;
+      *)
+        report_failure "$language_directory 包含未知辅助目录: $child_name"
+        ;;
+    esac
+  done
 }
 
 check_concepts() {
