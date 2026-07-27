@@ -35,10 +35,13 @@ TEST(RuntimeCapabilityConcept, FeatureTestMacrosDescribeLibraryFacilities) {
 }
 
 TEST(RuntimeCapabilityConcept, RequiresExpressionChecksUsableInterface) {
-  static_assert(HasSize<std::string>);
-  static_assert(!HasSize<int>);
+  constexpr bool string_has_size = HasSize<std::string>;
+  constexpr bool int_has_size = HasSize<int>;
+  static_assert(string_has_size);
+  static_assert(!int_has_size);
 
-  SUCCEED();
+  EXPECT_TRUE(string_has_size);
+  EXPECT_FALSE(int_has_size);
 }
 
 TEST(RuntimeCapabilityConcept, CompilerVersionDoesNotGuaranteeEveryLibraryFeature) {

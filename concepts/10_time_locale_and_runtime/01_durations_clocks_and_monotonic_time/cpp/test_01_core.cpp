@@ -39,12 +39,13 @@ TEST(ClockConcept, SteadyClockIsSuitableForElapsedTime) {
 }
 
 TEST(ClockConcept, DifferentClockEpochsAreDifferentTypes) {
-  static_assert(
-      !std::is_same_v<std::chrono::steady_clock::time_point,
-                      std::chrono::system_clock::time_point>);
+  constexpr bool same_time_point_type =
+      std::is_same_v<std::chrono::steady_clock::time_point,
+                     std::chrono::system_clock::time_point>;
+  static_assert(!same_time_point_type);
 
   // system_clock 可映射日历时间；steady_clock 只保证单调，二者时间点不能直接相减。
-  SUCCEED();
+  EXPECT_FALSE(same_time_point_type);
 }
 
 }  // namespace
