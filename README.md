@@ -56,20 +56,24 @@ concepts/
       python/test_01_core.py
       cpp/test_01_core.cpp
       nodejs/test_01_core.mjs
+      go/test_01_core_test.go
     02_equality/
       python/test_01_core.py
       cpp/test_01_core.cpp
       nodejs/test_01_core.mjs
+      go/test_01_core_test.go
   02_functions_and_calls/
     01_argument_passing/
       python/test_01_core.py
       cpp/test_01_core.cpp
       nodejs/test_01_core.mjs
+      go/test_01_core_test.go
   03_errors_and_resources/
     01_resource_cleanup/
       python/test_01_core.py
       cpp/test_01_core.cpp
       nodejs/test_01_core.mjs
+      go/test_01_core_test.go
 ```
 
 当前横向课程已经完成 10 个章节、49 个主题：
@@ -117,6 +121,16 @@ Markdown 映射表。
     ↓ docker exec ohdev
 ./tools/run-in-container.sh
 ```
+
+环境检查区分当前工程与规划语言：
+
+```bash
+./tools/run.sh doctor
+./tools/run.sh doctor planned
+```
+
+默认 `doctor` 只强制验证 Python、C++、Node.js、Go；`doctor planned` 额外显示 Julia、R、
+Rust 的可用状态，规划语言缺失不会使当前四语言工程检查失败。
 
 纵向课程验证：
 
@@ -166,7 +180,7 @@ Markdown 映射表。
 - GCC/libstdc++ 11.4.0、C++20、GoogleTest 1.16.0：课程
   `1409 passed, 15 skipped`；
 - Node.js 24.18.0：课程 `935 passed`；
-- Go 1.26.5：课程 128 个文件、`129 passed`；
+- Go 1.26.5：课程 128 个文件、`133 passed`；
 - 横向课程 10 个章节、49 个已终审主题、24 个多文件主题；每门语言 73 个测试入口：
   Python `252 passed`、C++ `249 passed`、Node.js `255 passed`、Go `75 passed`。
 
@@ -184,7 +198,7 @@ Markdown 映射表。
 5. 案例保持精简并指回完整课程，不移动、裁剪或拆散语言课程文件。
 
 只有出现无法归入现有十章的稳定问题域时才增加 family。新增语言时优先把它接入现有
-49 个主题，并保留确实不存在对应机制的说明，不为追求三语言或多语言齐全而伪造等价。
+49 个主题，并保留确实不存在对应机制的说明，不为追求四语言或更多语言齐全而伪造等价。
 
 标准库默认只属于语言主线。文件系统、日期时间、并发等主题只有在真实问题值得比较时，
 才另写一个小型概念测试；不会把整组标准库文件迁入 `concepts/`。

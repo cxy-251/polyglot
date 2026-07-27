@@ -131,6 +131,16 @@ concepts/01_values_and_comparison/01_truthiness/go/test_01_core_test.go
 ./tools/run.sh list-concepts
 ```
 
+环境检查：
+
+```bash
+./tools/run.sh doctor
+./tools/run.sh doctor planned
+```
+
+默认 `doctor` 只强制检查四门 active language；`doctor planned` 额外报告 Julia、R、Rust，
+规划语言缺失不影响当前工程可运行状态。
+
 结构门禁：
 
 ```bash
@@ -150,7 +160,7 @@ concepts/01_values_and_comparison/01_truthiness/go/test_01_core_test.go
   GoogleTest 1.16.0；`1409 passed, 15 skipped`。
 - Node.js：课程 `001`–`107`；Node.js 24.18.0、ECMAScript 2025、
   ECMA-402 12th edition、npm 11.16.0；`935 passed`。
-- Go：课程 `001`–`128`；Go 1.26.5；128 个测试文件、`129 passed`。
+- Go：课程 `001`–`128`；Go 1.26.5；128 个测试文件、`133 passed`。
 - 横向层有 10 个章节、49 个已终审主题、24 个多文件主题；每门语言 73 个测试入口：
   Python `252 passed`、C++ `249 passed`、Node.js `255 passed`、Go `75 passed`。
 

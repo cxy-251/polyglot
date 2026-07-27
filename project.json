@@ -38,7 +38,7 @@
         },
         "go": {
           "test_files": 128,
-          "passed": 129,
+          "passed": 133,
           "skipped": 0
         }
       }
@@ -145,6 +145,8 @@
     "new_languages_prefer_existing_topics": true,
     "new_active_languages_require_complete_course": true,
     "active_languages_cover_all_topics": true,
+    "doctor_defaults_to_active_languages": true,
+    "planned_language_checks_are_optional": true,
     "single_current_task": true,
     "committed_generated_inventories": false,
     "temporary_output_root": "/tmp/polyglot-*",
