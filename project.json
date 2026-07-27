@@ -3,12 +3,13 @@
   "project": "polyglot-concepts-by-example",
   "mission": "Compare how languages solve shared problems through readable, executable tests.",
   "architecture": "dual-axis",
-  "phase": "cross-language-concept-curriculum-reviewed",
+  "phase": "four-language-curriculum-reviewed",
   "current_milestone": null,
+  "active_language_count": 4,
   "concept_curriculum_complete": true,
   "content_review_complete": true,
   "reviewed_topic_count": 49,
-  "reviewed_language_implementation_count": 147,
+  "reviewed_language_implementation_count": 196,
   "continuation_source": "NEXT.md",
   "source_lock": "sources.lock",
   "legacy_tip": "662e0d1",
@@ -19,7 +20,8 @@
       "validate": [
         "./tools/run.sh python -q --timeout=30 -W error",
         "./tools/run.sh cpp",
-        "./tools/run.sh nodejs"
+        "./tools/run.sh nodejs",
+        "./tools/run.sh go"
       ],
       "verified_results": {
         "python": {
@@ -32,6 +34,11 @@
         },
         "nodejs": {
           "passed": 935,
+          "skipped": 0
+        },
+        "go": {
+          "test_files": 128,
+          "passed": 129,
           "skipped": 0
         }
       }
@@ -64,6 +71,11 @@
         "nodejs": {
           "test_files": 73,
           "passed": 255
+        },
+        "go": {
+          "test_files": 73,
+          "passed": 75,
+          "skipped": 0
         }
       }
     }
@@ -94,6 +106,14 @@
       "validate": "./tools/run.sh nodejs"
     },
     {
+      "id": "go",
+      "name": "Go",
+      "status": "verified",
+      "course_root": "languages/go",
+      "test_framework": "testing",
+      "validate": "./tools/run.sh go"
+    },
+    {
       "id": "julia",
       "name": "Julia",
       "status": "planned_paused",
@@ -108,13 +128,6 @@
       "test_framework": "base stopifnot()"
     },
     {
-      "id": "go",
-      "name": "Go",
-      "status": "planned_paused",
-      "root": "languages/go",
-      "test_framework": "testing"
-    },
-    {
       "id": "rust",
       "name": "Rust",
       "status": "planned_paused",
@@ -125,11 +138,13 @@
   "policies": {
     "complete_courses_stay_in_languages": true,
     "concepts_are_independent_minimal_tests": true,
-    "force_all_languages_per_concept": false,
+    "force_all_active_languages_per_concept": true,
     "move_course_files_into_concepts": false,
     "standard_library_paths_preserved": true,
     "new_topics_prefer_existing_families": true,
     "new_languages_prefer_existing_topics": true,
+    "new_active_languages_require_complete_course": true,
+    "active_languages_cover_all_topics": true,
     "single_current_task": true,
     "committed_generated_inventories": false,
     "temporary_output_root": "/tmp/polyglot-*",

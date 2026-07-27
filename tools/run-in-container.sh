@@ -72,7 +72,7 @@ doctor() {
   printf 'gofmt: '
   command -v gofmt
   printf 'go vet: '
-  go tool vet -help >/dev/null
+  go tool vet -help >/dev/null 2>&1
   echo available
   printf 'rustc: '
   rustc --version

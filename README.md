@@ -28,16 +28,21 @@ languages/
     language/
     node_core/
     npm_and_package_workflows/
+  go/
+    language/
+    standard_library/
+    tooling_and_runtime/
 ```
 
 课程文件使用 `test_NNN_topic.<ext>`。编号在每门语言内全局唯一、连续且稳定：
 
 - Python `001`–`178`；
 - C++ `001`–`160`；
-- Node.js `001`–`107`。
+- Node.js `001`–`107`；
+- Go `001`–`128`。
 
 语言主线承担基础语法、高级语义、数据模型、标准库、运行时与语言独有机制。Python
-标准库、C++ 标准库、Node 核心模块和 npm 工作流始终留在这里。
+标准库、C++ 标准库、Node 核心模块和 npm 工作流、Go 标准库与工具链工作流始终留在这里。
 
 ## 横向概念对照
 
@@ -82,7 +87,7 @@ concepts/
 | `09_files_paths_and_streams` | 4 | 路径、文件、流、背压与子进程 |
 | `10_time_locale_and_runtime` | 4 | 时钟、日历、区域化与运行时能力 |
 
-49 个主题已经完成逐文件内容终审。终审逐项核对三门语言的共同问题、测试名称与断言、
+49 个主题已经完成逐文件内容终审。终审逐项核对四门语言的共同问题、测试名称与断言、
 锁定版本语义、边界与失败路径、状态隔离、迁移陷阱和直接关联课程；它表示当前案例经过
 统一语义复核，不表示穷举所有语言输入或未来版本能力。24 个高复杂度主题已按独立子问题
 使用多个测试文件，每门语言现有 73 个横向测试入口。
@@ -99,11 +104,12 @@ Markdown 映射表。
 
 没有对应能力时不编造等价机制。例如 C++ 容器没有通用真假协议，测试会断言容器不能
 进入上下文布尔转换，并用注释说明必须显式查询 `empty()`；JavaScript 对象不能覆盖
-`ToBoolean`，测试会证明转换钩子根本不会被调用。
+`ToBoolean`，测试会证明转换钩子根本不会被调用；Go 条件只接受 `bool`，不会把零值、
+空集合或自定义对象转换为真假。
 
 ## 在 `ohdev` 中执行
 
-宿主机只负责阅读代码和发起 Docker 命令。Python、C++、Node.js 的解释器、编译器和
+宿主机只负责阅读代码和发起 Docker 命令。Python、C++、Node.js、Go 的解释器、编译器和
 测试框架都只在 `ohdev` 中运行：
 
 ```text
@@ -118,6 +124,7 @@ Markdown 映射表。
 ./tools/run.sh python -q --timeout=30 -W error
 ./tools/run.sh cpp
 ./tools/run.sh nodejs
+./tools/run.sh go
 ```
 
 横向概念验证：
@@ -144,7 +151,7 @@ Markdown 映射表。
 
 - 语言课程只位于声明的 `languages/` 路径，编号连续且有 `polyglot-covers`；
 - 顶层章节使用连续的 `NN_family`，章节内主题使用连续的 `NN_topic`；
-- 每个主题至少包含两门语言，每门语言的 `test_NN_name` 编号连续且入口明确；
+- 每个主题包含四门 active language，每门语言的 `test_NN_name` 编号连续且入口明确；
 - `polyglot-family`、`polyglot-concept` 分别与章节和主题目录一致；
 - `polyglot-related` 及可选续行指向同语言中真实存在的完整课程文件；
 - 语言目录可以按需增加 `fixtures/` 或 `support/`；
@@ -159,8 +166,9 @@ Markdown 映射表。
 - GCC/libstdc++ 11.4.0、C++20、GoogleTest 1.16.0：课程
   `1409 passed, 15 skipped`；
 - Node.js 24.18.0：课程 `935 passed`；
+- Go 1.26.5：课程 128 个文件、`129 passed`；
 - 横向课程 10 个章节、49 个已终审主题、24 个多文件主题；每门语言 73 个测试入口：
-  Python `252 passed`、C++ `249 passed`、Node.js `255 passed`。
+  Python `252 passed`、C++ `249 passed`、Node.js `255 passed`、Go `75 passed`。
 
 所有 skip 都必须说明实现能力、平台行为或可选依赖原因。准确工具链、官方资料、归档
 校验值和实现提交记录在 `sources.lock`。

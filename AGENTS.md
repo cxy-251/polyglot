@@ -20,9 +20,9 @@
 > Polyglot 通过可执行测试，对照学习不同语言如何解决相同问题，理解它们的共同概念、
 > 语义差异、底层机制和迁移陷阱。
 
-Python、C++ 和 Node.js 的双轴学习结构已完成：三门纵向课程保持完整，横向层包含
+Python、C++、Node.js 和 Go 的双轴学习结构已完成：四门纵向课程保持完整，横向层包含
 10 个 family、49 个完成文件级内容终审的 topic，其中 24 个高复杂度 topic 使用多文件
-组织。Julia、R、Go 和 Rust 保留在规划范围，但不得自动开始；只有用户为 `NEXT.md`
+组织。Julia、R 和 Rust 保留在规划范围，但不得自动开始；只有用户为 `NEXT.md`
 指定新阶段后才接入。
 
 测试代码是主要产品。不要建立大型 Markdown/JSON checklist、Dash 对象快照、数据库
@@ -38,6 +38,7 @@ Python、C++ 和 Node.js 的双轴学习结构已完成：三门纵向课程保�
 languages/python/{language,builtins,stdlib}/
 languages/cpp/{language,standard_library}/
 languages/nodejs/{language,node_core,npm_and_package_workflows}/
+languages/go/{language,standard_library,tooling_and_runtime}/
 ```
 
 现有详细测试、标准库和运行时工作流始终留在语言主线。不要为了建立概念对照而移动、
@@ -62,6 +63,7 @@ languages/nodejs/{language,node_core,npm_and_package_workflows}/
 concepts/01_values_and_comparison/01_truthiness/python/test_01_core.py
 concepts/01_values_and_comparison/01_truthiness/cpp/test_01_core.cpp
 concepts/01_values_and_comparison/01_truthiness/nodejs/test_01_core.mjs
+concepts/01_values_and_comparison/01_truthiness/go/test_01_core_test.go
 ```
 
 概念测试必须：
@@ -89,7 +91,9 @@ concepts/01_values_and_comparison/01_truthiness/nodejs/test_01_core.mjs
 ## 通用内容规范
 
 - 案例展示正常用法、高阶语义、隐式机制、实际工作流和真实陷阱。
-- 新增或修改 topic 前先对齐三门语言的共同问题、输入类别和观察点；缺失机制不强行等价。
+- 新增或修改 topic 前先对齐四门 active language 的共同问题、输入类别和观察点；缺失机制不强行等价。
+- 新 active language 必须先建立完整纵向课程，再覆盖现有全部 topic；每个横向实现关联本语言纵向课程。
+- 四语言优先回答同一问题，不要求代码外形一致，也不把缺失机制包装成相似 API。
 - 测试名称只描述断言真正证明的范围，不把锁定实现观察写成语言普遍保证。
 - 测试必须可独立运行且不依赖执行顺序；修改全局或进程状态时可靠恢复。
 - 可执行的能力和边界使用真实断言或编译期检测，不以空 `SUCCEED()` 代替。
@@ -115,6 +119,7 @@ concepts/01_values_and_comparison/01_truthiness/nodejs/test_01_core.mjs
 ./tools/run.sh python -q --timeout=30 -W error
 ./tools/run.sh cpp
 ./tools/run.sh nodejs
+./tools/run.sh go
 ```
 
 横向概念：
@@ -133,7 +138,7 @@ concepts/01_values_and_comparison/01_truthiness/nodejs/test_01_core.mjs
 ```
 
 门禁分别验证语言路径、课程连续编号和覆盖标记、章节与主题连续编号、主题内测试连续
-编号、至少两门语言、`polyglot-family`、`polyglot-concept`、课程关联目标和 Unicode
+编号、四门 active language、`polyglot-family`、`polyglot-concept`、课程关联目标和 Unicode
 120 字符行宽。它不能替代人工语义审阅；提交主题时还要确认各语言确实回答同一问题。
 
 修改测试时先跑受影响课程或单个概念，再跑对应全量。只有两者都通过才能称为 verified。
@@ -145,8 +150,9 @@ concepts/01_values_and_comparison/01_truthiness/nodejs/test_01_core.mjs
   GoogleTest 1.16.0；`1409 passed, 15 skipped`。
 - Node.js：课程 `001`–`107`；Node.js 24.18.0、ECMAScript 2025、
   ECMA-402 12th edition、npm 11.16.0；`935 passed`。
+- Go：课程 `001`–`128`；Go 1.26.5；128 个测试文件、`129 passed`。
 - 横向层有 10 个章节、49 个已终审主题、24 个多文件主题；每门语言 73 个测试入口：
-  Python `252 passed`、C++ `249 passed`、Node.js `255 passed`。
+  Python `252 passed`、C++ `249 passed`、Node.js `255 passed`、Go `75 passed`。
 
 所有 skip 必须说明实现能力、平台行为或可选依赖原因。工具链和资料版本见
 `sources.lock`。
@@ -177,6 +183,13 @@ Node.js 来源优先级：
 4. Node.js 官方指南；
 5. 仅补充演进和实现差异的 TC39 提案、Node.js issue 与变更记录。
 
+Go 来源优先级：
+
+1. Go Language Specification 与 Memory Model；
+2. Go 1.26 release notes、标准库文档和源码；
+3. Go Modules Reference 与 `go` command 文档；
+4. Effective Go 只补充惯用写法，不覆盖规范语义。
+
 Dash、MDN、cppreference 和 Test262 可以帮助定位主题或发现遗漏，但不作为语义争议的
 最终依据，也不决定目录结构。
 
@@ -191,6 +204,11 @@ FetchContent。测试目标启用 `-Wall -Wextra -Wpedantic -Werror`。不执行
 Node.js 使用内置 `node:test` 和 ESM `.mjs`；普通测试不安装 npm 依赖。修改进程级状态
 时用 `t.after()` 或 `try/finally` 恢复；网络只监听回环动态端口；异步测试等待明确事件
 或 Promise，不用时间延迟猜测完成。
+
+Go 使用标准 `testing`，执行时固定 `-count=1`，所有源码通过 `gofmt` 和 `go vet`。编译期
+非法语义使用 `go/parser`、`go/types` 或隔离临时 module；并发测试使用 channel、
+WaitGroup、context 或条件 predicate 建立明确同步，不用 `sleep` 猜测调度。网络只使用
+loopback、`httptest` 或内存连接；全局状态、环境、cwd 和临时资源必须恢复。
 
 ## 单任务接续与 Git
 

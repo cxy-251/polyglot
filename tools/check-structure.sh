@@ -418,6 +418,7 @@ check_concepts() {
 
 check_go_workspace() {
   local required_file
+  local workspace_json
   for required_file in go.work languages/go/go.mod concepts/go.mod; do
     if [[ ! -f "$required_file" ]]; then
       report_failure "缺少 Go module/workspace 文件: $required_file"
@@ -431,8 +432,14 @@ check_go_workspace() {
   if [[ "$(go env GOVERSION)" != go1.26.5 ]]; then
     report_failure "Go 工具链不是锁定的 go1.26.5"
   fi
-  if ! go work edit -json >/dev/null; then
+  if ! workspace_json=$(go work edit -json); then
     report_failure "go.work 无法被 Go 工具链解析"
+  else
+    for required_file in "./languages/go" "./concepts"; do
+      if ! grep -Fq "\"DiskPath\": \"$required_file\"" <<<"$workspace_json"; then
+        report_failure "go.work 缺少 workspace module: $required_file"
+      fi
+    done
   fi
   if ! (
     cd languages/go
