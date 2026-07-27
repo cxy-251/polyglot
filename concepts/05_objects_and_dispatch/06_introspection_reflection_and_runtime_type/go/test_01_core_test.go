@@ -16,6 +16,8 @@ type reflectionRecord struct {
 	Name string
 }
 
+func (value reflectionRecord) Label() string { return "record:" + value.Name }
+
 func TestReflectionSeparatesTypeMetadataFromSettableStorage(t *testing.T) {
 	value := reflectionRecord{Name: "go"}
 	typeInfo := reflect.TypeOf(value)
@@ -29,5 +31,9 @@ func TestReflectionSeparatesTypeMetadataFromSettableStorage(t *testing.T) {
 	field.SetString("changed")
 	if value.Name != "changed" {
 		t.Fatal("reflect.Value 写回原存储")
+	}
+	result := reflect.ValueOf(value).MethodByName("Label").Call(nil)
+	if len(result) != 1 || result[0].String() != "record:changed" {
+		t.Fatal("反射可以按名称动态调用导出方法，但签名错误会在运行时 panic")
 	}
 }

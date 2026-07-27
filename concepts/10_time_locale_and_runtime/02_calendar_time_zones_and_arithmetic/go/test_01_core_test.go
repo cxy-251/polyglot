@@ -21,4 +21,8 @@ func TestCalendarConstructionAndTimelineAdditionAreExplicit(t *testing.T) {
 	if value.AddDate(0, 0, 1).Day() != 28 || value.Add(24*time.Hour).Sub(value) != 24*time.Hour {
 		t.Fatal("AddDate 表达 calendar 意图；Add 表达时间线长度")
 	}
+	normalized := time.Date(2026, time.February, 30, 0, 0, 0, 0, time.UTC)
+	if normalized.Month() != time.March {
+		t.Fatal("time.Date 会归一化越界字段，而不是返回无效日期 error")
+	}
 }

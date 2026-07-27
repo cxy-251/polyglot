@@ -20,4 +20,12 @@ func TestAppendMayDetachOneSliceFromAnother(t *testing.T) {
 	if len(alias) != 2 || len(grown) != 3 {
 		t.Fatal("每个 slice header 独立保存长度")
 	}
+	visited := 0
+	for range base {
+		visited++
+		base = append(base, 4)
+	}
+	if visited != 2 {
+		t.Fatal("slice range 在开始时复制 header，循环次数不随 append 增长")
+	}
 }

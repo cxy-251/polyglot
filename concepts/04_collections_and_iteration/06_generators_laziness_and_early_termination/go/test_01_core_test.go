@@ -13,6 +13,7 @@ import (
 
 func observedSequence(events *[]int) iter.Seq[int] {
 	return func(yield func(int) bool) {
+		defer func() { *events = append(*events, -1) }()
 		for value := range 5 {
 			*events = append(*events, value)
 			if !yield(value) {
@@ -33,7 +34,7 @@ func TestSequenceIsLazyAndHonorsEarlyTermination(t *testing.T) {
 			break
 		}
 	}
-	if len(events) != 2 {
+	if len(events) != 3 || events[2] != -1 {
 		t.Fatalf("break 通过 yield=false 阻止继续生产: %v", events)
 	}
 }

@@ -24,4 +24,7 @@ func TestFormattingAndParsingUseDifferentAPIs(t *testing.T) {
 	if !errors.As(err, &numberError) || !errors.Is(numberError.Err, strconv.ErrRange) {
 		t.Fatalf("strconv 保留输入、函数与具体失败原因: %v", err)
 	}
+	if value, err := strconv.ParseInt("0xff", 0, 64); err != nil || value != 255 {
+		t.Fatalf("base=0 明确启用 Go 风格前缀识别: %d %v", value, err)
+	}
 }

@@ -26,4 +26,11 @@ func TestMapBackedSetDeduplicatesComparableValues(t *testing.T) {
 	if _, found := set["go"]; found {
 		t.Fatal("delete 实现集合移除")
 	}
+	other := makeSet("cpp", "node")
+	for value := range other {
+		set[value] = struct{}{}
+	}
+	if len(set) != 2 {
+		t.Fatal("集合运算由 map 循环显式实现；迭代顺序没有保证")
+	}
 }

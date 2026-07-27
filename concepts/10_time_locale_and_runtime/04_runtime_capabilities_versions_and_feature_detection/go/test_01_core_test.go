@@ -1,7 +1,7 @@
 // polyglot-family: time_locale_and_runtime
 // polyglot-concept: runtime_capabilities_versions_and_feature_detection
-// polyglot-related: languages/go/tooling_and_runtime/
-// polyglot-related+: 15_time_runtime_reflection_and_unsafe/test_117_runtime_version_architecture_and_capabilities_test.go
+// polyglot-related: languages/go/tooling_and_runtime/15_time_runtime_reflection_and_unsafe/
+// polyglot-related+: test_117_runtime_version_architecture_and_capabilities_test.go
 //
 // 共同问题：如何识别语言/运行时版本、平台和可用能力；版本字符串能否替代能力检查。
 // 对照观察：runtime 暴露锁定版本和目标平台；行为分支优先使用 interface、build tag 或实际 API 检查。

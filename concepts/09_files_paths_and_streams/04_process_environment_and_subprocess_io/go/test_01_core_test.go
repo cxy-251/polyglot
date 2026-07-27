@@ -15,8 +15,10 @@ import (
 )
 
 func TestCommandReceivesExplicitEnvironmentAndSeparatesStreams(t *testing.T) {
-	command := exec.Command("sh", "-c", "printf \"$COURSE\"; printf problem >&2; exit 3")
+	directory := t.TempDir()
+	command := exec.Command("sh", "-c", "printf \"$COURSE:$1:$PWD\"; printf problem >&2; exit 3", "shell", "arg")
 	command.Env = append(command.Environ(), "COURSE=go")
+	command.Dir = directory
 	var stdout bytes.Buffer
 	var stderr bytes.Buffer
 	command.Stdout = &stdout
@@ -24,7 +26,7 @@ func TestCommandReceivesExplicitEnvironmentAndSeparatesStreams(t *testing.T) {
 	err := command.Run()
 	var exitError *exec.ExitError
 	if !errors.As(err, &exitError) || exitError.ExitCode() != 3 ||
-		stdout.String() != "go" || stderr.String() != "problem" {
+		stdout.String() != "go:arg:"+directory || stderr.String() != "problem" {
 		t.Fatalf("Cmd 显式定义 env、stdio 与 status 边界: %q %q %v", &stdout, &stderr, err)
 	}
 }

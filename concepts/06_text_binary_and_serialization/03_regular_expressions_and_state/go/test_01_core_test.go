@@ -23,4 +23,8 @@ func TestFindAllReturnsExplicitMatchesWithoutHiddenCursor(t *testing.T) {
 	if !slices.Equal(expression.FindAllString("a=1 b=2", -1), []string{"a=1", "b=2"}) {
 		t.Fatal("FindAll 显式返回全部非重叠匹配")
 	}
+	if !regexp.MustCompile(`a=1`).MatchString("prefix a=1 suffix") ||
+		regexp.MustCompile(`^a=1$`).MatchString("prefix a=1 suffix") {
+		t.Fatal("MatchString 默认搜索任意位置；全串匹配需要显式 anchors")
+	}
 }

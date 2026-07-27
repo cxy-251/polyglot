@@ -30,4 +30,7 @@ func TestConversionsExposeTruncationAndWidth(t *testing.T) {
 	if math.IsNaN(math.Sqrt(-1)) != true {
 		t.Fatal("浮点域错误可产生 NaN，而非语言异常")
 	}
+	if _, err := strconv.ParseInt("not-a-number", 10, 64); err == nil {
+		t.Fatal("数值类型转换本身不返回 error；文本解析用 strconv 显式报告失败")
+	}
 }

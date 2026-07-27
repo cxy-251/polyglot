@@ -31,4 +31,9 @@ func TestStatAndLstatObserveDifferentObjects(t *testing.T) {
 	if err != nil || followed.Size() != 4 || entry.Mode()&os.ModeSymlink == 0 {
 		t.Fatalf("Stat 观察目标，Lstat 观察链接目录项: %+v %+v %v", followed, entry, err)
 	}
+	content, err := os.ReadFile(link)
+	entries, readDirErr := os.ReadDir(root)
+	if err != nil || readDirErr != nil || string(content) != "data" || len(entries) != 2 {
+		t.Fatalf("ReadFile 跟随链接，ReadDir 返回按文件名排序的目录项: %q %v %v", content, err, readDirErr)
+	}
 }

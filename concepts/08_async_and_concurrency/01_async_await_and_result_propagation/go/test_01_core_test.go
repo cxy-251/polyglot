@@ -31,8 +31,13 @@ func startAsync(success bool) <-chan asyncResult {
 }
 
 func TestChannelCarriesOneResultAndCompletion(t *testing.T) {
-	result := <-startAsync(true)
+	results := startAsync(true)
+	result := <-results
 	if result.value != 42 || result.err != nil {
 		t.Fatalf("调用方通过 receive 等待结果: %+v", result)
+	}
+	zero, ok := <-results
+	if ok || zero != (asyncResult{}) {
+		t.Fatal("关闭后的 channel 不能像 Promise/Future 重复读取同一结果，只返回零值与 false")
 	}
 }

@@ -28,4 +28,10 @@ func TestValueCopyAndAliasingAreSeparateQuestions(t *testing.T) {
 	if mapping["value"] != 9 {
 		t.Fatal("map 值复制后仍引用同一运行时映射")
 	}
+	nested := [][]int{{1}}
+	shallow := append([][]int(nil), nested...)
+	shallow[0][0] = 7
+	if nested[0][0] != 7 {
+		t.Fatal("复制外层 slice 仍保留内层 slice 别名；Go 没有通用 deep-copy 操作")
+	}
 }
