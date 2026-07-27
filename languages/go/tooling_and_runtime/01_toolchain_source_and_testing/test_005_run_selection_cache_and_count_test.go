@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-func TestOfficialTestFlagsDescribeSelectionAndCacheBypass(t *testing.T) {
+func TestGoHelpListsRunSelectionAndCountFlags(t *testing.T) {
 	output, err := exec.Command("go", "help", "testflag").CombinedOutput()
 	if err != nil {
 		t.Fatal(err)
