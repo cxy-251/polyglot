@@ -15,6 +15,7 @@ import path from 'node:path';
 import test from 'node:test';
 
 test('子进程环境可由调用方创建独立映射', () => {
+  const original = process.env.POLYGLOT_VALUE;
   const result = spawnSync(
     process.execPath,
     ['-e', "process.stdout.write(process.env.POLYGLOT_VALUE)"],
@@ -26,7 +27,7 @@ test('子进程环境可由调用方创建独立映射', () => {
 
   assert.equal(result.status, 0);
   assert.equal(result.stdout, 'child');
-  assert.notEqual(process.env.POLYGLOT_VALUE, 'child');
+  assert.equal(process.env.POLYGLOT_VALUE, original);
 });
 
 test('子进程工作目录不改变调用方 cwd', (t) => {

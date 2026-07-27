@@ -5,7 +5,9 @@
 // polyglot-family: files_paths_and_streams
 // polyglot-concept: streaming_buffering_and_backpressure
 // polyglot-related: languages/cpp/standard_library/14_input_output/
-// polyglot-related+: test_126_ios_base_state_format_storage_callbacks_and_positions.cpp
+// polyglot-related+: test_127_streambuf_get_put_areas_virtual_dispatch_and_redirection.cpp
+// polyglot-related: languages/cpp/standard_library/14_input_output/
+// polyglot-related+: test_131_string_stream_modes_buffers_positions_views_and_moves.cpp
 
 #include <gtest/gtest.h>
 
@@ -41,10 +43,17 @@ TEST(StreamConcept, FlushRequestsEmissionFromTheStreamBuffer) {
   EXPECT_EQ(output.str(), "value");
 }
 
-TEST(StreamConcept, StandardIostreamHasNoAsynchronousDrainProtocol) {
-  // operator<<、write 和 streambuf 的同步调用通过状态位、异常或写入计数报告结果；
+TEST(StreamConcept, StreamBufferWriteReportsSynchronousProgress) {
+  std::stringbuf buffer;
+  const std::string value = "payload";
+  const std::streamsize written =
+      buffer.sputn(value.data(), static_cast<std::streamsize>(value.size()));
+
+  EXPECT_EQ(written, static_cast<std::streamsize>(value.size()));
+  EXPECT_EQ(buffer.str(), value);
+
+  // sputn 在调用返回时报告写入计数；operator<< 和 write 还可通过状态位或异常报告结果。
   // C++20 标准库没有与 Node.js highWaterMark/drain 等价的事件驱动背压接口。
-  SUCCEED();
 }
 
 }  // namespace

@@ -47,6 +47,8 @@ TEST(ObjectLifetimeConcept, ConstructorStartsLifetimeAndDestructorEndsAtScopeExi
   }
 
   EXPECT_EQ(events, (std::vector<std::string>{"construct:value", "destroy:value"}));
+
+  // 自动对象按作用域确定销毁；Python/JavaScript 的垃圾回收对象没有同等析构时点。
 }
 
 TEST(ObjectLifetimeConcept, CopyAndMoveAreDistinctLanguageOperations) {
@@ -72,13 +74,6 @@ TEST(ObjectLifetimeConcept, TypeCanForbidCopyAtCompileTime) {
 
   static_assert(!std::is_copy_constructible_v<Unique>);
   static_assert(!std::is_copy_assignable_v<Unique>);
-}
-
-TEST(ObjectLifetimeConcept, AutomaticLifetimeIsDeterministicUnlikeGcFinalization) {
-  static_assert(std::is_destructible_v<Record>);
-
-  // 自动对象按作用域确定销毁；Python/JavaScript 的垃圾回收对象没有同等析构时点。
-  SUCCEED();
 }
 
 }  // namespace

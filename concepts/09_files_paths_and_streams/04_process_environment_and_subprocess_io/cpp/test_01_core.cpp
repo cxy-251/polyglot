@@ -48,12 +48,9 @@ TEST(ProcessEnvironmentConcept, StandardStreamsCanBeRedirectedAtBufferBoundary) 
   std::cout.rdbuf(old_output);
 
   EXPECT_EQ(output.str(), "hello");
-}
 
-TEST(ProcessEnvironmentConcept, Cpp20HasNoPortableSubprocessPipes) {
   // std::system 只把字符串交给实现定义的命令处理器；它不提供参数数组、stdin/stdout 管道或
   // 可移植的退出状态解码，因此不执行外部命令来伪装成 Python subprocess 或 Node child_process。
-  SUCCEED();
 }
 
 }  // namespace

@@ -6,6 +6,8 @@
 // polyglot-concept: streaming_buffering_and_backpressure
 // polyglot-related: languages/nodejs/node_core/05_streams/
 // polyglot-related+: test_050_readable_stream_modes_async_iteration_and_functional_helpers.mjs
+// polyglot-related: languages/nodejs/node_core/05_streams/
+// polyglot-related+: test_051_writable_backpressure_cork_writev_final_and_destruction.mjs
 
 import assert from 'node:assert/strict';
 import { once } from 'node:events';

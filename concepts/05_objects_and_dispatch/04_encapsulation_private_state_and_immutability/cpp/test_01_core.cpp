@@ -62,9 +62,10 @@ TEST(EncapsulationConcept, ConstContainerIsShallowForPointerTargets) {
 }
 
 TEST(EncapsulationConcept, ConstReferenceCannotCallMutatingMember) {
-  static_assert(!ConstDepositable<Account>);
+  constexpr bool const_depositable = ConstDepositable<Account>;
+  static_assert(!const_depositable);
 
-  SUCCEED();
+  EXPECT_FALSE(const_depositable);
 }
 
 }  // namespace
