@@ -8,6 +8,8 @@
 
 #include <gtest/gtest.h>
 
+#include <climits>
+#include <limits>
 #include <string>
 #include <type_traits>
 
@@ -40,10 +42,18 @@ TEST(UnicodeStringsConcept, StringDoesNotDeclareOrValidateAnEncoding) {
 }
 
 TEST(UnicodeStringsConcept, CharacterTypesRepresentDifferentCodeUnitWidths) {
-  static_assert(sizeof(char8_t) == 1);
-  static_assert(sizeof(char16_t) == 2);
-  static_assert(sizeof(char32_t) == 4);
   static_assert(!std::is_same_v<char, char8_t>);
+  static_assert(!std::is_same_v<char8_t, char16_t>);
+  static_assert(!std::is_same_v<char16_t, char32_t>);
+  static_assert(std::numeric_limits<char16_t>::digits >= 16);
+  static_assert(std::numeric_limits<char32_t>::digits >= 32);
+
+  EXPECT_GE(sizeof(char16_t) * CHAR_BIT, std::numeric_limits<char16_t>::digits);
+  EXPECT_GE(sizeof(char32_t) * CHAR_BIT, std::numeric_limits<char32_t>::digits);
+
+  // char16_t/char32_t 分别能保存 UTF-16/UTF-32 code unit，这是类型语义；上面的
+  // sizeof * CHAR_BIT 只是锁定 ABI 的存储观察。sizeof 的单位是 byte，语言不普遍保证
+  // 一个 byte 恰好为 8 bit。
 }
 
 }  // namespace

@@ -12,15 +12,37 @@
 import asyncio
 
 
-def test_call_soon_runs_after_current_callback_yields():
+def test_ready_callbacks_and_tasks_run_only_after_the_current_code_yields():
     async def scenario():
         events = []
-        asyncio.get_running_loop().call_soon(events.append, "soon")
+        loop = asyncio.get_running_loop()
+        future = loop.create_future()
+        future.add_done_callback(lambda _: events.append("future callback"))
+
+        async def work():
+            events.append("task")
+
+        loop.call_soon(events.append, "call_soon")
+        task = asyncio.create_task(work())
+        future.set_result(42)
         events.append("sync")
+        assert events == ["sync"]
+
         await asyncio.sleep(0)
+        events.append("resumed")
+        await task
         return events
 
-    assert asyncio.run(scenario()) == ["sync", "soon"]
+    assert asyncio.run(scenario()) == [
+        "sync",
+        "call_soon",
+        "task",
+        "future callback",
+        "resumed",
+    ]
+
+    # asyncio 的 ready queue 与 ECMAScript Promise job queue 是不同调度模型；这里只
+    # 断言 CPython 3.10 asyncio 在明确让出边界前不执行已排队 callback/task。
 
 
 def test_create_task_schedules_coroutine_on_the_running_loop():
@@ -49,9 +71,3 @@ def test_future_callback_runs_via_event_loop_scheduling():
         return future.result(), events
 
     assert asyncio.run(scenario()) == (42, ["set", "callback"])
-
-
-def test_asyncio_has_no_javascript_microtask_api():
-    assert not hasattr(asyncio, "queue_microtask")
-
-    # asyncio 由事件循环调度 callback/task；不要把其 ready queue 机械等同 ECMAScript Promise jobs。

@@ -15,6 +15,18 @@ namespace {
 
 using namespace std::chrono;
 
+#if defined(__cpp_lib_chrono) && __cpp_lib_chrono >= 201907L
+constexpr bool kChronoFeatureMacroHasTimeZones = true;
+constexpr bool kChronoInterfacesAreAvailable =
+    requires {
+      std::chrono::get_tzdb();
+      typename std::chrono::zoned_time<std::chrono::seconds>;
+    };
+#else
+constexpr bool kChronoFeatureMacroHasTimeZones = false;
+constexpr bool kChronoInterfacesAreAvailable = false;
+#endif
+
 TEST(CalendarConcept, YearMonthDayValidatesCalendarFields) {
   const year_month_day leap_day{year{2024}, February, day{29}};
   const year_month_day invalid{year{2023}, February, day{29}};
@@ -39,15 +51,21 @@ TEST(CalendarConcept, MonthArithmeticCanProduceAnInvalidCalendarDate) {
   // calendar 字段算术不会自动选择“月末”；需要调用方明确采用截断等业务规则。
 }
 
-TEST(CalendarConcept, LockedLibstdcppDoesNotProvidePortableTimeZoneDatabase) {
+TEST(CalendarConcept, FeatureMacroAndTimeZoneInterfacesAgree) {
 #if defined(__cpp_lib_chrono) && __cpp_lib_chrono >= 201907L
-  SUCCEED();
+  static_assert(kChronoInterfacesAreAvailable);
+  const time_zone* utc = locate_zone("UTC");
+  ASSERT_NE(utc, nullptr);
+  EXPECT_EQ(utc->get_info(sys_seconds{}).offset, seconds{0});
 #else
-  SUCCEED();
+  static_assert(!kChronoInterfacesAreAvailable);
+  EXPECT_FALSE(kChronoFeatureMacroHasTimeZones);
 #endif
 
-  // C++20 规范包含时区设施，但锁定的 libstdc++ 11 未完整提供 tzdb/zoned_time；
-  // 不编造 America/New_York 案例，时区跳变由 Python 与 Node.js 的可用实现执行验证。
+  EXPECT_EQ(kChronoFeatureMacroHasTimeZones, kChronoInterfacesAreAvailable);
+
+  // 标准版本与库实现能力是两件事。锁定的 libstdc++ 11 未声明 201907L，因此不能引用
+  // tzdb/zoned_time；支持该宏的实现则必须编译并执行上面的 UTC 接口案例。
 }
 
 }  // namespace

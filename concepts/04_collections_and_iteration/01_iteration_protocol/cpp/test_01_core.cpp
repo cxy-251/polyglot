@@ -8,6 +8,7 @@
 
 #include <gtest/gtest.h>
 
+#include <concepts>
 #include <iterator>
 #include <ranges>
 #include <vector>
@@ -27,8 +28,13 @@ TEST(IterationProtocolConcept, BeginDereferenceIncrementAndEndExposeTheProtocol)
 
 TEST(IterationProtocolConcept, ContainerCreatesFreshIterators) {
   std::vector<int> values{1, 2};
+  auto first = values.begin();
+  auto second = values.begin();
 
-  EXPECT_EQ(values.begin(), values.begin());
+  ++first;
+
+  EXPECT_EQ(*first, 2);
+  EXPECT_EQ(*second, 1);
   EXPECT_EQ(std::ranges::distance(values), 2);
   EXPECT_EQ(std::ranges::distance(values), 2);
 }
@@ -45,10 +51,24 @@ TEST(IterationProtocolConcept, RangeForUsesBeginEndAndIncrement) {
 }
 
 TEST(IterationProtocolConcept, IteratorAndSentinelNeedNotHaveOneType) {
-  auto values = std::views::iota(1) | std::views::take(3);
+  int values[]{1, 2, 3};
+  auto range = std::ranges::subrange{
+      std::counted_iterator{values, 3},
+      std::default_sentinel,
+  };
+  int sum = 0;
 
-  static_assert(std::ranges::range<decltype(values)>);
-  EXPECT_EQ(std::ranges::distance(values), 3);
+  static_assert(std::ranges::range<decltype(range)>);
+  static_assert(
+      !std::same_as<
+          std::ranges::iterator_t<decltype(range)>,
+          std::ranges::sentinel_t<decltype(range)>>);
+
+  for (int value : range) {
+    sum += value;
+  }
+
+  EXPECT_EQ(sum, 6);
 
   // C++ iterator/sentinel 协议没有 Python close 或 JavaScript return 的通用提前关闭钩子。
 }

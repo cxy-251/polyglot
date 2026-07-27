@@ -20,7 +20,11 @@ TEST(AsyncResultConcept, FutureGetReturnsTheProducedValue) {
 
   producer.set_value(42);
 
+  EXPECT_TRUE(result.valid());
   EXPECT_EQ(result.get(), 42);
+  EXPECT_FALSE(result.valid());
+
+  // future::get 是单消费者操作：它取得结果后释放当前 future 对共享状态的访问权。
 }
 
 TEST(AsyncResultConcept, FutureGetRethrowsTheStoredException) {
@@ -34,9 +38,26 @@ TEST(AsyncResultConcept, FutureGetRethrowsTheStoredException) {
 
 TEST(AsyncResultConcept, AsyncLaunchPolicyControlsExecutionMode) {
   auto deferred = std::async(std::launch::deferred, [] { return 42; });
+  std::promise<void> started;
+  std::promise<void> release;
+  std::future<void> release_signal = release.get_future();
+  auto asynchronous = std::async(
+      std::launch::async,
+      [&started, signal = std::move(release_signal)]() mutable {
+        started.set_value();
+        signal.get();
+        return 7;
+      });
 
   EXPECT_EQ(deferred.wait_for(std::chrono::seconds{0}), std::future_status::deferred);
+  started.get_future().get();
+  release.set_value();
+
   EXPECT_EQ(deferred.get(), 42);
+  EXPECT_EQ(asynchronous.get(), 7);
+
+  // deferred 直到 wait/get 才在等待线程执行；async 要求在独立执行线程启动。事件握手
+  // 明确控制边界，不用 sleep 猜测调度时机。
 }
 
 TEST(AsyncResultConcept, FutureIsSingleConsumerButSharedFutureIsReusable) {
@@ -47,7 +68,8 @@ TEST(AsyncResultConcept, FutureIsSingleConsumerButSharedFutureIsReusable) {
   EXPECT_EQ(result.get(), 42);
   EXPECT_EQ(result.get(), 42);
 
-  // 标准 future 不是 JavaScript Promise；普通 future::get 会消耗共享状态访问权。
+  // shared_future 可被多个观察者重复读取；它仍不是自带 then/await 调度的 JavaScript
+  // Promise，也不是由 promise_type 定制的 C++ coroutine return object。
 }
 
 }  // namespace

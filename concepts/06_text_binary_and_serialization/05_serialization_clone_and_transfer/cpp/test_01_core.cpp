@@ -12,6 +12,7 @@
 #include <memory>
 #include <stdexcept>
 #include <string>
+#include <string_view>
 #include <system_error>
 #include <type_traits>
 
@@ -27,12 +28,18 @@ std::string encode(const Point& point) {
 }
 
 Point decode(const std::string& text) {
+  constexpr std::string_view prefix = "Point:";
   constexpr std::size_t prefix_size = 6;
+  if (text.size() < prefix_size ||
+      std::string_view{text}.substr(0, prefix_size) != prefix) {
+    throw std::invalid_argument{"invalid Point"};
+  }
+
   int value = 0;
-  auto result = std::from_chars(text.data() + prefix_size, text.data() + text.size(), value);
-  if (text.substr(0, prefix_size) != "Point:" ||
-      result.ec != std::errc{} ||
-      result.ptr != text.data() + text.size()) {
+  const char* begin = text.data() + prefix_size;
+  const char* end = text.data() + text.size();
+  const auto result = std::from_chars(begin, end, value);
+  if (result.ptr == begin || result.ec != std::errc{} || result.ptr != end) {
     throw std::invalid_argument{"invalid Point"};
   }
   return Point{value};
@@ -42,7 +49,17 @@ TEST(SerializationConcept, DomainFormatNeedsExplicitEncoderAndDecoder) {
   Point original{3};
 
   EXPECT_EQ(decode(encode(original)), original);
-  EXPECT_THROW(decode("invalid"), std::invalid_argument);
+  EXPECT_EQ(decode("Point:-7"), (Point{-7}));
+}
+
+TEST(SerializationConcept, DecoderRejectsTruncatedMalformedAndOutOfRangeInput) {
+  EXPECT_THROW(decode(""), std::invalid_argument);
+  EXPECT_THROW(decode("Point"), std::invalid_argument);
+  EXPECT_THROW(decode("Point:"), std::invalid_argument);
+  EXPECT_THROW(decode("Other:3"), std::invalid_argument);
+  EXPECT_THROW(decode("Point:no"), std::invalid_argument);
+  EXPECT_THROW(decode("Point:3tail"), std::invalid_argument);
+  EXPECT_THROW(decode("Point:999999999999999999999999"), std::invalid_argument);
 }
 
 TEST(SerializationConcept, ValueCopyAndSharedPointerCopyPreserveDifferentGraphs) {

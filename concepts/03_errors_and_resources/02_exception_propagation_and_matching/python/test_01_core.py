@@ -62,7 +62,8 @@ def test_only_base_exception_instances_or_classes_can_be_raised():
     with pytest.raises(TypeError):
         raise "failed"
 
-    # JavaScript 可以 throw 任意值；Python 与 C++ 都要求异常属于各自的异常对象体系。
+    # Python 只能 raise BaseException 实例或子类；C++ 可以 throw int 等非异常类对象；
+    # JavaScript 可以 throw 任意值。后两者虽然允许，但工程代码通常仍使用异常对象。
 
 
 def test_exception_else_runs_only_when_try_body_completes_normally():

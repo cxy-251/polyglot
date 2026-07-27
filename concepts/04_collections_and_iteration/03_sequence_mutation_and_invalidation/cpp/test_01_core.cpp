@@ -8,23 +8,30 @@
 
 #include <gtest/gtest.h>
 
+#include <algorithm>
 #include <list>
 #include <vector>
 
 namespace {
 
-TEST(MutationInvalidationConcept, VectorReallocationChangesStorageIdentity) {
-  std::vector<int> values;
-  values.reserve(1);
-  values.push_back(1);
-  const int* old_storage = values.data();
+TEST(MutationInvalidationConcept, InsertingPastCapacityForcesReallocation) {
+  std::vector<int> values{1};
+  values.reserve(4);
+  const std::size_t original_capacity = values.capacity();
 
-  values.push_back(2);
+  while (values.size() < original_capacity) {
+    values.push_back(static_cast<int>(values.size() + 1));
+  }
+  const std::vector<int> original_values = values;
 
-  EXPECT_NE(values.data(), old_storage);
-  EXPECT_EQ(values, (std::vector<int>{1, 2}));
+  values.push_back(99);
 
-  // 重分配后旧 iterator/reference/pointer 失效；只比较地址，不解引用旧指针。
+  EXPECT_GT(values.capacity(), original_capacity);
+  EXPECT_TRUE(std::equal(original_values.begin(), original_values.end(), values.begin()));
+  EXPECT_EQ(values.back(), 99);
+
+  // size 已等于真实 capacity，下一次插入按标准保证触发重分配；旧 iterator、引用和指针
+  // 全部失效，因此测试只观察新容器的 capacity 与值，不读取或比较任何悬空句柄。
 }
 
 TEST(MutationInvalidationConcept, ReserveCanKeepReferencesValidUntilCapacityIsExceeded) {
@@ -32,11 +39,15 @@ TEST(MutationInvalidationConcept, ReserveCanKeepReferencesValidUntilCapacityIsEx
   values.reserve(3);
   values.push_back(1);
   int* first = &values[0];
+  const std::size_t capacity = values.capacity();
 
-  values.push_back(2);
+  while (values.size() < capacity) {
+    values.push_back(static_cast<int>(values.size() + 1));
+  }
 
   EXPECT_EQ(first, &values[0]);
   EXPECT_EQ(*first, 1);
+  EXPECT_EQ(values.capacity(), capacity);
 }
 
 TEST(MutationInvalidationConcept, ListInsertionPreservesExistingIterators) {

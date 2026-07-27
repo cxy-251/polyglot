@@ -14,36 +14,71 @@ const source = [
   'export function increment() { value += 1; }',
   'export default value;',
 ].join('\n');
-const moduleUrl = `data:text/javascript,${encodeURIComponent(source)}`;
 
-test('ESM namespace 暴露只读 live binding', async () => {
-  const namespace = await import(moduleUrl);
+function moduleUrl(tag, moduleSource = source) {
+  return `data:text/javascript,${encodeURIComponent(moduleSource)}#${tag}`;
+}
+
+test('named export 是 live binding，default 表达式保存求值时的值', async () => {
+  const namespace = await import(moduleUrl('live-and-default'));
 
   assert.equal(namespace.value, 1);
+  assert.equal(namespace.default, 1);
   namespace.increment();
   assert.equal(namespace.value, 2);
+  assert.equal(namespace.default, 1);
+});
+
+test('ESM namespace 属性不可重新赋值', async () => {
+  const namespace = await import(moduleUrl('namespace-assignment'));
+
   assert.throws(() => {
     namespace.value = 10;
   }, TypeError);
 });
 
-test('default 表达式导出保存导出时的值', async () => {
-  const namespace = await import(moduleUrl);
-
-  assert.equal(namespace.value, 2);
-  assert.equal(namespace.default, 1);
-});
-
-test('相同 URL 复用同一个模块记录和 namespace', async () => {
-  const first = await import(moduleUrl);
-  const second = await import(moduleUrl);
+test('相同 URL 复用模块记录和 namespace', async () => {
+  const url = moduleUrl('same-url');
+  const first = await import(url);
+  first.increment();
+  const second = await import(url);
 
   assert.equal(first, second);
   assert.equal(second.value, 2);
 });
 
+test('不同 URL 创建彼此隔离的模块记录', async () => {
+  const first = await import(moduleUrl('first-url'));
+  const second = await import(moduleUrl('second-url'));
+
+  first.increment();
+
+  assert.notEqual(first, second);
+  assert.equal(first.value, 2);
+  assert.equal(second.value, 1);
+});
+
+test('同一 URL 的模块初始化只执行一次', async (t) => {
+  const counterKey = `__polyglot_module_count_${process.pid}_${Date.now()}`;
+  t.after(() => {
+    delete globalThis[counterKey];
+  });
+  const countingSource = [
+    `globalThis[${JSON.stringify(counterKey)}] = (globalThis[${JSON.stringify(counterKey)}] ?? 0) + 1;`,
+    `export const initializationCount = globalThis[${JSON.stringify(counterKey)}];`,
+  ].join('\n');
+  const url = moduleUrl('initialize-once', countingSource);
+
+  const first = await import(url);
+  const second = await import(url);
+
+  assert.equal(first.initializationCount, 1);
+  assert.equal(second.initializationCount, 1);
+  assert.equal(globalThis[counterKey], 1);
+});
+
 test('模块 namespace 是不可扩展的专用对象', async () => {
-  const namespace = await import(moduleUrl);
+  const namespace = await import(moduleUrl('namespace-shape'));
 
   assert.equal(Object.isExtensible(namespace), false);
   assert.equal(Object.getPrototypeOf(namespace), null);
