@@ -14,7 +14,13 @@ import { isMainThread, Worker } from 'node:worker_threads';
 
 function runWorker(source, workerData) {
   const worker = new Worker(source, { eval: true, workerData });
-  return once(worker, 'message').then(([message]) => message);
+  return Promise.all([
+    once(worker, 'message'),
+    once(worker, 'exit'),
+  ]).then(([[message], [exitCode]]) => {
+    assert.equal(exitCode, 0);
+    return message;
+  });
 }
 
 test('Worker 在同一进程的独立 JavaScript 线程中运行', async () => {

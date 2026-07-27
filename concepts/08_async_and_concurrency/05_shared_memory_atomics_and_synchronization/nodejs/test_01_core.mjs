@@ -38,8 +38,13 @@ test('Worker 可通过共享存储发布结果', async () => {
     parentPort.postMessage('stored');
   `, { eval: true, workerData: storage });
 
-  await once(worker, 'message');
+  const [[message], [exitCode]] = await Promise.all([
+    once(worker, 'message'),
+    once(worker, 'exit'),
+  ]);
 
+  assert.equal(message, 'stored');
+  assert.equal(exitCode, 0);
   assert.equal(Atomics.load(new Int32Array(storage), 0), 42);
 });
 

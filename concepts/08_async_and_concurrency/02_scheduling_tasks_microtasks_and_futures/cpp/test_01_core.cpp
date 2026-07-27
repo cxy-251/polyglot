@@ -44,9 +44,4 @@ TEST(SchedulingConcept, PromiseMakesFutureReadyAtAnExplicitPoint) {
   EXPECT_EQ(result.wait_for(std::chrono::seconds{0}), std::future_status::ready);
 }
 
-TEST(SchedulingConcept, StandardCpp20DoesNotDefineAUniversalEventLoop) {
-  // future 没有标准 then/microtask 队列；executor/sender-receiver 不属于锁定的 C++20 基线。
-  SUCCEED();
-}
-
 }  // namespace

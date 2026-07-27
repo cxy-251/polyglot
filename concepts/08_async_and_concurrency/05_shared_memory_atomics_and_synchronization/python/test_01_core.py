@@ -74,7 +74,15 @@ def test_processes_require_explicit_shared_storage_and_locking():
     assert value.value == 2
 
 
-def test_python_has_no_language_level_atomic_number_type():
-    assert not hasattr(threading, "AtomicInteger")
+def test_lock_defines_the_atomic_boundary_for_a_compound_update():
+    value = [0]
+    lock = threading.Lock()
 
-    # 锁是这里可移植的复合操作边界；不要把 GIL 当作用户数据的通用原子性契约。
+    with lock:
+        before = value[0]
+        value[0] = before + 1
+
+    assert value == [1]
+
+    # CPython 3.10 的 GIL 是解释器执行机制，不是用户数据的读改写契约；锁明确覆盖
+    # 读取、计算和写回，代码也不会依赖不存在的“原子整数”API 名称。

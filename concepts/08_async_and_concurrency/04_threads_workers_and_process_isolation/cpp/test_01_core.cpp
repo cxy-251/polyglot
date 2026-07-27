@@ -55,10 +55,4 @@ TEST(ThreadIsolationConcept, JthreadDestructorJoinsOwnedThread) {
   EXPECT_EQ(result.get(), 42);
 }
 
-TEST(ThreadIsolationConcept, StandardCpp20HasNoProcessOrWorkerAbstraction) {
-  // std::thread 共享同一地址空间；进程创建与 IPC 不属于 C++20 标准库。
-  // 因而它不能直接等同 Python multiprocessing 或 Node.js Worker 的隔离边界。
-  SUCCEED();
-}
-
 }  // namespace

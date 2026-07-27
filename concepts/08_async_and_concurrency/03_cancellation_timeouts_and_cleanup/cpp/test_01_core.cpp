@@ -51,10 +51,10 @@ struct NoThrowCleanup {
 
 TEST(CancellationConcept, DestructorsCannotSuppressCancellationOrTimeout) {
   static_assert(std::is_nothrow_destructible_v<NoThrowCleanup>);
+  EXPECT_TRUE(std::is_nothrow_destructible_v<NoThrowCleanup>);
 
   // stop_token 只传递请求，不会像 Python CancelledError 那样注入控制流。
   // RAII 仍可在实际作用域退出时清理，但析构函数不能决定是否继续传播取消或超时。
-  SUCCEED();
 }
 
 }  // namespace
