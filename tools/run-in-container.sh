@@ -3,11 +3,12 @@ set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT"
+source "$ROOT/tools/language-state.sh"
 
 usage() {
   cat <<'EOF'
 Usage:
-  ./tools/run-in-container.sh doctor
+  ./tools/run-in-container.sh doctor [planned]
   ./tools/run-in-container.sh python [pytest arguments...]
   ./tools/run-in-container.sh cpp [ctest arguments...]
   ./tools/run-in-container.sh nodejs [node --test arguments or test files...]
@@ -31,40 +32,38 @@ need_cmd() {
   fi
 }
 
-doctor() {
+doctor_python() {
   need_cmd python3
-  need_cmd g++
-  need_cmd cmake
-  need_cmd ctest
-  need_cmd node
-  need_cmd npm
-  need_cmd julia
-  need_cmd R
-  need_cmd Rscript
-  need_cmd go
-  need_cmd gofmt
-  need_cmd rustc
-  need_cmd cargo
-  need_cmd rustfmt
-  printf 'workspace: %s\n' "$ROOT"
   printf 'python: '
   python3 --version
   printf 'pytest: '
   python3 -m pytest --version
+}
+
+doctor_cpp() {
+  need_cmd g++
+  need_cmd cmake
+  need_cmd ctest
   printf 'c++: '
   g++ --version | sed -n '1p'
   printf 'cmake: '
   cmake --version | sed -n '1p'
   printf 'ctest: '
   ctest --version | sed -n '1p'
+}
+
+doctor_nodejs() {
+  need_cmd node
+  need_cmd npm
   printf 'node: '
   node --version
   printf 'npm: '
   npm --version
-  printf 'julia: '
-  julia --startup-file=no --history-file=no --version
-  printf 'R: '
-  R --version | sed -n '1p'
+}
+
+doctor_go() {
+  need_cmd go
+  need_cmd gofmt
   printf 'go: '
   go version
   printf 'go env: '
@@ -72,14 +71,72 @@ doctor() {
   printf 'gofmt: '
   command -v gofmt
   printf 'go vet: '
-  go tool vet -help >/dev/null 2>&1
+  go help vet >/dev/null
   echo available
-  printf 'rustc: '
-  rustc --version
-  printf 'cargo: '
-  cargo --version
-  printf 'rustfmt: '
-  rustfmt --version
+}
+
+optional_version() {
+  local label="$1"
+  local command_name="$2"
+  shift 2
+  printf '%s: ' "$label"
+  if ! command -v "$command_name" >/dev/null 2>&1; then
+    echo 'unavailable (planned_paused)'
+    return
+  fi
+
+  local output
+  if output=$("$@" 2>&1); then
+    printf '%s\n' "${output%%$'\n'*}"
+  else
+    printf 'available, but version check failed: %s\n' "${output%%$'\n'*}"
+  fi
+}
+
+doctor_planned() {
+  printf 'planned languages: %s\n' "${PLANNED_LANGUAGES[*]}"
+  optional_version julia julia julia --startup-file=no --history-file=no --version
+  optional_version R R R --version
+  optional_version Rscript Rscript Rscript --version
+  optional_version rustc rustc rustc --version
+  optional_version cargo cargo cargo --version
+  optional_version rustfmt rustfmt rustfmt --version
+}
+
+doctor() {
+  local mode="${1:-active}"
+  if [[ $# -gt 1 || "$mode" != active && "$mode" != planned ]]; then
+    echo "doctor 只接受可选参数 planned" >&2
+    exit 2
+  fi
+
+  printf 'workspace: %s\n' "$ROOT"
+  printf 'active languages: %s\n' "${ACTIVE_LANGUAGES[*]}"
+  local language
+  for language in "${ACTIVE_LANGUAGES[@]}"; do
+    case "$language" in
+      python)
+        doctor_python
+        ;;
+      cpp)
+        doctor_cpp
+        ;;
+      nodejs)
+        doctor_nodejs
+        ;;
+      go)
+        doctor_go
+        ;;
+      *)
+        echo "doctor 缺少 active language 检查实现: $language" >&2
+        exit 2
+        ;;
+    esac
+  done
+
+  if [[ "$mode" == planned ]]; then
+    doctor_planned
+  fi
 }
 
 run_python() {
@@ -441,7 +498,7 @@ list_concepts() {
         continue
       fi
       language_counts=()
-      for language in python cpp nodejs go; do
+      for language in "${ACTIVE_LANGUAGES[@]}"; do
         case "$language" in
           python)
             extension=py
@@ -490,7 +547,8 @@ main() {
   local command_name="${1:-}"
   case "$command_name" in
     doctor)
-      doctor
+      shift
+      doctor "$@"
       ;;
     python|py)
       shift
