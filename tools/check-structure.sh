@@ -3,6 +3,7 @@ set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT"
+source "$ROOT/tools/language-state.sh"
 
 readonly MAX_LINE_LENGTH=120
 failure_count=0
@@ -10,6 +11,54 @@ failure_count=0
 report_failure() {
   printf '结构检查失败: %s\n' "$*" >&2
   failure_count=$((failure_count + 1))
+}
+
+project_language_ids() {
+  local status="$1"
+  python3 - "$status" <<'PY'
+import json
+import sys
+
+with open("project.json", encoding="utf-8") as project_file:
+    project = json.load(project_file)
+
+print(" ".join(
+    language["id"]
+    for language in project["languages"]
+    if language["status"] == sys.argv[1]
+))
+PY
+}
+
+check_active_language_state() {
+  local expected_active="python cpp nodejs go"
+  local configured_active="${ACTIVE_LANGUAGES[*]}"
+  local configured_planned="${PLANNED_LANGUAGES[*]}"
+  local project_active
+  local project_active_count
+  local project_planned
+
+  if [[ "$configured_active" != "$expected_active" ]]; then
+    report_failure "稳定 active language 集合错误: $configured_active"
+  fi
+
+  project_active=$(project_language_ids verified)
+  project_planned=$(project_language_ids planned_paused)
+  project_active_count=$(
+    python3 -c 'import json; print(json.load(open("project.json"))["active_language_count"])'
+  )
+
+  if [[ "$project_active" != "$configured_active" ]]; then
+    report_failure "project.json active language 与运行配置不一致: $project_active / $configured_active"
+  fi
+  if [[ "$project_planned" != "$configured_planned" ]]; then
+    report_failure "project.json planned language 与运行配置不一致: $project_planned / $configured_planned"
+  fi
+  if ((project_active_count != ${#ACTIVE_LANGUAGES[@]})); then
+    report_failure "project.json active_language_count 与 active language 集合不一致"
+  fi
+
+  printf 'active languages: %s\n' "$configured_active"
 }
 
 check_test_path() {
@@ -342,7 +391,7 @@ check_concepts() {
       expected_topic_index=$((expected_topic_index + 1))
 
       language_count=0
-      for language in python cpp nodejs go; do
+      for language in "${ACTIVE_LANGUAGES[@]}"; do
         case "$language" in
           python)
             extension=py
@@ -373,8 +422,8 @@ check_concepts() {
           "$language_directory"
       done
 
-      if ((language_count != 4)); then
-        report_failure "$topic 需要 4 门 active language，实际为 $language_count"
+      if ((language_count != ${#ACTIVE_LANGUAGES[@]})); then
+        report_failure "$topic 需要 ${#ACTIVE_LANGUAGES[@]} 门 active language，实际为 $language_count"
       fi
 
       local python_stems
@@ -503,10 +552,26 @@ check_unicode_line_lengths() {
   fi
 }
 
-check_language python py
-check_language cpp cpp
-check_language nodejs mjs
-check_language go go 'test_[0-9][0-9][0-9]_*_test.go'
+check_active_language_state
+for active_language in "${ACTIVE_LANGUAGES[@]}"; do
+  case "$active_language" in
+    python)
+      check_language python py
+      ;;
+    cpp)
+      check_language cpp cpp
+      ;;
+    nodejs)
+      check_language nodejs mjs
+      ;;
+    go)
+      check_language go go 'test_[0-9][0-9][0-9]_*_test.go'
+      ;;
+    *)
+      report_failure "缺少 active language 结构检查实现: $active_language"
+      ;;
+  esac
+done
 check_concepts
 check_go_workspace
 check_unicode_line_lengths
