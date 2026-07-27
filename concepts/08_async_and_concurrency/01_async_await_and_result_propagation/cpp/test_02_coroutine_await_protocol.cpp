@@ -8,7 +8,6 @@
 
 #include <gtest/gtest.h>
 
-#include <array>
 #include <coroutine>
 #include <exception>
 #include <stdexcept>
@@ -20,19 +19,16 @@ namespace {
 
 class EventLog {
  public:
-  void add(std::string_view event) noexcept {
-    if (size_ < events_.size()) {
-      events_[size_++] = event;
-    }
+  void add(std::string_view event) {
+    events_.push_back(event);
   }
 
-  std::vector<std::string_view> values() const {
-    return {events_.begin(), events_.begin() + static_cast<std::ptrdiff_t>(size_)};
+  const std::vector<std::string_view>& values() const noexcept {
+    return events_;
   }
 
  private:
-  std::array<std::string_view, 24> events_{};
-  std::size_t size_{0};
+  std::vector<std::string_view> events_;
 };
 
 template <bool Lazy>
