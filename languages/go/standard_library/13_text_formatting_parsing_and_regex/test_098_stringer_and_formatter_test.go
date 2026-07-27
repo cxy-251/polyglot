@@ -13,7 +13,9 @@ func (value point) String() string { return fmt.Sprintf("(%d,%d)", value.x, valu
 type masked string
 
 func (value masked) Format(state fmt.State, verb rune) {
-	_, _ = fmt.Fprintf(state, "<%c:%d>", verb, len(value))
+	if _, err := fmt.Fprintf(state, "<%c:%d>", verb, len(value)); err != nil {
+		panic(err)
+	}
 }
 
 func TestFormattingInterfacesOverrideDefaultPresentation(t *testing.T) {

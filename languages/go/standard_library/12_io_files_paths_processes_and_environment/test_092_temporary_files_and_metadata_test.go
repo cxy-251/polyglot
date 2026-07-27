@@ -14,8 +14,8 @@ func TestTemporaryFileLifecycleAndMetadata(t *testing.T) {
 		t.Fatal(err)
 	}
 	if _, err := file.WriteString("data"); err != nil {
-		_ = file.Close()
-		t.Fatal(err)
+		closeErr := file.Close()
+		t.Fatalf("写入临时文件失败；关闭结果为 %v: %v", closeErr, err)
 	}
 	if err := file.Close(); err != nil {
 		t.Fatal(err)

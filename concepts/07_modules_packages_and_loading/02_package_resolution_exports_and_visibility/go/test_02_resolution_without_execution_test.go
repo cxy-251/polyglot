@@ -8,6 +8,7 @@
 package package_resolution_exports_and_visibility
 
 import (
+	"fmt"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -18,8 +19,14 @@ func TestGoListResolvesPackageWithoutRunningInit(t *testing.T) {
 	root := t.TempDir()
 	marker := filepath.Join(root, "initialized")
 	module := "module example.test/list\n\ngo 1.26.0\n"
-	source := "package sample\nimport \"os\"\nfunc init(){ _ = os.WriteFile(" +
-		"`" + marker + "`, []byte(\"ran\"), 0600) }\n"
+	source := fmt.Sprintf(`package sample
+import "os"
+func init() {
+	if err := os.WriteFile(%q, []byte("ran"), 0600); err != nil {
+		panic(err)
+	}
+}
+`, marker)
 	if err := os.WriteFile(filepath.Join(root, "go.mod"), []byte(module), 0o600); err != nil {
 		t.Fatal(err)
 	}
