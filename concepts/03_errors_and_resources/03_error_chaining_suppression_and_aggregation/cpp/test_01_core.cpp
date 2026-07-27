@@ -74,7 +74,6 @@ TEST(ErrorChainingConcept, DestructorsCannotSuppressOrReturnAnErrorChain) {
   static_assert(std::is_nothrow_destructible_v<SafeCleanup>);
 
   // 栈展开期间析构再抛异常会 terminate；RAII 清理应 noexcept，并用其他通道记录清理失败。
-  SUCCEED();
 }
 
 }  // namespace

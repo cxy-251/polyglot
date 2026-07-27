@@ -111,7 +111,6 @@ TEST(ResourceCleanupConcept, NoThrowDestructorPreservesTheOriginalExceptionPath)
 
   // 析构函数没有 Python __exit__ 那样的异常参数或真假返回通道，不能决定抑制原异常。
   // 若栈展开直接调用的析构函数又让异常逃出，标准要求 std::terminate；这里不执行该危险路径。
-  SUCCEED();
 }
 
 }  // namespace

@@ -31,8 +31,6 @@ TEST(ContractsConcept, StaticAssertAndConceptsRejectInvalidPrograms) {
   static_assert(sizeof(char) == 1);
   static_assert(AddableToItself<int>);
   static_assert(!AddableToItself<std::exception>);
-
-  SUCCEED();
 }
 
 TEST(ContractsConcept, RuntimeValidationUsesTypedExceptions) {

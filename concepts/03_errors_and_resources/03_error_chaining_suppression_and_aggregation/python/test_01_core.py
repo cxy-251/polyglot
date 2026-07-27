@@ -8,7 +8,7 @@
 # polyglot-concept: error_chaining_suppression_and_aggregation
 # polyglot-related: languages/python/language/test_009_exception_handling_and_chaining.py
 
-import builtins
+import sys
 
 import pytest
 
@@ -68,7 +68,17 @@ def test_cleanup_failure_becomes_primary_and_keeps_body_as_context():
     assert isinstance(caught.value.__context__, ValueError)
 
 
-def test_python_310_has_no_builtin_exception_group():
-    assert not hasattr(builtins, "ExceptionGroup")
+def test_python_310_requires_an_explicit_container_for_multiple_failures():
+    class BatchError(RuntimeError):
+        def __init__(self, errors):
+            super().__init__("batch failed")
+            self.errors = tuple(errors)
 
-    # Python 3.11 才增加 ExceptionGroup；锁定的 3.10 需要领域容器或第三方方案表达多错误。
+    failures = [ValueError("first"), TypeError("second")]
+    aggregate = BatchError(failures)
+
+    assert sys.version_info[:2] == (3, 10)
+    assert aggregate.errors == tuple(failures)
+
+    # ExceptionGroup 从 Python 3.11 才成为内置协议；锁定的 3.10 只能定义领域容器，
+    # 且没有 except* 的选择性拆分语义。版本边界比探测虚构/缺失属性更直接。
