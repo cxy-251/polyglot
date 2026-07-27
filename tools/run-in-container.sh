@@ -11,6 +11,7 @@ Usage:
   ./tools/run-in-container.sh python [pytest arguments...]
   ./tools/run-in-container.sh cpp [ctest arguments...]
   ./tools/run-in-container.sh nodejs [node --test arguments or test files...]
+  ./tools/run-in-container.sh go [go test arguments...]
   ./tools/run-in-container.sh concept NN_family/NN_topic
   ./tools/run-in-container.sh family NN_family
   ./tools/run-in-container.sh concepts
@@ -66,6 +67,13 @@ doctor() {
   R --version | sed -n '1p'
   printf 'go: '
   go version
+  printf 'go env: '
+  go env GOOS GOARCH GOROOT GOWORK | paste -sd ' ' -
+  printf 'gofmt: '
+  command -v gofmt
+  printf 'go vet: '
+  go tool vet -help >/dev/null
+  echo available
   printf 'rustc: '
   rustc --version
   printf 'cargo: '
@@ -173,6 +181,42 @@ run_nodejs_files() {
       "${test_files[@]}"
 }
 
+check_go_version() {
+  need_cmd go
+  need_cmd gofmt
+
+  local expected_version="go1.26.5"
+  local actual_version
+  actual_version="$(go env GOVERSION)"
+  if [[ "$actual_version" != "$expected_version" ]]; then
+    echo "Go 版本不匹配: 需要 $expected_version，实际 $actual_version" >&2
+    echo "请在 ohdev 中运行 ./tools/bootstrap-language-toolchains-in-container.sh go。" >&2
+    exit 1
+  fi
+}
+
+run_go() {
+  check_go_version
+  printf '\n== Go vertical course ==\n'
+  (
+    cd languages/go
+    go test -count=1 "$@" ./...
+    go vet ./...
+  )
+}
+
+run_concept_go() {
+  local concept_name="$1"
+  if [[ -d "concepts/$concept_name/go" ]]; then
+    check_go_version
+    printf '\n== %s / Go ==\n' "$concept_name"
+    (
+      cd concepts
+      go test -count=1 "./$concept_name/go"
+    )
+  fi
+}
+
 validate_concept_name() {
   local concept_name="$1"
   if [[ ! "$concept_name" =~ ^[0-9]{2}_[a-z0-9_]+/[0-9]{2}_[a-z0-9_]+$ ]]; then
@@ -243,6 +287,7 @@ run_concept() {
   run_concept_python "$concept_name"
   run_concept_cpp "$concept_name"
   run_concept_nodejs "$concept_name"
+  run_concept_go "$concept_name"
 }
 
 validate_family_name() {
@@ -311,6 +356,19 @@ run_family() {
     printf '\n== %s / Node.js ==\n' "$family_name"
     run_nodejs_files "${nodejs_test_files[@]}"
   fi
+
+  if find "concepts/$family_name" \
+    -type f \
+    -path '*/go/test_[0-9][0-9]_*_test.go' \
+    -print \
+    -quit | grep -q .; then
+    check_go_version
+    printf '\n== %s / Go ==\n' "$family_name"
+    (
+      cd concepts
+      go test -count=1 "./$family_name/..."
+    )
+  fi
 }
 
 run_concepts() {
@@ -349,6 +407,20 @@ run_concepts() {
     printf '\n== all concepts / Node.js ==\n'
     run_nodejs_files "${nodejs_test_files[@]}"
   fi
+
+  if find concepts \
+    -type f \
+    -path '*/go/test_[0-9][0-9]_*_test.go' \
+    -print \
+    -quit | grep -q .; then
+    check_go_version
+    printf '\n== all concepts / Go ==\n'
+    (
+      cd concepts
+      go test -count=1 ./...
+      go vet ./...
+    )
+  fi
 }
 
 list_concepts() {
@@ -369,7 +441,7 @@ list_concepts() {
         continue
       fi
       language_counts=()
-      for language in python cpp nodejs; do
+      for language in python cpp nodejs go; do
         case "$language" in
           python)
             extension=py
@@ -380,6 +452,9 @@ list_concepts() {
           nodejs)
             extension=mjs
             ;;
+          go)
+            extension=go
+            ;;
         esac
         if [[ ! -d "$topic_directory/$language" ]]; then
           continue
@@ -388,7 +463,13 @@ list_concepts() {
           find "$topic_directory/$language" \
             -maxdepth 1 \
             -type f \
-            -name "test_[0-9][0-9]_*.${extension}" \
+            -name "$(
+              if [[ "$language" == go ]]; then
+                printf 'test_[0-9][0-9]_*_test.go'
+              else
+                printf 'test_[0-9][0-9]_*.%s' "$extension"
+              fi
+            )" \
             -print | wc -l | tr -d ' '
         )
         language_counts+=("$language:$count")
@@ -422,6 +503,10 @@ main() {
     nodejs|node|js)
       shift
       run_nodejs "$@"
+      ;;
+    go|golang)
+      shift
+      run_go "$@"
       ;;
     concept)
       shift

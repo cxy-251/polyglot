@@ -34,6 +34,12 @@ check_test_path() {
       ;;
     nodejs:languages/nodejs/npm_and_package_workflows/test_[0-9][0-9][0-9]_*.mjs)
       ;;
+    go:languages/go/language/*/test_[0-9][0-9][0-9]_*_test.go)
+      ;;
+    go:languages/go/standard_library/*/test_[0-9][0-9][0-9]_*_test.go)
+      ;;
+    go:languages/go/tooling_and_runtime/*/test_[0-9][0-9][0-9]_*_test.go)
+      ;;
     *)
       report_failure "$language 测试位于未声明路径: $path"
       ;;
@@ -47,6 +53,7 @@ check_test_path() {
 check_language() {
   local language="$1"
   local extension="$2"
+  local test_pattern="${3:-test_[0-9][0-9][0-9]_*.${extension}}"
   local -a files=()
   local path
   local filename
@@ -61,7 +68,7 @@ check_language() {
   done < <(
     find "languages/$language" \
       -type f \
-      -name "test_[0-9][0-9][0-9]_*.${extension}" \
+      -name "$test_pattern" \
       -print0 | sort -z
   )
 
@@ -127,6 +134,10 @@ check_concept_language() {
   local marker_count
   local child
   local child_name
+  local test_pattern="test_[0-9][0-9]_*.${extension}"
+  if [[ "$language" == go ]]; then
+    test_pattern='test_[0-9][0-9]_*_test.go'
+  fi
 
   while IFS= read -r -d '' path; do
     test_files+=("$path")
@@ -134,7 +145,7 @@ check_concept_language() {
     find "$language_directory" \
       -maxdepth 1 \
       -type f \
-      -name "test_[0-9][0-9]_*.${extension}" \
+      -name "$test_pattern" \
       -print0 | sort -z
   )
 
@@ -144,7 +155,11 @@ check_concept_language() {
   fi
 
   while IFS= read -r -d '' path; do
-    if [[ ! "$path" =~ /test_[0-9]{2}_[a-z0-9_]+[.]${extension}$ ]]; then
+    if [[ "$language" == go ]]; then
+      if [[ ! "$path" =~ /test_[0-9]{2}_[a-z0-9_]+_test[.]go$ ]]; then
+        report_failure "Go 概念测试必须使用 test_NN_name_test.go: $path"
+      fi
+    elif [[ ! "$path" =~ /test_[0-9]{2}_[a-z0-9_]+[.]${extension}$ ]]; then
       report_failure "概念测试必须使用 test_NN_name.${extension}: $path"
     fi
   done < <(
@@ -327,7 +342,7 @@ check_concepts() {
       expected_topic_index=$((expected_topic_index + 1))
 
       language_count=0
-      for language in python cpp nodejs; do
+      for language in python cpp nodejs go; do
         case "$language" in
           python)
             extension=py
@@ -338,10 +353,14 @@ check_concepts() {
           nodejs)
             extension=mjs
             ;;
+          go)
+            extension=go
+            ;;
         esac
 
         language_directory="$topic/$language"
         if [[ ! -d "$language_directory" ]]; then
+          report_failure "$topic 缺少 active language: $language"
           continue
         fi
 
@@ -354,8 +373,22 @@ check_concepts() {
           "$language_directory"
       done
 
-      if ((language_count < 2)); then
-        report_failure "$topic 只有 $language_count 门语言，不能构成跨语言主题"
+      if ((language_count != 4)); then
+        report_failure "$topic 需要 4 门 active language，实际为 $language_count"
+      fi
+
+      local python_stems
+      local go_stems
+      python_stems=$(
+        find "$topic/python" -maxdepth 1 -type f -name 'test_[0-9][0-9]_*.py' \
+          -exec basename {} .py \; | sort
+      )
+      go_stems=$(
+        find "$topic/go" -maxdepth 1 -type f -name 'test_[0-9][0-9]_*_test.go' \
+          -exec basename {} _test.go \; | sort
+      )
+      if [[ "$python_stems" != "$go_stems" ]]; then
+        report_failure "$topic 的 Go 子问题文件没有镜像既有测试结构"
       fi
 
       for child in "$topic"/*; do
@@ -364,7 +397,7 @@ check_concepts() {
         fi
         child_name="${child##*/}"
         case "$child_name" in
-          python|cpp|nodejs)
+          python|cpp|nodejs|go)
             ;;
           *)
             report_failure "$topic 包含未知语言目录: $child_name"
@@ -380,6 +413,49 @@ check_concepts() {
 
   if ((found_family == 0)); then
     report_failure "没有发现 NN_family 格式的概念章节"
+  fi
+}
+
+check_go_workspace() {
+  local required_file
+  for required_file in go.work languages/go/go.mod concepts/go.mod; do
+    if [[ ! -f "$required_file" ]]; then
+      report_failure "缺少 Go module/workspace 文件: $required_file"
+    fi
+  done
+
+  if ! command -v go >/dev/null 2>&1; then
+    report_failure "ohdev 中缺少 Go，无法验证 workspace"
+    return
+  fi
+  if [[ "$(go env GOVERSION)" != go1.26.5 ]]; then
+    report_failure "Go 工具链不是锁定的 go1.26.5"
+  fi
+  if ! go work edit -json >/dev/null; then
+    report_failure "go.work 无法被 Go 工具链解析"
+  fi
+  if ! (
+    cd languages/go
+    go mod edit -json >/dev/null
+  ); then
+    report_failure "languages/go/go.mod 无法被 Go 工具链解析"
+  fi
+  if ! (
+    cd concepts
+    go mod edit -json >/dev/null
+  ); then
+    report_failure "concepts/go.mod 无法被 Go 工具链解析"
+  fi
+
+  local unformatted
+  unformatted=$(
+    find languages/go concepts \
+      -type f \
+      -name '*.go' \
+      -print0 | xargs -0 gofmt -l
+  )
+  if [[ -n "$unformatted" ]]; then
+    report_failure "Go 文件未通过 gofmt: $unformatted"
   fi
 }
 
@@ -423,7 +499,9 @@ check_unicode_line_lengths() {
 check_language python py
 check_language cpp cpp
 check_language nodejs mjs
+check_language go go 'test_[0-9][0-9][0-9]_*_test.go'
 check_concepts
+check_go_workspace
 check_unicode_line_lengths
 
 if ((failure_count > 0)); then

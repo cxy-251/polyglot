@@ -95,8 +95,13 @@ linux_arm64_sha256 = "fe4789e92b1f33358680864bbe8704289e7bb5fc207d80623c308935bd
 linux_x64_archive = "https://go.dev/dl/go1.26.5.linux-amd64.tar.gz"
 linux_x64_sha256 = "5c2c3b16caefa1d968a94c1daca04a7ca301a496d9b086e17ad77bb81393f053"
 language_specification = "https://go.dev/ref/spec"
+memory_model = "https://go.dev/ref/mem"
+modules_reference = "https://go.dev/ref/mod"
+go_command = "https://pkg.go.dev/cmd/go@go1.26.5"
 standard_library = "https://pkg.go.dev/std@go1.26.5"
+effective_go = "https://go.dev/doc/effective_go"
 test_framework = "testing package bundled with Go 1.26.5"
+test_framework_docs = "https://pkg.go.dev/testing@go1.26.5"
 
 [rust]
 runtime = "Rust 1.97.1 stable, edition 2024"
