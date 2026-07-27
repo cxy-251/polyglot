@@ -6,7 +6,10 @@
 
 # polyglot-family: text_binary_and_serialization
 # polyglot-concept: serialization_clone_and_transfer
-# polyglot-related: languages/python/builtins/test_024_mapping_dict.py
+# polyglot-related: languages/python/stdlib/104-110_internet_data_handling/
+# polyglot-related+: test_104_json_complete_encoding_decoding_streaming_and_cli_workflows.py
+# polyglot-related: languages/python/stdlib/043-055_data_types/
+# polyglot-related+: test_054_copy_pprint_and_reprlib_object_graph_and_presentation_workflows.py
 
 import copy
 import json

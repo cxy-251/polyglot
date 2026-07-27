@@ -4,7 +4,8 @@
 //
 // polyglot-family: text_binary_and_serialization
 // polyglot-concept: regular_expressions_and_state
-// polyglot-related: languages/cpp/language/test_013_literals_character_encodings_and_user_defined_literals.cpp
+// polyglot-related: languages/cpp/standard_library/13_strings_and_text/
+// polyglot-related+: test_125_regex_grammars_matches_replacement_and_iterators.cpp
 
 #include <gtest/gtest.h>
 

@@ -39,12 +39,14 @@ TEST(BinaryBuffersConcept, SpanIsANonOwningSharedView) {
   EXPECT_EQ(view.data(), storage.data());
 }
 
-TEST(BinaryBuffersConcept, EndianReportsNativeObjectRepresentationOrder) {
-  static_assert(
+TEST(BinaryBuffersConcept, LockedAbiUsesARecognizedNativeEndianOrder) {
+  constexpr bool native_is_little_or_big =
       std::endian::native == std::endian::little ||
-      std::endian::native == std::endian::big);
+      std::endian::native == std::endian::big;
 
-  SUCCEED();
+  EXPECT_TRUE(native_is_little_or_big);
+
+  // C++ 允许 mixed-endian 实现，此处只记录 ohdev ABI。协议字节序仍须逐字段明确编码。
 }
 
 TEST(BinaryBuffersConcept, NetworkOrderMustBeEncodedExplicitly) {

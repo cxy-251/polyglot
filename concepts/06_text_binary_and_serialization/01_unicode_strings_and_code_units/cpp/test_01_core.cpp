@@ -4,7 +4,10 @@
 //
 // polyglot-family: text_binary_and_serialization
 // polyglot-concept: unicode_strings_and_code_units
-// polyglot-related: languages/cpp/language/test_013_literals_character_encodings_and_user_defined_literals.cpp
+// polyglot-related: languages/cpp/standard_library/13_strings_and_text/
+// polyglot-related+: test_117_character_traits_and_encoding_code_units.cpp
+// polyglot-related: languages/cpp/standard_library/13_strings_and_text/
+// polyglot-related+: test_124_wide_multibyte_and_unicode_code_unit_conversions.cpp
 
 #include <gtest/gtest.h>
 

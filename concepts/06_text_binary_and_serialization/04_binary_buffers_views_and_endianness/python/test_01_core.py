@@ -7,6 +7,7 @@
 # polyglot-family: text_binary_and_serialization
 # polyglot-concept: binary_buffers_views_and_endianness
 # polyglot-related: languages/python/builtins/test_022_binary_sequences.py
+# polyglot-related: languages/python/stdlib/041-042_binary_data/test_041_struct_binary_layouts.py
 
 import struct
 
@@ -24,7 +25,7 @@ def test_bytes_is_immutable_and_bytearray_is_mutable():
     assert mutable == bytearray(b"zbc")
 
 
-def test_memoryview_shares_the_exporters_storage():
+def test_memoryview_shares_the_exporter_storage():
     storage = bytearray(b"abc")
     view = memoryview(storage)[1:]
 

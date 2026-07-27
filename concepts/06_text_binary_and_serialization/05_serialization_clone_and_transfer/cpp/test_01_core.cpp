@@ -5,6 +5,7 @@
 // polyglot-family: text_binary_and_serialization
 // polyglot-concept: serialization_clone_and_transfer
 // polyglot-related: languages/cpp/language/test_008_classes_construction_and_special_members.cpp
+// polyglot-related: languages/cpp/language/test_017_object_representation_alignment_and_bit_cast.cpp
 
 #include <gtest/gtest.h>
 

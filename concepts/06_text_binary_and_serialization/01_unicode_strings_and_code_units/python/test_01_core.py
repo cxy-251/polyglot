@@ -7,6 +7,8 @@
 # polyglot-family: text_binary_and_serialization
 # polyglot-concept: unicode_strings_and_code_units
 # polyglot-related: languages/python/builtins/test_021_text_sequence_str.py
+# polyglot-related: languages/python/stdlib/036-040_text_processing/test_037_string_textwrap_unicodedata.py
+# polyglot-related: languages/python/stdlib/041-042_binary_data/test_042_codecs_registry_and_streams.py
 
 import unicodedata
 
