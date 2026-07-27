@@ -42,7 +42,7 @@ Python、C++、Node.js、Go 的双轴课程已经完成，没有待实现 topic�
 3. 默认 `./tools/run.sh doctor` 只强制检查 active language；`doctor planned` 额外报告
    Julia、R、Rust，不把规划语言变成当前工程依赖。
 4. `./tools/run.sh go` 固定使用 `-count=1` 并执行 `go vet`；concept、family 和 concepts
-   命令会自动包含 Go。
+   命令统一遍历 `ACTIVE_LANGUAGES`，缺少对应语言运行器时立即失败。
 5. active language 新增后必须先建立完整纵向课程，再覆盖现有全部 topic，并指向本语言
    纵向课程。
 6. 当前 `content_review_complete` 为 true；终审表示四语言共同问题已经统一复核，不表示

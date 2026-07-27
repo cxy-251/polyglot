@@ -20,6 +20,6 @@ func (value masked) Format(state fmt.State, verb rune) {
 
 func TestFormattingInterfacesOverrideDefaultPresentation(t *testing.T) {
 	if fmt.Sprint(point{2, 3}) != "(2,3)" || fmt.Sprintf("%v", masked("secret")) != "<v:6>" {
-		t.Fatal("Stringer 提供普通文本；Formatter 可观察 verb、flag、宽度和 precision")
+		t.Fatal("Stringer 提供普通文本；Formatter 接收 verb 并自定义输出")
 	}
 }

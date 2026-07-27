@@ -340,11 +340,11 @@ run_concept_nodejs() {
 
 run_concept() {
   local concept_name="${1:-}"
+  local language
   validate_concept_name "$concept_name"
-  run_concept_python "$concept_name"
-  run_concept_cpp "$concept_name"
-  run_concept_nodejs "$concept_name"
-  run_concept_go "$concept_name"
+  for language in "${ACTIVE_LANGUAGES[@]}"; do
+    run_concept_language "$language" "$concept_name"
+  done
 }
 
 validate_family_name() {
@@ -359,36 +359,13 @@ validate_family_name() {
   fi
 }
 
-run_family() {
-  local family_name="${1:-}"
+run_family_python() {
+  local family_name="$1"
   local -a python_test_files=()
-  local -a nodejs_test_files=()
-  local topic_directory
-  local topic_count=0
-  validate_family_name "$family_name"
-
-  for topic_directory in "concepts/$family_name"/[0-9][0-9]_*; do
-    if [[ ! -d "$topic_directory" ]]; then
-      continue
-    fi
-    topic_count=$((topic_count + 1))
-  done
-
-  if ((topic_count == 0)); then
-    echo "概念章节没有发现主题: concepts/$family_name" >&2
-    exit 1
-  fi
-
   mapfile -d '' python_test_files < <(
     find "concepts/$family_name" \
       -type f \
       -path '*/python/test_[0-9][0-9]_*.py' \
-      -print0 | sort -z
-  )
-  mapfile -d '' nodejs_test_files < <(
-    find "concepts/$family_name" \
-      -type f \
-      -path '*/nodejs/test_[0-9][0-9]_*.mjs' \
       -print0 | sort -z
   )
 
@@ -397,7 +374,10 @@ run_family() {
     printf '\n== %s / Python ==\n' "$family_name"
     python3 -m pytest --import-mode=importlib "${python_test_files[@]}"
   fi
+}
 
+run_family_cpp() {
+  local family_name="$1"
   if find "concepts/$family_name" \
     -type f \
     -path '*/cpp/test_[0-9][0-9]_*.cpp' \
@@ -408,12 +388,25 @@ run_family() {
     run_cpp_layer concepts "$build_dir" '^polyglot-concept$' \
       -R "^concept_${family_name}_"
   fi
+}
 
+run_family_nodejs() {
+  local family_name="$1"
+  local -a nodejs_test_files=()
+  mapfile -d '' nodejs_test_files < <(
+    find "concepts/$family_name" \
+      -type f \
+      -path '*/nodejs/test_[0-9][0-9]_*.mjs' \
+      -print0 | sort -z
+  )
   if [[ ${#nodejs_test_files[@]} -gt 0 ]]; then
     printf '\n== %s / Node.js ==\n' "$family_name"
     run_nodejs_files "${nodejs_test_files[@]}"
   fi
+}
 
+run_family_go() {
+  local family_name="$1"
   if find "concepts/$family_name" \
     -type f \
     -path '*/go/test_[0-9][0-9]_*_test.go' \
@@ -428,19 +421,12 @@ run_family() {
   fi
 }
 
-run_concepts() {
+run_all_concepts_python() {
   local -a python_test_files=()
-  local -a nodejs_test_files=()
   mapfile -d '' python_test_files < <(
     find concepts \
       -type f \
       -path '*/python/test_[0-9][0-9]_*.py' \
-      -print0 | sort -z
-  )
-  mapfile -d '' nodejs_test_files < <(
-    find concepts \
-      -type f \
-      -path '*/nodejs/test_[0-9][0-9]_*.mjs' \
       -print0 | sort -z
   )
 
@@ -449,7 +435,9 @@ run_concepts() {
     printf '\n== all concepts / Python ==\n'
     python3 -m pytest --import-mode=importlib "${python_test_files[@]}"
   fi
+}
 
+run_all_concepts_cpp() {
   if find concepts \
     -type f \
     -path '*/cpp/test_[0-9][0-9]_*.cpp' \
@@ -459,12 +447,23 @@ run_concepts() {
     local build_dir="${POLYGLOT_CPP_CONCEPT_BUILD_DIR:-/tmp/polyglot-cpp-concepts-build}"
     run_cpp_layer concepts "$build_dir" '^polyglot-concept$'
   fi
+}
 
+run_all_concepts_nodejs() {
+  local -a nodejs_test_files=()
+  mapfile -d '' nodejs_test_files < <(
+    find concepts \
+      -type f \
+      -path '*/nodejs/test_[0-9][0-9]_*.mjs' \
+      -print0 | sort -z
+  )
   if [[ ${#nodejs_test_files[@]} -gt 0 ]]; then
     printf '\n== all concepts / Node.js ==\n'
     run_nodejs_files "${nodejs_test_files[@]}"
   fi
+}
 
+run_all_concepts_go() {
   if find concepts \
     -type f \
     -path '*/go/test_[0-9][0-9]_*_test.go' \
@@ -478,6 +477,61 @@ run_concepts() {
       go vet ./...
     )
   fi
+}
+
+run_concept_language() {
+  run_concept_scope_for_language concept "$1" "$2"
+}
+
+run_family_language() {
+  run_concept_scope_for_language family "$1" "$2"
+}
+
+run_all_concepts_language() {
+  run_concept_scope_for_language all_concepts "$1"
+}
+
+run_concept_scope_for_language() {
+  local scope="$1"
+  local language="$2"
+  shift 2
+  local runner="run_${scope}_${language}"
+  if ! declare -F "$runner" >/dev/null; then
+    echo "active language 缺少 ${scope} 横向运行器: $language" >&2
+    exit 1
+  fi
+  "$runner" "$@"
+}
+
+run_family() {
+  local family_name="${1:-}"
+  local topic_directory
+  local topic_count=0
+  local language
+  validate_family_name "$family_name"
+
+  for topic_directory in "concepts/$family_name"/[0-9][0-9]_*; do
+    if [[ ! -d "$topic_directory" ]]; then
+      continue
+    fi
+    topic_count=$((topic_count + 1))
+  done
+
+  if ((topic_count == 0)); then
+    echo "概念章节没有发现主题: concepts/$family_name" >&2
+    exit 1
+  fi
+
+  for language in "${ACTIVE_LANGUAGES[@]}"; do
+    run_family_language "$language" "$family_name"
+  done
+}
+
+run_concepts() {
+  local language
+  for language in "${ACTIVE_LANGUAGES[@]}"; do
+    run_all_concepts_language "$language"
+  done
 }
 
 list_concepts() {

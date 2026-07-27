@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-func TestNetPipeExercisesFullDuplexConnectionWithoutRealNetwork(t *testing.T) {
+func TestNetPipeProvidesInMemoryConnectionWithoutRealNetwork(t *testing.T) {
 	client, server := net.Pipe()
 	t.Cleanup(func() {
 		if err := client.Close(); err != nil {
@@ -29,7 +29,7 @@ func TestNetPipeExercisesFullDuplexConnectionWithoutRealNetwork(t *testing.T) {
 	}()
 	payload, err := io.ReadAll(client)
 	if err != nil || string(payload) != "reply" {
-		t.Fatalf("net.Conn 同时实现 Reader、Writer、deadlines 与 Close: %q %v", payload, err)
+		t.Fatalf("net.Pipe 可在不监听真实网络端口时传输字节: %q %v", payload, err)
 	}
 	if err := <-serverResult; err != nil {
 		t.Fatalf("server write/close: %v", err)
