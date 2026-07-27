@@ -8,15 +8,18 @@
 package initialization_caching_cycles_and_dynamic_loading
 
 import (
-	"net/http"
+	"slices"
 	"testing"
+
+	"polyglot.local/c/07_modules_packages_and_loading/03_initialization_caching_cycles_and_dynamic_loading/go/support/init"
 )
 
-func TestImportedPackageInstanceIsInitializedOnce(t *testing.T) {
-	first := http.DefaultClient
-	second := http.DefaultClient
-	if first != second {
-		t.Fatal("重复读取同一 import path 的导出变量观察同一 package 实例")
+func TestPackageVariablesAndInitRunOncePerPackageInstance(t *testing.T) {
+	first := initstate.Events
+	second := initstate.Events
+	expected := []string{"variable", "init"}
+	if !slices.Equal(first, expected) || !slices.Equal(second, expected) {
+		t.Fatalf("package variable 先初始化，init 随后执行，多个 selector 不会重复初始化: %v %v", first, second)
 	}
-	// package variable 先按依赖初始化，再运行该 package 的 init；import cycle 在执行前被拒绝。
+	// 同一 import path 在程序中只有一个 package 实例；import cycle 在初始化前被构建器拒绝。
 }

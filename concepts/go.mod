@@ -1,4 +1,4 @@
-module polyglot.local/concepts
+module polyglot.local/c
 
 go 1.26.0
 

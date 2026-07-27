@@ -12,7 +12,7 @@ import (
 	"testing"
 )
 
-func TestGoroutinesShareHeapAndSchedulerChoosesThreads(t *testing.T) {
+func TestGoroutinesShareHeapWithoutProcessIsolation(t *testing.T) {
 	shared := make(chan *int, 1)
 	value := 7
 	go func() { shared <- &value }()
@@ -23,5 +23,6 @@ func TestGoroutinesShareHeapAndSchedulerChoosesThreads(t *testing.T) {
 	}
 	runtime.LockOSThread()
 	runtime.UnlockOSThread()
-	// LockOSThread 只用于线程亲和 API，不把 goroutine 变成内存隔离 worker。
+	// runtime 把 goroutine 调度到 OS threads，但该映射没有普通业务测试可依赖的稳定身份关系。
+	// LockOSThread 只服务线程亲和 API，不把 goroutine 变成内存隔离 worker。
 }

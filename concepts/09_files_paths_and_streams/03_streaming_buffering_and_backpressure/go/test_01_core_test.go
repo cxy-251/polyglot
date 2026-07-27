@@ -10,32 +10,50 @@ package streaming_buffering_and_backpressure
 import (
 	"bufio"
 	"bytes"
+	"fmt"
 	"io"
 	"testing"
 )
 
 func TestPipeAndBufferedWriterExposeExplicitFlushBoundaries(t *testing.T) {
 	reader, writer := io.Pipe()
-	written := make(chan struct{})
+	writeResult := make(chan error, 1)
 	go func() {
-		_, _ = writer.Write([]byte("payload"))
-		close(written)
-		_ = writer.Close()
+		count, err := writer.Write([]byte("payload"))
+		if err == nil && count != len("payload") {
+			err = fmt.Errorf("io.PipeWriter short write: %d", count)
+		}
+		writeResult <- err
 	}()
+
+	first := make([]byte, 1)
+	if count, err := reader.Read(first); err != nil || count != 1 || string(first) != "p" {
+		t.Fatalf("reader 先取得 writer 提供的首个 byte: %d %q %v", count, first, err)
+	}
 	select {
-	case <-written:
-		t.Fatal("io.Pipe 没有内部 buffer，Write 应等待 Read")
+	case err := <-writeResult:
+		t.Fatalf("io.PipeWriter 不应在剩余 byte 被读取前完成: %v", err)
 	default:
 	}
-	payload, err := io.ReadAll(reader)
-	if err != nil || string(payload) != "payload" {
-		t.Fatalf("reader 消费后 writer 才完成: %q %v", payload, err)
+	remaining := make([]byte, len("payload")-1)
+	if _, err := io.ReadFull(reader, remaining); err != nil || string(remaining) != "ayload" {
+		t.Fatalf("reader 消费剩余 byte 后 writer 才能完成: %q %v", remaining, err)
 	}
-	<-written
+	if err := <-writeResult; err != nil {
+		t.Fatal(err)
+	}
+	if err := writer.Close(); err != nil {
+		t.Fatal(err)
+	}
+	if err := reader.Close(); err != nil {
+		t.Fatal(err)
+	}
 
 	var destination bytes.Buffer
 	buffered := bufio.NewWriter(&destination)
-	_, _ = buffered.WriteString("queued")
+	if count, err := buffered.WriteString("queued"); err != nil || count != len("queued") {
+		t.Fatalf("buffered writer 接收完整输入并报告进度: %d %v", count, err)
+	}
 	if destination.Len() != 0 {
 		t.Fatal("缓冲写入在 Flush 前不一定到达下游")
 	}

@@ -15,7 +15,7 @@ import (
 
 func TestBuildInfoReportsResolvedMainModule(t *testing.T) {
 	info, ok := debug.ReadBuildInfo()
-	if !ok || info.Main.Path != "polyglot.local/concepts" {
+	if !ok || info.Main.Path != "polyglot.local/c" {
 		t.Fatalf("当前 package 由 concepts/go.mod 的 module path 定位: %+v", info)
 	}
 	if strings.Contains(info.Main.Path, "/v1") {

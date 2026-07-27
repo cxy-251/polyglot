@@ -9,7 +9,7 @@ package scheduling_tasks_microtasks_and_futures
 
 import "testing"
 
-func TestSelectDoesNotPrioritizeSourceOrder(t *testing.T) {
+func TestSelectAllowsAnyReadyCase(t *testing.T) {
 	first := make(chan int, 1)
 	second := make(chan int, 1)
 	first <- 1
@@ -22,5 +22,5 @@ func TestSelectDoesNotPrioritizeSourceOrder(t *testing.T) {
 	if selected != 1 && selected != 2 {
 		t.Fatalf("两个 case 均已就绪，任一都合法: %d", selected)
 	}
-	// 公平性不等于可预测顺序；测试不应统计某次运行的选择比例。
+	// 规范从可继续执行的 case 中伪随机选择一个；单次测试不证明长期公平性或实现分布。
 }
