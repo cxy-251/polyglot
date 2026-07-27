@@ -3,9 +3,12 @@
   "project": "polyglot-concepts-by-example",
   "mission": "Compare how languages solve shared problems through readable, executable tests.",
   "architecture": "dual-axis",
-  "phase": "cross-language-concept-curriculum-complete",
+  "phase": "cross-language-concept-curriculum-reviewed",
   "current_milestone": null,
   "concept_curriculum_complete": true,
+  "content_review_complete": true,
+  "reviewed_topic_count": 49,
+  "reviewed_language_implementation_count": 147,
   "continuation_source": "NEXT.md",
   "source_lock": "sources.lock",
   "legacy_tip": "662e0d1",
@@ -41,6 +44,7 @@
       "test_pattern": "test_NN_name",
       "family_count": 10,
       "topic_count": 49,
+      "multi_file_topic_count": 24,
       "fixed_topic_total": false,
       "precreate_empty_families": false,
       "allow_multiple_test_files_per_language": true,
@@ -50,16 +54,16 @@
       "list": "./tools/run.sh list-concepts",
       "verified_results": {
         "python": {
-          "test_files": 49,
-          "passed": 199
+          "test_files": 73,
+          "passed": 252
         },
         "cpp": {
-          "test_files": 49,
-          "passed": 200
+          "test_files": 73,
+          "passed": 249
         },
         "nodejs": {
-          "test_files": 49,
-          "passed": 196
+          "test_files": 73,
+          "passed": 255
         }
       }
     }

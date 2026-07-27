@@ -4,12 +4,15 @@ Status: `complete`
 
 ## Current state
 
-Python、C++、Node.js 的横向概念课程已经完成，没有待实现的 topic：
+Python、C++、Node.js 的 49 个横向主题已经完成文件级内容终审与深化，没有待实现的
+topic：
 
 - 10 个连续 family；
-- 49 个真实横向 topic；
+- 49 个完成共同问题、断言、版本语义、失败路径与迁移陷阱复核的横向 topic；
 - 每个 topic 均包含 Python、C++、Node.js；
-- 每门语言 49 个 `test_NN_name` 概念测试入口；
+- 24 个高复杂度 topic 使用多个连续编号测试文件；
+- 每门语言 73 个 `test_NN_name` 概念测试入口；
+- 9 个已知正确性问题及终审中新发现的问题均已修复；
 - `languages/` 纵向课程未被迁移、拆分或混入横向验证。
 
 本文件当前不指定新的实现任务。不要自动开始 Julia、R、Go、Rust，不要为了继续生产而
@@ -20,9 +23,9 @@ Python、C++、Node.js 的横向概念课程已经完成，没有待实现的 to
 
 横向课程：
 
-- `./tools/run.sh concepts`：Python `199 passed`、C++ `200 passed`、
-  Node.js `196 passed`；
-- `./tools/run.sh list-concepts`：10 个 family、49 个 topic，每个语言各 49 个测试文件；
+- `./tools/run.sh concepts`：Python `252 passed`、C++ `249 passed`、
+  Node.js `255 passed`；
+- `./tools/run.sh list-concepts`：10 个 family、49 个 topic，每个语言各 73 个测试文件；
 - 01–10 每个 family 的独立验证均通过；
 - `./tools/run.sh check` 与 `git diff --check` 均通过。
 
@@ -40,4 +43,7 @@ Python、C++、Node.js 的横向概念课程已经完成，没有待实现的 to
 3. 主题允许多个连续编号测试文件以及必要的 `fixtures/`、`support/`；C++ 同主题
    `support/*.cpp` 会自动链接。
 4. `polyglot-related+` 只用于续接过长的课程文件名，与前一行共同构成真实路径。
-5. 后续优先深化现有 49 个 topic；新增 family 或接入新语言必须由用户重新确定范围。
+5. 当前 `content_review_complete` 为 true；终审表示现有内容已统一复核，不表示穷举未来
+   语言版本的所有能力。
+6. 后续优先维护现有 49 个 topic；新增 family、topic 或接入新语言必须由用户重新确定
+   范围。
