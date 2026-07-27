@@ -4,7 +4,8 @@
 //
 // polyglot-family: collections_and_iteration
 // polyglot-concept: sorting_stability_and_custom_order
-// polyglot-related: languages/cpp/language/test_010_operator_overloading_conversions_and_spaceship.cpp
+// polyglot-related: languages/cpp/standard_library/10_algorithms/
+// polyglot-related+: test_094_sort_stability_partial_sort_nth_element_and_order_checks.cpp
 
 #include <gtest/gtest.h>
 

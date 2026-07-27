@@ -5,6 +5,8 @@
 // polyglot-family: collections_and_iteration
 // polyglot-concept: generators_laziness_and_early_termination
 // polyglot-related: languages/cpp/language/test_021_coroutines_promise_awaiter_and_generator.cpp
+// polyglot-related: languages/cpp/standard_library/09_ranges/
+// polyglot-related+: test_084_filter_and_transform_views_lazy_evaluation_references_and_categories.cpp
 
 #include <gtest/gtest.h>
 

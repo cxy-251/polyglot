@@ -4,7 +4,10 @@
 //
 // polyglot-family: collections_and_iteration
 // polyglot-concept: sequence_mutation_and_invalidation
-// polyglot-related: languages/cpp/language/test_011_object_lifetime_references_and_storage_reuse.cpp
+// polyglot-related: languages/cpp/standard_library/07_containers/
+// polyglot-related+: test_064_vector_storage_capacity_insertion_erasure_and_invalidation.cpp
+// polyglot-related: languages/cpp/standard_library/07_containers/
+// polyglot-related+: test_067_list_and_forward_list_node_stability_splice_and_member_algorithms.cpp
 
 #include <gtest/gtest.h>
 

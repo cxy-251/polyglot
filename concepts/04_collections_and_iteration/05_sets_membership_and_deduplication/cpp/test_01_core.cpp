@@ -4,7 +4,10 @@
 //
 // polyglot-family: collections_and_iteration
 // polyglot-concept: sets_membership_and_deduplication
-// polyglot-related: languages/cpp/language/test_010_operator_overloading_conversions_and_spaceship.cpp
+// polyglot-related: languages/cpp/standard_library/07_containers/
+// polyglot-related+: test_069_unordered_associative_hash_policy_buckets_invalidation_and_multi_keys.cpp
+// polyglot-related: languages/cpp/standard_library/10_algorithms/
+// polyglot-related+: test_096_merge_inplace_merge_includes_and_sorted_set_algorithms.cpp
 
 #include <gtest/gtest.h>
 

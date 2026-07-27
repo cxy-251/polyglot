@@ -4,7 +4,10 @@
 //
 // polyglot-family: collections_and_iteration
 // polyglot-concept: indexing_slicing_and_bounds
-// polyglot-related: languages/cpp/language/test_003_expression_value_categories_and_conversions.cpp
+// polyglot-related: languages/cpp/standard_library/07_containers/
+// polyglot-related+: test_063_array_and_span_fixed_storage_non_owning_views_and_bytes.cpp
+// polyglot-related: languages/cpp/standard_library/07_containers/
+// polyglot-related+: test_064_vector_storage_capacity_insertion_erasure_and_invalidation.cpp
 
 #include <gtest/gtest.h>
 

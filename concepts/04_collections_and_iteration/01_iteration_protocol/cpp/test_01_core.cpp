@@ -4,7 +4,10 @@
 //
 // polyglot-family: collections_and_iteration
 // polyglot-concept: iteration_protocol
-// polyglot-related: languages/cpp/language/test_005_statements_control_flow_and_range_for.cpp
+// polyglot-related: languages/cpp/standard_library/08_iterators/
+// polyglot-related+: test_071_iterator_traits_concepts_indirect_access_and_customization_points.cpp
+// polyglot-related: languages/cpp/standard_library/08_iterators/
+// polyglot-related+: test_076_common_counted_default_and_unreachable_sentinel_adaptors.cpp
 
 #include <gtest/gtest.h>
 
