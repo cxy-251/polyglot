@@ -13,6 +13,12 @@
 
 namespace {
 
+#if __has_include(<concepts>)
+constexpr bool kConceptsHeaderIsResolvable = true;
+#else
+constexpr bool kConceptsHeaderIsResolvable = false;
+#endif
+
 namespace library {
 
 class Service {
@@ -49,8 +55,9 @@ TEST(PackageVisibilityConcept, ClassAccessControlEnforcesPrivateState) {
 }
 
 TEST(PackageVisibilityConcept, HeaderSearchAndLibraryResolutionAreBuildConcerns) {
+  EXPECT_TRUE(kConceptsHeaderIsResolvable);
+
   // C++20 标准定义 translation unit、linkage 和 modules，不定义 Python/npm 式包仓库解析。
-  SUCCEED();
 }
 
 TEST(PackageVisibilityConcept, IncludePathDoesNotCreateARuntimePackageObject) {

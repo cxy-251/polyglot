@@ -13,6 +13,7 @@
 
 namespace {
 
+template <typename Tag>
 int initialize_once(std::vector<std::string>& events) {
   static int value = [&events] {
     events.push_back("initialize");
@@ -22,27 +23,41 @@ int initialize_once(std::vector<std::string>& events) {
 }
 
 TEST(ModuleInitializationConcept, FunctionLocalStaticInitializesOnce) {
+  struct CoreInitialization;
   std::vector<std::string> events;
 
-  EXPECT_EQ(initialize_once(events), 42);
-  EXPECT_EQ(initialize_once(events), 42);
+  EXPECT_EQ(initialize_once<CoreInitialization>(events), 42);
+  EXPECT_EQ(initialize_once<CoreInitialization>(events), 42);
   EXPECT_EQ(events, (std::vector<std::string>{"initialize"}));
 }
 
 TEST(ModuleInitializationConcept, StaticInitializationOrderAcrossUnitsNeedsCare) {
+  std::vector<std::string> events;
+  auto dependency = [&events] {
+    static const int value = [&events] {
+      events.push_back("dependency");
+      return 7;
+    }();
+    return value;
+  };
+
+  EXPECT_EQ(dependency(), 7);
+  EXPECT_EQ(dependency(), 7);
+  EXPECT_EQ(events, (std::vector<std::string>{"dependency"}));
+
   // 同一 translation unit 内按定义顺序初始化；跨 translation unit 的动态初始化顺序
   // 可能未指定。函数局部 static 可把依赖推迟到首次调用。
-  SUCCEED();
 }
 
 TEST(ModuleInitializationConcept, HeaderGuardsPreventTextualRedefinitionOnly) {
-  // include guard/pragma once 不建立 Python/Node 模块缓存；链接仍受 ODR 约束。
-  SUCCEED();
-}
+  struct HeaderInitialization;
+  std::vector<std::string> events;
 
-TEST(ModuleInitializationConcept, StandardCppHasNoRuntimeImportByString) {
-  // shared-library loading 属于平台 API；C++20 module import 在编译期解析，不能等同 dynamic import。
-  SUCCEED();
+  static_assert(__cplusplus >= 202002L);
+  EXPECT_EQ(initialize_once<HeaderInitialization>(events), 42);
+  EXPECT_EQ(events, (std::vector<std::string>{"initialize"}));
+
+  // include guard/pragma once 不建立 Python/Node 模块缓存；链接仍受 ODR 约束。
 }
 
 }  // namespace

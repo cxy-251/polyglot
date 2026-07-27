@@ -17,4 +17,8 @@ int initialization_count() {
   return count;
 }
 
+int* inline_value_address_from_other_unit() {
+  return &inline_value;
+}
+
 }  // namespace module_fixture

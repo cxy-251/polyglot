@@ -9,20 +9,22 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 
-test('相同 URL 的 dynamic import 复用模块记录', async () => {
+test('相同 URL 的 dynamic import 复用模块记录', async (t) => {
   const source = [
     'globalThis.__polyglotRuns=(globalThis.__polyglotRuns??0)+1;',
     'export const run=globalThis.__polyglotRuns;',
   ].join('');
   const url = `data:text/javascript,${source}`;
   delete globalThis.__polyglotRuns;
+  t.after(() => {
+    delete globalThis.__polyglotRuns;
+  });
 
   const first = await import(url);
   const second = await import(url);
 
   assert.equal(first, second);
   assert.equal(first.run, 1);
-  delete globalThis.__polyglotRuns;
 });
 
 test('查询参数形成不同缓存键', async () => {

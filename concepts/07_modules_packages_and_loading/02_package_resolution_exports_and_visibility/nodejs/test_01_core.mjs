@@ -7,7 +7,7 @@
 // polyglot-related: languages/nodejs/language/test_029_esm_live_bindings_namespace_dynamic_import_and_metadata.mjs
 
 import assert from 'node:assert/strict';
-import { mkdir, mkdtemp, writeFile } from 'node:fs/promises';
+import { mkdir, mkdtemp, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
@@ -15,6 +15,7 @@ import test from 'node:test';
 
 test('package exports 只公开声明的入口和子路径', async (t) => {
   const root = await mkdtemp(join(tmpdir(), 'polyglot-package-'));
+  t.after(() => rm(root, { recursive: true, force: true }));
   await mkdir(join(root, 'node_modules', 'demo'), { recursive: true });
   const packageRoot = join(root, 'node_modules', 'demo');
   await writeFile(join(packageRoot, 'package.json'), JSON.stringify({
@@ -34,10 +35,6 @@ test('package exports 只公开声明的入口和子路径', async (t) => {
   const privateEntry = join(root, 'private-entry.mjs');
   await writeFile(privateEntry, "import 'demo/private.mjs';\n");
   await assert.rejects(import(pathToFileURL(privateEntry)), { code: 'ERR_PACKAGE_PATH_NOT_EXPORTED' });
-  t.after(async () => {
-    const { rm } = await import('node:fs/promises');
-    await rm(root, { recursive: true, force: true });
-  });
 });
 
 test('相对说明符以当前模块 URL 为基准', () => {

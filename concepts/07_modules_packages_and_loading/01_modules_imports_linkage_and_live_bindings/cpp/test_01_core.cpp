@@ -13,6 +13,8 @@
 namespace {
 
 TEST(ModulesLinkageConcept, HeaderDeclarationRefersToOneExternDefinition) {
+  module_fixture::shared_value = 3;
+
   EXPECT_EQ(module_fixture::shared_value, 3);
   EXPECT_EQ(module_fixture::read_shared(), 3);
 
@@ -26,8 +28,10 @@ TEST(ModulesLinkageConcept, NamespaceQualifiesNamesAcrossTranslationUnits) {
 }
 
 TEST(ModulesLinkageConcept, IncludeIsTextualWhileLinkageJoinsDefinitions) {
+  static_assert(module_fixture::doubled(3) == 6);
+  EXPECT_EQ(&module_fixture::inline_value, module_fixture::inline_value_address_from_other_unit());
+
   // 头文件提供声明和 inline 定义；support .cpp 提供一次外部定义并只链接到本主题目标。
-  SUCCEED();
 }
 
 TEST(ModulesLinkageConcept, ExternalNameIsNotAJavaScriptStyleLiveBinding) {

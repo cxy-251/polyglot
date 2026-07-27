@@ -12,6 +12,8 @@ import importlib
 import importlib.util
 import sys
 
+import pytest
+
 
 def make_package(tmp_path):
     package = tmp_path / "demo"
@@ -21,17 +23,25 @@ def make_package(tmp_path):
         encoding="utf-8",
     )
     (package / "core.py").write_text(
-        "public = 1\n_private = 2\n",
+        "from .sibling import sibling\npublic = 1\n_private = 2\n",
         encoding="utf-8",
     )
+    (package / "sibling.py").write_text("sibling = 3\n", encoding="utf-8")
 
 
 def clear_package():
-    for name in ["demo", "demo.core"]:
+    for name in ["demo", "demo.core", "demo.sibling"]:
         sys.modules.pop(name, None)
 
 
-def test_package_name_resolves_through_sys_path(tmp_path, monkeypatch):
+@pytest.fixture
+def clean_demo_package():
+    clear_package()
+    yield
+    clear_package()
+
+
+def test_package_name_resolves_through_sys_path(tmp_path, monkeypatch, clean_demo_package):
     make_package(tmp_path)
     monkeypatch.syspath_prepend(str(tmp_path))
 
@@ -39,10 +49,9 @@ def test_package_name_resolves_through_sys_path(tmp_path, monkeypatch):
 
     assert spec is not None
     assert spec.submodule_search_locations is not None
-    clear_package()
 
 
-def test_package_init_can_reexport_a_public_api(tmp_path, monkeypatch):
+def test_package_init_can_reexport_a_public_api(tmp_path, monkeypatch, clean_demo_package):
     make_package(tmp_path)
     monkeypatch.syspath_prepend(str(tmp_path))
 
@@ -50,10 +59,9 @@ def test_package_init_can_reexport_a_public_api(tmp_path, monkeypatch):
 
     assert package.public == 1
     assert package.__all__ == ["public"]
-    clear_package()
 
 
-def test_relative_import_uses_the_containing_package(tmp_path, monkeypatch):
+def test_relative_import_uses_the_containing_package(tmp_path, monkeypatch, clean_demo_package):
     make_package(tmp_path)
     monkeypatch.syspath_prepend(str(tmp_path))
 
@@ -61,14 +69,17 @@ def test_relative_import_uses_the_containing_package(tmp_path, monkeypatch):
 
     assert core.__package__ == "demo"
     assert core.public == 1
-    clear_package()
+    assert core.sibling == 3
 
 
-def test_underscore_is_a_visibility_convention_not_access_control(tmp_path, monkeypatch):
+def test_underscore_is_a_visibility_convention_not_access_control(
+    tmp_path,
+    monkeypatch,
+    clean_demo_package,
+):
     make_package(tmp_path)
     monkeypatch.syspath_prepend(str(tmp_path))
 
     core = importlib.import_module("demo.core")
 
     assert core._private == 2
-    clear_package()

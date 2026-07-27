@@ -14,43 +14,54 @@ import sys
 import pytest
 
 
-def test_import_cache_runs_module_body_once(tmp_path, monkeypatch):
+@pytest.fixture
+def imported_names():
+    names = []
+    yield names
+    for name in names:
+        sys.modules.pop(name, None)
+
+
+def test_import_cache_runs_module_body_once(tmp_path, monkeypatch, imported_names):
     marker = tmp_path / "marker.txt"
     source = f"from pathlib import Path\nPath({str(marker)!r}).write_text('run')\n"
     (tmp_path / "cached.py").write_text(source, encoding="utf-8")
     monkeypatch.syspath_prepend(str(tmp_path))
+    imported_names.append("cached")
 
     first = importlib.import_module("cached")
     second = importlib.import_module("cached")
 
     assert first is second
     assert marker.read_text(encoding="utf-8") == "run"
-    sys.modules.pop("cached", None)
 
 
-def test_reload_reexecutes_code_in_the_existing_module_object(tmp_path, monkeypatch):
+def test_reload_reexecutes_code_in_the_existing_module_object(
+    tmp_path,
+    monkeypatch,
+    imported_names,
+):
     path = tmp_path / "reloadable.py"
     path.write_text("runs = globals().get('runs', 0) + 1\n", encoding="utf-8")
     monkeypatch.syspath_prepend(str(tmp_path))
+    imported_names.append("reloadable")
     module = importlib.import_module("reloadable")
 
     reloaded = importlib.reload(module)
 
     assert reloaded is module
     assert module.runs == 2
-    sys.modules.pop("reloadable", None)
 
 
-def test_cycle_can_observe_a_partially_initialized_module(tmp_path, monkeypatch):
+def test_cycle_can_observe_a_partially_initialized_module(tmp_path, monkeypatch, imported_names):
     (tmp_path / "left.py").write_text("label = 'left'\nimport right\nseen = right.label\n", encoding="utf-8")
     (tmp_path / "right.py").write_text("import left\nlabel = left.label + '>right'\n", encoding="utf-8")
     monkeypatch.syspath_prepend(str(tmp_path))
+    imported_names.extend(["left", "right"])
 
     left = importlib.import_module("left")
 
     assert left.seen == "left>right"
-    sys.modules.pop("left", None)
-    sys.modules.pop("right", None)
 
 
 def test_dynamic_import_reports_missing_module():
