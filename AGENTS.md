@@ -20,7 +20,8 @@
 > Polyglot 通过可执行测试，对照学习不同语言如何解决相同问题，理解它们的共同概念、
 > 语义差异、底层机制和迁移陷阱。
 
-Python、C++、Node.js、Go、Rust、Julia 和 R 的双轴学习结构已完成：七门纵向课程保持完整，
+Python、C++、Node.js、Go、Rust、Julia、R 和 Lua 的双轴学习结构已完成：八门纵向课程
+保持完整，
 横向层包含 10 个 family、49 个完成文件级内容终审的 topic，其中 24 个高复杂度 topic
 使用多文件组织。
 
@@ -41,6 +42,7 @@ languages/go/{language,standard_library,tooling_and_runtime}/
 languages/rust/tests/{language,standard_library,tooling_and_runtime}/
 languages/julia/{language,standard_library,tooling_and_runtime}/
 languages/r/{language,standard_library,tooling_and_runtime}/
+languages/lua/{language,standard_library,tooling_and_runtime}/
 ```
 
 现有详细测试、标准库和运行时工作流始终留在语言主线。不要为了建立概念对照而移动、
@@ -68,6 +70,7 @@ concepts/01_values_and_comparison/01_truthiness/nodejs/test_01_core.mjs
 concepts/01_values_and_comparison/01_truthiness/go/test_01_core_test.go
 concepts/01_values_and_comparison/01_truthiness/rust/test_01_core.rs
 concepts/01_values_and_comparison/01_truthiness/julia/test_01_core.jl
+concepts/01_values_and_comparison/01_truthiness/lua/test_01_core.lua
 ```
 
 概念测试必须：
@@ -95,9 +98,9 @@ concepts/01_values_and_comparison/01_truthiness/julia/test_01_core.jl
 ## 通用内容规范
 
 - 案例展示正常用法、高阶语义、隐式机制、实际工作流和真实陷阱。
-- 新增或修改 topic 前先对齐七门 active language 的共同问题、输入类别和观察点；缺失机制不强行等价。
+- 新增或修改 topic 前先对齐八门 active language 的共同问题、输入类别和观察点；缺失机制不强行等价。
 - 新 active language 必须先建立完整纵向课程，再覆盖现有全部 topic；每个横向实现关联本语言纵向课程。
-- 七门语言优先回答同一问题，不要求代码外形一致，也不把缺失机制包装成相似 API。
+- 八门语言优先回答同一问题，不要求代码外形一致，也不把缺失机制包装成相似 API。
 - 测试名称只描述断言真正证明的范围，不把锁定实现观察写成语言普遍保证。
 - 测试必须可独立运行且不依赖执行顺序；修改全局或进程状态时可靠恢复。
 - 可执行的能力和边界使用真实断言或编译期检测，不以空 `SUCCEED()` 代替。
@@ -127,6 +130,7 @@ concepts/01_values_and_comparison/01_truthiness/julia/test_01_core.jl
 ./tools/run.sh rust
 ./tools/run.sh julia
 ./tools/run.sh r
+./tools/run.sh lua
 ```
 
 横向概念：
@@ -145,7 +149,7 @@ concepts/01_values_and_comparison/01_truthiness/julia/test_01_core.jl
 ./tools/run.sh doctor planned
 ```
 
-默认 `doctor` 强制检查七门 active language；当前没有暂停中的规划语言，
+默认 `doctor` 强制检查八门 active language；当前没有暂停中的规划语言，
 `doctor planned` 在 active 检查后报告空规划集合。
 
 结构门禁：
@@ -155,7 +159,7 @@ concepts/01_values_and_comparison/01_truthiness/julia/test_01_core.jl
 ```
 
 门禁分别验证语言路径、课程连续编号和覆盖标记、章节与主题连续编号、主题内测试连续
-编号、七门 active language、`polyglot-family`、`polyglot-concept`、课程关联目标和 Unicode
+编号、八门 active language、`polyglot-family`、`polyglot-concept`、课程关联目标和 Unicode
 120 字符行宽。它不能替代人工语义审阅；提交主题时还要确认各语言确实回答同一问题。
 
 修改测试时先跑受影响课程或单个概念，再跑对应全量。只有两者都通过才能称为 verified。
@@ -172,6 +176,7 @@ concepts/01_values_and_comparison/01_truthiness/julia/test_01_core.jl
   另有 1 个 doc test。
 - Julia：课程 `001`–`128`；Julia 1.12.6；128 个测试文件、`488 passed`。
 - R：课程 `001`–`128`；R 4.6.1；128 个测试文件、`128/128` 通过。
+- Lua：课程 `001`–`128`；Lua 5.5.0；128 个测试文件、`128/128` 通过。
 - 横向层有 10 个章节、49 个已终审主题、24 个多文件主题；每门语言 73 个测试入口：
   Python `252 passed`、C++ `249 passed`、Node.js `255 passed`、Go `75 passed`、
   Rust `73 passed`、Julia `280 passed`、R `73/73` 通过。
@@ -233,6 +238,13 @@ R 来源优先级：
 3. Writing R Extensions、R Installation and Administration；
 4. R Internals 只补充明确标注的实现观察，不覆盖语言接口保证。
 
+Lua 来源优先级：
+
+1. Lua 5.5 Reference Manual；
+2. Lua 5.5.0 官方源码包内 README、Makefile 与头文件；
+3. Lua 5.5.0 对应源码只补充明确标注的实现观察，不覆盖 Reference Manual 的语义保证；
+4. LuaJIT、旧版 Lua、LuaRocks 与宿主引擎文档不决定本课程语义。
+
 Dash、MDN、cppreference 和 Test262 可以帮助定位主题或发现遗漏，但不作为语义争议的
 最终依据，也不决定目录结构。
 
@@ -268,6 +280,11 @@ R 使用 4.6.1、base `stopifnot` 与随 R 发行的标准工具；普通课程�
 options、环境变量、cwd、locale、library/search path、connections、sink、graphics device 和
 random state 泄漏。并发测试按 fork/PSOCK 进程模型建立显式收集与清理，不描述成共享内存线程；
 package 与 FFI 测试只构建仓库内本地 fixture，不访问公网。
+
+Lua 使用 5.5.0、仓库内最小断言库和每文件独立解释器进程；执行清除所有 `LUA_INIT`、
+`LUA_PATH` 与 `LUA_CPATH` 版本变量，并用 `lua -E` 和受控 repository/module path。
+C API 宿主与 C module 使用锁定头文件和静态库，以 C11、`-Wall -Wextra -Wpedantic -Werror`
+构建到 `/tmp`；coroutine 只描述为 cooperative control flow，不伪装成线程或 async runtime。
 
 ## 单任务接续与 Git
 

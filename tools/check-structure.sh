@@ -31,7 +31,7 @@ PY
 }
 
 check_active_language_state() {
-  local expected_active="python cpp nodejs go rust julia r"
+  local expected_active="python cpp nodejs go rust julia r lua"
   local configured_active="${ACTIVE_LANGUAGES[*]}"
   local configured_planned="${PLANNED_LANGUAGES[*]}"
   local project_active
@@ -106,6 +106,12 @@ check_test_path() {
     r:languages/r/standard_library/*/test_[0-9][0-9][0-9]_*.R)
       ;;
     r:languages/r/tooling_and_runtime/*/test_[0-9][0-9][0-9]_*.R)
+      ;;
+    lua:languages/lua/language/*/test_[0-9][0-9][0-9]_*.lua)
+      ;;
+    lua:languages/lua/standard_library/*/test_[0-9][0-9][0-9]_*.lua)
+      ;;
+    lua:languages/lua/tooling_and_runtime/*/test_[0-9][0-9][0-9]_*.lua)
       ;;
     *)
       report_failure "$language 测试位于未声明路径: $path"
@@ -437,6 +443,9 @@ check_concepts() {
           r)
             extension=R
             ;;
+          lua)
+            extension=lua
+            ;;
         esac
 
         language_directory="$topic/$language"
@@ -463,6 +472,7 @@ check_concepts() {
       local rust_stems
       local julia_stems
       local r_stems
+      local lua_stems
       python_stems=$(
         find "$topic/python" -maxdepth 1 -type f -name 'test_[0-9][0-9]_*.py' \
           -exec basename {} .py \; | sort
@@ -483,6 +493,10 @@ check_concepts() {
         find "$topic/r" -maxdepth 1 -type f -name 'test_[0-9][0-9]_*.R' \
           -exec basename {} .R \; | sort
       )
+      lua_stems=$(
+        find "$topic/lua" -maxdepth 1 -type f -name 'test_[0-9][0-9]_*.lua' \
+          -exec basename {} .lua \; | sort
+      )
       if [[ "$python_stems" != "$go_stems" ]]; then
         report_failure "$topic 的 Go 子问题文件没有镜像既有测试结构"
       fi
@@ -495,6 +509,9 @@ check_concepts() {
       if [[ "$python_stems" != "$r_stems" ]]; then
         report_failure "$topic 的 R 子问题文件没有镜像既有测试结构"
       fi
+      if [[ "$python_stems" != "$lua_stems" ]]; then
+        report_failure "$topic 的 Lua 子问题文件没有镜像既有测试结构"
+      fi
 
       for child in "$topic"/*; do
         if [[ ! -d "$child" ]]; then
@@ -502,7 +519,7 @@ check_concepts() {
         fi
         child_name="${child##*/}"
         case "$child_name" in
-          python|cpp|nodejs|go|rust|julia|r)
+          python|cpp|nodejs|go|rust|julia|r|lua)
             ;;
           *)
             report_failure "$topic 包含未知语言目录: $child_name"
@@ -523,6 +540,7 @@ check_concepts() {
   local total_topic_count
   local julia_test_count
   local r_test_count
+  local lua_test_count
   total_topic_count=$(
     find concepts -mindepth 2 -maxdepth 2 -type d -name '[0-9][0-9]_*' -print | wc -l
   )
@@ -532,6 +550,9 @@ check_concepts() {
   r_test_count=$(
     find concepts -type f -path '*/r/test_[0-9][0-9]_*.R' -print | wc -l
   )
+  lua_test_count=$(
+    find concepts -type f -path '*/lua/test_[0-9][0-9]_*.lua' -print | wc -l
+  )
   if ((total_topic_count != 49)); then
     report_failure "横向层需要 49 个 topic，实际为 $total_topic_count"
   fi
@@ -540,6 +561,9 @@ check_concepts() {
   fi
   if ((r_test_count != 73)); then
     report_failure "R 横向层需要 73 个测试入口，实际为 $r_test_count"
+  fi
+  if ((lua_test_count != 73)); then
+    report_failure "Lua 横向层需要 73 个测试入口，实际为 $lua_test_count"
   fi
 }
 
@@ -939,6 +963,192 @@ check_r_projects() {
   rm -f "$state_probe"
 }
 
+check_lua_projects() {
+  local required_file
+  local actual_lua_version
+  local actual_luac_version
+  local domain
+  local domain_name
+  local domain_number
+  local domain_index
+  local domain_count=0
+  local expected_domain
+  local lua_test_count
+  local cover_count
+  local build_root
+  local c_case
+  local -a seen_domains=()
+
+  for required_file in \
+    languages/lua/support/assertions.lua \
+    languages/lua/support/c_api.lua \
+    languages/lua/fixtures/modules/course_sample.lua \
+    languages/lua/c_api/Makefile \
+    languages/lua/c_api/polyglot_lua_host.c \
+    languages/lua/c_api/polyglot_native.c; do
+    if [[ ! -f "$required_file" ]]; then
+      report_failure "缺少 Lua runner、module 或 C API 工程文件: $required_file"
+    fi
+  done
+
+  for required_file in lua luac cc make; do
+    if ! command -v "$required_file" >/dev/null 2>&1; then
+      report_failure "ohdev 中缺少 Lua 工具链命令: $required_file"
+      return
+    fi
+  done
+
+  actual_lua_version="$(lua -E -v 2>&1 | awk '{print $2}')"
+  actual_luac_version="$(luac -v 2>&1 | awk '{print $2}')"
+  if [[ "$actual_lua_version" != 5.5.0 ]]; then
+    report_failure "Lua 解释器不是锁定的 5.5.0，实际为 $actual_lua_version"
+  fi
+  if [[ "$actual_luac_version" != 5.5.0 ]]; then
+    report_failure "luac 不是锁定的 5.5.0，实际为 $actual_luac_version"
+  fi
+  if [[ ! -f /opt/polyglot/lua-5.5.0/include/lua.h ]] || \
+    [[ ! -f /opt/polyglot/lua-5.5.0/lib/liblua.a ]]; then
+    report_failure "Lua 5.5.0 头文件或 liblua.a 不完整"
+  elif ! grep -Fq '#define LUA_VERSION_RELEASE_NUM' \
+    /opt/polyglot/lua-5.5.0/include/lua.h; then
+    report_failure "Lua 头文件缺少 release 版本宏"
+  fi
+
+  for required_file in \
+    '57ccc32bbbd005cab75bcc52444052535af691789dba2b9016d5c50640d68b3d'; do
+    if ! grep -Fq "$required_file" sources.lock || \
+      ! grep -Fq "$required_file" tools/bootstrap-language-toolchains-in-container.sh; then
+      report_failure "Lua source lock 或 bootstrap 缺少锁定值: $required_file"
+    fi
+  done
+  if ! grep -Fq 'https://www.lua.org/ftp/lua-5.5.0.tar.gz' sources.lock || \
+    ! grep -Fq 'https://www.lua.org/ftp/' \
+      tools/bootstrap-language-toolchains-in-container.sh; then
+    report_failure "Lua source lock 或 bootstrap 缺少官方归档 URL"
+  fi
+
+  while IFS= read -r -d '' domain; do
+    domain_name="${domain##*/}"
+    domain_number="${domain_name%%_*}"
+    domain_index=$((10#$domain_number))
+    domain_count=$((domain_count + 1))
+    if [[ -n "${seen_domains[$domain_index]:-}" ]]; then
+      report_failure "Lua 问题域编号 $domain_number 重复: ${seen_domains[$domain_index]} 与 $domain"
+    else
+      seen_domains[$domain_index]="$domain"
+    fi
+  done < <(
+    find \
+      languages/lua/language \
+      languages/lua/standard_library \
+      languages/lua/tooling_and_runtime \
+      -mindepth 1 \
+      -maxdepth 1 \
+      -type d \
+      -name '[0-9][0-9]_*' \
+      -print0 | sort -z
+  )
+  if ((domain_count != 16)); then
+    report_failure "Lua 纵向课程需要 16 个问题域，实际为 $domain_count"
+  fi
+  for ((expected_domain = 1; expected_domain <= 16; expected_domain += 1)); do
+    if [[ -z "${seen_domains[$expected_domain]:-}" ]]; then
+      printf -v domain_number '%02d' "$expected_domain"
+      report_failure "Lua 纵向课程缺少问题域 $domain_number"
+    fi
+  done
+
+  lua_test_count=$(
+    find languages/lua -type f -name 'test_[0-9][0-9][0-9]_*.lua' -print | wc -l
+  )
+  if ((lua_test_count != 128)); then
+    report_failure "Lua 纵向课程需要 128 个测试文件，实际为 $lua_test_count"
+  fi
+  cover_count=$(
+    grep -h 'polyglot-covers:' \
+      languages/lua/{language,standard_library,tooling_and_runtime}/*/test_*.lua |
+      sed 's/^.*polyglot-covers:[[:space:]]*//' |
+      sort -u |
+      wc -l
+  )
+  if ((cover_count != 128)); then
+    report_failure "Lua 纵向课程需要 128 个唯一 polyglot-covers，实际为 $cover_count"
+  fi
+
+  for required_file in \
+    'function assertions.equal' \
+    'function assertions.same' \
+    'function assertions.truth' \
+    'function assertions.raises' \
+    'function assertions.with_cleanup' \
+    'function assertions.done'; do
+    if ! grep -Fq "$required_file" languages/lua/support/assertions.lua; then
+      report_failure "Lua 最小断言库缺少能力: $required_file"
+    fi
+  done
+
+  for required_file in \
+    LUA_INIT LUA_INIT_5_5 LUA_PATH LUA_PATH_5_5 LUA_CPATH LUA_CPATH_5_5 \
+    '-E' POLYGLOT_LUA_TEST_TMP POLYGLOT_LUA_C_API_HOST; do
+    if ! grep -Fq -- "$required_file" tools/run-in-container.sh; then
+      report_failure "Lua runner 缺少环境隔离设置: $required_file"
+    fi
+  done
+  for required_file in \
+    '-std=c11' '-Wall' '-Wextra' '-Wpedantic' '-Werror' \
+    polyglot_lua_host polyglot_native.so; do
+    if ! grep -Fq -- "$required_file" languages/lua/c_api/Makefile; then
+      report_failure "Lua C API 工程缺少严格构建设置: $required_file"
+    fi
+  done
+
+  build_root="$(mktemp -d /tmp/polyglot-lua-structure.XXXXXX)"
+  if ! make \
+    --no-print-directory \
+    -C languages/lua/c_api \
+    LUA_HOME=/opt/polyglot/lua-5.5.0 \
+    BUILD_DIR="$build_root" \
+    all >/dev/null; then
+    report_failure "Lua C API 工程无法严格编译"
+  else
+    for c_case in \
+      state selected-libraries stack tables-registry closures protected \
+      continuation userdata allocator-warning hook dump-load state-isolation \
+      structured auxiliary external-string version-gc; do
+      if ! "$build_root/polyglot_lua_host" "$c_case" >/dev/null; then
+        report_failure "Lua C API 宿主用例失败: $c_case"
+      fi
+    done
+    if ! POLYGLOT_LUA_CPATH="$build_root/?.so" \
+      lua -E -e '
+        package.cpath = assert(os.getenv("POLYGLOT_LUA_CPATH"))
+        local native = require("polyglot_native")
+        assert(native.release == "Lua 5.5.0")
+        assert(native.add(20, 22) == 42)
+      '; then
+      report_failure "Lua C module 无法通过受控 module path 加载"
+    fi
+  fi
+
+  if ! lua -E -e '
+    _G.polyglot_state_probe = true
+    package.loaded.polyglot_state_probe = true
+    debug.sethook(function() end, "", 1)
+    collectgarbage("generational")
+    math.randomseed(1, 2)
+    local file = assert(io.tmpfile())
+    io.output(file)
+  ' || ! lua -E -e '
+    assert(rawget(_G, "polyglot_state_probe") == nil)
+    assert(package.loaded.polyglot_state_probe == nil)
+    assert(debug.gethook() == nil)
+    assert(io.type(io.output()) == "file")
+  '; then
+    report_failure "Lua 独立进程状态隔离探针失败"
+  fi
+  rm -rf "$build_root"
+}
+
 check_unicode_line_lengths() {
   local -a checked_files=()
   local path
@@ -1000,6 +1210,9 @@ for active_language in "${ACTIVE_LANGUAGES[@]}"; do
     r)
       check_language r R
       ;;
+    lua)
+      check_language lua lua
+      ;;
     *)
       report_failure "缺少 active language 结构检查实现: $active_language"
       ;;
@@ -1010,6 +1223,7 @@ check_go_workspace
 check_rust_workspaces
 check_julia_projects
 check_r_projects
+check_lua_projects
 check_unicode_line_lengths
 
 if ((failure_count > 0)); then

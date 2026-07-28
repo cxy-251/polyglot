@@ -181,6 +181,9 @@ doctor() {
       r)
         doctor_r
         ;;
+      lua)
+        doctor_lua
+        ;;
       *)
         echo "doctor 缺少 active language 检查实现: $language" >&2
         exit 2
@@ -757,6 +760,25 @@ run_concept_r() {
   fi
 }
 
+run_concept_lua() {
+  local concept_name="$1"
+  local -a lua_test_files=()
+  if [[ -d "concepts/$concept_name/lua" ]]; then
+    mapfile -d '' lua_test_files < <(
+      find "concepts/$concept_name/lua" \
+        -maxdepth 1 \
+        -type f \
+        -name 'test_[0-9][0-9]_*.lua' \
+        -print0 | sort -z
+    )
+    check_lua_version
+    run_lua_files \
+      "$concept_name / Lua" \
+      "${POLYGLOT_LUA_CONCEPT_ROOT:-/tmp/polyglot-lua-concepts}" \
+      "${lua_test_files[@]}"
+  fi
+}
+
 run_concept() {
   local concept_name="${1:-}"
   local language
@@ -894,6 +916,24 @@ run_family_r() {
   fi
 }
 
+run_family_lua() {
+  local family_name="$1"
+  local -a lua_test_files=()
+  mapfile -d '' lua_test_files < <(
+    find "concepts/$family_name" \
+      -type f \
+      -path '*/lua/test_[0-9][0-9]_*.lua' \
+      -print0 | sort -z
+  )
+  if [[ ${#lua_test_files[@]} -gt 0 ]]; then
+    check_lua_version
+    run_lua_files \
+      "$family_name / Lua" \
+      "${POLYGLOT_LUA_CONCEPT_ROOT:-/tmp/polyglot-lua-concepts}" \
+      "${lua_test_files[@]}"
+  fi
+}
+
 run_all_concepts_python() {
   local -a python_test_files=()
   mapfile -d '' python_test_files < <(
@@ -1003,6 +1043,23 @@ run_all_concepts_r() {
   fi
 }
 
+run_all_concepts_lua() {
+  local -a lua_test_files=()
+  mapfile -d '' lua_test_files < <(
+    find concepts \
+      -type f \
+      -path '*/lua/test_[0-9][0-9]_*.lua' \
+      -print0 | sort -z
+  )
+  if [[ ${#lua_test_files[@]} -gt 0 ]]; then
+    check_lua_version
+    run_lua_files \
+      "all concepts / Lua" \
+      "${POLYGLOT_LUA_CONCEPT_ROOT:-/tmp/polyglot-lua-concepts}" \
+      "${lua_test_files[@]}"
+  fi
+}
+
 run_concept_language() {
   run_concept_scope_for_language concept "$1" "$2"
 }
@@ -1098,6 +1155,9 @@ list_concepts() {
             ;;
           r)
             extension=R
+            ;;
+          lua)
+            extension=lua
             ;;
         esac
         if [[ ! -d "$topic_directory/$language" ]]; then
