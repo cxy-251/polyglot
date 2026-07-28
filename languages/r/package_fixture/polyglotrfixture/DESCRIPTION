@@ -1,0 +1,11 @@
+Package: polyglotrfixture
+Type: Package
+Title: Local Fixture for Polyglot R Package Workflows
+Version: 0.1.0
+Authors@R: person("Polyglot", "Project", role = c("aut", "cre"), email = "polyglot@example.invalid")
+Description: A minimal offline package used to exercise namespace, lifecycle,
+    testing, compiled-code, build, installation, and checking workflows.
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+NeedsCompilation: yes

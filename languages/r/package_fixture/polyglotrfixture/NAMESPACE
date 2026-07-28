@@ -1,0 +1,5 @@
+useDynLib(polyglotrfixture, .registration = TRUE)
+export(double_value)
+export(new_polyglot_label)
+export(.Last.lib)
+S3method(print, polyglot_label)
