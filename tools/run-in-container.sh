@@ -15,6 +15,7 @@ Usage:
   ./tools/run-in-container.sh go [go test arguments...]
   ./tools/run-in-container.sh rust [cargo test arguments...]
   ./tools/run-in-container.sh julia [test files...]
+  ./tools/run-in-container.sh r [test files...]
   ./tools/run-in-container.sh concept NN_family/NN_topic
   ./tools/run-in-container.sh family NN_family
   ./tools/run-in-container.sh concepts
@@ -371,6 +372,86 @@ run_julia() {
     "Julia vertical course" \
     "languages/julia" \
     "${POLYGLOT_JULIA_COURSE_DEPOT:-/tmp/polyglot-julia-course-depot}" \
+    "${test_files[@]}"
+}
+
+check_r_version() {
+  need_cmd R
+  need_cmd Rscript
+
+  local expected_version="4.6.1"
+  local actual_version
+  actual_version="$(Rscript --vanilla -e 'cat(as.character(getRversion()))')"
+  if [[ "$actual_version" != "$expected_version" ]]; then
+    echo "R 版本不匹配: 需要 $expected_version，实际 $actual_version" >&2
+    echo "请在 ohdev 中运行 ./tools/bootstrap-language-toolchains-in-container.sh r。" >&2
+    exit 1
+  fi
+}
+
+run_r_files() {
+  local label="$1"
+  local sandbox_root="$2"
+  shift 2
+  local -a test_files=("$@")
+  local test_file
+  local test_sandbox
+
+  if [[ ${#test_files[@]} -eq 0 ]]; then
+    echo "$label 没有发现 R 测试文件。" >&2
+    exit 1
+  fi
+
+  mkdir -p "$sandbox_root"
+  printf '\n== %s ==\n' "$label"
+  for test_file in "${test_files[@]}"; do
+    if [[ ! -f "$test_file" ]]; then
+      echo "R 测试文件不存在: $test_file" >&2
+      exit 2
+    fi
+
+    test_sandbox="$(mktemp -d "$sandbox_root/test.XXXXXX")"
+    mkdir -p \
+      "$test_sandbox/library" \
+      "$test_sandbox/tmp" \
+      "$test_sandbox/user"
+    if ! R_LIBS_USER="$test_sandbox/library" \
+      R_USER="$test_sandbox/user" \
+      TMPDIR="$test_sandbox/tmp" \
+      R_ENVIRON_USER=/dev/null \
+      R_PROFILE_USER=/dev/null \
+      R_DEFAULT_PACKAGES='datasets,utils,grDevices,graphics,stats,methods' \
+      TZ=UTC \
+      LC_ALL=C.UTF-8 \
+      Rscript \
+        --vanilla \
+        languages/r/support/run_test.R \
+        "$test_file"; then
+      echo "R 测试失败: $test_file" >&2
+      rm -rf "$test_sandbox"
+      exit 1
+    fi
+    rm -rf "$test_sandbox"
+  done
+  printf '%s: %d 个 R 测试文件通过。\n' "$label" "${#test_files[@]}"
+}
+
+run_r() {
+  check_r_version
+  local -a test_files=()
+  if [[ $# -gt 0 ]]; then
+    test_files=("$@")
+  else
+    mapfile -d '' test_files < <(
+      find languages/r \
+        -type f \
+        -name 'test_[0-9][0-9][0-9]_*.R' \
+        -print0 | sort -z
+    )
+  fi
+  run_r_files \
+    "R vertical course" \
+    "${POLYGLOT_R_COURSE_ROOT:-/tmp/polyglot-r-course}" \
     "${test_files[@]}"
 }
 
@@ -870,6 +951,10 @@ main() {
     julia|jl)
       shift
       run_julia "$@"
+      ;;
+    r|R)
+      shift
+      run_r "$@"
       ;;
     concept)
       shift
