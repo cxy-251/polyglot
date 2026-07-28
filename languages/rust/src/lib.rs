@@ -6,9 +6,13 @@
 //! ```
 
 use std::fs;
+use std::future::Future;
 use std::path::PathBuf;
+use std::pin::Pin;
 use std::process::{Command, Output};
+use std::sync::Arc;
 use std::sync::atomic::{AtomicU64, Ordering};
+use std::task::{Context, Poll, Wake, Waker};
 
 static NEXT_TEMP_ID: AtomicU64 = AtomicU64::new(0);
 
@@ -57,4 +61,29 @@ pub fn unique_temp_directory(label: &str) -> PathBuf {
     ));
     fs::create_dir(&directory).expect("create temporary Rust directory");
     directory
+}
+
+struct ThreadWaker(std::thread::Thread);
+
+impl Wake for ThreadWaker {
+    fn wake(self: Arc<Self>) {
+        self.0.unpark();
+    }
+
+    fn wake_by_ref(self: &Arc<Self>) {
+        self.0.unpark();
+    }
+}
+
+/// 运行不依赖第三方 runtime 的教学 Future；Pending 时由 waker 唤醒当前线程。
+pub fn block_on<F: Future>(future: F) -> F::Output {
+    let mut future = Box::pin(future);
+    let waker = Waker::from(Arc::new(ThreadWaker(std::thread::current())));
+    let mut context = Context::from_waker(&waker);
+    loop {
+        match Future::poll(Pin::as_mut(&mut future), &mut context) {
+            Poll::Ready(output) => return output,
+            Poll::Pending => std::thread::park(),
+        }
+    }
 }

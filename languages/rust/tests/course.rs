@@ -158,3 +158,67 @@ mod course_078;
 mod course_079;
 #[path = "tooling_and_runtime/10_modules_visibility_linkage_and_initialization/test_080_dynamic_loading_and_reload_boundary.rs"]
 mod course_080;
+#[path = "standard_library/11_threads_channels_and_memory_model/test_081_thread_spawn_join_and_scope.rs"]
+mod course_081;
+#[path = "standard_library/11_threads_channels_and_memory_model/test_082_send_sync_and_static_thread_boundaries.rs"]
+mod course_082;
+#[path = "standard_library/11_threads_channels_and_memory_model/test_083_arc_mutex_and_shared_state.rs"]
+mod course_083;
+#[path = "standard_library/11_threads_channels_and_memory_model/test_084_rwlock_and_read_write_coordination.rs"]
+mod course_084;
+#[path = "standard_library/11_threads_channels_and_memory_model/test_085_channels_and_synchronous_backpressure.rs"]
+mod course_085;
+#[path = "standard_library/11_threads_channels_and_memory_model/test_086_atomics_ordering_and_happens_before.rs"]
+mod course_086;
+#[path = "standard_library/11_threads_channels_and_memory_model/test_087_condition_variables_and_thread_local_state.rs"]
+mod course_087;
+#[path = "standard_library/11_threads_channels_and_memory_model/test_088_panic_propagation_and_process_isolation.rs"]
+mod course_088;
+#[path = "language/12_async_future_pin_and_cancellation/test_089_future_poll_and_context.rs"]
+mod course_089;
+#[path = "language/12_async_future_pin_and_cancellation/test_090_waker_and_wake_notifications.rs"]
+mod course_090;
+#[path = "language/12_async_future_pin_and_cancellation/test_091_pin_unpin_and_poll_receivers.rs"]
+mod course_091;
+#[path = "language/12_async_future_pin_and_cancellation/test_092_async_functions_blocks_and_laziness.rs"]
+mod course_092;
+#[path = "language/12_async_future_pin_and_cancellation/test_093_minimal_standard_library_executor.rs"]
+mod course_093;
+#[path = "language/12_async_future_pin_and_cancellation/test_094_result_propagation_and_joining_futures.rs"]
+mod course_094;
+#[path = "language/12_async_future_pin_and_cancellation/test_095_cancellation_by_drop_and_cleanup.rs"]
+mod course_095;
+#[path = "language/12_async_future_pin_and_cancellation/test_096_timeout_and_standard_runtime_boundary.rs"]
+mod course_096;
+#[path = "standard_library/13_io_files_paths_processes_and_networking/test_097_read_write_and_short_operations.rs"]
+mod course_097;
+#[path = "standard_library/13_io_files_paths_processes_and_networking/test_098_read_exact_write_all_buffering_and_cursor.rs"]
+mod course_098;
+#[path = "standard_library/13_io_files_paths_processes_and_networking/test_099_files_metadata_and_temporary_directories.rs"]
+mod course_099;
+#[path = "standard_library/13_io_files_paths_processes_and_networking/test_100_path_pathbuf_and_platform_boundaries.rs"]
+mod course_100;
+#[path = "standard_library/13_io_files_paths_processes_and_networking/test_101_environment_and_working_directory_isolation.rs"]
+mod course_101;
+#[path = "standard_library/13_io_files_paths_processes_and_networking/test_102_command_stdio_and_exit_status.rs"]
+mod course_102;
+#[path = "standard_library/13_io_files_paths_processes_and_networking/test_103_tcp_loopback_and_request_response.rs"]
+mod course_103;
+#[path = "standard_library/13_io_files_paths_processes_and_networking/test_104_socket_shutdown_and_timeout_boundaries.rs"]
+mod course_104;
+#[path = "standard_library/14_formatting_parsing_binary_and_serialization/test_105_display_debug_and_formatting_traits.rs"]
+mod course_105;
+#[path = "standard_library/14_formatting_parsing_binary_and_serialization/test_106_from_str_and_numeric_parsing.rs"]
+mod course_106;
+#[path = "standard_library/14_formatting_parsing_binary_and_serialization/test_107_utf8_validation_and_lossy_decoding.rs"]
+mod course_107;
+#[path = "standard_library/14_formatting_parsing_binary_and_serialization/test_108_byte_order_and_integer_conversion.rs"]
+mod course_108;
+#[path = "standard_library/14_formatting_parsing_binary_and_serialization/test_109_cursor_and_binary_framing.rs"]
+mod course_109;
+#[path = "standard_library/14_formatting_parsing_binary_and_serialization/test_110_size_prefix_and_trailing_data_validation.rs"]
+mod course_110;
+#[path = "standard_library/14_formatting_parsing_binary_and_serialization/test_111_regex_json_and_serialization_absence.rs"]
+mod course_111;
+#[path = "standard_library/14_formatting_parsing_binary_and_serialization/test_112_manual_codec_and_trust_boundary.rs"]
+mod course_112;
