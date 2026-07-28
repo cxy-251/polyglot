@@ -1,0 +1,21 @@
+[package]
+name = "polyglot-rust-concepts"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.97.1"
+publish = false
+autotests = false
+
+[dependencies]
+polyglot-rust-course = { path = "../languages/rust" }
+
+[workspace]
+resolver = "3"
+
+[lib]
+path = "src/lib.rs"
+
+[[test]]
+name = "concepts"
+path = "tests/concepts.rs"
+
