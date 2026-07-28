@@ -89,6 +89,14 @@ doctor_rust() {
   cargo clippy --version
 }
 
+doctor_julia() {
+  check_julia_version
+  printf 'julia: '
+  JULIA_DEPOT_PATH=/tmp/polyglot-julia-doctor-depot \
+    JULIA_LOAD_PATH='@:@stdlib' \
+    julia --startup-file=no --history-file=no --project=@stdlib --version
+}
+
 optional_version() {
   local label="$1"
   local command_name="$2"
@@ -109,7 +117,6 @@ optional_version() {
 
 doctor_planned() {
   printf 'planned languages: %s\n' "${PLANNED_LANGUAGES[*]}"
-  optional_version julia julia julia --startup-file=no --history-file=no --version
   optional_version R R R --version
   optional_version Rscript Rscript Rscript --version
 }
@@ -140,6 +147,9 @@ doctor() {
         ;;
       rust)
         doctor_rust
+        ;;
+      julia)
+        doctor_julia
         ;;
       *)
         echo "doctor 缺少 active language 检查实现: $language" >&2
@@ -475,6 +485,26 @@ run_concept_nodejs() {
   fi
 }
 
+run_concept_julia() {
+  local concept_name="$1"
+  local -a test_files=()
+  if [[ -d "concepts/$concept_name/julia" ]]; then
+    mapfile -d '' test_files < <(
+      find "concepts/$concept_name/julia" \
+        -maxdepth 1 \
+        -type f \
+        -name 'test_[0-9][0-9]_*.jl' \
+        -print0 | sort -z
+    )
+    check_julia_version
+    run_julia_files \
+      "$concept_name / Julia" \
+      "concepts" \
+      "${POLYGLOT_JULIA_CONCEPT_DEPOT:-/tmp/polyglot-julia-concepts-depot}" \
+      "${test_files[@]}"
+  fi
+}
+
 run_concept() {
   local concept_name="${1:-}"
   local language
@@ -575,6 +605,25 @@ run_family_rust() {
   fi
 }
 
+run_family_julia() {
+  local family_name="$1"
+  local -a julia_test_files=()
+  mapfile -d '' julia_test_files < <(
+    find "concepts/$family_name" \
+      -type f \
+      -path '*/julia/test_[0-9][0-9]_*.jl' \
+      -print0 | sort -z
+  )
+  if [[ ${#julia_test_files[@]} -gt 0 ]]; then
+    check_julia_version
+    run_julia_files \
+      "$family_name / Julia" \
+      "concepts" \
+      "${POLYGLOT_JULIA_CONCEPT_DEPOT:-/tmp/polyglot-julia-concepts-depot}" \
+      "${julia_test_files[@]}"
+  fi
+}
+
 run_all_concepts_python() {
   local -a python_test_files=()
   mapfile -d '' python_test_files < <(
@@ -646,6 +695,24 @@ run_all_concepts_rust() {
     CARGO_TARGET_DIR="$target_directory" \
       cargo clippy --manifest-path concepts/Cargo.toml --all-targets --all-features -- -D warnings
     CARGO_TARGET_DIR="$target_directory" cargo test --manifest-path concepts/Cargo.toml
+  fi
+}
+
+run_all_concepts_julia() {
+  local -a julia_test_files=()
+  mapfile -d '' julia_test_files < <(
+    find concepts \
+      -type f \
+      -path '*/julia/test_[0-9][0-9]_*.jl' \
+      -print0 | sort -z
+  )
+  if [[ ${#julia_test_files[@]} -gt 0 ]]; then
+    check_julia_version
+    run_julia_files \
+      "all concepts / Julia" \
+      "concepts" \
+      "${POLYGLOT_JULIA_CONCEPT_DEPOT:-/tmp/polyglot-julia-concepts-depot}" \
+      "${julia_test_files[@]}"
   fi
 }
 
@@ -738,6 +805,9 @@ list_concepts() {
             ;;
           rust)
             extension=rs
+            ;;
+          julia)
+            extension=jl
             ;;
         esac
         if [[ ! -d "$topic_directory/$language" ]]; then

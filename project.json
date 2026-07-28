@@ -1,15 +1,15 @@
 {
-  "schema_version": 6,
+  "schema_version": 7,
   "project": "polyglot-concepts-by-example",
   "mission": "Compare how languages solve shared problems through readable, executable tests.",
   "architecture": "dual-axis",
-  "phase": "five-language-curriculum-reviewed",
+  "phase": "six-language-curriculum-reviewed",
   "current_milestone": null,
-  "active_language_count": 5,
+  "active_language_count": 6,
   "concept_curriculum_complete": true,
   "content_review_complete": true,
   "reviewed_topic_count": 49,
-  "reviewed_language_implementation_count": 245,
+  "reviewed_language_implementation_count": 294,
   "continuation_source": "NEXT.md",
   "source_lock": "sources.lock",
   "legacy_tip": "662e0d1",
@@ -22,7 +22,8 @@
         "./tools/run.sh cpp",
         "./tools/run.sh nodejs",
         "./tools/run.sh go",
-        "./tools/run.sh rust"
+        "./tools/run.sh rust",
+        "./tools/run.sh julia"
       ],
       "verified_results": {
         "python": {
@@ -48,6 +49,11 @@
           "skipped": 0,
           "ignored": 1,
           "doc_tests_passed": 1
+        },
+        "julia": {
+          "test_files": 128,
+          "passed": 488,
+          "skipped": 0
         }
       }
     },
@@ -88,6 +94,11 @@
         "rust": {
           "test_files": 73,
           "passed": 73,
+          "skipped": 0
+        },
+        "julia": {
+          "test_files": 73,
+          "passed": 280,
           "skipped": 0
         }
       }
@@ -137,9 +148,10 @@
     {
       "id": "julia",
       "name": "Julia",
-      "status": "planned_paused",
-      "root": "languages/julia",
-      "test_framework": "Test"
+      "status": "verified",
+      "course_root": "languages/julia",
+      "test_framework": "Test standard library",
+      "validate": "./tools/run.sh julia"
     },
     {
       "id": "r",

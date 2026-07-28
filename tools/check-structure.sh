@@ -31,7 +31,7 @@ PY
 }
 
 check_active_language_state() {
-  local expected_active="python cpp nodejs go rust"
+  local expected_active="python cpp nodejs go rust julia"
   local configured_active="${ACTIVE_LANGUAGES[*]}"
   local configured_planned="${PLANNED_LANGUAGES[*]}"
   local project_active
@@ -94,6 +94,12 @@ check_test_path() {
     rust:languages/rust/tests/standard_library/*/test_[0-9][0-9][0-9]_*.rs)
       ;;
     rust:languages/rust/tests/tooling_and_runtime/*/test_[0-9][0-9][0-9]_*.rs)
+      ;;
+    julia:languages/julia/language/*/test_[0-9][0-9][0-9]_*.jl)
+      ;;
+    julia:languages/julia/standard_library/*/test_[0-9][0-9][0-9]_*.jl)
+      ;;
+    julia:languages/julia/tooling_and_runtime/*/test_[0-9][0-9][0-9]_*.jl)
       ;;
     *)
       report_failure "$language 测试位于未声明路径: $path"
@@ -419,6 +425,9 @@ check_concepts() {
           rust)
             extension=rs
             ;;
+          julia)
+            extension=jl
+            ;;
         esac
 
         language_directory="$topic/$language"
@@ -443,6 +452,7 @@ check_concepts() {
       local python_stems
       local go_stems
       local rust_stems
+      local julia_stems
       python_stems=$(
         find "$topic/python" -maxdepth 1 -type f -name 'test_[0-9][0-9]_*.py' \
           -exec basename {} .py \; | sort
@@ -455,11 +465,18 @@ check_concepts() {
         find "$topic/rust" -maxdepth 1 -type f -name 'test_[0-9][0-9]_*.rs' \
           -exec basename {} .rs \; | sort
       )
+      julia_stems=$(
+        find "$topic/julia" -maxdepth 1 -type f -name 'test_[0-9][0-9]_*.jl' \
+          -exec basename {} .jl \; | sort
+      )
       if [[ "$python_stems" != "$go_stems" ]]; then
         report_failure "$topic 的 Go 子问题文件没有镜像既有测试结构"
       fi
       if [[ "$python_stems" != "$rust_stems" ]]; then
         report_failure "$topic 的 Rust 子问题文件没有镜像既有测试结构"
+      fi
+      if [[ "$python_stems" != "$julia_stems" ]]; then
+        report_failure "$topic 的 Julia 子问题文件没有镜像既有测试结构"
       fi
 
       for child in "$topic"/*; do
@@ -468,7 +485,7 @@ check_concepts() {
         fi
         child_name="${child##*/}"
         case "$child_name" in
-          python|cpp|nodejs|go|rust)
+          python|cpp|nodejs|go|rust|julia)
             ;;
           *)
             report_failure "$topic 包含未知语言目录: $child_name"
@@ -484,6 +501,21 @@ check_concepts() {
 
   if ((found_family == 0)); then
     report_failure "没有发现 NN_family 格式的概念章节"
+  fi
+
+  local total_topic_count
+  local julia_test_count
+  total_topic_count=$(
+    find concepts -mindepth 2 -maxdepth 2 -type d -name '[0-9][0-9]_*' -print | wc -l
+  )
+  julia_test_count=$(
+    find concepts -type f -path '*/julia/test_[0-9][0-9]_*.jl' -print | wc -l
+  )
+  if ((total_topic_count != 49)); then
+    report_failure "横向层需要 49 个 topic，实际为 $total_topic_count"
+  fi
+  if ((julia_test_count != 73)); then
+    report_failure "Julia 横向层需要 73 个测试入口，实际为 $julia_test_count"
   fi
 }
 
@@ -662,6 +694,101 @@ check_rust_workspaces() {
   )
 }
 
+check_julia_projects() {
+  local required_file
+  local actual_version
+  local domain
+  local domain_name
+  local domain_number
+  local domain_index
+  local domain_count=0
+  local expected_domain
+  local julia_test_count
+  local -a seen_domains=()
+
+  for required_file in \
+    languages/julia/Project.toml \
+    languages/julia/src/PolyglotJuliaCourse.jl \
+    concepts/Project.toml; do
+    if [[ ! -f "$required_file" ]]; then
+      report_failure "缺少 Julia 项目文件: $required_file"
+    fi
+  done
+
+  if ! command -v julia >/dev/null 2>&1; then
+    report_failure "ohdev 中缺少 Julia，无法验证项目"
+    return
+  fi
+
+  actual_version=$(
+    JULIA_DEPOT_PATH=/tmp/polyglot-julia-check-depot \
+      JULIA_LOAD_PATH='@:@stdlib' \
+      julia --startup-file=no --history-file=no --project=@stdlib -e 'print(VERSION)'
+  )
+  if [[ "$actual_version" != 1.12.6 ]]; then
+    report_failure "Julia 工具链不是锁定的 1.12.6，实际为 $actual_version"
+  fi
+
+  if ! JULIA_DEPOT_PATH=/tmp/polyglot-julia-check-depot \
+    JULIA_LOAD_PATH='@:@stdlib' \
+    julia \
+      --startup-file=no \
+      --history-file=no \
+      --project=@stdlib \
+      --depwarn=error \
+      --check-bounds=yes \
+      -e '
+        using TOML
+        for path in ARGS
+            project = TOML.parsefile(path)
+            get(get(project, "compat", Dict()), "julia", nothing) == "1.12.6" ||
+                error("$path 必须精确锁定 julia = 1.12.6")
+            isempty(get(project, "deps", Dict())) ||
+                error("$path 的普通测试不得引入第三方 dependency")
+        end
+      ' languages/julia/Project.toml concepts/Project.toml; then
+    report_failure "Julia Project.toml 无法解析或不满足版本、依赖约束"
+  fi
+
+  while IFS= read -r -d '' domain; do
+    domain_name="${domain##*/}"
+    domain_number="${domain_name%%_*}"
+    domain_index=$((10#$domain_number))
+    domain_count=$((domain_count + 1))
+    if [[ -n "${seen_domains[$domain_index]:-}" ]]; then
+      report_failure "Julia 问题域编号 $domain_number 重复: ${seen_domains[$domain_index]} 与 $domain"
+    else
+      seen_domains[$domain_index]="$domain"
+    fi
+  done < <(
+    find \
+      languages/julia/language \
+      languages/julia/standard_library \
+      languages/julia/tooling_and_runtime \
+      -mindepth 1 \
+      -maxdepth 1 \
+      -type d \
+      -name '[0-9][0-9]_*' \
+      -print0 | sort -z
+  )
+  if ((domain_count != 16)); then
+    report_failure "Julia 纵向课程需要 16 个问题域，实际为 $domain_count"
+  fi
+  for ((expected_domain = 1; expected_domain <= 16; expected_domain += 1)); do
+    if [[ -z "${seen_domains[$expected_domain]:-}" ]]; then
+      printf -v domain_number '%02d' "$expected_domain"
+      report_failure "Julia 纵向课程缺少问题域 $domain_number"
+    fi
+  done
+
+  julia_test_count=$(
+    find languages/julia -type f -name 'test_[0-9][0-9][0-9]_*.jl' -print | wc -l
+  )
+  if ((julia_test_count != 128)); then
+    report_failure "Julia 纵向课程需要 128 个测试文件，实际为 $julia_test_count"
+  fi
+}
+
 check_unicode_line_lengths() {
   local -a checked_files=()
   local path
@@ -717,6 +844,9 @@ for active_language in "${ACTIVE_LANGUAGES[@]}"; do
     rust)
       check_language rust rs
       ;;
+    julia)
+      check_language julia jl
+      ;;
     *)
       report_failure "缺少 active language 结构检查实现: $active_language"
       ;;
@@ -725,6 +855,7 @@ done
 check_concepts
 check_go_workspace
 check_rust_workspaces
+check_julia_projects
 check_unicode_line_lengths
 
 if ((failure_count > 0)); then
