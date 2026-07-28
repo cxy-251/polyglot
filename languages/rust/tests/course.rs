@@ -94,3 +94,67 @@ mod course_046;
 mod course_047;
 #[path = "language/06_traits_generics_and_dispatch/test_048_fully_qualified_syntax.rs"]
 mod course_048;
+#[path = "standard_library/07_smart_pointers_interior_mutability_and_drop/test_049_box_and_deref_coercion.rs"]
+mod course_049;
+#[path = "standard_library/07_smart_pointers_interior_mutability_and_drop/test_050_rc_weak_and_acyclic_ownership_graphs.rs"]
+mod course_050;
+#[path = "standard_library/07_smart_pointers_interior_mutability_and_drop/test_051_arc_and_thread_safe_shared_ownership.rs"]
+mod course_051;
+#[path = "standard_library/07_smart_pointers_interior_mutability_and_drop/test_052_cell_refcell_and_runtime_borrow_checking.rs"]
+mod course_052;
+#[path = "standard_library/07_smart_pointers_interior_mutability_and_drop/test_053_mutex_rwlock_and_poison.rs"]
+mod course_053;
+#[path = "standard_library/07_smart_pointers_interior_mutability_and_drop/test_054_once_lock_and_one_time_initialization.rs"]
+mod course_054;
+#[path = "standard_library/07_smart_pointers_interior_mutability_and_drop/test_055_drop_order_and_ownership_graphs.rs"]
+mod course_055;
+#[path = "standard_library/07_smart_pointers_interior_mutability_and_drop/test_056_pin_and_movement_boundaries.rs"]
+mod course_056;
+#[path = "language/08_errors_panics_and_resource_management/test_057_result_question_mark_and_propagation.rs"]
+mod course_057;
+#[path = "language/08_errors_panics_and_resource_management/test_058_custom_errors_conversion_and_source.rs"]
+mod course_058;
+#[path = "language/08_errors_panics_and_resource_management/test_059_option_result_combinators.rs"]
+mod course_059;
+#[path = "language/08_errors_panics_and_resource_management/test_060_panic_catch_unwind_and_unwind_safety.rs"]
+mod course_060;
+#[path = "language/08_errors_panics_and_resource_management/test_061_abort_and_panic_strategy_boundary.rs"]
+mod course_061;
+#[path = "language/08_errors_panics_and_resource_management/test_062_raii_and_partial_acquisition.rs"]
+mod course_062;
+#[path = "language/08_errors_panics_and_resource_management/test_063_drop_during_unwind_and_poison.rs"]
+mod course_063;
+#[path = "language/08_errors_panics_and_resource_management/test_064_cleanup_failure_and_original_error.rs"]
+mod course_064;
+#[path = "standard_library/09_collections_strings_slices_and_indexing/test_065_arrays_slices_indexing_and_get.rs"]
+mod course_065;
+#[path = "standard_library/09_collections_strings_slices_and_indexing/test_066_vec_capacity_reallocation_and_borrowing.rs"]
+mod course_066;
+#[path = "standard_library/09_collections_strings_slices_and_indexing/test_067_vec_deque_front_back_and_contiguity.rs"]
+mod course_067;
+#[path = "standard_library/09_collections_strings_slices_and_indexing/test_068_hash_map_entry_and_missing_keys.rs"]
+mod course_068;
+#[path = "standard_library/09_collections_strings_slices_and_indexing/test_069_btree_map_ordered_keys_and_ranges.rs"]
+mod course_069;
+#[path = "standard_library/09_collections_strings_slices_and_indexing/test_070_hash_set_membership_and_set_algebra.rs"]
+mod course_070;
+#[path = "standard_library/09_collections_strings_slices_and_indexing/test_071_sorting_stability_and_comparator_contracts.rs"]
+mod course_071;
+#[path = "standard_library/09_collections_strings_slices_and_indexing/test_072_utf8_string_str_chars_and_indexing.rs"]
+mod course_072;
+#[path = "tooling_and_runtime/10_modules_visibility_linkage_and_initialization/test_073_module_trees_mod_and_use.rs"]
+mod course_073;
+#[path = "tooling_and_runtime/10_modules_visibility_linkage_and_initialization/test_074_pub_crate_and_super_visibility.rs"]
+mod course_074;
+#[path = "tooling_and_runtime/10_modules_visibility_linkage_and_initialization/test_075_reexports_and_crate_paths.rs"]
+mod course_075;
+#[path = "tooling_and_runtime/10_modules_visibility_linkage_and_initialization/test_076_package_crate_and_target_distinctions.rs"]
+mod course_076;
+#[path = "tooling_and_runtime/10_modules_visibility_linkage_and_initialization/test_077_dependency_aliases_features_and_build_graph.rs"]
+mod course_077;
+#[path = "tooling_and_runtime/10_modules_visibility_linkage_and_initialization/test_078_static_and_lazy_initialization.rs"]
+mod course_078;
+#[path = "tooling_and_runtime/10_modules_visibility_linkage_and_initialization/test_079_module_cycles_and_crate_cycle_rejection.rs"]
+mod course_079;
+#[path = "tooling_and_runtime/10_modules_visibility_linkage_and_initialization/test_080_dynamic_loading_and_reload_boundary.rs"]
+mod course_080;
