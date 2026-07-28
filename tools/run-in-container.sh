@@ -16,6 +16,7 @@ Usage:
   ./tools/run-in-container.sh rust [cargo test arguments...]
   ./tools/run-in-container.sh julia [test files...]
   ./tools/run-in-container.sh r [test files...]
+  ./tools/run-in-container.sh lua [test files...]
   ./tools/run-in-container.sh concept NN_family/NN_topic
   ./tools/run-in-container.sh family NN_family
   ./tools/run-in-container.sh concepts
@@ -104,6 +105,21 @@ doctor_r() {
   R --vanilla --version | sed -n '1p'
   printf 'Rscript: '
   Rscript --version 2>&1 | sed -n '1p'
+}
+
+doctor_lua() {
+  check_lua_version
+  printf 'lua: '
+  lua -E -v
+  printf 'lua path: '
+  command -v lua
+  printf 'luac: '
+  luac -v
+  printf 'luac path: '
+  command -v luac
+  printf 'Lua headers: %s\n' /opt/polyglot/lua-5.5.0/include
+  printf 'Lua library: %s\n' /opt/polyglot/lua-5.5.0/lib/liblua.a
+  printf 'Lua module path: repository and per-test temporary directories only\n'
 }
 
 optional_version() {
@@ -465,6 +481,128 @@ run_r() {
   run_r_files \
     "R vertical course" \
     "${POLYGLOT_R_COURSE_ROOT:-/tmp/polyglot-r-course}" \
+    "${test_files[@]}"
+}
+
+check_lua_version() {
+  need_cmd lua
+  need_cmd luac
+
+  local expected_version="5.5.0"
+  local actual_lua_version
+  local actual_luac_version
+  actual_lua_version="$(lua -E -v 2>&1 | awk '{print $2}')"
+  actual_luac_version="$(luac -v 2>&1 | awk '{print $2}')"
+  if [[ "$actual_lua_version" != "$expected_version" ]]; then
+    echo "Lua 版本不匹配: 需要 $expected_version，实际 $actual_lua_version" >&2
+    echo "请在 ohdev 中运行 ./tools/bootstrap-language-toolchains-in-container.sh lua。" >&2
+    exit 1
+  fi
+  if [[ "$actual_luac_version" != "$expected_version" ]]; then
+    echo "luac 版本不匹配: 需要 $expected_version，实际 $actual_luac_version" >&2
+    echo "请在 ohdev 中运行 ./tools/bootstrap-language-toolchains-in-container.sh lua。" >&2
+    exit 1
+  fi
+  if [[ ! -f /opt/polyglot/lua-5.5.0/include/lua.h ]] || \
+    [[ ! -f /opt/polyglot/lua-5.5.0/lib/liblua.a ]]; then
+    echo "Lua C 工具链不完整: 需要 5.5.0 头文件与 liblua.a" >&2
+    echo "请在 ohdev 中运行 ./tools/bootstrap-language-toolchains-in-container.sh lua。" >&2
+    exit 1
+  fi
+}
+
+build_lua_c_api() {
+  local build_directory="$1"
+  need_cmd cc
+  mkdir -p "$build_directory"
+  make \
+    --no-print-directory \
+    -C languages/lua/c_api \
+    LUA_HOME=/opt/polyglot/lua-5.5.0 \
+    BUILD_DIR="$build_directory" \
+    all
+}
+
+run_lua_files() {
+  local label="$1"
+  local sandbox_root="$2"
+  shift 2
+  local -a test_files=("$@")
+  local run_sandbox
+  local test_sandbox
+  local test_file
+  local support_path
+  local c_module_path
+
+  if [[ ${#test_files[@]} -eq 0 ]]; then
+    echo "$label 没有发现 Lua 测试文件。" >&2
+    exit 1
+  fi
+
+  mkdir -p "$sandbox_root"
+  run_sandbox="$(mktemp -d "$sandbox_root/run.XXXXXX")"
+  build_lua_c_api "$run_sandbox/c-api"
+  support_path="$ROOT/languages/lua/?.lua;$ROOT/languages/lua/?/init.lua"
+  c_module_path="$run_sandbox/c-api/?.so"
+
+  printf '\n== %s ==\n' "$label"
+  for test_file in "${test_files[@]}"; do
+    if [[ ! -f "$test_file" ]]; then
+      echo "Lua 测试文件不存在: $test_file" >&2
+      rm -rf "$run_sandbox"
+      exit 2
+    fi
+
+    test_sandbox="$(mktemp -d "$run_sandbox/test.XXXXXX")"
+    mkdir -p "$test_sandbox/home" "$test_sandbox/tmp"
+    if ! env \
+      -u LUA_INIT \
+      -u LUA_INIT_5_5 \
+      -u LUA_PATH \
+      -u LUA_PATH_5_5 \
+      -u LUA_CPATH \
+      -u LUA_CPATH_5_5 \
+      HOME="$test_sandbox/home" \
+      TMPDIR="$test_sandbox/tmp" \
+      TZ=UTC \
+      LC_ALL=C.UTF-8 \
+      POLYGLOT_LUA_TEST_TMP="$test_sandbox/tmp" \
+      POLYGLOT_LUA_PATH="$support_path" \
+      POLYGLOT_LUA_CPATH="$c_module_path" \
+      POLYGLOT_LUA_C_API_HOST="$run_sandbox/c-api/polyglot_lua_host" \
+      lua \
+        -E \
+        -e '
+          package.path = assert(os.getenv("POLYGLOT_LUA_PATH"))
+          package.cpath = assert(os.getenv("POLYGLOT_LUA_CPATH"))
+        ' \
+        "$test_file"; then
+      echo "Lua 测试失败: $test_file" >&2
+      rm -rf "$run_sandbox"
+      exit 1
+    fi
+    rm -rf "$test_sandbox"
+  done
+  rm -rf "$run_sandbox"
+  printf '%s: %d 个 Lua 测试文件通过。\n' "$label" "${#test_files[@]}"
+}
+
+run_lua() {
+  check_lua_version
+  local -a test_files=()
+  if [[ $# -gt 0 ]]; then
+    test_files=("$@")
+  else
+    mapfile -d '' test_files < <(
+      find languages/lua \
+        -type f \
+        -name 'test_[0-9][0-9][0-9]_*.lua' \
+        -print0 | sort -z
+    )
+  fi
+  run_lua_files \
+    "Lua vertical course" \
+    "${POLYGLOT_LUA_COURSE_ROOT:-/tmp/polyglot-lua-course}" \
     "${test_files[@]}"
 }
 
@@ -1025,6 +1163,10 @@ main() {
     r|R)
       shift
       run_r "$@"
+      ;;
+    lua)
+      shift
+      run_lua "$@"
       ;;
     concept)
       shift

@@ -7,6 +7,7 @@ set -euo pipefail
 readonly INSTALL_ROOT="/opt/polyglot"
 readonly JULIA_VERSION="1.12.6"
 readonly R_VERSION="4.6.1"
+readonly LUA_VERSION="5.5.0"
 readonly GO_VERSION="1.26.5"
 readonly RUST_VERSION="1.97.1"
 readonly RUST_RELEASE_DATE="2026-07-16"
@@ -156,6 +157,43 @@ install_r() {
   R --version | sed -n '1p'
 }
 
+install_lua() {
+  local expected_sha="57ccc32bbbd005cab75bcc52444052535af691789dba2b9016d5c50640d68b3d"
+  local archive_name="lua-${LUA_VERSION}.tar.gz"
+  local archive_path="/tmp/${archive_name}"
+  local source_dir="/tmp/lua-${LUA_VERSION}"
+  local install_dir="${INSTALL_ROOT}/lua-${LUA_VERSION}"
+  local download_url="https://www.lua.org/ftp/${archive_name}"
+  local installed_release=""
+
+  if [[ -x "$install_dir/bin/lua" ]]; then
+    installed_release="$("$install_dir/bin/lua" -v 2>&1 | awk '{print $2}')"
+  fi
+
+  if [[ "$installed_release" != "$LUA_VERSION" ]] || \
+    [[ ! -x "$install_dir/bin/luac" ]] || \
+    [[ ! -f "$install_dir/include/lua.h" ]] || \
+    [[ ! -f "$install_dir/lib/liblua.a" ]]; then
+    download_verified "$download_url" "$archive_path" "$expected_sha"
+    rm -rf "$source_dir" "$install_dir"
+    tar --extract --gzip --file "$archive_path" --directory /tmp
+    (
+      cd "$source_dir"
+      make all
+      make test
+      make install INSTALL_TOP="$install_dir"
+    )
+    rm -rf "$source_dir"
+  fi
+
+  ln -sfn "$install_dir/bin/lua" /usr/local/bin/lua
+  ln -sfn "$install_dir/bin/luac" /usr/local/bin/luac
+  printf 'lua: '
+  lua -v
+  printf 'luac: '
+  luac -v
+}
+
 install_go() {
   local archive_arch
   local expected_sha
@@ -256,6 +294,7 @@ for target in "$@"; do
     all)
       install_julia
       install_r
+      install_lua
       install_go
       install_rust
       ;;
@@ -265,6 +304,9 @@ for target in "$@"; do
     r)
       install_r
       ;;
+    lua)
+      install_lua
+      ;;
     go)
       install_go
       ;;
@@ -272,7 +314,7 @@ for target in "$@"; do
       install_rust
       ;;
     *)
-      echo "用法: $0 [all|julia|r|go|rust]..." >&2
+      echo "用法: $0 [all|julia|r|lua|go|rust]..." >&2
       exit 2
       ;;
   esac

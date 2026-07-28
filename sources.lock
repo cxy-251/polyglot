@@ -102,6 +102,21 @@ parallel_reference = "https://stat.ethz.ch/R-manual/R-release/library/parallel/h
 package_installation = "https://cran.r-project.org/doc/manuals/r-release/R-admin.html"
 test_framework = "base stopifnot() and tools::assertError()"
 
+[lua]
+runtime = "Lua 5.5.0"
+runtime_source = "https://www.lua.org/source/5.5/"
+source_archive = "https://www.lua.org/ftp/lua-5.5.0.tar.gz"
+source_sha256 = "57ccc32bbbd005cab75bcc52444052535af691789dba2b9016d5c50640d68b3d"
+reference_manual = "https://www.lua.org/manual/5.5/manual.html"
+reference_index = "https://www.lua.org/manual/5.5/"
+source_build_instructions = "README and Makefile in the locked source archive"
+c_api = "https://www.lua.org/manual/5.5/manual.html#4"
+auxiliary_library = "https://www.lua.org/manual/5.5/manual.html#5"
+standard_libraries = "https://www.lua.org/manual/5.5/manual.html#6"
+standalone = "https://www.lua.org/manual/5.5/manual.html#7"
+incompatibilities = "https://www.lua.org/manual/5.5/manual.html#8"
+test_framework = "repository-local assertion library using only Lua 5.5 standard capabilities"
+
 [go]
 runtime = "Go 1.26.5"
 runtime_source = "https://go.googlesource.com/go/+/refs/tags/go1.26.5"
