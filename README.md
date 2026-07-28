@@ -32,6 +32,11 @@ languages/
     language/
     standard_library/
     tooling_and_runtime/
+  rust/
+    tests/
+      language/
+      standard_library/
+      tooling_and_runtime/
 ```
 
 课程文件使用 `test_NNN_topic.<ext>`。编号在每门语言内全局唯一、连续且稳定：
@@ -39,10 +44,12 @@ languages/
 - Python `001`–`178`；
 - C++ `001`–`160`；
 - Node.js `001`–`107`；
-- Go `001`–`128`。
+- Go `001`–`128`；
+- Rust `001`–`128`。
 
 语言主线承担基础语法、高级语义、数据模型、标准库、运行时与语言独有机制。Python
-标准库、C++ 标准库、Node 核心模块和 npm 工作流、Go 标准库与工具链工作流始终留在这里。
+标准库、C++ 标准库、Node 核心模块和 npm 工作流、Go 与 Rust 的标准库和工具链工作流
+始终留在这里。
 
 ## 横向概念对照
 
@@ -57,23 +64,27 @@ concepts/
       cpp/test_01_core.cpp
       nodejs/test_01_core.mjs
       go/test_01_core_test.go
+      rust/test_01_core.rs
     02_equality/
       python/test_01_core.py
       cpp/test_01_core.cpp
       nodejs/test_01_core.mjs
       go/test_01_core_test.go
+      rust/test_01_core.rs
   02_functions_and_calls/
     01_argument_passing/
       python/test_01_core.py
       cpp/test_01_core.cpp
       nodejs/test_01_core.mjs
       go/test_01_core_test.go
+      rust/test_01_core.rs
   03_errors_and_resources/
     01_resource_cleanup/
       python/test_01_core.py
       cpp/test_01_core.cpp
       nodejs/test_01_core.mjs
       go/test_01_core_test.go
+      rust/test_01_core.rs
 ```
 
 当前横向课程已经完成 10 个章节、49 个主题：
@@ -91,7 +102,7 @@ concepts/
 | `09_files_paths_and_streams` | 4 | 路径、文件、流、背压与子进程 |
 | `10_time_locale_and_runtime` | 4 | 时钟、日历、区域化与运行时能力 |
 
-49 个主题已经完成逐文件内容终审。终审逐项核对四门语言的共同问题、测试名称与断言、
+49 个主题已经完成逐文件内容终审。终审逐项核对五门语言的共同问题、测试名称与断言、
 锁定版本语义、边界与失败路径、状态隔离、迁移陷阱和直接关联课程；它表示当前案例经过
 统一语义复核，不表示穷举所有语言输入或未来版本能力。24 个高复杂度主题已按独立子问题
 使用多个测试文件，每门语言现有 73 个横向测试入口。
@@ -113,7 +124,7 @@ Markdown 映射表。
 
 ## 在 `ohdev` 中执行
 
-宿主机只负责阅读代码和发起 Docker 命令。Python、C++、Node.js、Go 的解释器、编译器和
+宿主机只负责阅读代码和发起 Docker 命令。Python、C++、Node.js、Go、Rust 的解释器、编译器和
 测试框架都只在 `ohdev` 中运行：
 
 ```text
@@ -129,8 +140,8 @@ Markdown 映射表。
 ./tools/run.sh doctor planned
 ```
 
-默认 `doctor` 只强制验证 Python、C++、Node.js、Go；`doctor planned` 额外显示 Julia、R、
-Rust 的可用状态，规划语言缺失不会使当前四语言工程检查失败。
+默认 `doctor` 强制验证 Python、C++、Node.js、Go、Rust；`doctor planned` 额外显示 Julia、R
+的可用状态，规划语言缺失不会使当前五语言工程检查失败。
 
 纵向课程验证：
 
@@ -139,6 +150,7 @@ Rust 的可用状态，规划语言缺失不会使当前四语言工程检查失
 ./tools/run.sh cpp
 ./tools/run.sh nodejs
 ./tools/run.sh go
+./tools/run.sh rust
 ```
 
 横向概念验证：
@@ -165,7 +177,7 @@ Rust 的可用状态，规划语言缺失不会使当前四语言工程检查失
 
 - 语言课程只位于声明的 `languages/` 路径，编号连续且有 `polyglot-covers`；
 - 顶层章节使用连续的 `NN_family`，章节内主题使用连续的 `NN_topic`；
-- 每个主题包含四门 active language，每门语言的 `test_NN_name` 编号连续且入口明确；
+- 每个主题包含五门 active language，每门语言的 `test_NN_name` 编号连续且入口明确；
 - `polyglot-family`、`polyglot-concept` 分别与章节和主题目录一致；
 - `polyglot-related` 及可选续行指向同语言中真实存在的完整课程文件；
 - 语言目录可以按需增加 `fixtures/` 或 `support/`；
@@ -181,8 +193,10 @@ Rust 的可用状态，规划语言缺失不会使当前四语言工程检查失
   `1409 passed, 15 skipped`；
 - Node.js 24.18.0：课程 `935 passed`；
 - Go 1.26.5：课程 128 个文件、`133 passed`；
+- Rust 1.97.1、edition 2024：课程 128 个文件、`128 passed, 1 ignored`，另有 1 个 doc test；
 - 横向课程 10 个章节、49 个已终审主题、24 个多文件主题；每门语言 73 个测试入口：
-  Python `252 passed`、C++ `249 passed`、Node.js `255 passed`、Go `75 passed`。
+  Python `252 passed`、C++ `249 passed`、Node.js `255 passed`、Go `75 passed`、
+  Rust `73 passed`。
 
 所有 skip 都必须说明实现能力、平台行为或可选依赖原因。准确工具链、官方资料、归档
 校验值和实现提交记录在 `sources.lock`。
@@ -198,7 +212,7 @@ Rust 的可用状态，规划语言缺失不会使当前四语言工程检查失
 5. 案例保持精简并指回完整课程，不移动、裁剪或拆散语言课程文件。
 
 只有出现无法归入现有十章的稳定问题域时才增加 family。新增语言时优先把它接入现有
-49 个主题，并保留确实不存在对应机制的说明，不为追求四语言或更多语言齐全而伪造等价。
+49 个主题，并保留确实不存在对应机制的说明，不为追求语言齐全而伪造等价。
 
 标准库默认只属于语言主线。文件系统、日期时间、并发等主题只有在真实问题值得比较时，
 才另写一个小型概念测试；不会把整组标准库文件迁入 `concepts/`。

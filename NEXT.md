@@ -2,50 +2,25 @@
 
 Status: `complete`
 
-## Current state
+## Completed goal
 
-Python、C++、Node.js、Go 的双轴课程已经完成，没有待实现 topic：
+Rust 1.97.1 / edition 2024 已成为第五门 active language；Julia、R 保持
+`planned_paused`。Rust 纵向课程包含 16 个问题域、`001`–`128` 连续测试文件；现有
+10 个 family、49 个 topic、24 个多文件 topic 均已增加 Rust，共 73 个横向测试入口。
 
-- Go 1.26.5 纵向课程包含 16 个问题域、128 个连续编号测试文件；
-- 10 个连续 family、49 个完成四语言内容终审的横向 topic；
-- 每个 topic 均包含 Python、C++、Node.js、Go；
-- 24 个高复杂度 topic 使用多个连续编号测试文件；
-- 每门语言 73 个横向测试入口，Go 实现保持既有子问题结构；
-- Go 接入终审已修正 doctor 语言状态、调度与初始化断言范围、Reader/Writer 契约及
-  归档压缩资源处理；
-- `languages/` 纵向课程未被迁移、拆分或混入横向验证。
+运行器、doctor、概念清单、结构门禁、`project.json` 和文档现已统一采用五语言状态。
+Rust 纵向与横向使用独立 Cargo workspace，普通课程不引入第三方 crate。
 
-本文件当前不指定新语言或新 topic。不要自动开始 Julia、R 或 Rust；下一阶段由用户在
-课程审阅、深化既有主题或接入新语言中明确选择。
+## Final verification
 
-## Verified baseline
-
-横向课程：
-
-- `./tools/run.sh concepts`：Python `252 passed`、C++ `249 passed`、
-  Node.js `255 passed`、Go `75 passed`；
-- `./tools/run.sh list-concepts`：10 个 family、49 个 topic，每门语言各 73 个测试文件；
-- 01–10 每个 family 的四语言独立验证均通过；
-- `./tools/run.sh check` 与 `git diff --check` 均通过。
-
-纵向课程：
-
-- Python 3.10.12：`5025 passed, 39 skipped`；
-- C++20 / GCC 11.4 / GoogleTest 1.16.0：`1409 passed, 15 skipped`；
-- Node.js 24.18.0：`935 passed`；
-- Go 1.26.5：128 个测试文件、`133 passed`，`go vet ./...` 通过。
+- 五门纵向课程通过：Python `5025 passed, 39 skipped`；C++ `1409 passed, 15 skipped`；
+  Node.js `935 passed`；Go `133 passed`；Rust `128 passed, 1 ignored`，另有 1 个 doc test。
+- 五语言横向全量通过：Python `252 passed`；C++ `249 passed`；Node.js `255 passed`；
+  Go `75 passed`；Rust `73 passed`。
+- 10 个 `family` 命令逐一通过；代表性单 topic 命令确认五语言及 Rust 精确分派。
+- `doctor`、`doctor planned`、`list-concepts`、结构与 Unicode 行宽门禁通过。
+- Rust 纵向、横向均通过 rustfmt 与 Clippy `-D warnings`；Go 通过 `go vet`。
 
 ## Handoff
 
-1. `languages/go/` 是完整纵向课程；`concepts/*/*/go/` 是 49 个精简横向实现。
-2. `go.work` 连接 `languages/go` 与 `concepts` 两个 module；Go 测试只在 `ohdev` 中运行。
-3. 默认 `./tools/run.sh doctor` 只强制检查 active language；`doctor planned` 额外报告
-   Julia、R、Rust，不把规划语言变成当前工程依赖。
-4. `./tools/run.sh go` 固定使用 `-count=1` 并执行 `go vet`；concept、family 和 concepts
-   命令统一遍历 `ACTIVE_LANGUAGES`，缺少对应语言运行器时立即失败。
-5. active language 新增后必须先建立完整纵向课程，再覆盖现有全部 topic，并指向本语言
-   纵向课程。
-6. 当前 `content_review_complete` 为 true；终审表示四语言共同问题已经统一复核，不表示
-   穷举未来版本的全部能力。
-7. 后续优先维护现有 49 个 topic；新增 family、topic 或接入新语言必须由用户重新确定
-   范围。
+当前 goal 已完成，没有剩余开发步骤。下一阶段必须由用户为本文件指定一个新的单一任务。

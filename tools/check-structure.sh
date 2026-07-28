@@ -544,6 +544,14 @@ check_rust_workspaces() {
   local relative_path
   local directory_path
   local file_name
+  local domain
+  local domain_name
+  local domain_number
+  local domain_index
+  local domain_count=0
+  local expected_domain
+  local rust_test_count
+  local -a seen_domains=()
   for required_file in \
     Cargo.toml \
     Cargo.lock \
@@ -571,6 +579,43 @@ check_rust_workspaces() {
   fi
   if ! cargo clippy --version >/dev/null; then
     report_failure "ohdev 中缺少 Clippy"
+  fi
+
+  while IFS= read -r -d '' domain; do
+    domain_name="${domain##*/}"
+    domain_number="${domain_name%%_*}"
+    domain_index=$((10#$domain_number))
+    domain_count=$((domain_count + 1))
+    if [[ -n "${seen_domains[$domain_index]:-}" ]]; then
+      report_failure "Rust 问题域编号 $domain_number 重复: ${seen_domains[$domain_index]} 与 $domain"
+    else
+      seen_domains[$domain_index]="$domain"
+    fi
+  done < <(
+    find \
+      languages/rust/tests/language \
+      languages/rust/tests/standard_library \
+      languages/rust/tests/tooling_and_runtime \
+      -mindepth 1 \
+      -maxdepth 1 \
+      -type d \
+      -name '[0-9][0-9]_*' \
+      -print0 | sort -z
+  )
+  if ((domain_count != 16)); then
+    report_failure "Rust 纵向课程需要 16 个问题域，实际为 $domain_count"
+  fi
+  for ((expected_domain = 1; expected_domain <= 16; expected_domain += 1)); do
+    if [[ -z "${seen_domains[$expected_domain]:-}" ]]; then
+      printf -v domain_number '%02d' "$expected_domain"
+      report_failure "Rust 纵向课程缺少问题域 $domain_number"
+    fi
+  done
+  rust_test_count=$(
+    find languages/rust/tests -type f -name 'test_[0-9][0-9][0-9]_*.rs' -print | wc -l
+  )
+  if ((rust_test_count < 120)); then
+    report_failure "Rust 纵向课程至少需要 120 个测试文件，实际为 $rust_test_count"
   fi
 
   if ! metadata=$(cargo metadata --manifest-path Cargo.toml --no-deps --format-version 1); then
