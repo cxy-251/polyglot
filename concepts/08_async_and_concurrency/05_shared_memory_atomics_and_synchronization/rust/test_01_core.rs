@@ -4,7 +4,8 @@
 // polyglot-related+: 11_threads_channels_and_memory_model/test_086_atomics_ordering_and_happens_before.rs
 //
 // 共同问题：共享读写如何同步；atomic、lock 与消息传递分别保证什么。
-// 对照观察：Send/Sync gate sharing；atomic orders individual state，Mutex protects compound invariants，channel transfers values.
+// 对照观察：Send/Sync gate sharing；atomic orders individual state；
+// Mutex protects compound invariants，channel transfers values.
 
 use std::sync::atomic::{AtomicUsize, Ordering};
 use std::sync::{Arc, Mutex, mpsc};

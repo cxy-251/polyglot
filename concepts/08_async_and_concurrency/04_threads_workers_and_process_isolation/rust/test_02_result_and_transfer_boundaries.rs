@@ -4,7 +4,8 @@
 // polyglot-related+: 13_io_files_paths_processes_and_networking/test_102_command_stdio_and_exit_status.rs
 //
 // 共同问题：隔离执行单元怎样传回结果；对象是共享、复制还是序列化。
-// 对照观察：thread JoinHandle transfers typed owned result inside one process；subprocess result is bytes/status over OS pipes.
+// 对照观察：thread JoinHandle transfers typed owned result inside one process；
+// subprocess result is bytes/status over OS pipes.
 
 #[test]
 fn comparison() {

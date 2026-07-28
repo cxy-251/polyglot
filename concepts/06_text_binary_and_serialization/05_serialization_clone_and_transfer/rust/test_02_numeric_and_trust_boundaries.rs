@@ -1,7 +1,7 @@
 // polyglot-family: text_binary_and_serialization
 // polyglot-concept: serialization_clone_and_transfer
-// polyglot-related: languages/rust/tests/standard_library/
-// polyglot-related+: 14_formatting_parsing_binary_and_serialization/test_110_size_prefix_and_trailing_data_validation.rs
+// polyglot-related: languages/rust/tests/standard_library/14_formatting_parsing_binary_and_serialization/
+// polyglot-related+: test_110_size_prefix_and_trailing_data_validation.rs
 //
 // 共同问题：大整数和特殊浮点怎样编码；未知字段、长度、cycle 与不可信输入在哪里拒绝。
 // 对照观察：没有内建 JSON number model；manual codec 必须在 allocation 前检查 prefix 并定义精度与 schema。

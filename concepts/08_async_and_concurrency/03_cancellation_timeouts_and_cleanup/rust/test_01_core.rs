@@ -4,7 +4,8 @@
 // polyglot-related+: test_095_cancellation_by_drop_and_cleanup.rs
 //
 // 共同问题：取消如何传递；阻塞工作怎样退出；取消路径是否仍执行清理。
-// 对照观察：dropping an incomplete Future is cancellation；Drop cleans owned state, cooperative work needs an explicit signal.
+// 对照观察：dropping an incomplete Future is cancellation；Drop cleans owned state；
+// cooperative work needs an explicit signal.
 
 use std::future::Future;
 use std::pin::Pin;

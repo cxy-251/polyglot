@@ -4,7 +4,8 @@
 // polyglot-related+: 15_time_runtime_reflection_and_unsafe/test_117_size_alignment_and_repr.rs
 //
 // 共同问题：规范接口、构建配置和当前实现观察如何分层；平台特性缺失怎样表达。
-// 对照观察：traits define source contracts，cfg selects build target，size/alignment/type_name observations need scoped claims.
+// 对照观察：traits define source contracts，cfg selects build target；
+// size/alignment/type_name observations need scoped claims.
 
 fn requires_send_sync<T: Send + Sync>() {}
 

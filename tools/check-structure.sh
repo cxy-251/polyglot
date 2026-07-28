@@ -31,7 +31,7 @@ PY
 }
 
 check_active_language_state() {
-  local expected_active="python cpp nodejs go"
+  local expected_active="python cpp nodejs go rust"
   local configured_active="${ACTIVE_LANGUAGES[*]}"
   local configured_planned="${PLANNED_LANGUAGES[*]}"
   local project_active
@@ -88,6 +88,12 @@ check_test_path() {
     go:languages/go/standard_library/*/test_[0-9][0-9][0-9]_*_test.go)
       ;;
     go:languages/go/tooling_and_runtime/*/test_[0-9][0-9][0-9]_*_test.go)
+      ;;
+    rust:languages/rust/tests/language/*/test_[0-9][0-9][0-9]_*.rs)
+      ;;
+    rust:languages/rust/tests/standard_library/*/test_[0-9][0-9][0-9]_*.rs)
+      ;;
+    rust:languages/rust/tests/tooling_and_runtime/*/test_[0-9][0-9][0-9]_*.rs)
       ;;
     *)
       report_failure "$language 测试位于未声明路径: $path"
@@ -350,8 +356,13 @@ check_concepts() {
     if [[ ! -d "$family" ]]; then
       continue
     fi
-    found_family=1
     family_name="${family##*/}"
+    case "$family_name" in
+      src|tests)
+        continue
+        ;;
+    esac
+    found_family=1
     if [[ ! "$family_name" =~ ^[0-9]{2}_[a-z0-9_]+$ ]]; then
       report_failure "概念章节必须使用 NN_family 格式: $family_name"
       continue
@@ -405,6 +416,9 @@ check_concepts() {
           go)
             extension=go
             ;;
+          rust)
+            extension=rs
+            ;;
         esac
 
         language_directory="$topic/$language"
@@ -428,6 +442,7 @@ check_concepts() {
 
       local python_stems
       local go_stems
+      local rust_stems
       python_stems=$(
         find "$topic/python" -maxdepth 1 -type f -name 'test_[0-9][0-9]_*.py' \
           -exec basename {} .py \; | sort
@@ -436,8 +451,15 @@ check_concepts() {
         find "$topic/go" -maxdepth 1 -type f -name 'test_[0-9][0-9]_*_test.go' \
           -exec basename {} _test.go \; | sort
       )
+      rust_stems=$(
+        find "$topic/rust" -maxdepth 1 -type f -name 'test_[0-9][0-9]_*.rs' \
+          -exec basename {} .rs \; | sort
+      )
       if [[ "$python_stems" != "$go_stems" ]]; then
         report_failure "$topic 的 Go 子问题文件没有镜像既有测试结构"
+      fi
+      if [[ "$python_stems" != "$rust_stems" ]]; then
+        report_failure "$topic 的 Rust 子问题文件没有镜像既有测试结构"
       fi
 
       for child in "$topic"/*; do
@@ -446,7 +468,7 @@ check_concepts() {
         fi
         child_name="${child##*/}"
         case "$child_name" in
-          python|cpp|nodejs|go)
+          python|cpp|nodejs|go|rust)
             ;;
           *)
             report_failure "$topic 包含未知语言目录: $child_name"
@@ -515,6 +537,86 @@ check_go_workspace() {
   fi
 }
 
+check_rust_workspaces() {
+  local required_file
+  local metadata
+  local path
+  local relative_path
+  local directory_path
+  local file_name
+  for required_file in \
+    Cargo.toml \
+    Cargo.lock \
+    languages/rust/Cargo.toml \
+    languages/rust/tests/course.rs \
+    concepts/Cargo.toml \
+    concepts/Cargo.lock \
+    concepts/tests/concepts.rs; do
+    if [[ ! -f "$required_file" ]]; then
+      report_failure "缺少 Rust Cargo workspace 文件: $required_file"
+    fi
+  done
+
+  for required_file in rustc cargo rustfmt; do
+    if ! command -v "$required_file" >/dev/null 2>&1; then
+      report_failure "ohdev 中缺少 Rust 工具: $required_file"
+      return
+    fi
+  done
+  if [[ "$(rustc --version | awk '{print $2}')" != 1.97.1 ]]; then
+    report_failure "rustc 不是锁定的 1.97.1"
+  fi
+  if [[ "$(cargo --version | awk '{print $2}')" != 1.97.1 ]]; then
+    report_failure "Cargo 不是锁定的 1.97.1"
+  fi
+  if ! cargo clippy --version >/dev/null; then
+    report_failure "ohdev 中缺少 Clippy"
+  fi
+
+  if ! metadata=$(cargo metadata --manifest-path Cargo.toml --no-deps --format-version 1); then
+    report_failure "根 Cargo.toml 无法被 Cargo 解析"
+  elif [[ "$metadata" != *'"name":"polyglot-rust-course"'* ]]; then
+    report_failure "根 Cargo workspace 缺少 languages/rust package"
+  fi
+  if ! metadata=$(
+    cargo metadata --manifest-path concepts/Cargo.toml --no-deps --format-version 1
+  ); then
+    report_failure "concepts/Cargo.toml 无法被 Cargo 解析"
+  elif [[ "$metadata" != *'"name":"polyglot-rust-concepts"'* ]]; then
+    report_failure "concepts Cargo workspace 缺少横向 package"
+  fi
+
+  if ! cargo fmt --manifest-path Cargo.toml --all -- --check; then
+    report_failure "Rust 纵向课程文件未通过 rustfmt"
+  fi
+  if ! cargo fmt --manifest-path concepts/Cargo.toml --all -- --check; then
+    report_failure "Rust 横向概念文件未通过 rustfmt"
+  fi
+
+  while IFS= read -r -d '' path; do
+    relative_path="${path#languages/rust/tests/}"
+    directory_path="${relative_path%/*}/"
+    file_name="${relative_path##*/}"
+    if ! grep -Fq "\"$directory_path\"" languages/rust/tests/course.rs || \
+      ! grep -Fq "\"$file_name\"" languages/rust/tests/course.rs; then
+      report_failure "Rust 纵向测试未接入 Cargo 聚合入口: $path"
+    fi
+  done < <(
+    find languages/rust -type f -name 'test_[0-9][0-9][0-9]_*.rs' -print0 | sort -z
+  )
+  while IFS= read -r -d '' path; do
+    relative_path="${path#concepts/}"
+    directory_path="../${relative_path%/*}/"
+    file_name="${relative_path##*/}"
+    if ! grep -Fq "\"$directory_path\"" concepts/tests/concepts.rs || \
+      ! grep -Fq "\"$file_name\"" concepts/tests/concepts.rs; then
+      report_failure "Rust 横向测试未接入 Cargo 聚合入口: $path"
+    fi
+  done < <(
+    find concepts -type f -path '*/rust/test_[0-9][0-9]_*.rs' -print0 | sort -z
+  )
+}
+
 check_unicode_line_lengths() {
   local -a checked_files=()
   local path
@@ -567,6 +669,9 @@ for active_language in "${ACTIVE_LANGUAGES[@]}"; do
     go)
       check_language go go 'test_[0-9][0-9][0-9]_*_test.go'
       ;;
+    rust)
+      check_language rust rs
+      ;;
     *)
       report_failure "缺少 active language 结构检查实现: $active_language"
       ;;
@@ -574,6 +679,7 @@ for active_language in "${ACTIVE_LANGUAGES[@]}"; do
 done
 check_concepts
 check_go_workspace
+check_rust_workspaces
 check_unicode_line_lengths
 
 if ((failure_count > 0)); then

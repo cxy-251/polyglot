@@ -77,9 +77,7 @@ doctor_go() {
 }
 
 doctor_rust() {
-  need_cmd rustc
-  need_cmd cargo
-  need_cmd rustfmt
+  check_rust_version
   printf 'rustc: '
   rustc --version
   printf 'cargo: '
@@ -113,9 +111,6 @@ doctor_planned() {
   optional_version julia julia julia --startup-file=no --history-file=no --version
   optional_version R R R --version
   optional_version Rscript Rscript Rscript --version
-  optional_version rustc rustc rustc --version
-  optional_version cargo cargo cargo --version
-  optional_version rustfmt rustfmt rustfmt --version
 }
 
 doctor() {
@@ -141,6 +136,9 @@ doctor() {
         ;;
       go)
         doctor_go
+        ;;
+      rust)
+        doctor_rust
         ;;
       *)
         echo "doctor 缺少 active language 检查实现: $language" >&2
@@ -273,11 +271,17 @@ check_rust_version() {
   need_cmd rustfmt
 
   local expected_version="1.97.1"
-  local actual_version
-  actual_version="$(rustc --version | awk '{print $2}')"
-  if [[ "$actual_version" != "$expected_version" ]]; then
-    echo "Rust 版本不匹配: 需要 $expected_version，实际 $actual_version" >&2
+  local actual_rustc_version
+  local actual_cargo_version
+  actual_rustc_version="$(rustc --version | awk '{print $2}')"
+  actual_cargo_version="$(cargo --version | awk '{print $2}')"
+  if [[ "$actual_rustc_version" != "$expected_version" ]]; then
+    echo "rustc 版本不匹配: 需要 $expected_version，实际 $actual_rustc_version" >&2
     echo "请在 ohdev 中运行 ./tools/bootstrap-language-toolchains-in-container.sh rust。" >&2
+    exit 1
+  fi
+  if [[ "$actual_cargo_version" != "$expected_version" ]]; then
+    echo "Cargo 版本不匹配: 需要 $expected_version，实际 $actual_cargo_version" >&2
     exit 1
   fi
 }
@@ -311,6 +315,21 @@ run_concept_go() {
       cd concepts
       go test -count=1 "./$concept_name/go"
     )
+  fi
+}
+
+run_concept_rust() {
+  local concept_name="$1"
+  if [[ -d "concepts/$concept_name/rust" ]]; then
+    check_rust_version
+    local family_number="${concept_name%%_*}"
+    local topic_name="${concept_name#*/}"
+    local topic_number="${topic_name%%_*}"
+    local target_directory="${POLYGLOT_RUST_CONCEPT_TARGET_DIR:-/tmp/polyglot-rust-concepts-target}"
+    printf '\n== %s / Rust ==\n' "$concept_name"
+    CARGO_TARGET_DIR="$target_directory" \
+      cargo test --manifest-path concepts/Cargo.toml --test concepts \
+      "concept_${family_number}_${topic_number}_"
   fi
 }
 
@@ -461,6 +480,23 @@ run_family_go() {
   fi
 }
 
+run_family_rust() {
+  local family_name="$1"
+  if find "concepts/$family_name" \
+    -type f \
+    -path '*/rust/test_[0-9][0-9]_*.rs' \
+    -print \
+    -quit | grep -q .; then
+    check_rust_version
+    local family_number="${family_name%%_*}"
+    local target_directory="${POLYGLOT_RUST_CONCEPT_TARGET_DIR:-/tmp/polyglot-rust-concepts-target}"
+    printf '\n== %s / Rust ==\n' "$family_name"
+    CARGO_TARGET_DIR="$target_directory" \
+      cargo test --manifest-path concepts/Cargo.toml --test concepts \
+      "concept_${family_number}_"
+  fi
+}
+
 run_all_concepts_python() {
   local -a python_test_files=()
   mapfile -d '' python_test_files < <(
@@ -516,6 +552,22 @@ run_all_concepts_go() {
       go test -count=1 ./...
       go vet ./...
     )
+  fi
+}
+
+run_all_concepts_rust() {
+  if find concepts \
+    -type f \
+    -path '*/rust/test_[0-9][0-9]_*.rs' \
+    -print \
+    -quit | grep -q .; then
+    check_rust_version
+    local target_directory="${POLYGLOT_RUST_CONCEPT_TARGET_DIR:-/tmp/polyglot-rust-concepts-target}"
+    printf '\n== all concepts / Rust ==\n'
+    cargo fmt --manifest-path concepts/Cargo.toml --all -- --check
+    CARGO_TARGET_DIR="$target_directory" \
+      cargo clippy --manifest-path concepts/Cargo.toml --all-targets --all-features -- -D warnings
+    CARGO_TARGET_DIR="$target_directory" cargo test --manifest-path concepts/Cargo.toml
   fi
 }
 
@@ -605,6 +657,9 @@ list_concepts() {
             ;;
           go)
             extension=go
+            ;;
+          rust)
+            extension=rs
             ;;
         esac
         if [[ ! -d "$topic_directory/$language" ]]; then
