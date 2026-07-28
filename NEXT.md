@@ -1,6 +1,6 @@
 # Next task
 
-Status: `in_progress`
+Status: `complete`
 
 ## Goal
 
@@ -32,12 +32,22 @@ Status: `in_progress`
 - Lua 5.5.0 source archive：`https://www.lua.org/ftp/lua-5.5.0.tar.gz`
 - Lua 5.5.0 source browser：`https://www.lua.org/source/5.5/`
 
-## Current progress
+## Completion
 
-- 已核对当前 R 完成基线、Docker `ohdev` 架构与 C 编译器。
-- 正在建立 Lua bootstrap、精确版本检查、断言库、独立进程 runner 和 C API 骨架。
+- 工具链：官方 Lua 5.5.0 源码归档校验、构建和幂等 bootstrap 通过；`lua`、`luac`、
+  C headers 与 `liblua.a` 均由 `/opt/polyglot/lua-5.5.0` 提供，`doctor` 精确版本检查通过。
+- 纵向课程：`languages/lua/` 的 `001`–`128` 连续编号与 128 个唯一
+  `polyglot-covers` 通过结构检查；完整执行结果为 `128/128 files passed`。
+- 横向课程：现有 `49/49 topics` 均有 Lua 实现，局部 stem 与其他 active language
+  一致；完整执行结果为 `73/73 files passed`。
+- family：`01_values_and_comparison` 至 `10_time_locale_and_runtime` 共 10 个 family
+  已逐一通过八语言统一入口。
+- C API：严格 C11 警告配置下，C host 的 16 个独立案例与动态 C module 构建、加载和
+  清理通过；模块加载、standalone、`luac`、bytecode 与 C API 的 32 个课程文件独立复跑通过。
+- 统一验证：单 topic、单 family、`lua`、`concepts`、`list-concepts`、`doctor`、
+  `check` 和 `git diff --check` 全部通过；临时构建目录、模块、进程状态和测试沙箱均已清理。
 
 ## Handoff
 
-当前唯一下一步：完成并验证 Lua 5.5.0 工具链与最小测试骨架；不得在实际验证前记录
-课程或横向通过数字，也不得在全部闭环前将状态改为 `complete`。
+Lua 5.5.0 已成为第八门 active language，本任务没有剩余实现步骤。后续任务必须由用户
+重新指定 `NEXT.md`，不得从本完成记录自行扩张 topic、family 或语言范围。
