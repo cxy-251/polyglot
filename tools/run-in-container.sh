@@ -13,6 +13,7 @@ Usage:
   ./tools/run-in-container.sh cpp [ctest arguments...]
   ./tools/run-in-container.sh nodejs [node --test arguments or test files...]
   ./tools/run-in-container.sh go [go test arguments...]
+  ./tools/run-in-container.sh rust [cargo test arguments...]
   ./tools/run-in-container.sh concept NN_family/NN_topic
   ./tools/run-in-container.sh family NN_family
   ./tools/run-in-container.sh concepts
@@ -73,6 +74,20 @@ doctor_go() {
   printf 'go vet: '
   go help vet >/dev/null
   echo available
+}
+
+doctor_rust() {
+  need_cmd rustc
+  need_cmd cargo
+  need_cmd rustfmt
+  printf 'rustc: '
+  rustc --version
+  printf 'cargo: '
+  cargo --version
+  printf 'rustfmt: '
+  rustfmt --version
+  printf 'clippy: '
+  cargo clippy --version
 }
 
 optional_version() {
@@ -250,6 +265,31 @@ check_go_version() {
     echo "请在 ohdev 中运行 ./tools/bootstrap-language-toolchains-in-container.sh go。" >&2
     exit 1
   fi
+}
+
+check_rust_version() {
+  need_cmd rustc
+  need_cmd cargo
+  need_cmd rustfmt
+
+  local expected_version="1.97.1"
+  local actual_version
+  actual_version="$(rustc --version | awk '{print $2}')"
+  if [[ "$actual_version" != "$expected_version" ]]; then
+    echo "Rust 版本不匹配: 需要 $expected_version，实际 $actual_version" >&2
+    echo "请在 ohdev 中运行 ./tools/bootstrap-language-toolchains-in-container.sh rust。" >&2
+    exit 1
+  fi
+}
+
+run_rust() {
+  check_rust_version
+  local target_directory="${POLYGLOT_RUST_COURSE_TARGET_DIR:-/tmp/polyglot-rust-course-target}"
+  printf '\n== Rust vertical course ==\n'
+  CARGO_TARGET_DIR="$target_directory" cargo fmt --all --check
+  CARGO_TARGET_DIR="$target_directory" \
+    cargo clippy --workspace --all-targets --all-features -- -D warnings
+  CARGO_TARGET_DIR="$target_directory" cargo test --workspace "$@"
 }
 
 run_go() {
@@ -619,6 +659,10 @@ main() {
     go|golang)
       shift
       run_go "$@"
+      ;;
+    rust|rs)
+      shift
+      run_rust "$@"
       ;;
     concept)
       shift

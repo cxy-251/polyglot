@@ -9,6 +9,8 @@ __pycache__/
 # Repository-local build output. Runners should prefer /tmp.
 /languages/cpp/build/
 /languages/rust/target/
+/target/
+/concepts/target/
 /languages/nodejs/node_modules/
 /concepts/*/*/nodejs/node_modules/
 
