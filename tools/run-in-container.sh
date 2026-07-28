@@ -14,6 +14,7 @@ Usage:
   ./tools/run-in-container.sh nodejs [node --test arguments or test files...]
   ./tools/run-in-container.sh go [go test arguments...]
   ./tools/run-in-container.sh rust [cargo test arguments...]
+  ./tools/run-in-container.sh julia [test files...]
   ./tools/run-in-container.sh concept NN_family/NN_topic
   ./tools/run-in-container.sh family NN_family
   ./tools/run-in-container.sh concepts
@@ -284,6 +285,83 @@ check_rust_version() {
     echo "Cargo 版本不匹配: 需要 $expected_version，实际 $actual_cargo_version" >&2
     exit 1
   fi
+}
+
+check_julia_version() {
+  need_cmd julia
+
+  local expected_version="1.12.6"
+  local actual_version
+  actual_version=$(
+    JULIA_DEPOT_PATH=/tmp/polyglot-julia-version-depot \
+      JULIA_LOAD_PATH='@:@stdlib' \
+      julia \
+        --startup-file=no \
+        --history-file=no \
+        --project=@stdlib \
+        -e 'print(VERSION)'
+  )
+  if [[ "$actual_version" != "$expected_version" ]]; then
+    echo "Julia 版本不匹配: 需要 $expected_version，实际 $actual_version" >&2
+    echo "请在 ohdev 中运行 ./tools/bootstrap-language-toolchains-in-container.sh julia。" >&2
+    exit 1
+  fi
+}
+
+run_julia_files() {
+  local label="$1"
+  local project_directory="$2"
+  local depot_directory="$3"
+  shift 3
+  local -a test_files=("$@")
+  local test_file
+
+  if [[ ${#test_files[@]} -eq 0 ]]; then
+    echo "$label 没有发现 Julia 测试文件。" >&2
+    exit 1
+  fi
+
+  mkdir -p "$depot_directory"
+  printf '\n== %s ==\n' "$label"
+  for test_file in "${test_files[@]}"; do
+    if [[ ! -f "$test_file" ]]; then
+      echo "Julia 测试文件不存在: $test_file" >&2
+      exit 2
+    fi
+    JULIA_DEPOT_PATH="$depot_directory" \
+      JULIA_LOAD_PATH='@:@stdlib' \
+      JULIA_PKG_PRECOMPILE_AUTO=0 \
+      julia \
+        --startup-file=no \
+        --history-file=no \
+        --project="$project_directory" \
+        --depwarn=error \
+        --check-bounds=yes \
+        --threads=2,0 \
+        --color=no \
+        "$test_file"
+  done
+  printf '%s: %d 个 Julia 测试文件通过。\n' "$label" "${#test_files[@]}"
+}
+
+run_julia() {
+  check_julia_version
+  local -a test_files=()
+  if [[ $# -gt 0 ]]; then
+    test_files=("$@")
+  else
+    mapfile -d '' test_files < <(
+      find languages/julia \
+        -type f \
+        -name 'test_[0-9][0-9][0-9]_*.jl' \
+        -print0 | sort -z
+    )
+  fi
+  run_julia_files \
+    "Julia vertical course" \
+    "languages/julia" \
+    "${POLYGLOT_JULIA_COURSE_DEPOT:-/tmp/polyglot-julia-course-depot}" \
+    "${test_files[@]}"
 }
 
 run_rust() {
@@ -718,6 +796,10 @@ main() {
     rust|rs)
       shift
       run_rust "$@"
+      ;;
+    julia|jl)
+      shift
+      run_julia "$@"
       ;;
     concept)
       shift
