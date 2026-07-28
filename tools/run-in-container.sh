@@ -543,6 +543,7 @@ run_lua_files() {
   run_sandbox="$(mktemp -d "$sandbox_root/run.XXXXXX")"
   build_lua_c_api "$run_sandbox/c-api"
   support_path="$ROOT/languages/lua/?.lua;$ROOT/languages/lua/?/init.lua"
+  support_path+=";$ROOT/languages/lua/fixtures/modules/?.lua"
   c_module_path="$run_sandbox/c-api/?.so"
 
   printf '\n== %s ==\n' "$label"
