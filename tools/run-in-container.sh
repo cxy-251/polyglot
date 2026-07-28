@@ -17,6 +17,7 @@ Usage:
   ./tools/run-in-container.sh julia [test files...]
   ./tools/run-in-container.sh r [test files...]
   ./tools/run-in-container.sh lua [test files...]
+  ./tools/run-in-container.sh ruby [test files...]
   ./tools/run-in-container.sh concept NN_family/NN_topic
   ./tools/run-in-container.sh family NN_family
   ./tools/run-in-container.sh concepts
@@ -120,6 +121,25 @@ doctor_lua() {
   printf 'Lua headers: %s\n' /opt/polyglot/lua-5.5.0/include
   printf 'Lua library: %s\n' /opt/polyglot/lua-5.5.0/lib/liblua.a
   printf 'Lua module path: repository and per-test temporary directories only\n'
+}
+
+doctor_ruby() {
+  check_ruby_version
+  printf 'ruby: '
+  ruby --version
+  printf 'ruby path: '
+  command -v ruby
+  printf 'gem: '
+  gem --version
+  printf 'bundle: '
+  bundle --version
+  printf 'rake: '
+  rake --version
+  printf 'Ruby headers: '
+  ruby --disable-gems -rrbconfig -e 'puts RbConfig::CONFIG.fetch("rubyhdrdir")'
+  printf 'Ruby engine: '
+  ruby --disable-gems -e 'puts RUBY_ENGINE'
+  printf 'RubyGems/Bundler: isolated local paths only\n'
 }
 
 optional_version() {
@@ -607,6 +627,180 @@ run_lua() {
   run_lua_files \
     "Lua vertical course" \
     "${POLYGLOT_LUA_COURSE_ROOT:-/tmp/polyglot-lua-course}" \
+    "${test_files[@]}"
+}
+
+check_ruby_version() {
+  need_cmd ruby
+  need_cmd gem
+  need_cmd bundle
+  need_cmd rake
+
+  local expected_version="4.0.6"
+  local actual_version
+  local actual_engine
+  local ruby_header_directory
+  actual_version="$(ruby --disable-gems -e 'print RUBY_VERSION')"
+  actual_engine="$(ruby --disable-gems -e 'print RUBY_ENGINE')"
+  ruby_header_directory="$(
+    ruby --disable-gems -rrbconfig -e 'print RbConfig::CONFIG.fetch("rubyhdrdir")'
+  )"
+  if [[ "$actual_version" != "$expected_version" ]] || [[ "$actual_engine" != ruby ]]; then
+    echo "Ruby 版本不匹配: 需要 CRuby $expected_version，实际 $actual_engine $actual_version" >&2
+    echo "请在 ohdev 中运行 ./tools/bootstrap-language-toolchains-in-container.sh ruby。" >&2
+    exit 1
+  fi
+  if [[ "$ruby_header_directory" != /opt/polyglot/ruby-4.0.6/include/ruby-4.0.0 ]]; then
+    echo "Ruby C Extension 头文件不是锁定的 4.0.6 安装: $ruby_header_directory" >&2
+    exit 1
+  fi
+}
+
+build_ruby_c_extension() {
+  local build_directory="$1"
+  local source_directory="$ROOT/languages/ruby/c_extension"
+  need_cmd cc
+  need_cmd make
+  mkdir -p "$build_directory"
+  (
+    cd "$build_directory"
+    ruby "$source_directory/extconf.rb"
+    make V=1
+  )
+}
+
+run_ruby_files() {
+  local label="$1"
+  local sandbox_root="$2"
+  shift 2
+  local -a test_files=("$@")
+  local run_sandbox
+  local test_sandbox
+  local test_file
+  local default_gem_directory
+
+  if [[ ${#test_files[@]} -eq 0 ]]; then
+    echo "$label 没有发现 Ruby 测试文件。" >&2
+    exit 1
+  fi
+
+  mkdir -p "$sandbox_root"
+  run_sandbox="$(mktemp -d "$sandbox_root/run.XXXXXX")"
+  build_ruby_c_extension "$run_sandbox/c-extension"
+  default_gem_directory="$(
+    ruby -rrubygems -e 'print Gem.default_dir'
+  )"
+
+  printf '\n== %s ==\n' "$label"
+  for test_file in "${test_files[@]}"; do
+    if [[ ! -f "$test_file" ]]; then
+      echo "Ruby 测试文件不存在: $test_file" >&2
+      rm -rf "$run_sandbox"
+      exit 2
+    fi
+
+    test_sandbox="$(mktemp -d "$run_sandbox/test.XXXXXX")"
+    mkdir -p \
+      "$test_sandbox/home" \
+      "$test_sandbox/tmp" \
+      "$test_sandbox/gems" \
+      "$test_sandbox/bundle"
+    if ! env \
+      -u RUBYOPT \
+      -u RUBYLIB \
+      -u GEM_HOME \
+      -u GEM_PATH \
+      -u BUNDLE_GEMFILE \
+      -u BUNDLE_PATH \
+      -u BUNDLE_APP_CONFIG \
+      HOME="$test_sandbox/home" \
+      TMPDIR="$test_sandbox/tmp" \
+      GEM_HOME="$test_sandbox/gems" \
+      GEM_PATH="$test_sandbox/gems:$default_gem_directory" \
+      GEMRC=/dev/null \
+      BUNDLE_USER_HOME="$test_sandbox/bundle" \
+      BUNDLE_USER_CONFIG="$test_sandbox/bundle/config" \
+      BUNDLE_USER_CACHE="$test_sandbox/bundle/cache" \
+      BUNDLE_USER_PLUGIN="$test_sandbox/bundle/plugin" \
+      BUNDLE_DISABLE_VERSION_CHECK=true \
+      BUNDLE_SILENCE_ROOT_WARNING=true \
+      BUNDLE_ALLOW_OFFLINE_INSTALL=true \
+      TZ=UTC \
+      LC_ALL=C.UTF-8 \
+      POLYGLOT_RUBY_TEST_TMP="$test_sandbox/tmp" \
+      POLYGLOT_RUBY_GEM_HOME="$test_sandbox/gems" \
+      POLYGLOT_RUBY_BUNDLE_HOME="$test_sandbox/bundle" \
+      POLYGLOT_RUBY_EXTENSION_DIR="$run_sandbox/c-extension" \
+      ruby \
+        --disable-did_you_mean \
+        --disable-error_highlight \
+        -I "$ROOT/languages/ruby/support" \
+        -I "$run_sandbox/c-extension" \
+        -cw \
+        "$test_file" >/dev/null; then
+      echo "Ruby 语法或 warning 检查失败: $test_file" >&2
+      rm -rf "$run_sandbox"
+      exit 1
+    fi
+    if ! env \
+      -u RUBYOPT \
+      -u RUBYLIB \
+      -u GEM_HOME \
+      -u GEM_PATH \
+      -u BUNDLE_GEMFILE \
+      -u BUNDLE_PATH \
+      -u BUNDLE_APP_CONFIG \
+      HOME="$test_sandbox/home" \
+      TMPDIR="$test_sandbox/tmp" \
+      GEM_HOME="$test_sandbox/gems" \
+      GEM_PATH="$test_sandbox/gems:$default_gem_directory" \
+      GEMRC=/dev/null \
+      BUNDLE_USER_HOME="$test_sandbox/bundle" \
+      BUNDLE_USER_CONFIG="$test_sandbox/bundle/config" \
+      BUNDLE_USER_CACHE="$test_sandbox/bundle/cache" \
+      BUNDLE_USER_PLUGIN="$test_sandbox/bundle/plugin" \
+      BUNDLE_DISABLE_VERSION_CHECK=true \
+      BUNDLE_SILENCE_ROOT_WARNING=true \
+      BUNDLE_ALLOW_OFFLINE_INSTALL=true \
+      TZ=UTC \
+      LC_ALL=C.UTF-8 \
+      POLYGLOT_RUBY_TEST_TMP="$test_sandbox/tmp" \
+      POLYGLOT_RUBY_GEM_HOME="$test_sandbox/gems" \
+      POLYGLOT_RUBY_BUNDLE_HOME="$test_sandbox/bundle" \
+      POLYGLOT_RUBY_EXTENSION_DIR="$run_sandbox/c-extension" \
+      ruby \
+        --disable-did_you_mean \
+        --disable-error_highlight \
+        -W:deprecated \
+        -I "$ROOT/languages/ruby/support" \
+        -I "$run_sandbox/c-extension" \
+        "$test_file"; then
+      echo "Ruby 测试失败: $test_file" >&2
+      rm -rf "$run_sandbox"
+      exit 1
+    fi
+    rm -rf "$test_sandbox"
+  done
+  rm -rf "$run_sandbox"
+  printf '%s: %d 个 Ruby 测试文件通过。\n' "$label" "${#test_files[@]}"
+}
+
+run_ruby() {
+  check_ruby_version
+  local -a test_files=()
+  if [[ $# -gt 0 ]]; then
+    test_files=("$@")
+  else
+    mapfile -d '' test_files < <(
+      find languages/ruby \
+        -type f \
+        -name 'test_[0-9][0-9][0-9]_*.rb' \
+        -print0 | sort -z
+    )
+  fi
+  run_ruby_files \
+    "Ruby vertical course" \
+    "${POLYGLOT_RUBY_COURSE_ROOT:-/tmp/polyglot-ruby-course}" \
     "${test_files[@]}"
 }
 
@@ -1228,6 +1422,10 @@ main() {
     lua)
       shift
       run_lua "$@"
+      ;;
+    ruby|rb)
+      shift
+      run_ruby "$@"
       ;;
     concept)
       shift

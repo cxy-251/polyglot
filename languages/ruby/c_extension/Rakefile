@@ -1,0 +1,14 @@
+# frozen_string_literal: true
+
+require "rake/clean"
+
+# 此文件记录常规扩展工程入口；正式测试直接使用随 CRuby 提供的 mkmf 和 make，
+# 不依赖第三方 rake-compiler。
+task default: :compile
+
+task :compile do
+  ruby "extconf.rb"
+  sh "make"
+end
+
+CLEAN.include("Makefile", "*.o", "*.so")

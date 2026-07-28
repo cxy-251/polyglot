@@ -8,6 +8,7 @@ readonly INSTALL_ROOT="/opt/polyglot"
 readonly JULIA_VERSION="1.12.6"
 readonly R_VERSION="4.6.1"
 readonly LUA_VERSION="5.5.0"
+readonly RUBY_VERSION="4.0.6"
 readonly GO_VERSION="1.26.5"
 readonly RUST_VERSION="1.97.1"
 readonly RUST_RELEASE_DATE="2026-07-16"
@@ -194,6 +195,73 @@ install_lua() {
   luac -v
 }
 
+install_ruby_build_dependencies() {
+  export DEBIAN_FRONTEND=noninteractive
+  apt-get update
+  apt-get install --yes --no-install-recommends \
+    autoconf \
+    bison \
+    build-essential \
+    libffi-dev \
+    libgdbm-dev \
+    libncurses-dev \
+    libreadline-dev \
+    libssl-dev \
+    libyaml-dev \
+    pkg-config \
+    zlib1g-dev
+  rm -rf /var/lib/apt/lists/*
+}
+
+install_ruby() {
+  local expected_sha="837d299e8f7ddf2be31a229a7a7e019d354979825117989acb3b32b1a9be262a"
+  local archive_name="ruby-${RUBY_VERSION}.tar.gz"
+  local archive_path="/tmp/${archive_name}"
+  local source_dir="/tmp/ruby-${RUBY_VERSION}"
+  local install_dir="${INSTALL_ROOT}/ruby-${RUBY_VERSION}"
+  local download_url="https://cache.ruby-lang.org/pub/ruby/4.0/${archive_name}"
+  local installed_version=""
+
+  if [[ -x "$install_dir/bin/ruby" ]]; then
+    installed_version="$("$install_dir/bin/ruby" -e 'print RUBY_VERSION')"
+  fi
+
+  if [[ "$installed_version" != "$RUBY_VERSION" ]] || \
+    [[ ! -x "$install_dir/bin/gem" ]] || \
+    [[ ! -x "$install_dir/bin/bundle" ]] || \
+    [[ ! -x "$install_dir/bin/rake" ]]; then
+    install_ruby_build_dependencies
+    download_verified "$download_url" "$archive_path" "$expected_sha"
+    rm -rf "$source_dir" "$install_dir"
+    tar --extract --gzip --file "$archive_path" --directory /tmp
+    (
+      cd "$source_dir"
+      ./configure \
+        --prefix="$install_dir" \
+        --disable-install-doc \
+        --disable-yjit \
+        --disable-zjit
+      make --jobs "${POLYGLOT_BUILD_JOBS:-4}"
+      make install
+    )
+    rm -rf "$source_dir"
+  fi
+
+  for command_name in ruby gem bundle bundler rake rdoc ri; do
+    if [[ -x "$install_dir/bin/$command_name" ]]; then
+      ln -sfn "$install_dir/bin/$command_name" "/usr/local/bin/$command_name"
+    fi
+  done
+  printf 'ruby: '
+  ruby --version
+  printf 'gem: '
+  gem --version
+  printf 'bundle: '
+  bundle --version
+  printf 'rake: '
+  rake --version
+}
+
 install_go() {
   local archive_arch
   local expected_sha
@@ -295,6 +363,7 @@ for target in "$@"; do
       install_julia
       install_r
       install_lua
+      install_ruby
       install_go
       install_rust
       ;;
@@ -307,6 +376,9 @@ for target in "$@"; do
     lua)
       install_lua
       ;;
+    ruby)
+      install_ruby
+      ;;
     go)
       install_go
       ;;
@@ -314,7 +386,7 @@ for target in "$@"; do
       install_rust
       ;;
     *)
-      echo "用法: $0 [all|julia|r|lua|go|rust]..." >&2
+      echo "用法: $0 [all|julia|r|lua|ruby|go|rust]..." >&2
       exit 2
       ;;
   esac

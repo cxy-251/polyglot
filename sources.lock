@@ -117,6 +117,23 @@ standalone = "https://www.lua.org/manual/5.5/manual.html#7"
 incompatibilities = "https://www.lua.org/manual/5.5/manual.html#8"
 test_framework = "repository-local assertion library using only Lua 5.5 standard capabilities"
 
+[ruby]
+runtime = "CRuby 4.0.6"
+runtime_engine = "ruby"
+runtime_source = "https://github.com/ruby/ruby/tree/v4.0.6"
+release = "https://www.ruby-lang.org/en/news/2026/07/14/ruby-4-0-6-released/"
+source_archive = "https://cache.ruby-lang.org/pub/ruby/4.0/ruby-4.0.6.tar.gz"
+source_sha256 = "837d299e8f7ddf2be31a229a7a7e019d354979825117989acb3b32b1a9be262a"
+documentation = "https://docs.ruby-lang.org/en/4.0/"
+syntax = "https://docs.ruby-lang.org/en/4.0/syntax_rdoc.html"
+standard_library = "https://docs.ruby-lang.org/en/4.0/standard_library_md.html"
+ractor = "https://docs.ruby-lang.org/en/4.0/language/ractor_md.html"
+ruby_box = "https://docs.ruby-lang.org/en/4.0/language/box_md.html"
+c_extension = "https://docs.ruby-lang.org/en/4.0/extension_rdoc.html"
+rubygems = "https://guides.rubygems.org/"
+bundler = "https://bundler.io/man/"
+test_framework = "repository-local assertion library using only CRuby 4.0 standard capabilities"
+
 [go]
 runtime = "Go 1.26.5"
 runtime_source = "https://go.googlesource.com/go/+/refs/tags/go1.26.5"
