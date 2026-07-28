@@ -98,6 +98,14 @@ doctor_julia() {
     julia --startup-file=no --history-file=no --project=@stdlib --version
 }
 
+doctor_r() {
+  check_r_version
+  printf 'R: '
+  R --vanilla --version | sed -n '1p'
+  printf 'Rscript: '
+  Rscript --version 2>&1 | sed -n '1p'
+}
+
 optional_version() {
   local label="$1"
   local command_name="$2"
@@ -117,9 +125,11 @@ optional_version() {
 }
 
 doctor_planned() {
+  if [[ ${#PLANNED_LANGUAGES[@]} -eq 0 ]]; then
+    echo 'planned languages: (none)'
+    return
+  fi
   printf 'planned languages: %s\n' "${PLANNED_LANGUAGES[*]}"
-  optional_version R R R --version
-  optional_version Rscript Rscript Rscript --version
 }
 
 doctor() {
@@ -151,6 +161,9 @@ doctor() {
         ;;
       julia)
         doctor_julia
+        ;;
+      r)
+        doctor_r
         ;;
       *)
         echo "doctor 缺少 active language 检查实现: $language" >&2
@@ -586,6 +599,25 @@ run_concept_julia() {
   fi
 }
 
+run_concept_r() {
+  local concept_name="$1"
+  local -a r_test_files=()
+  if [[ -d "concepts/$concept_name/r" ]]; then
+    mapfile -d '' r_test_files < <(
+      find "concepts/$concept_name/r" \
+        -maxdepth 1 \
+        -type f \
+        -name 'test_[0-9][0-9]_*.R' \
+        -print0 | sort -z
+    )
+    check_r_version
+    run_r_files \
+      "$concept_name / R" \
+      "${POLYGLOT_R_CONCEPT_ROOT:-/tmp/polyglot-r-concepts}" \
+      "${r_test_files[@]}"
+  fi
+}
+
 run_concept() {
   local concept_name="${1:-}"
   local language
@@ -705,6 +737,24 @@ run_family_julia() {
   fi
 }
 
+run_family_r() {
+  local family_name="$1"
+  local -a r_test_files=()
+  mapfile -d '' r_test_files < <(
+    find "concepts/$family_name" \
+      -type f \
+      -path '*/r/test_[0-9][0-9]_*.R' \
+      -print0 | sort -z
+  )
+  if [[ ${#r_test_files[@]} -gt 0 ]]; then
+    check_r_version
+    run_r_files \
+      "$family_name / R" \
+      "${POLYGLOT_R_CONCEPT_ROOT:-/tmp/polyglot-r-concepts}" \
+      "${r_test_files[@]}"
+  fi
+}
+
 run_all_concepts_python() {
   local -a python_test_files=()
   mapfile -d '' python_test_files < <(
@@ -794,6 +844,23 @@ run_all_concepts_julia() {
       "concepts" \
       "${POLYGLOT_JULIA_CONCEPT_DEPOT:-/tmp/polyglot-julia-concepts-depot}" \
       "${julia_test_files[@]}"
+  fi
+}
+
+run_all_concepts_r() {
+  local -a r_test_files=()
+  mapfile -d '' r_test_files < <(
+    find concepts \
+      -type f \
+      -path '*/r/test_[0-9][0-9]_*.R' \
+      -print0 | sort -z
+  )
+  if [[ ${#r_test_files[@]} -gt 0 ]]; then
+    check_r_version
+    run_r_files \
+      "all concepts / R" \
+      "${POLYGLOT_R_CONCEPT_ROOT:-/tmp/polyglot-r-concepts}" \
+      "${r_test_files[@]}"
   fi
 }
 
@@ -889,6 +956,9 @@ list_concepts() {
             ;;
           julia)
             extension=jl
+            ;;
+          r)
+            extension=R
             ;;
         esac
         if [[ ! -d "$topic_directory/$language" ]]; then

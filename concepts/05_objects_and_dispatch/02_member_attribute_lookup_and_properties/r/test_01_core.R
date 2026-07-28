@@ -1,6 +1,6 @@
 # polyglot-family: objects_and_dispatch
 # polyglot-concept: member_attribute_lookup_and_properties
-# polyglot-related: languages/r/language/03_attributes_classes_and_compound_values/
+# polyglot-related: languages/r/language/02_values_types_and_special_values/
 # polyglot-related+: test_016_attributes_names_class_and_dimensions.R
 #
 # 共同问题：成员、属性和计算属性如何查找。

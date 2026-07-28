@@ -31,7 +31,7 @@ PY
 }
 
 check_active_language_state() {
-  local expected_active="python cpp nodejs go rust julia"
+  local expected_active="python cpp nodejs go rust julia r"
   local configured_active="${ACTIVE_LANGUAGES[*]}"
   local configured_planned="${PLANNED_LANGUAGES[*]}"
   local project_active
@@ -100,6 +100,12 @@ check_test_path() {
     julia:languages/julia/standard_library/*/test_[0-9][0-9][0-9]_*.jl)
       ;;
     julia:languages/julia/tooling_and_runtime/*/test_[0-9][0-9][0-9]_*.jl)
+      ;;
+    r:languages/r/language/*/test_[0-9][0-9][0-9]_*.R)
+      ;;
+    r:languages/r/standard_library/*/test_[0-9][0-9][0-9]_*.R)
+      ;;
+    r:languages/r/tooling_and_runtime/*/test_[0-9][0-9][0-9]_*.R)
       ;;
     *)
       report_failure "$language 测试位于未声明路径: $path"
@@ -428,6 +434,9 @@ check_concepts() {
           julia)
             extension=jl
             ;;
+          r)
+            extension=R
+            ;;
         esac
 
         language_directory="$topic/$language"
@@ -453,6 +462,7 @@ check_concepts() {
       local go_stems
       local rust_stems
       local julia_stems
+      local r_stems
       python_stems=$(
         find "$topic/python" -maxdepth 1 -type f -name 'test_[0-9][0-9]_*.py' \
           -exec basename {} .py \; | sort
@@ -469,6 +479,10 @@ check_concepts() {
         find "$topic/julia" -maxdepth 1 -type f -name 'test_[0-9][0-9]_*.jl' \
           -exec basename {} .jl \; | sort
       )
+      r_stems=$(
+        find "$topic/r" -maxdepth 1 -type f -name 'test_[0-9][0-9]_*.R' \
+          -exec basename {} .R \; | sort
+      )
       if [[ "$python_stems" != "$go_stems" ]]; then
         report_failure "$topic 的 Go 子问题文件没有镜像既有测试结构"
       fi
@@ -478,6 +492,9 @@ check_concepts() {
       if [[ "$python_stems" != "$julia_stems" ]]; then
         report_failure "$topic 的 Julia 子问题文件没有镜像既有测试结构"
       fi
+      if [[ "$python_stems" != "$r_stems" ]]; then
+        report_failure "$topic 的 R 子问题文件没有镜像既有测试结构"
+      fi
 
       for child in "$topic"/*; do
         if [[ ! -d "$child" ]]; then
@@ -485,7 +502,7 @@ check_concepts() {
         fi
         child_name="${child##*/}"
         case "$child_name" in
-          python|cpp|nodejs|go|rust|julia)
+          python|cpp|nodejs|go|rust|julia|r)
             ;;
           *)
             report_failure "$topic 包含未知语言目录: $child_name"
@@ -505,17 +522,24 @@ check_concepts() {
 
   local total_topic_count
   local julia_test_count
+  local r_test_count
   total_topic_count=$(
     find concepts -mindepth 2 -maxdepth 2 -type d -name '[0-9][0-9]_*' -print | wc -l
   )
   julia_test_count=$(
     find concepts -type f -path '*/julia/test_[0-9][0-9]_*.jl' -print | wc -l
   )
+  r_test_count=$(
+    find concepts -type f -path '*/r/test_[0-9][0-9]_*.R' -print | wc -l
+  )
   if ((total_topic_count != 49)); then
     report_failure "横向层需要 49 个 topic，实际为 $total_topic_count"
   fi
   if ((julia_test_count != 73)); then
     report_failure "Julia 横向层需要 73 个测试入口，实际为 $julia_test_count"
+  fi
+  if ((r_test_count != 73)); then
+    report_failure "R 横向层需要 73 个测试入口，实际为 $r_test_count"
   fi
 }
 
@@ -789,6 +813,132 @@ check_julia_projects() {
   fi
 }
 
+check_r_projects() {
+  local required_file
+  local actual_version
+  local domain
+  local domain_name
+  local domain_number
+  local domain_index
+  local domain_count=0
+  local expected_domain
+  local r_test_count
+  local state_probe
+  local state_output
+  local -a seen_domains=()
+
+  for required_file in \
+    languages/r/support/run_test.R \
+    languages/r/support/package_helpers.R \
+    languages/r/support/native_helpers.R \
+    languages/r/package_fixture/polyglotrfixture/DESCRIPTION \
+    languages/r/package_fixture/polyglotrfixture/NAMESPACE \
+    languages/r/package_fixture/polyglotrfixture/R/functions.R \
+    languages/r/package_fixture/polyglotrfixture/src/polyglotrfixture.c \
+    languages/r/package_fixture/polyglotrfixture/tests/basic.R \
+    languages/r/fixtures/native/polyglot_native.c; do
+    if [[ ! -f "$required_file" ]]; then
+      report_failure "缺少 R runner、package 或 native fixture 文件: $required_file"
+    fi
+  done
+
+  if ! command -v R >/dev/null 2>&1 || ! command -v Rscript >/dev/null 2>&1; then
+    report_failure "ohdev 中缺少 R/Rscript，无法验证 R 工程"
+    return
+  fi
+
+  actual_version="$(Rscript --vanilla -e 'cat(as.character(getRversion()))')"
+  if [[ "$actual_version" != 4.6.1 ]]; then
+    report_failure "R 工具链不是锁定的 4.6.1，实际为 $actual_version"
+  fi
+
+  if ! Rscript --vanilla -e '
+    description <- read.dcf("languages/r/package_fixture/polyglotrfixture/DESCRIPTION")
+    stopifnot(
+      identical(unname(description[1L, "Package"]), "polyglotrfixture"),
+      identical(unname(description[1L, "Version"]), "0.1.0"),
+      identical(unname(description[1L, "NeedsCompilation"]), "yes")
+    )
+    namespace <- readLines(
+      "languages/r/package_fixture/polyglotrfixture/NAMESPACE",
+      warn = FALSE
+    )
+    stopifnot(
+      any(grepl("useDynLib(polyglotrfixture", namespace, fixed = TRUE)),
+      any(grepl("S3method(print, polyglot_label)", namespace, fixed = TRUE))
+    )
+  '; then
+    report_failure "R package fixture 无法解析或缺少 namespace/native 注册"
+  fi
+
+  while IFS= read -r -d '' domain; do
+    domain_name="${domain##*/}"
+    domain_number="${domain_name%%_*}"
+    domain_index=$((10#$domain_number))
+    domain_count=$((domain_count + 1))
+    if [[ -n "${seen_domains[$domain_index]:-}" ]]; then
+      report_failure "R 问题域编号 $domain_number 重复: ${seen_domains[$domain_index]} 与 $domain"
+    else
+      seen_domains[$domain_index]="$domain"
+    fi
+  done < <(
+    find \
+      languages/r/language \
+      languages/r/standard_library \
+      languages/r/tooling_and_runtime \
+      -mindepth 1 \
+      -maxdepth 1 \
+      -type d \
+      -name '[0-9][0-9]_*' \
+      -print0 | sort -z
+  )
+  if ((domain_count != 16)); then
+    report_failure "R 纵向课程需要 16 个问题域，实际为 $domain_count"
+  fi
+  for ((expected_domain = 1; expected_domain <= 16; expected_domain += 1)); do
+    if [[ -z "${seen_domains[$expected_domain]:-}" ]]; then
+      printf -v domain_number '%02d' "$expected_domain"
+      report_failure "R 纵向课程缺少问题域 $domain_number"
+    fi
+  done
+
+  r_test_count=$(
+    find languages/r -type f -name 'test_[0-9][0-9][0-9]_*.R' -print | wc -l
+  )
+  if ((r_test_count != 128)); then
+    report_failure "R 纵向课程需要 128 个测试文件，实际为 $r_test_count"
+  fi
+
+  for required_file in R_LIBS_USER R_USER TMPDIR R_ENVIRON_USER R_PROFILE_USER \
+    Rscript --vanilla; do
+    if ! grep -Fq -- "$required_file" tools/run-in-container.sh; then
+      report_failure "R runner 缺少隔离设置: $required_file"
+    fi
+  done
+  for required_file in options environment working_directory locale library_paths \
+    search_path connections output_sinks message_sinks devices random_seed; do
+    if ! grep -Fq "$required_file" languages/r/support/run_test.R; then
+      report_failure "R 状态隔离器缺少快照维度: $required_file"
+    fi
+  done
+
+  state_probe="$(mktemp /tmp/polyglot-r-state-probe.XXXXXX.R)"
+  printf '%s\n' 'options(polyglot_state_probe = TRUE)' >"$state_probe"
+  if state_output=$(
+    R_LIBS_USER=/tmp/polyglot-r-state-library \
+      R_USER=/tmp/polyglot-r-state-user \
+      TMPDIR=/tmp \
+      R_ENVIRON_USER=/dev/null \
+      R_PROFILE_USER=/dev/null \
+      Rscript --vanilla languages/r/support/run_test.R "$state_probe" 2>&1
+  ); then
+    report_failure "R 状态隔离器未拒绝 option 泄漏"
+  elif [[ "$state_output" != *"test leaked process state: options"* ]]; then
+    report_failure "R 状态隔离器泄漏探针返回了非预期诊断"
+  fi
+  rm -f "$state_probe"
+}
+
 check_unicode_line_lengths() {
   local -a checked_files=()
   local path
@@ -847,6 +997,9 @@ for active_language in "${ACTIVE_LANGUAGES[@]}"; do
     julia)
       check_language julia jl
       ;;
+    r)
+      check_language r R
+      ;;
     *)
       report_failure "缺少 active language 结构检查实现: $active_language"
       ;;
@@ -856,6 +1009,7 @@ check_concepts
 check_go_workspace
 check_rust_workspaces
 check_julia_projects
+check_r_projects
 check_unicode_line_lengths
 
 if ((failure_count > 0)); then

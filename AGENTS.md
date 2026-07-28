@@ -20,9 +20,9 @@
 > Polyglot 通过可执行测试，对照学习不同语言如何解决相同问题，理解它们的共同概念、
 > 语义差异、底层机制和迁移陷阱。
 
-Python、C++、Node.js、Go、Rust 和 Julia 的双轴学习结构已完成：六门纵向课程保持完整，横向层
-包含 10 个 family、49 个完成文件级内容终审的 topic，其中 24 个高复杂度 topic 使用
-多文件组织。R 保留在规划范围，只有用户为 `NEXT.md` 指定新阶段后才接入。
+Python、C++、Node.js、Go、Rust、Julia 和 R 的双轴学习结构已完成：七门纵向课程保持完整，
+横向层包含 10 个 family、49 个完成文件级内容终审的 topic，其中 24 个高复杂度 topic
+使用多文件组织。
 
 测试代码是主要产品。不要建立大型 Markdown/JSON checklist、Dash 对象快照、数据库
 快照、完整覆盖清单或 `chatgpt-sources/`。
@@ -40,6 +40,7 @@ languages/nodejs/{language,node_core,npm_and_package_workflows}/
 languages/go/{language,standard_library,tooling_and_runtime}/
 languages/rust/tests/{language,standard_library,tooling_and_runtime}/
 languages/julia/{language,standard_library,tooling_and_runtime}/
+languages/r/{language,standard_library,tooling_and_runtime}/
 ```
 
 现有详细测试、标准库和运行时工作流始终留在语言主线。不要为了建立概念对照而移动、
@@ -94,9 +95,9 @@ concepts/01_values_and_comparison/01_truthiness/julia/test_01_core.jl
 ## 通用内容规范
 
 - 案例展示正常用法、高阶语义、隐式机制、实际工作流和真实陷阱。
-- 新增或修改 topic 前先对齐六门 active language 的共同问题、输入类别和观察点；缺失机制不强行等价。
+- 新增或修改 topic 前先对齐七门 active language 的共同问题、输入类别和观察点；缺失机制不强行等价。
 - 新 active language 必须先建立完整纵向课程，再覆盖现有全部 topic；每个横向实现关联本语言纵向课程。
-- 六门语言优先回答同一问题，不要求代码外形一致，也不把缺失机制包装成相似 API。
+- 七门语言优先回答同一问题，不要求代码外形一致，也不把缺失机制包装成相似 API。
 - 测试名称只描述断言真正证明的范围，不把锁定实现观察写成语言普遍保证。
 - 测试必须可独立运行且不依赖执行顺序；修改全局或进程状态时可靠恢复。
 - 可执行的能力和边界使用真实断言或编译期检测，不以空 `SUCCEED()` 代替。
@@ -125,6 +126,7 @@ concepts/01_values_and_comparison/01_truthiness/julia/test_01_core.jl
 ./tools/run.sh go
 ./tools/run.sh rust
 ./tools/run.sh julia
+./tools/run.sh r
 ```
 
 横向概念：
@@ -143,8 +145,8 @@ concepts/01_values_and_comparison/01_truthiness/julia/test_01_core.jl
 ./tools/run.sh doctor planned
 ```
 
-默认 `doctor` 强制检查六门 active language；`doctor planned` 额外报告 R，
-规划语言缺失不影响当前工程可运行状态。
+默认 `doctor` 强制检查七门 active language；当前没有暂停中的规划语言，
+`doctor planned` 在 active 检查后报告空规划集合。
 
 结构门禁：
 
@@ -153,7 +155,7 @@ concepts/01_values_and_comparison/01_truthiness/julia/test_01_core.jl
 ```
 
 门禁分别验证语言路径、课程连续编号和覆盖标记、章节与主题连续编号、主题内测试连续
-编号、六门 active language、`polyglot-family`、`polyglot-concept`、课程关联目标和 Unicode
+编号、七门 active language、`polyglot-family`、`polyglot-concept`、课程关联目标和 Unicode
 120 字符行宽。它不能替代人工语义审阅；提交主题时还要确认各语言确实回答同一问题。
 
 修改测试时先跑受影响课程或单个概念，再跑对应全量。只有两者都通过才能称为 verified。
@@ -169,9 +171,10 @@ concepts/01_values_and_comparison/01_truthiness/julia/test_01_core.jl
 - Rust：课程 `001`–`128`；Rust 1.97.1、edition 2024；`128 passed, 1 ignored`，
   另有 1 个 doc test。
 - Julia：课程 `001`–`128`；Julia 1.12.6；128 个测试文件、`488 passed`。
+- R：课程 `001`–`128`；R 4.6.1；128 个测试文件、`128/128` 通过。
 - 横向层有 10 个章节、49 个已终审主题、24 个多文件主题；每门语言 73 个测试入口：
   Python `252 passed`、C++ `249 passed`、Node.js `255 passed`、Go `75 passed`、
-  Rust `73 passed`、Julia `280 passed`。
+  Rust `73 passed`、Julia `280 passed`、R `73/73` 通过。
 
 所有 skip 必须说明实现能力、平台行为或可选依赖原因。工具链和资料版本见
 `sources.lock`。
@@ -223,6 +226,13 @@ Julia 来源优先级：
 3. Pkg documentation 与 Julia 1.12.6 对应源码；
 4. 开发者文档只补充明确标注的实现观察，不覆盖 Manual 语义。
 
+R 来源优先级：
+
+1. R Language Definition 4.6.1；
+2. R 4.6.1 base、recommended packages 与标准工具文档；
+3. Writing R Extensions、R Installation and Administration；
+4. R Internals 只补充明确标注的实现观察，不覆盖语言接口保证。
+
 Dash、MDN、cppreference 和 Test262 可以帮助定位主题或发现遗漏，但不作为语义争议的
 最终依据，也不决定目录结构。
 
@@ -252,6 +262,12 @@ Julia 使用 1.12.6、标准库 `Test`；普通课程不引入第三方 package�
 `--startup-file=no`、`--history-file=no`、`--depwarn=error`、`--check-bounds=yes`，
 并使用独立 `JULIA_DEPOT_PATH`。并发测试使用 Task、Channel、Event、Condition 或显式
 predicate，不用 `sleep` 猜测调度；FFI 与 unsafe 测试用 `GC.@preserve` 和拥有对象约束生命周期。
+
+R 使用 4.6.1、base `stopifnot` 与随 R 发行的标准工具；普通课程不安装第三方 CRAN package。
+每个文件使用独立 `Rscript --vanilla` 进程、`R_LIBS_USER`、`R_USER` 与临时目录，并检查
+options、环境变量、cwd、locale、library/search path、connections、sink、graphics device 和
+random state 泄漏。并发测试按 fork/PSOCK 进程模型建立显式收集与清理，不描述成共享内存线程；
+package 与 FFI 测试只构建仓库内本地 fixture，不访问公网。
 
 ## 单任务接续与 Git
 

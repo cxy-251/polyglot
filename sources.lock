@@ -95,7 +95,11 @@ source_archive = "https://cran.r-project.org/src/base/R-4/R-4.6.1.tar.xz"
 source_sha256 = "e4149581e151f3f1bc5edd6475e24ca1e2f452c08b6a22c29b570ce8abfe5783"
 manuals = "https://cran.r-project.org/doc/manuals/r-release/"
 language_definition = "https://cran.r-project.org/doc/manuals/r-release/R-lang.html"
+writing_extensions = "https://cran.r-project.org/doc/manuals/r-release/R-exts.html"
+internals = "https://cran.r-project.org/doc/manuals/r-release/R-ints.html"
 base_reference = "https://stat.ethz.ch/R-manual/R-release/library/base/html/00Index.html"
+parallel_reference = "https://stat.ethz.ch/R-manual/R-release/library/parallel/html/parallel-package.html"
+package_installation = "https://cran.r-project.org/doc/manuals/r-release/R-admin.html"
 test_framework = "base stopifnot() and tools::assertError()"
 
 [go]
