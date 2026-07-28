@@ -1,0 +1,6 @@
+name = "PolyglotJuliaConcepts"
+uuid = "72184866-2c38-4760-ac3d-286904be4ec0"
+version = "0.1.0"
+
+[compat]
+julia = "1.12.6"
