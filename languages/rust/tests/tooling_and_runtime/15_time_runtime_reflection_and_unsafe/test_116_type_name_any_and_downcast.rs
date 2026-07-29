@@ -22,5 +22,6 @@ fn any_downcasts_static_types_while_type_name_is_diagnostic_text() {
     );
     assert_eq!(TypeId::of::<i32>(), TypeId::of::<i32>());
     assert_ne!(TypeId::of::<i32>(), TypeId::of::<u32>());
-    assert!(type_name::<Option<i32>>().contains("Option<i32>"));
+    assert!(!type_name::<Option<i32>>().is_empty());
+    // `type_name` 只提供诊断文本，不承诺稳定、唯一或可解析的格式。
 }

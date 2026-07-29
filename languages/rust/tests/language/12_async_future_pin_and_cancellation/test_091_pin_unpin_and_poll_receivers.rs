@@ -1,4 +1,5 @@
 // polyglot-covers: rust.async.pin_unpin_poll_receiver
+// polyglot-covers: rust.ownership.pin_movement_boundary
 
 use polyglot_rust_harness::assert_compile_fails;
 use std::marker::PhantomPinned;
