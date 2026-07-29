@@ -1,7 +1,7 @@
 # polyglot-family: async_and_concurrency
 # polyglot-concept: cancellation_timeouts_and_cleanup
 # polyglot-related: languages/julia/tooling_and_runtime/12_tasks_channels_and_cooperative_concurrency/
-# polyglot-related+: test_095_cooperative_cancellation_protocol.jl
+# polyglot-related+: test_094_events_and_explicit_wakeup.jl
 #
 # 共同问题：取消由谁发起和确认；cleanup 是否在协作停止路径执行。
 # 对照观察：Julia Task 没有通用强制 cancel；应用通过 Channel/Event 传递停止协议并用 finally 清理。

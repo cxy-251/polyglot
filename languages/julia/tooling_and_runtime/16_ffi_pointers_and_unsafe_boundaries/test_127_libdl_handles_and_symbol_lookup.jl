@@ -4,7 +4,8 @@ using Test
 using Libdl
 
 @testset "Libdl handle 与 symbol pointer 具有显式生命周期" begin
-    library = Libdl.find_library(["libc.so.6", "libc"])
+    candidates = Sys.iswindows() ? ["msvcrt.dll"] : ["libc.so.6", "libc.dylib", "libc"]
+    library = Libdl.find_library(candidates)
     @test !isempty(library)
     handle = Libdl.dlopen(library)
     try

@@ -10,4 +10,6 @@ using Test
     sorted = sort(records; by = first, alg = Base.Sort.MergeSort)
     @test sorted == [(1, :first), (1, :last), (2, :middle)]
     @test partialsort([5, 1, 4, 2], 2) == 2
+    @test searchsorted([1, 3, 3, 5], 3) == 2:3
+    @test_throws ErrorException sort([1, 2]; by = _ -> error("key failure"))
 end

@@ -8,6 +8,7 @@ using Test
     after = time_ns()
     @test value == 5050
     @test after >= before
-    @test time() > 0
     @test time_ns() >= after
+    @test typeof(before) === UInt64
+    # wall clock 可跳变；只有 time_ns 的间隔用途是单调观察，不能推断调度或性能。
 end

@@ -10,4 +10,7 @@ using Test
     @test keys(named) == (:count, :label)
     @test merge(named, (count = 3,)) == (count = 3, label = "two")
     @test NamedTuple{(:x, :y)}((1, 2)) == (x = 1, y = 2)
+    @test typeof(named) === NamedTuple{(:count, :label),Tuple{Int,String}}
+    @test_throws BoundsError tuple_value[3]
+    @test_throws MethodError setindex!(tuple_value, 3, 1)
 end

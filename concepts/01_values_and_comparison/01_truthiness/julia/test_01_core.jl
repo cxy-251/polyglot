@@ -1,7 +1,7 @@
 # polyglot-family: values_and_comparison
 # polyglot-concept: truthiness
 # polyglot-related: languages/julia/language/02_values_types_missing_and_numbers/
-# polyglot-related+: test_010_nothing_and_optional_unions.jl
+# polyglot-related+: test_009_type_lattice_and_runtime_type_queries.jl
 #
 # 共同问题：零、空集合和空值如何进入条件；逻辑运算是否返回原操作数。
 # 对照观察：Julia 条件和 &&/|| 左操作数要求 Bool，不提供容器或数值的隐式真假协议。

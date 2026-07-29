@@ -10,4 +10,6 @@ using Test
     @test intersect(left, right) == Set([3])
     @test setdiff(left, right) == Set([1, 2])
     @test issubset(Set([1, 2]), left)
+    @test pop!(copy(left), 2) == 2
+    @test_throws KeyError pop!(copy(left), 9)
 end

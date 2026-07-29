@@ -13,6 +13,7 @@ using Mmap
             mapped = Mmap.mmap(stream, Vector{UInt8}, 4)
             mapped[1] = 0x2a
             mapped[4] = 0xff
+            @test mapped == UInt8[0x2a, 0x00, 0x00, 0xff]
             Mmap.sync!(mapped)
         end
         @test read(path) == UInt8[0x2a, 0x00, 0x00, 0xff]

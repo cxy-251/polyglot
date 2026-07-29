@@ -11,4 +11,7 @@ using LinearAlgebra
     @test dot([1, 2], [3, 4]) == 11
     @test tr(matrix) == 5.0
     @test Matrix(I, 2, 2) == [1 0; 0 1]
+    @test_throws DimensionMismatch matrix * [1.0, 2.0, 3.0]
+    singular = [1.0 2.0; 2.0 4.0]
+    @test_throws SingularException singular \ [1.0, 2.0]
 end

@@ -1,7 +1,7 @@
 # polyglot-family: values_and_comparison
 # polyglot-concept: numeric_models_and_conversion
 # polyglot-related: languages/julia/language/02_values_types_missing_and_numbers/
-# polyglot-related+: test_016_promotion_rules_and_common_types.jl
+# polyglot-related+: test_014_integer_float_rational_and_complex_models.jl
 #
 # 共同问题：整数除法、溢出、显式转换和混合类型算术采用什么模型。
 # 对照观察：Julia 固定宽度整数按类型运算，convert 拒绝不精确整数，promotion 选择共同表示。

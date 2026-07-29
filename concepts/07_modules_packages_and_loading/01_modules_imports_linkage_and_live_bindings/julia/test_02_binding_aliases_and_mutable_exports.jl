@@ -1,7 +1,7 @@
 # polyglot-family: modules_packages_and_loading
 # polyglot-concept: modules_imports_linkage_and_live_bindings
 # polyglot-related: languages/julia/tooling_and_runtime/11_modules_macros_and_metaprogramming/
-# polyglot-related+: test_082_relative_modules_and_imported_bindings.jl
+# polyglot-related+: test_081_module_namespaces_exports_and_qualification.jl
 #
 # 共同问题：导入别名能否重新绑定；导出可变对象的内部修改是否对所有引用可见。
 # 对照观察：imported binding 只读，调用方可建立自己的 const alias；对象 mutation 与 binding 重绑定分离。

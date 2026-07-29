@@ -1,4 +1,4 @@
-# polyglot-covers: julia.language.try-catch-finally-and-rethrow
+# polyglot-covers: julia.language.exceptions-rethrow-finally-and-diagnostics
 
 using Test
 
@@ -15,8 +15,21 @@ function controlled_failure(events)
     end
 end
 
-@testset "catch 选择处理路径，finally 在返回前执行" begin
+struct ValidationError <: Exception
+    field::Symbol
+    reason::String
+end
+
+function Base.showerror(io::IO, error::ValidationError)
+    print(io, "invalid ", error.field, ": ", error.reason)
+end
+
+@testset "异常类型承载数据，catch/rethrow 与 finally 控制传播" begin
     events = Symbol[]
     @test controlled_failure(events) === :handled
     @test events == [:try, :catch, :finally]
+    error = ValidationError(:port, "out of range")
+    @test error.field === :port
+    @test sprint(showerror, error) == "invalid port: out of range"
+    @test_throws ValidationError throw(error)
 end

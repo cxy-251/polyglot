@@ -10,4 +10,7 @@ using Statistics
     @test std(values; corrected = false) ≈ sqrt(1.25)
     with_missing = Union{Missing,Float64}[1.0, missing, 3.0]
     @test mean(skipmissing(with_missing)) == 2.0
+    @test ismissing(mean(with_missing))
+    @test isnan(mean(Float64[]))
+    @test_throws ArgumentError median(Float64[])
 end

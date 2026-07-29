@@ -1,7 +1,7 @@
 # polyglot-family: files_paths_and_streams
 # polyglot-concept: process_environment_and_subprocess_io
 # polyglot-related: languages/julia/standard_library/10_io_files_processes_and_networking/
-# polyglot-related+: test_078_child_environment_and_working_directory.jl
+# polyglot-related+: test_077_subprocess_output_status_and_pipelines.jl
 #
 # 共同问题：child 的环境、cwd、stdin/stdout 如何隔离；父进程状态是否被调用修改。
 # 对照观察：Cmd 可用 addenv/setenv 和 dir 建立 child 状态，pipeline 显式连接 IO，父 ENV/cwd 保持不变。

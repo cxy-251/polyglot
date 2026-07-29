@@ -13,4 +13,12 @@ end
     previous = @atomicswap counter.value = 5
     @test previous == 1
     @test (@atomic counter.value) == 5
+    tasks = [Threads.@spawn begin
+        for _ in 1:100
+            @atomic counter.value += 1
+        end
+    end for _ in 1:4]
+    fetch.(tasks)
+    @test (@atomic counter.value) == 405
+    # atomic 只覆盖一个位置；跨字段不变量仍需要 lock。
 end

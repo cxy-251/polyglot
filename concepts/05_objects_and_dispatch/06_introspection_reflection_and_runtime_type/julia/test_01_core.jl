@@ -1,7 +1,7 @@
 # polyglot-family: objects_and_dispatch
 # polyglot-concept: introspection_reflection_and_runtime_type
 # polyglot-related: languages/julia/tooling_and_runtime/15_reflection_time_and_runtime_observations/
-# polyglot-related+: test_115_method_tables_applicable_and_hasmethod.jl
+# polyglot-related+: test_114_type_field_and_parameter_reflection.jl
 #
 # 共同问题：运行时怎样查询类型、字段和可调用能力；反射结果哪些属于稳定接口。
 # 对照观察：typeof/isa/fieldnames/methods 返回结构化语义；编译器文本和具体优化不作为跨版本契约。

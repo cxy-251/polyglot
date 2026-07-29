@@ -13,4 +13,8 @@ using Test
     write(buffer, UInt8('d'))
     @test String(take!(buffer)) == "abcd"
     @test position(buffer) == 0
+    write(buffer, UInt8[0x01, 0x02])
+    seekstart(buffer)
+    @test read(buffer, 2) == UInt8[0x01, 0x02]
+    @test eof(buffer)
 end

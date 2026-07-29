@@ -11,4 +11,9 @@ using Random
     shuffled = shuffle(MersenneTwister(7), values)
     @test sort(shuffled) == values
     @test shuffled != values
+    rng = Xoshiro(11)
+    snapshot = copy(rng)
+    first = rand(rng, UInt)
+    @test first == rand(snapshot, UInt)
+    @test rand(rng, UInt) != first
 end

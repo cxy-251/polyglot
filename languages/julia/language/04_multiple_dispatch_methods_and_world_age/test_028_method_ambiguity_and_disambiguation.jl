@@ -14,4 +14,9 @@ resolved(left::Int, right::Int) = :both
     @test ambiguous(1, "x") === :left
     @test ambiguous("x", 1) === :right
     @test resolved(1, 2) === :both
+    @test !Base.isambiguous(
+        which(resolved, (Int, Int)),
+        which(resolved, (Int, Any)),
+    )
+    @test !isempty(detect_ambiguities(@__MODULE__; recursive = false))
 end

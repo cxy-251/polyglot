@@ -1,7 +1,7 @@
 # polyglot-family: collections_and_iteration
 # polyglot-concept: generators_laziness_and_early_termination
 # polyglot-related: languages/julia/language/06_arrays_indexing_iteration_and_broadcast/
-# polyglot-related+: test_046_generators_laziness_and_early_termination.jl
+# polyglot-related+: test_045_custom_iteration_protocol.jl
 #
 # 共同问题：generator 何时求值；消费者提前停止时后续元素是否执行。
 # 对照观察：Julia generator 按 iterate 请求求值；Iterators.take 限制请求数量，不需要先物化源序列。

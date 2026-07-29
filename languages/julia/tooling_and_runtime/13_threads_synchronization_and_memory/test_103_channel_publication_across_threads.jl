@@ -15,4 +15,6 @@ using Base.Threads
     @test received == [1, 2, 3]
     @test fetch(producer) === :published
     close(channel)
+    @test !isopen(channel)
+    @test_throws InvalidStateException put!(channel, Int[])
 end

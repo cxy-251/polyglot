@@ -14,7 +14,12 @@ Base.:+(value::Int, offset::Offset) = value + offset.value
     row = [10 20]
     @test values .+ row == [11 21; 12 22]
     @test values .+ Offset(3) == [4, 5]
+    @test_throws DimensionMismatch [1, 2, 3] .+ [10, 20]
     destination = zeros(Int, 2)
     destination .= values .* 4
     @test destination == [4, 8]
+    @test Broadcast.combine_axes(values, row) == (Base.OneTo(2), Base.OneTo(2))
+    flags = BitVector([true, false, true])
+    flags .⊻= true
+    @test flags == BitVector([false, true, false])
 end

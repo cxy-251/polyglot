@@ -25,4 +25,6 @@ using Sockets
         close(server)
     end
     @test istaskdone(server_task)
+    @test !isopen(server)
+    @test fetch(server_task) == 6
 end

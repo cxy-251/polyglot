@@ -1,4 +1,4 @@
-# polyglot-covers: julia.runtime.lowered-and-typed-code-observations
+# polyglot-covers: julia.runtime.compiler-and-memory-observations
 
 using Test
 using InteractiveUtils
@@ -12,4 +12,10 @@ runtime_double(value::Int) = value * 2
     @test first(lowered) isa Core.CodeInfo
     @test length(typed) == 1
     @test last(first(typed)) === Int
+    values = [1, 2, 3]
+    payload_bytes = sizeof(Int) * length(values)
+    @test sizeof(values) == payload_bytes
+    @test Base.summarysize(values) >= payload_bytes
+    @test sizeof("α") == ncodeunits("α")
+    # code_typed、sizeof 与 summarysize 都是锁定实现的观察入口，不是优化或对象布局保证。
 end

@@ -12,4 +12,8 @@ using Test
     end
     @test timedwait(() -> true, 0.1) === :ok
     @test timedwait(() -> false, 0.0) === :timed_out
+    completed = @async :done
+    @test fetch(completed) === :done
+    @test istaskdone(completed)
+    # timedwait 只报告 predicate 状态，不取得被观察任务的所有权，也不隐式取消任务。
 end

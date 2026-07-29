@@ -1,4 +1,4 @@
-# polyglot-covers: julia.language.immutable-and-mutable-structs
+# polyglot-covers: julia.language.immutable-mutable-identity-and-aliasing
 
 using Test
 
@@ -11,12 +11,17 @@ mutable struct MutablePoint
     x::Int
 end
 
-@testset "immutable 固定字段 binding，mutable 允许字段重绑定" begin
+@testset "immutable 固定字段 binding，mutable 对象拥有可观察身份" begin
     immutable = ImmutablePoint(1, [2])
     @test_throws ErrorException setfield!(immutable, :x, 3)
     push!(immutable.values, 4)
     @test immutable.values == [2, 4]
-    mutable = MutablePoint(1)
-    mutable.x = 3
-    @test mutable.x == 3
+    first = MutablePoint(1)
+    second = MutablePoint(1)
+    alias = first
+    @test first !== second
+    @test first === alias
+    alias.x = 3
+    @test first.x == 3
+    @test second.x == 1
 end

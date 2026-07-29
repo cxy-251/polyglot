@@ -11,5 +11,8 @@ using Test
         alias[2] = 9
         @test storage == Int32[1, 9, 3]
         @test pointer(alias) == storage_pointer
+        storage[3] = 7
+        @test alias == Int32[1, 9, 7]
     end
+    # own=true 只适用于与 Julia allocator 契约匹配且转移所有权的外部分配；这里不伪造该前置条件。
 end

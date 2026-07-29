@@ -1,7 +1,7 @@
 # polyglot-family: functions_and_calls
 # polyglot-concept: scope_name_lookup_and_shadowing
 # polyglot-related: languages/julia/language/03_scope_functions_closures_and_calls/
-# polyglot-related+: test_018_lexical_scope_let_and_shadowing.jl
+# polyglot-related+: test_017_bindings_const_and_typed_globals.jl
 #
 # 共同问题：词法作用域怎样查找名称；内层声明是修改外层 binding 还是建立遮蔽。
 # 对照观察：函数和 let 是 hard scope；let 的新 binding 遮蔽外层，同一闭包可显式更新捕获 binding。

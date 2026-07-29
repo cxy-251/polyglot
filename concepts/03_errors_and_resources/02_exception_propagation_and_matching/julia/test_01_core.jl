@@ -1,7 +1,7 @@
 # polyglot-family: errors_and_resources
 # polyglot-concept: exception_propagation_and_matching
 # polyglot-related: languages/julia/language/07_unicode_exceptions_and_resources/
-# polyglot-related+: test_056_custom_exceptions_and_diagnostic_rendering.jl
+# polyglot-related+: test_054_try_catch_finally_and_rethrow.jl
 #
 # 共同问题：异常怎样沿调用栈传播；处理器按什么规则匹配。
 # 对照观察：Julia 使用单个 catch 并由 isa/dispatch 显式分类，未处理异常保持其结构化类型和值。
