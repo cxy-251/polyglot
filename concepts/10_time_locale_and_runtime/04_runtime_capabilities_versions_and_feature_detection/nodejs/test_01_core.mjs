@@ -11,11 +11,17 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 
 test('运行时与组件版本由结构化字段分别报告', () => {
-  const [major] = process.versions.node.split('.').map(Number);
+  const version = process.versions.node.split('.').map(Number);
 
-  assert.equal(major, 24);
+  assert.equal(version.length, 3);
+  assert.ok(version.every(Number.isInteger));
   assert.equal(process.release.name, 'node');
   assert.equal(typeof process.versions.v8, 'string');
+  assert.equal(Number.isInteger(Number(process.versions.modules)), true);
+  assert.notEqual(process.versions.node, process.versions.v8);
+
+  assert.equal('24.18.0' < '9.0.0', true);
+  // 字符串比较会把 24 错判为小于 9；需要比较版本时应先解析字段，能力分支则直接探测接口。
 });
 
 test('标准内置模块可通过运行时接口检测并取得', () => {

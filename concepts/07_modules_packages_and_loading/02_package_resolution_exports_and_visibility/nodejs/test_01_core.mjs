@@ -4,7 +4,8 @@
 //
 // polyglot-family: modules_packages_and_loading
 // polyglot-concept: package_resolution_exports_and_visibility
-// polyglot-related: languages/nodejs/language/test_029_esm_live_bindings_namespace_dynamic_import_and_metadata.mjs
+// polyglot-related: languages/nodejs/node_core/01_modules_and_runtime/
+// polyglot-related+: test_032_packages_type_exports_imports_and_conditional_resolution.mjs
 
 import assert from 'node:assert/strict';
 import { mkdir, mkdtemp, rm, writeFile } from 'node:fs/promises';
@@ -35,6 +36,10 @@ test('package exports 只公开声明的入口和子路径', async (t) => {
   const privateEntry = join(root, 'private-entry.mjs');
   await writeFile(privateEntry, "import 'demo/private.mjs';\n");
   await assert.rejects(import(pathToFileURL(privateEntry)), { code: 'ERR_PACKAGE_PATH_NOT_EXPORTED' });
+
+  const direct = await import(pathToFileURL(join(packageRoot, 'private.mjs')));
+  assert.equal(direct.hidden, 3);
+  // exports 限制包说明符解析，不是文件系统访问控制；可访问真实 file URL 的代码仍能加载该文件。
 });
 
 test('相对说明符以当前模块 URL 为基准', () => {

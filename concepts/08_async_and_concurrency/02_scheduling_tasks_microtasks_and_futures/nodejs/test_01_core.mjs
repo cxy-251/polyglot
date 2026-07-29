@@ -56,3 +56,16 @@ test('Promise 构造器 executor 同步运行', () => {
 
   assert.deepEqual(events, ['executor', 'after']);
 });
+
+test('已 fulfilled Promise 的后来 reactions 仍异步并按登记顺序运行', async () => {
+  const events = [];
+  const result = Promise.resolve(42);
+
+  result.then(() => events.push('first'));
+  result.then(() => events.push('second'));
+  events.push('sync');
+
+  assert.deepEqual(events, ['sync']);
+  await result;
+  assert.deepEqual(events, ['sync', 'first', 'second']);
+});
