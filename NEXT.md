@@ -45,6 +45,12 @@ language 进行完整文件级语义审计和课程重构。审计后的课程�
   depot/project/runner 隔离、本地工程 fixture 和 2 个验证移入 `harness/julia/`。
 - Julia 验证通过：71 个纵向文件、65 个横向文件、10 个 family、完整 concepts、
   `julia-harness`、`list-concepts`、`doctor`、结构门禁和 `git diff --check`。
-- 当前审计语言为 Rust。唯一下一步是逐文件审查 ownership/borrowing、trait coherence、
-  lifetimes、async/Future、Send/Sync、Cargo 与 unsafe，并先将 toolchain、Cargo runner、
-  编译失败 fixture 和工程配置从语言课程识别到 harness 层。
+- Rust 已完成文件级审计：纵向课程由审计前 128 个文件重构为 60 个，编号范围
+  `009`–`124` 且保留稳定空缺；49 个横向 topic 使用 67 个 Rust 文件；Cargo runner、
+  toolchain/工程配置、编译失败 fixture 和 7 个工程验证移入 `harness/rust/`。
+- Rust 验证通过：97 个纵向测试、67 个横向测试、49 个精确 topic、10 个 family、
+  完整 concepts、7 个 harness 测试与 1 个 doc test、`list-concepts`、`doctor`、
+  结构门禁和 `git diff --check`。
+- 当前审计语言为 Go。唯一下一步是逐文件审查 interface/nil、method set、slice/map、
+  goroutine/channel、memory model、context、module/toolchain 与 cgo，并先将 runner、
+  module/workspace 配置和构建 fixture 从语言课程识别到 harness 层。
