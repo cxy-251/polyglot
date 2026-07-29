@@ -1,0 +1,13 @@
+# frozen_string_literal: true
+
+require "rake"
+
+desc "Verify the local gem without external dependencies"
+task :verify do
+  require_relative "lib/polyglot_ruby_fixture"
+  abort "fixture mismatch" unless PolyglotRubyFixture.label("ok") == "ruby:ok"
+
+  puts "fixture verified"
+end
+
+task default: :verify
