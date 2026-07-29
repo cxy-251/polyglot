@@ -57,7 +57,13 @@ language 进行完整文件级语义审计和课程重构。审计后的课程�
 - Go 验证通过：115 个纵向测试、71 个横向测试、49 个精确 topic、10 个 family、
   完整 concepts、15 个 harness 测试、`go vet`、`list-concepts`、`doctor`、
   结构门禁和 `git diff --check`。
-- 当前审计语言为 Node.js。唯一下一步是逐文件审查 ECMAScript coercion/object model、
-  Promise/microtask、event loop、streams、worker、module/package loading 与 native
-  runtime boundary，并先将 Node/npm 版本、runner、package 配置和构建 fixture
-  从语言课程识别到 harness 层。
+- Node.js 已完成文件级审计：纵向课程由审计前 107 个文件重构为 103 个，编号范围
+  `001`–`107` 且保留稳定空缺；49 个横向 topic 使用 70 个 Node.js 文件；`node:test`
+  context/mock/snapshot/CLI runner、package 配置和 4 个工程验证移入 `harness/nodejs/`。
+- Node.js 验证通过：900 个纵向测试、248 个横向测试、49 个精确 topic、10 个 family、
+  完整 concepts、35 个 harness 测试、`list-concepts`、`doctor`、结构门禁和
+  `git diff --check`。
+- 当前审计语言为 C++。唯一下一步是逐文件审查 value category/lifetime、模板与约束、
+  exception/RAII、iterator invalidation、concurrency/memory model、filesystem、modules、
+  ABI/FFI 与编译期诊断边界，并先将 CMake/GoogleTest/runner 和构建工程验证从语言课程
+  识别到 `harness/cpp/`。
