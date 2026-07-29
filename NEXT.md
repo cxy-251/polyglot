@@ -51,6 +51,13 @@ language 进行完整文件级语义审计和课程重构。审计后的课程�
 - Rust 验证通过：97 个纵向测试、67 个横向测试、49 个精确 topic、10 个 family、
   完整 concepts、7 个 harness 测试与 1 个 doc test、`list-concepts`、`doctor`、
   结构门禁和 `git diff --check`。
-- 当前审计语言为 Go。唯一下一步是逐文件审查 interface/nil、method set、slice/map、
-  goroutine/channel、memory model、context、module/toolchain 与 cgo，并先将 runner、
-  module/workspace 配置和构建 fixture 从语言课程识别到 harness 层。
+- Go 已完成文件级审计：纵向课程由审计前 128 个文件重构为 65 个，编号范围
+  `009`–`127` 且保留稳定空缺；49 个横向 topic 使用 64 个 Go 文件；module/workspace、
+  testing/toolchain、构建选择、锁定运行时观察和 12 个工程测试移入 `harness/go/`。
+- Go 验证通过：115 个纵向测试、71 个横向测试、49 个精确 topic、10 个 family、
+  完整 concepts、15 个 harness 测试、`go vet`、`list-concepts`、`doctor`、
+  结构门禁和 `git diff --check`。
+- 当前审计语言为 Node.js。唯一下一步是逐文件审查 ECMAScript coercion/object model、
+  Promise/microtask、event loop、streams、worker、module/package loading 与 native
+  runtime boundary，并先将 Node/npm 版本、runner、package 配置和构建 fixture
+  从语言课程识别到 harness 层。
