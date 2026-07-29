@@ -42,7 +42,7 @@ def test_ready_callbacks_and_tasks_run_only_after_the_current_code_yields():
     ]
 
     # asyncio 的 ready queue 与 ECMAScript Promise job queue 是不同调度模型；这里只
-    # 断言 CPython 3.10 asyncio 在明确让出边界前不执行已排队 callback/task。
+    # 断言 Python 3.10 asyncio 在明确让出边界前不执行已排队 callback/task。
 
 
 def test_create_task_schedules_coroutine_on_the_running_loop():

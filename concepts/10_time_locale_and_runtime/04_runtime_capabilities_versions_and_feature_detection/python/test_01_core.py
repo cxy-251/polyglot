@@ -12,11 +12,16 @@
 import importlib.util
 import platform
 import sys
+import sysconfig
 
 
 def test_version_info_is_structured_and_orderable():
-    assert sys.version_info >= (3, 10)
-    assert sys.version_info.major == 3
+    assert "3.10" < "3.9"
+    assert (3, 10) > (3, 9)
+    assert sys.version_info[:2] == (
+        sys.version_info.major,
+        sys.version_info.minor,
+    )
     assert isinstance(sys.version, str)
 
 
@@ -26,13 +31,22 @@ def test_module_capability_can_be_detected_without_import_side_effects():
 
 
 def test_attribute_detection_checks_the_interface_directly():
-    assert callable(getattr(str, "removeprefix", None))
-    assert getattr(sys, "gettotalrefcount", None) is None
+    remove_prefix = getattr(str, "removeprefix", None)
+    assert callable(remove_prefix)
+    assert remove_prefix("prefix-value", "prefix-") == "value"
+    assert remove_prefix("value", "prefix-") == "value"
+
+    get_total_refcount = getattr(sys, "gettotalrefcount", None)
+    if get_total_refcount is not None:
+        assert callable(get_total_refcount)
+        assert isinstance(get_total_refcount(), int)
 
     # gettotalrefcount 属于 CPython debug build；实现名称或版本号都不能保证该能力存在。
 
 
 def test_implementation_metadata_is_separate_from_language_version():
-    assert platform.python_implementation() == "CPython"
-    assert sys.implementation.name == "cpython"
+    assert platform.python_implementation().casefold() == sys.implementation.name
     assert sys.implementation.version.major == sys.version_info.major
+    assert isinstance(sysconfig.get_platform(), str)
+
+    # Python 版本、解释器实现和构建平台分别约束语法、实现扩展与二进制兼容性。
