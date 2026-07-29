@@ -1,6 +1,6 @@
 polyglot_native_source <- function() {
     normalizePath(
-        file.path("languages", "r", "fixtures", "native", "polyglot_native.c"),
+        file.path("harness", "r", "native", "polyglot_native.c"),
         mustWork = TRUE
     )
 }

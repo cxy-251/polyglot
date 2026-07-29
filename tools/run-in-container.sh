@@ -16,6 +16,7 @@ Usage:
   ./tools/run-in-container.sh rust [cargo test arguments...]
   ./tools/run-in-container.sh julia [test files...]
   ./tools/run-in-container.sh r [test files...]
+  ./tools/run-in-container.sh r-harness [test files...]
   ./tools/run-in-container.sh lua [test files...]
   ./tools/run-in-container.sh lua-harness [test files...]
   ./tools/run-in-container.sh ruby [test files...]
@@ -482,7 +483,7 @@ run_r_files() {
       LC_ALL=C.UTF-8 \
       Rscript \
         --vanilla \
-        languages/r/support/run_test.R \
+        harness/r/support/run_test.R \
         "$test_file"; then
       echo "R 测试失败: $test_file" >&2
       rm -rf "$test_sandbox"
@@ -509,6 +510,26 @@ run_r() {
   run_r_files \
     "R vertical course" \
     "${POLYGLOT_R_COURSE_ROOT:-/tmp/polyglot-r-course}" \
+    "${test_files[@]}"
+}
+
+run_r_harness() {
+  check_r_version
+  local -a test_files=()
+  if [[ $# -gt 0 ]]; then
+    test_files=("$@")
+  else
+    mapfile -d '' test_files < <(
+      find harness/r/tests \
+        -maxdepth 1 \
+        -type f \
+        -name 'test_*.R' \
+        -print0 | sort -z
+    )
+  fi
+  run_r_files \
+    "R harness" \
+    "${POLYGLOT_R_HARNESS_ROOT:-/tmp/polyglot-r-harness}" \
     "${test_files[@]}"
 }
 
@@ -1543,6 +1564,10 @@ main() {
     r|R)
       shift
       run_r "$@"
+      ;;
+    r-harness)
+      shift
+      run_r_harness "$@"
       ;;
     lua)
       shift

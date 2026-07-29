@@ -1,6 +1,6 @@
 polyglot_package_source <- function() {
     normalizePath(
-        file.path("languages", "r", "package_fixture", "polyglotrfixture"),
+        file.path("harness", "r", "package_fixture", "polyglotrfixture"),
         mustWork = TRUE
     )
 }

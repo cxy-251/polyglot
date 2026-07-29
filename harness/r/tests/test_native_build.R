@@ -1,7 +1,5 @@
-# polyglot-covers: r.tooling.r-cmd-shlib-and-dynamic-loading
-
 local({
-    source("languages/r/support/native_helpers.R", local = TRUE)
+    source("harness/r/support/native_helpers.R", local = TRUE)
     root <- tempfile("polyglot-r-native-")
     dir.create(root)
     on.exit(unlink(root, recursive = TRUE, force = TRUE), add = TRUE)

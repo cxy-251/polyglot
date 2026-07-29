@@ -1,7 +1,7 @@
 # polyglot-family: time_locale_and_runtime
 # polyglot-concept: locale_numbers_dates_and_collation
-# polyglot-related: languages/r/tooling_and_runtime/01_toolchain_isolation_and_testing/
-# polyglot-related+: test_004_options_environment_and_working_directory_cleanup.R
+# polyglot-related: languages/r/standard_library/13_io_text_time_and_numeric_workflows/
+# polyglot-related+: test_099_csv_encodings_locale_and_regular_expressions.R
 #
 # 共同问题：请求的 locale 不可用怎样表达，修改范围如何恢复。
 # 对照观察：`Sys.setlocale` 对不可用 locale 返回空字符串并警告；locale 是进程级状态。

@@ -749,15 +749,19 @@ check_r_projects() {
   local -a seen_domains=()
 
   for required_file in \
-    languages/r/support/run_test.R \
-    languages/r/support/package_helpers.R \
-    languages/r/support/native_helpers.R \
-    languages/r/package_fixture/polyglotrfixture/DESCRIPTION \
-    languages/r/package_fixture/polyglotrfixture/NAMESPACE \
-    languages/r/package_fixture/polyglotrfixture/R/functions.R \
-    languages/r/package_fixture/polyglotrfixture/src/polyglotrfixture.c \
-    languages/r/package_fixture/polyglotrfixture/tests/basic.R \
-    languages/r/fixtures/native/polyglot_native.c; do
+    harness/r/support/run_test.R \
+    harness/r/support/package_helpers.R \
+    harness/r/support/native_helpers.R \
+    harness/r/package_fixture/polyglotrfixture/DESCRIPTION \
+    harness/r/package_fixture/polyglotrfixture/NAMESPACE \
+    harness/r/package_fixture/polyglotrfixture/R/functions.R \
+    harness/r/package_fixture/polyglotrfixture/src/polyglotrfixture.c \
+    harness/r/package_fixture/polyglotrfixture/tests/basic.R \
+    harness/r/native/polyglot_native.c \
+    harness/r/tests/test_runtime_contract.R \
+    harness/r/tests/test_process_state_cleanup.R \
+    harness/r/tests/test_package_workflow.R \
+    harness/r/tests/test_native_build.R; do
     if [[ ! -f "$required_file" ]]; then
       report_failure "缺少 R runner、package 或 native fixture 文件: $required_file"
     fi
@@ -774,14 +778,14 @@ check_r_projects() {
   fi
 
   if ! Rscript --vanilla -e '
-    description <- read.dcf("languages/r/package_fixture/polyglotrfixture/DESCRIPTION")
+    description <- read.dcf("harness/r/package_fixture/polyglotrfixture/DESCRIPTION")
     stopifnot(
       identical(unname(description[1L, "Package"]), "polyglotrfixture"),
       identical(unname(description[1L, "Version"]), "0.1.0"),
       identical(unname(description[1L, "NeedsCompilation"]), "yes")
     )
     namespace <- readLines(
-      "languages/r/package_fixture/polyglotrfixture/NAMESPACE",
+      "harness/r/package_fixture/polyglotrfixture/NAMESPACE",
       warn = FALSE
     )
     stopifnot(
@@ -820,7 +824,7 @@ check_r_projects() {
   done
   for required_file in options environment working_directory locale library_paths \
     search_path connections output_sinks message_sinks devices random_seed; do
-    if ! grep -Fq "$required_file" languages/r/support/run_test.R; then
+    if ! grep -Fq "$required_file" harness/r/support/run_test.R; then
       report_failure "R 状态隔离器缺少快照维度: $required_file"
     fi
   done
@@ -833,7 +837,7 @@ check_r_projects() {
       TMPDIR=/tmp \
       R_ENVIRON_USER=/dev/null \
       R_PROFILE_USER=/dev/null \
-      Rscript --vanilla languages/r/support/run_test.R "$state_probe" 2>&1
+      Rscript --vanilla harness/r/support/run_test.R "$state_probe" 2>&1
   ); then
     report_failure "R 状态隔离器未拒绝 option 泄漏"
   elif [[ "$state_output" != *"test leaked process state: options"* ]]; then

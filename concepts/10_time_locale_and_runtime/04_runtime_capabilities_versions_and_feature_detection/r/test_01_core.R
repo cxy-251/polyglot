@@ -1,7 +1,7 @@
 # polyglot-family: time_locale_and_runtime
 # polyglot-concept: runtime_capabilities_versions_and_feature_detection
-# polyglot-related: languages/r/tooling_and_runtime/01_toolchain_isolation_and_testing/
-# polyglot-related+: test_001_locked_runtime_and_vanilla_process.R
+# polyglot-related: languages/r/tooling_and_runtime/15_processes_parallel_and_runtime/
+# polyglot-related+: test_120_noninteractive_graphics_and_runtime_capabilities.R
 #
 # 共同问题：怎样精确检查运行时版本并探测平台能力。
 # 对照观察：R 用 `getRversion`/`R.version` 报告版本，`capabilities` 与 `.Platform` 做运行时检测。
