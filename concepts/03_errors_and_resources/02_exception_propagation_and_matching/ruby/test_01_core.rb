@@ -2,7 +2,7 @@
 # 输入：ArgumentError、StandardError、未匹配类和 rescue 变量；观察：最近匹配、对象身份与传播。
 # polyglot-family: errors_and_resources
 # polyglot-concept: exception_propagation_and_matching
-# polyglot-related: languages/ruby/language/08_exceptions_resources_and_loading/test_057_rescue_else_ensure_order.rb
+# polyglot-related: languages/ruby/language/08_exceptions_resources_and_loading/test_057_rescue_else_ensure_and_retry.rb
 
 require "assertions"
 
@@ -24,5 +24,16 @@ A.truth(captured.is_a?(StandardError))
 A.raises(ArgumentError, "invalid") { propagate(original) }
 A.raises(ZeroDivisionError) { 1 / 0 }
 A.falsey(Exception.new.is_a?(StandardError))
+
+rethrown = begin
+  begin
+    raise original
+  rescue
+    raise
+  end
+rescue => error
+  error
+end
+A.same(original, rethrown)
 
 A.done

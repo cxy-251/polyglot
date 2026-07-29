@@ -2,7 +2,8 @@
 # 输入：Array、Hash、Range 和 each；观察：yield 形状、插入顺序及 Enumerable 对 each 的依赖。
 # polyglot-family: collections_and_iteration
 # polyglot-concept: iteration_protocol
-# polyglot-related: languages/ruby/language/06_collections_and_enumeration/test_045_enumerable_each_protocol.rb
+# polyglot-related: languages/ruby/language/06_collections_and_enumeration/
+# polyglot-related+: test_045_each_enumerable_and_external_enumerators.rb
 
 require "assertions"
 

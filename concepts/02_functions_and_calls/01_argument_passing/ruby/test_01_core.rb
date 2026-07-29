@@ -3,7 +3,7 @@
 # polyglot-family: functions_and_calls
 # polyglot-concept: argument_passing
 # polyglot-related: languages/ruby/language/03_methods_blocks_and_procs/
-# polyglot-related+: test_017_positional_default_and_rest_arguments.rb
+# polyglot-related+: test_017_arguments_keywords_splats_and_forwarding.rb
 
 require "assertions"
 

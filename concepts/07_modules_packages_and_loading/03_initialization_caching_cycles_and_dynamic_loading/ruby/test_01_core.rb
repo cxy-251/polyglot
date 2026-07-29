@@ -3,7 +3,9 @@
 # polyglot-family: modules_packages_and_loading
 # polyglot-concept: initialization_caching_cycles_and_dynamic_loading
 # polyglot-related: languages/ruby/language/08_exceptions_resources_and_loading/
-# polyglot-related+: test_063_require_load_and_feature_cache.rb
+# polyglot-related+: test_063_require_load_autoload_and_failure_cache.rb
+# polyglot-related: languages/ruby/tooling_and_runtime/15_c_extension/
+# polyglot-related+: test_114_value_string_array_and_hash_conversion.rb
 
 require "assertions"
 require "fileutils"

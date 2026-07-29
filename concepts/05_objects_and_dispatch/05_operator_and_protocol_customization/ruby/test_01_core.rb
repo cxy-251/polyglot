@@ -1,15 +1,16 @@
 # 共同问题：用户类型可定制哪些运算符和语言协议。
-# 输入：+、==、hash、each、to_s 和 call；观察：普通方法分派、Enumerable 组合及协议一致性。
+# 输入：+、==、eql? 和 hash；观察：运算符的方法分派及 Hash 协议一致性。
 # polyglot-family: objects_and_dispatch
 # polyglot-concept: operator_and_protocol_customization
-# polyglot-related: languages/ruby/language/04_classes_modules_and_lookup/test_026_singleton_class_methods_and_extend.rb
+# polyglot-related: languages/ruby/language/01_values_and_identity/test_004_numeric_models_conversion_and_coercion.rb
+# polyglot-related: languages/ruby/language/01_values_and_identity/test_003_equality_identity_and_hash_keys.rb
 
 require "assertions"
+require "set"
 
 A = PolyglotAssertions
 
 value_class = Class.new do
-  include Enumerable
   attr_reader :value
 
   def initialize(value) = @value = value
@@ -17,16 +18,11 @@ value_class = Class.new do
   def ==(other) = other.is_a?(self.class) && value == other.value
   def eql?(other) = self == other
   def hash = [self.class, value].hash
-  def each = block_given? ? yield(value) : enum_for(__method__)
-  def call(multiplier) = value * multiplier
-  def to_s = "Value(#{value})"
 end
 
 left = value_class.new(2)
 A.equal(value_class.new(5), left + value_class.new(3))
-A.equal([4], left.map { _1 * 2 })
-A.equal(6, left.call(3))
-A.equal("Value(2)", left.to_s)
-A.equal(1, {left => :present}.length)
+A.equal(:present, {left => :present}[value_class.new(2)])
+A.equal(1, Set.new([left, value_class.new(2)]).length)
 
 A.done

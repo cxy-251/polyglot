@@ -2,8 +2,8 @@
 # 输入：语法错误、缺失 feature 和错误操作数；观察：独立语法检查状态、LoadError 与 TypeError。
 # polyglot-family: errors_and_resources
 # polyglot-concept: contracts_assertions_and_failure_signaling
-# polyglot-related: languages/ruby/language/08_exceptions_resources_and_loading/
-# polyglot-related+: test_064_process_exit_syntax_and_load_failures.rb
+# polyglot-related: languages/ruby/tooling_and_runtime/13_command_parser_and_runtime/
+# polyglot-related+: test_097_command_line_loading_warnings_and_option_parsing.rb
 
 require "assertions"
 require "helpers"

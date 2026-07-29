@@ -2,7 +2,8 @@
 # 输入：anchors、lookahead、空 pattern、无效源码和 gsub block；观察：有限迭代、RegexpError 与原异常。
 # polyglot-family: text_binary_and_serialization
 # polyglot-concept: regular_expressions_and_state
-# polyglot-related: languages/ruby/language/07_strings_regex_and_patterns/test_053_substitution_and_match_state.rb
+# polyglot-related: languages/ruby/language/07_strings_regex_and_patterns/
+# polyglot-related+: test_052_regexp_captures_substitution_and_match_state.rb
 
 require "assertions"
 

@@ -2,7 +2,8 @@
 # 输入：Hash#[]、fetch、key?、default_proc 和 delete；观察：非插入 fallback、严格查找及状态变化。
 # polyglot-family: collections_and_iteration
 # polyglot-concept: mapping_lookup_and_missing_keys
-# polyglot-related: languages/ruby/language/06_collections_and_enumeration/test_042_hash_defaults_and_missing_keys.rb
+# polyglot-related: languages/ruby/language/06_collections_and_enumeration/
+# polyglot-related+: test_042_hash_missing_keys_defaults_and_key_identity.rb
 
 require "assertions"
 

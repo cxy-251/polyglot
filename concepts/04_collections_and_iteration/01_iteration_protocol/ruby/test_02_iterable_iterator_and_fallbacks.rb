@@ -2,7 +2,8 @@
 # 输入：只实现 each 的对象、Enumerator 和无 each 对象；观察：Enumerable mixin、next 状态及错误边界。
 # polyglot-family: collections_and_iteration
 # polyglot-concept: iteration_protocol
-# polyglot-related: languages/ruby/language/06_collections_and_enumeration/test_046_external_enumerator_state.rb
+# polyglot-related: languages/ruby/language/06_collections_and_enumeration/
+# polyglot-related+: test_045_each_enumerable_and_external_enumerators.rb
 
 require "assertions"
 

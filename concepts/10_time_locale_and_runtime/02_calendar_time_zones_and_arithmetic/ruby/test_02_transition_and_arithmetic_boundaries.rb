@@ -2,7 +2,8 @@
 # 输入：月底、闰日、elapsed seconds、Date invalid value 和固定 offset；观察：月份裁剪、错误与 instant arithmetic。
 # polyglot-family: time_locale_and_runtime
 # polyglot-concept: calendar_time_zones_and_arithmetic
-# polyglot-related: languages/ruby/standard_library/10_data_time_and_text/test_075_date_time_and_calendar_arithmetic.rb
+# polyglot-related: languages/ruby/standard_library/10_data_time_and_text/
+# polyglot-related+: test_075_calendar_time_zones_and_monotonic_clocks.rb
 
 require "assertions"
 require "date"

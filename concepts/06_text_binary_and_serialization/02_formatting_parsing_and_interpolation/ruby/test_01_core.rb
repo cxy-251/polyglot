@@ -3,7 +3,7 @@
 # polyglot-family: text_binary_and_serialization
 # polyglot-concept: formatting_parsing_and_interpolation
 # polyglot-related: languages/ruby/language/07_strings_regex_and_patterns/
-# polyglot-related+: test_051_interpolation_frozen_literals_and_symbols.rb
+# polyglot-related+: test_051_interpolation_formatting_and_string_construction.rb
 
 require "assertions"
 
@@ -16,7 +16,7 @@ A.near(3.5, Float("3.5"))
 A.raises(ArgumentError) { Integer("four") }
 
 language = "Ruby"
-A.equal("language=Ruby, version=#{RUBY_VERSION}", "language=#{language}, version=#{RUBY_VERSION}")
+A.equal("language=Ruby, value=42", "language=#{language}, value=#{42}")
 A.equal('"ruby\\n"', "ruby\n".inspect)
 A.equal("42", 42.to_s)
 

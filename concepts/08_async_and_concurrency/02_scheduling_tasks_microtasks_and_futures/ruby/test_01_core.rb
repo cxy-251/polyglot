@@ -2,7 +2,7 @@
 # 输入：两个 Fiber、resume、yield 和事件日志；观察：caller 控制调度、run-to-yield 及无 microtask 队列。
 # polyglot-family: async_and_concurrency
 # polyglot-concept: scheduling_tasks_microtasks_and_futures
-# polyglot-related: languages/ruby/standard_library/11_concurrency_models/test_085_fiber_resume_yield_and_transfer.rb
+# polyglot-related: languages/ruby/standard_library/11_concurrency_models/test_085_fiber_resume_yield_and_lifecycle.rb
 
 require "assertions"
 

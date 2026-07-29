@@ -3,7 +3,7 @@
 # polyglot-family: objects_and_dispatch
 # polyglot-concept: construction_initialization_and_lifetime
 # polyglot-related: languages/ruby/language/04_classes_modules_and_lookup/
-# polyglot-related+: test_025_construction_allocation_and_inheritance.rb
+# polyglot-related+: test_025_construction_inheritance_and_super.rb
 
 require "assertions"
 

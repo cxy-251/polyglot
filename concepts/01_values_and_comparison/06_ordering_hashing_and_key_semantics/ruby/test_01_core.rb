@@ -2,7 +2,7 @@
 # 输入：数值、字符串、自定义键、NaN 和不可比较对象；观察：<=>、sort、eql?/hash 及键身份。
 # polyglot-family: values_and_comparison
 # polyglot-concept: ordering_hashing_and_key_semantics
-# polyglot-related: languages/ruby/language/01_values_and_identity/test_003_equality_identity_and_case_equality.rb
+# polyglot-related: languages/ruby/language/01_values_and_identity/test_003_equality_identity_and_hash_keys.rb
 
 require "assertions"
 

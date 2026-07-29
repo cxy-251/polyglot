@@ -2,7 +2,8 @@
 # 输入：成功 Thread、失败 Thread、join 和 value；观察：join/value 都传播失败，value 取得成功结果。
 # polyglot-family: async_and_concurrency
 # polyglot-concept: async_await_and_result_propagation
-# polyglot-related: languages/ruby/standard_library/11_concurrency_models/test_081_thread_join_value_and_shared_state.rb
+# polyglot-related: languages/ruby/standard_library/11_concurrency_models/
+# polyglot-related+: test_081_thread_results_shared_state_and_failures.rb
 
 require "assertions"
 

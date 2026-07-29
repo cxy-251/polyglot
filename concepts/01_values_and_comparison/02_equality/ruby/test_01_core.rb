@@ -2,7 +2,7 @@
 # 输入：数值、字符串、别名及自定义值；观察：==、eql?、equal?、=== 和 hash 的一致性责任。
 # polyglot-family: values_and_comparison
 # polyglot-concept: equality
-# polyglot-related: languages/ruby/language/01_values_and_identity/test_003_equality_identity_and_case_equality.rb
+# polyglot-related: languages/ruby/language/01_values_and_identity/test_003_equality_identity_and_hash_keys.rb
 
 require "assertions"
 

@@ -2,7 +2,7 @@
 # 输入：nil、false、零、空字符串和空集合；观察：分支选择、短路表达式返回值和不可重载的真值规则。
 # polyglot-family: values_and_comparison
 # polyglot-concept: truthiness
-# polyglot-related: languages/ruby/language/01_values_and_identity/test_002_truthiness_and_nil.rb
+# polyglot-related: languages/ruby/language/01_values_and_identity/test_002_truthiness_nil_and_core_values.rb
 
 require "assertions"
 

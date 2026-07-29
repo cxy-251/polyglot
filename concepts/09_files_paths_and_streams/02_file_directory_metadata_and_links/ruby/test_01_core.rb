@@ -2,7 +2,8 @@
 # 输入：临时树、stat/lstat、link、symlink、rename 和 delete；观察：inode 身份、link 类型及真实目标。
 # polyglot-family: files_paths_and_streams
 # polyglot-concept: file_directory_metadata_and_links
-# polyglot-related: languages/ruby/standard_library/09_files_io_and_process/test_071_metadata_links_and_realpath.rb
+# polyglot-related: languages/ruby/standard_library/09_files_io_and_process/
+# polyglot-related+: test_065_paths_metadata_and_symbolic_links.rb
 
 require "assertions"
 require "fileutils"

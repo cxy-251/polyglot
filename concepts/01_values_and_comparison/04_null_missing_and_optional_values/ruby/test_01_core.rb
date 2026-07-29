@@ -2,7 +2,7 @@
 # 输入：nil、false、存在键和缺失键；观察：nil?、fetch、key?、默认值及删除语义。
 # polyglot-family: values_and_comparison
 # polyglot-concept: null_missing_and_optional_values
-# polyglot-related: languages/ruby/language/01_values_and_identity/test_002_truthiness_and_nil.rb
+# polyglot-related: languages/ruby/language/01_values_and_identity/test_002_truthiness_nil_and_core_values.rb
 
 require "assertions"
 

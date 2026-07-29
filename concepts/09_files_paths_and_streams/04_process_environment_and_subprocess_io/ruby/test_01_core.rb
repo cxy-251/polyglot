@@ -3,7 +3,7 @@
 # polyglot-family: files_paths_and_streams
 # polyglot-concept: process_environment_and_subprocess_io
 # polyglot-related: languages/ruby/standard_library/09_files_io_and_process/
-# polyglot-related+: test_068_open3_subprocess_streams_and_status.rb
+# polyglot-related+: test_068_subprocess_streams_environment_spawn_and_fork.rb
 
 require "assertions"
 require "open3"

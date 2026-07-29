@@ -2,8 +2,8 @@
 # 输入：临时 rb 文件、$LOAD_PATH candidate、$LOADED_FEATURES 和 require；观察：路径发现不执行，require 才运行。
 # polyglot-family: modules_packages_and_loading
 # polyglot-concept: package_resolution_exports_and_visibility
-# polyglot-related: languages/ruby/tooling_and_runtime/14_gems_bundler_and_rake/
-# polyglot-related+: test_109_bundler_path_dependency_and_lock.rb
+# polyglot-related: languages/ruby/language/08_exceptions_resources_and_loading/
+# polyglot-related+: test_063_require_load_autoload_and_failure_cache.rb
 
 require "assertions"
 require "fileutils"

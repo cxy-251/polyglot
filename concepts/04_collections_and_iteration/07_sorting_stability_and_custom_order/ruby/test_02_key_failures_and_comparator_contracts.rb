@@ -3,7 +3,7 @@
 # polyglot-family: collections_and_iteration
 # polyglot-concept: sorting_stability_and_custom_order
 # polyglot-related: languages/ruby/language/06_collections_and_enumeration/
-# polyglot-related+: test_048_sorting_grouping_and_mutation_boundaries.rb
+# polyglot-related+: test_048_sorting_grouping_and_comparator_contracts.rb
 
 require "assertions"
 

@@ -3,7 +3,7 @@
 # polyglot-family: async_and_concurrency
 # polyglot-concept: threads_workers_and_process_isolation
 # polyglot-related: languages/ruby/standard_library/11_concurrency_models/
-# polyglot-related+: test_088_ractor_move_remote_error_and_process_isolation.rb
+# polyglot-related+: test_088_ractor_move_and_remote_failure.rb
 
 require "assertions"
 

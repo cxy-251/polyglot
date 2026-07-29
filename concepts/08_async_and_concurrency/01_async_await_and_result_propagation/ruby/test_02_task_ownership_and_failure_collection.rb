@@ -2,7 +2,8 @@
 # 输入：Thread、ensure、显式 join/value 和未启用 abort_on_exception；观察：caller 收集结果及 worker 清理。
 # polyglot-family: async_and_concurrency
 # polyglot-concept: async_await_and_result_propagation
-# polyglot-related: languages/ruby/language/08_exceptions_resources_and_loading/test_062_thread_exception_propagation.rb
+# polyglot-related: languages/ruby/standard_library/11_concurrency_models/
+# polyglot-related+: test_081_thread_results_shared_state_and_failures.rb
 
 require "assertions"
 

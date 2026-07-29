@@ -2,7 +2,7 @@
 # 输入：数组、嵌套字符串、alias、dup 和 clone；观察：object_id、突变可见性、共享子对象和冻结状态。
 # polyglot-family: values_and_comparison
 # polyglot-concept: identity_aliasing_and_copying
-# polyglot-related: languages/ruby/language/01_values_and_identity/test_008_freeze_dup_clone_and_object_identity.rb
+# polyglot-related: languages/ruby/language/01_values_and_identity/test_005_mutability_symbols_freeze_and_copying.rb
 
 require "assertions"
 

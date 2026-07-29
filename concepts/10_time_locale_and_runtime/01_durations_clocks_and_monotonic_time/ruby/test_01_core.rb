@@ -2,7 +2,8 @@
 # 输入：Time.now、Process::CLOCK_MONOTONIC、固定 instants 和负 duration；观察：时钟用途、数值单位和有符号差。
 # polyglot-family: time_locale_and_runtime
 # polyglot-concept: durations_clocks_and_monotonic_time
-# polyglot-related: languages/ruby/standard_library/10_data_time_and_text/test_075_date_time_and_calendar_arithmetic.rb
+# polyglot-related: languages/ruby/standard_library/10_data_time_and_text/
+# polyglot-related+: test_075_calendar_time_zones_and_monotonic_clocks.rb
 
 require "assertions"
 require "time"

@@ -2,7 +2,8 @@
 # 输入：命名捕获、lookaround、scan、MatchData 和 Regexp.last_match；观察：对象化结果与线程局部状态。
 # polyglot-family: text_binary_and_serialization
 # polyglot-concept: regular_expressions_and_state
-# polyglot-related: languages/ruby/language/07_strings_regex_and_patterns/test_052_regexp_captures_and_lookaround.rb
+# polyglot-related: languages/ruby/language/07_strings_regex_and_patterns/
+# polyglot-related+: test_052_regexp_captures_substitution_and_match_state.rb
 
 require "assertions"
 

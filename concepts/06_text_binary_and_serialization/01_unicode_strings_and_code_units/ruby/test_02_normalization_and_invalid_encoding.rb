@@ -3,7 +3,7 @@
 # polyglot-family: text_binary_and_serialization
 # polyglot-concept: unicode_strings_and_code_units
 # polyglot-related: languages/ruby/language/07_strings_regex_and_patterns/
-# polyglot-related+: test_050_encoding_transcoding_and_invalid_bytes.rb
+# polyglot-related+: test_050_encoding_transcoding_and_invalid_sequences.rb
 
 require "assertions"
 

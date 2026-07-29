@@ -2,8 +2,8 @@
 # 输入：Module alias、标量读取、可变 Array 和 writer；观察：常量 alias 身份、标量快照及共享导出。
 # polyglot-family: modules_packages_and_loading
 # polyglot-concept: modules_imports_linkage_and_live_bindings
-# polyglot-related: languages/ruby/language/04_classes_modules_and_lookup/
-# polyglot-related+: test_032_class_variables_class_state_and_constants.rb
+# polyglot-related: languages/ruby/language/02_scope_and_constants/
+# polyglot-related+: test_010_constants_class_state_and_missing_lookup.rb
 
 require "assertions"
 

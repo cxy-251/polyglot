@@ -2,7 +2,8 @@
 # 输入：Pathname、cleanpath、expand_path、basename 和 cwd；观察：词法规范化、进程 cwd 解析及平台分隔符。
 # polyglot-family: files_paths_and_streams
 # polyglot-concept: path_normalization_and_resolution
-# polyglot-related: languages/ruby/standard_library/09_files_io_and_process/test_065_file_dir_and_pathname.rb
+# polyglot-related: languages/ruby/standard_library/09_files_io_and_process/
+# polyglot-related+: test_065_paths_metadata_and_symbolic_links.rb
 
 require "assertions"
 require "pathname"
@@ -14,7 +15,7 @@ A.equal("alpha/value.txt", relative.cleanpath.to_s)
 A.equal(File.join(Dir.pwd, "alpha", "value.txt"), File.expand_path(relative.cleanpath))
 A.equal("value.txt", relative.basename.to_s)
 A.equal("alpha/.", Pathname("alpha/.").to_s)
-A.equal(File::SEPARATOR, "/")
+A.truth(File.join("alpha", "value.txt").include?(File::SEPARATOR))
 A.falsey(relative.absolute?)
 A.truth(Pathname(File.expand_path(relative)).absolute?)
 

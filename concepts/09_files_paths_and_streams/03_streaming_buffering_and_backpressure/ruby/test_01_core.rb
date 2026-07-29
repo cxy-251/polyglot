@@ -3,7 +3,7 @@
 # polyglot-family: files_paths_and_streams
 # polyglot-concept: streaming_buffering_and_backpressure
 # polyglot-related: languages/ruby/standard_library/09_files_io_and_process/
-# polyglot-related+: test_067_io_pipes_binary_and_text_encoding.rb
+# polyglot-related+: test_067_stream_readiness_text_encoding_and_binary_layout.rb
 
 require "assertions"
 require "stringio"
@@ -22,7 +22,7 @@ reader, writer = IO.pipe
 begin
   chunk = "x" * 4096
   result = nil
-  10_000.times do
+  loop do
     result = writer.write_nonblock(chunk, exception: false)
     break if result == :wait_writable
   end

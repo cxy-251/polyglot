@@ -2,7 +2,7 @@
 # 输入：整数、浮点、Rational、Complex、文本和无效值；观察：运算结果、精度、解析与失败。
 # polyglot-family: values_and_comparison
 # polyglot-concept: numeric_models_and_conversion
-# polyglot-related: languages/ruby/language/01_values_and_identity/test_004_numeric_tower_and_conversion.rb
+# polyglot-related: languages/ruby/language/01_values_and_identity/test_004_numeric_models_conversion_and_coercion.rb
 
 require "assertions"
 

@@ -3,7 +3,7 @@
 # polyglot-family: objects_and_dispatch
 # polyglot-concept: inheritance_dynamic_dispatch_and_super
 # polyglot-related: languages/ruby/language/04_classes_modules_and_lookup/
-# polyglot-related+: test_029_super_lookup_and_argument_forwarding.rb
+# polyglot-related+: test_025_construction_inheritance_and_super.rb
 
 require "assertions"
 

@@ -2,7 +2,8 @@
 # 输入：Method、UnboundMethod、Proc 和自定义 call；观察：self 绑定、bind 约束及调用协议。
 # polyglot-family: functions_and_calls
 # polyglot-concept: callable_binding_and_invocation_context
-# polyglot-related: languages/ruby/language/03_methods_blocks_and_procs/test_024_method_unbound_method_and_currying.rb
+# polyglot-related: languages/ruby/language/03_methods_blocks_and_procs/
+# polyglot-related+: test_024_method_binding_callable_objects_and_currying.rb
 
 require "assertions"
 

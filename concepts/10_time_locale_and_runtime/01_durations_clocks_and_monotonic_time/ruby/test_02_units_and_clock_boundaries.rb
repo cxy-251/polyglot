@@ -2,7 +2,8 @@
 # 输入：float seconds、integer nanoseconds、clock_getres 和 Time.at；观察：显式单位、分辨率及 epoch 转换。
 # polyglot-family: time_locale_and_runtime
 # polyglot-concept: durations_clocks_and_monotonic_time
-# polyglot-related: languages/ruby/standard_library/10_data_time_and_text/test_075_date_time_and_calendar_arithmetic.rb
+# polyglot-related: languages/ruby/standard_library/10_data_time_and_text/
+# polyglot-related+: test_075_calendar_time_zones_and_monotonic_clocks.rb
 
 require "assertions"
 

@@ -2,7 +2,8 @@
 # 输入：private reader、public_send、send、freeze 及嵌套对象；观察：可见性检查、反射绕过和浅冻结。
 # polyglot-family: objects_and_dispatch
 # polyglot-concept: encapsulation_private_state_and_immutability
-# polyglot-related: languages/ruby/language/04_classes_modules_and_lookup/test_028_method_visibility.rb
+# polyglot-related: languages/ruby/language/04_classes_modules_and_lookup/
+# polyglot-related+: test_028_visibility_dynamic_fallback_and_reflection.rb
 
 require "assertions"
 

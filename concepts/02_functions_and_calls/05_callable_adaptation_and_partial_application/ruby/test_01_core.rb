@@ -2,7 +2,8 @@
 # 输入：Method、Proc、lambda、curry 和 symbol-to-proc；观察：适配后的调用、严格度与结果。
 # polyglot-family: functions_and_calls
 # polyglot-concept: callable_adaptation_and_partial_application
-# polyglot-related: languages/ruby/language/03_methods_blocks_and_procs/test_024_method_unbound_method_and_currying.rb
+# polyglot-related: languages/ruby/language/03_methods_blocks_and_procs/
+# polyglot-related+: test_024_method_binding_callable_objects_and_currying.rb
 
 require "assertions"
 

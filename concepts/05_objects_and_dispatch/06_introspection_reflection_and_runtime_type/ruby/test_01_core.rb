@@ -3,7 +3,7 @@
 # polyglot-family: objects_and_dispatch
 # polyglot-concept: introspection_reflection_and_runtime_type
 # polyglot-related: languages/ruby/language/05_metaprogramming_and_refinements/
-# polyglot-related+: test_039_tracepoint_and_rubyvm_observation.rb
+# polyglot-related+: test_039_tracepoint_and_cruby_observation.rb
 
 require "assertions"
 

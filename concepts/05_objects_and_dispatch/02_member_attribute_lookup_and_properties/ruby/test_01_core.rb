@@ -3,7 +3,7 @@
 # polyglot-family: objects_and_dispatch
 # polyglot-concept: member_attribute_lookup_and_properties
 # polyglot-related: languages/ruby/language/04_classes_modules_and_lookup/
-# polyglot-related+: test_030_method_missing_and_respond_to_missing.rb
+# polyglot-related+: test_028_visibility_dynamic_fallback_and_reflection.rb
 
 require "assertions"
 

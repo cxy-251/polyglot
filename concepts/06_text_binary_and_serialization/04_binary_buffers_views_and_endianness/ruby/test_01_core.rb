@@ -3,7 +3,7 @@
 # polyglot-family: text_binary_and_serialization
 # polyglot-concept: binary_buffers_views_and_endianness
 # polyglot-related: languages/ruby/standard_library/09_files_io_and_process/
-# polyglot-related+: test_067_io_pipes_binary_and_text_encoding.rb
+# polyglot-related+: test_067_stream_readiness_text_encoding_and_binary_layout.rb
 
 require "assertions"
 

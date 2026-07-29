@@ -2,7 +2,8 @@
 # 输入：显式 FIFO Queue、会继续 enqueue 的任务和循环；观察：当前 callback 完成后才取下一个任务。
 # polyglot-family: async_and_concurrency
 # polyglot-concept: scheduling_tasks_microtasks_and_futures
-# polyglot-related: languages/ruby/standard_library/11_concurrency_models/test_083_queue_sized_queue_and_close.rb
+# polyglot-related: languages/ruby/standard_library/11_concurrency_models/
+# polyglot-related+: test_083_queue_capacity_nonblocking_and_close_protocol.rb
 
 require "assertions"
 

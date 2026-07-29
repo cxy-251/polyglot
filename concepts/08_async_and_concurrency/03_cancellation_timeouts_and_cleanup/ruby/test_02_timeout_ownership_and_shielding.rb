@@ -3,7 +3,7 @@
 # polyglot-family: async_and_concurrency
 # polyglot-concept: cancellation_timeouts_and_cleanup
 # polyglot-related: languages/ruby/standard_library/11_concurrency_models/
-# polyglot-related+: test_082_mutex_condition_variable_and_predicate.rb
+# polyglot-related+: test_081_thread_results_shared_state_and_failures.rb
 
 require "assertions"
 

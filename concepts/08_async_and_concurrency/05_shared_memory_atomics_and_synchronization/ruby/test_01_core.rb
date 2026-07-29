@@ -3,7 +3,7 @@
 # polyglot-family: async_and_concurrency
 # polyglot-concept: shared_memory_atomics_and_synchronization
 # polyglot-related: languages/ruby/standard_library/11_concurrency_models/
-# polyglot-related+: test_082_mutex_condition_variable_and_predicate.rb
+# polyglot-related+: test_082_mutex_condition_variable_and_monitor_predicates.rb
 
 require "assertions"
 
