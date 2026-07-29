@@ -1,5 +1,5 @@
 {
-  "name": "polyglot-nodejs-examples",
+  "name": "polyglot-nodejs-harness",
   "private": true,
   "type": "module",
   "engines": {

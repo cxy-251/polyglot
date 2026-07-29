@@ -1,4 +1,4 @@
-// polyglot-covers:
+// polyglot-harness:
 // - nodejs.core.node-test-cli-skip-todo-expect-failure-and-precedence
 // - nodejs.core.node-test-cli-only-flag-and-only-is-not-default-focus
 // - nodejs.core.node-test-cli-name-and-skip-pattern-body-selection

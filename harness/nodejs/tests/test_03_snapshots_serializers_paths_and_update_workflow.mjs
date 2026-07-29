@@ -1,4 +1,4 @@
-// polyglot-covers:
+// polyglot-harness:
 // - nodejs.core.node-test-snapshot-missing-baseline-failure-and-update-flag
 // - nodejs.core.node-test-snapshot-full-name-counter-and-human-readable-file
 // - nodejs.core.node-test-snapshot-custom-path-resolver

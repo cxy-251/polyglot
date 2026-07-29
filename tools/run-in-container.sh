@@ -12,6 +12,8 @@ Usage:
   ./tools/run-in-container.sh python [pytest arguments...]
   ./tools/run-in-container.sh cpp [ctest arguments...]
   ./tools/run-in-container.sh nodejs [node --test arguments or test files...]
+  ./tools/run-in-container.sh nodejs-harness [node --test arguments...]
+  ./tools/run-in-container.sh nodejs-concepts [node --test arguments...]
   ./tools/run-in-container.sh go [go test arguments...]
   ./tools/run-in-container.sh go-harness [go test arguments...]
   ./tools/run-in-container.sh go-concepts [go test arguments...]
@@ -322,6 +324,32 @@ run_nodejs_files() {
       --test \
       --test-concurrency=1 \
       "${test_files[@]}"
+}
+
+run_nodejs_harness() {
+  check_nodejs_version
+  local -a test_files=()
+  mapfile -d '' test_files < <(
+    find harness/nodejs/tests \
+      -type f \
+      -name 'test_[0-9][0-9]_*.mjs' \
+      -print0 | sort -z
+  )
+  printf '\n== Node.js harness and integration ==\n'
+  run_nodejs_files "${test_files[@]}" "$@"
+}
+
+run_nodejs_concepts() {
+  check_nodejs_version
+  local -a test_files=()
+  mapfile -d '' test_files < <(
+    find concepts \
+      -path '*/nodejs/test_[0-9][0-9]_*.mjs' \
+      -type f \
+      -print0 | sort -z
+  )
+  printf '\n== Node.js horizontal concepts ==\n'
+  run_nodejs_files "${test_files[@]}" "$@"
 }
 
 check_go_version() {
@@ -1687,6 +1715,14 @@ main() {
     nodejs|node|js)
       shift
       run_nodejs "$@"
+      ;;
+    nodejs-harness)
+      shift
+      run_nodejs_harness "$@"
+      ;;
+    nodejs-concepts)
+      shift
+      run_nodejs_concepts "$@"
       ;;
     go|golang)
       shift

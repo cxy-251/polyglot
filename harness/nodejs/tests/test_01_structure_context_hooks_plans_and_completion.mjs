@@ -1,4 +1,4 @@
-// polyglot-covers:
+// polyglot-harness:
 // - nodejs.core.node-test-test-context-name-full-name-file-path-worker-id-and-signal
 // - nodejs.core.node-test-subtests-await-and-return-contract
 // - nodejs.core.node-test-parent-hooks-before-before-each-after-each-after-order
@@ -16,7 +16,7 @@ test('TestContext 提供层级名、根测试文件、worker 编号和统一取�
   assert.equal(t.fullName, t.name);
   assert.match(
     t.filePath,
-    /test_086_node_test_structure_context_hooks_plans_and_async_completion\.mjs$/,
+    /test_01_structure_context_hooks_plans_and_completion\.mjs$/,
   );
   assert.equal(t.workerId, Number(process.env.NODE_TEST_WORKER_ID));
   assert.ok(t.signal instanceof AbortSignal);
@@ -111,7 +111,7 @@ test('waitFor 重试抛错的条件并把最后一次成功返回值传给调用
 describe('describe 是 suite 的 BDD 别名', (suiteContext) => {
   assert.equal(suiteContext.name, 'describe 是 suite 的 BDD 别名');
   assert.equal(suiteContext.fullName, suiteContext.name);
-  assert.match(suiteContext.filePath, /test_086_node_test_structure_context_hooks_plans/);
+  assert.match(suiteContext.filePath, /test_01_structure_context_hooks_plans/);
   assert.ok(suiteContext.signal instanceof AbortSignal);
 
   it('it 是 test 的 BDD 别名', (t) => {

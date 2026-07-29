@@ -557,6 +557,32 @@ check_go_workspace() {
   fi
 }
 
+check_nodejs_projects() {
+  local required_file
+  for required_file in \
+    harness/nodejs/package.json \
+    harness/nodejs/tests/test_01_structure_context_hooks_plans_and_completion.mjs \
+    harness/nodejs/tests/test_02_mocks_functions_properties_timers_and_modules.mjs \
+    harness/nodejs/tests/test_03_snapshots_serializers_paths_and_update_workflow.mjs \
+    harness/nodejs/tests/test_04_cli_runner_reporters_and_coverage.mjs; do
+    if [[ ! -f "$required_file" ]]; then
+      report_failure "缺少 Node.js harness 文件: $required_file"
+    fi
+  done
+  if [[ -f languages/nodejs/package.json ]]; then
+    report_failure "Node.js 锁定 package 配置不得继续位于语言课程"
+  fi
+  if ! grep -Fq 'nodejs-harness)' tools/run-in-container.sh || \
+    ! grep -Fq 'nodejs-concepts)' tools/run-in-container.sh; then
+    report_failure "Node.js runner 缺少 harness 或独立横向入口"
+  fi
+  for required_file in harness/nodejs/tests/test_[0-9][0-9]_*.mjs; do
+    if ! grep -Fq '// polyglot-harness:' "$required_file"; then
+      report_failure "Node.js harness 文件缺少 polyglot-harness: $required_file"
+    fi
+  done
+}
+
 check_rust_workspaces() {
   local required_file
   local metadata
@@ -1202,6 +1228,7 @@ for active_language in "${ACTIVE_LANGUAGES[@]}"; do
   esac
 done
 check_concepts
+check_nodejs_projects
 check_go_workspace
 check_rust_workspaces
 check_julia_projects

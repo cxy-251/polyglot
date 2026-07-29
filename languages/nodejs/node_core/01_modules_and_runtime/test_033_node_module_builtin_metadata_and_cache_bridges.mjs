@@ -10,7 +10,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 
 import * as fsNamespace from 'node:fs';
-import { mkdtempSync, rmSync } from 'node:fs';
+import { mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import {
   builtinModules,
   constants,
@@ -21,8 +21,8 @@ import {
   isBuiltin,
   syncBuiltinESMExports,
 } from 'node:module';
-import { dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { dirname, join } from 'node:path';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 test('builtinModules 与 isBuiltin 识别核心模块说明符', () => {
   assert.ok(builtinModules.includes('fs'));
@@ -45,11 +45,17 @@ test('createRequire 的解析基准来自传入文件 URL 或绝对路径', () =
   assert.equal(require.resolve('node:fs'), 'node:fs');
 });
 
-test('findPackageJSON 从模块位置向上查找最近 package.json', () => {
-  const packagePath = findPackageJSON('.', import.meta.url);
+test('findPackageJSON 从显式模块位置向上查找最近 package.json', (t) => {
+  const directory = mkdtempSync('/tmp/polyglot-nodejs-package-json-');
+  t.after(() => rmSync(directory, { force: true, recursive: true }));
+  writeFileSync(join(directory, 'package.json'), '{"name":"fixture"}');
+  writeFileSync(join(directory, 'entry.mjs'), '');
+  const packagePath = findPackageJSON(
+    '.',
+    pathToFileURL(join(directory, 'entry.mjs')),
+  );
 
-  assert.equal(typeof packagePath, 'string');
-  assert.equal(packagePath.endsWith('/languages/nodejs/package.json'), true);
+  assert.equal(packagePath, join(directory, 'package.json'));
 });
 
 test('CommonJS 修改 builtin 导出后可显式同步到 ESM named exports', () => {

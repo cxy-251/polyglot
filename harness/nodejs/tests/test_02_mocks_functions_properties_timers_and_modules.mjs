@@ -1,4 +1,4 @@
-// polyglot-covers:
+// polyglot-harness:
 // - nodejs.core.node-test-mock-fn-call-records-result-error-stack-this-and-target
 // - nodejs.core.node-test-mock-fn-implementation-once-times-reset-calls-and-restore
 // - nodejs.core.node-test-mock-method-original-this-symbol-and-automatic-restore
@@ -37,7 +37,7 @@ test('mock.fn 记录返回、异常、调用位置、this 和构造目标', (t) 
   assert.ok(call.stack instanceof Error);
   assert.match(
     call.stack.stack,
-    /test_087_node_test_mocks_functions_properties_timers_and_modules/,
+    /test_02_mocks_functions_properties_timers_and_modules/,
   );
 
   const failure = new Error('planned failure');
