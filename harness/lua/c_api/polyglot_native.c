@@ -1,3 +1,4 @@
+/* 可加载的 C module fixture；构建与路径隔离由 harness 负责。 */
 #include <stdio.h>
 
 #include <lauxlib.h>

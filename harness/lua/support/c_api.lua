@@ -1,3 +1,4 @@
+-- C API fixture 进程适配器属于 harness；课程只讨论它验证的公开 API 契约。
 local c_api = {}
 
 function c_api.run(case_name)

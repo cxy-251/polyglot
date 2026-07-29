@@ -17,6 +17,7 @@ Usage:
   ./tools/run-in-container.sh julia [test files...]
   ./tools/run-in-container.sh r [test files...]
   ./tools/run-in-container.sh lua [test files...]
+  ./tools/run-in-container.sh lua-harness [test files...]
   ./tools/run-in-container.sh ruby [test files...]
   ./tools/run-in-container.sh ruby-harness [test files...]
   ./tools/run-in-container.sh concept NN_family/NN_topic
@@ -544,7 +545,7 @@ build_lua_c_api() {
   mkdir -p "$build_directory"
   make \
     --no-print-directory \
-    -C languages/lua/c_api \
+    -C harness/lua/c_api \
     LUA_HOME=/opt/polyglot/lua-5.5.0 \
     BUILD_DIR="$build_directory" \
     all
@@ -560,6 +561,7 @@ run_lua_files() {
   local test_file
   local support_path
   local c_module_path
+  local needs_c_api=0
 
   if [[ ${#test_files[@]} -eq 0 ]]; then
     echo "$label 没有发现 Lua 测试文件。" >&2
@@ -568,8 +570,18 @@ run_lua_files() {
 
   mkdir -p "$sandbox_root"
   run_sandbox="$(mktemp -d "$sandbox_root/run.XXXXXX")"
-  build_lua_c_api "$run_sandbox/c-api"
-  support_path="$ROOT/languages/lua/?.lua;$ROOT/languages/lua/?/init.lua"
+  for test_file in "${test_files[@]}"; do
+    if grep -Eq \
+      'polyglot_native|support[.]c_api|POLYGLOT_LUA_C_API_HOST' \
+      "$test_file"; then
+      needs_c_api=1
+      break
+    fi
+  done
+  if ((needs_c_api)); then
+    build_lua_c_api "$run_sandbox/c-api"
+  fi
+  support_path="$ROOT/harness/lua/?.lua;$ROOT/harness/lua/?/init.lua"
   support_path+=";$ROOT/languages/lua/fixtures/modules/?.lua"
   c_module_path="$run_sandbox/c-api/?.so"
 
@@ -631,6 +643,25 @@ run_lua() {
   run_lua_files \
     "Lua vertical course" \
     "${POLYGLOT_LUA_COURSE_ROOT:-/tmp/polyglot-lua-course}" \
+    "${test_files[@]}"
+}
+
+run_lua_harness() {
+  check_lua_version
+  local -a test_files=()
+  if [[ $# -gt 0 ]]; then
+    test_files=("$@")
+  else
+    mapfile -d '' test_files < <(
+      find harness/lua/tests \
+        -type f \
+        -name 'test_*.lua' \
+        -print0 | sort -z
+    )
+  fi
+  run_lua_files \
+    "Lua harness" \
+    "${POLYGLOT_LUA_HARNESS_ROOT:-/tmp/polyglot-lua-harness}" \
     "${test_files[@]}"
 }
 
@@ -1516,6 +1547,10 @@ main() {
     lua)
       shift
       run_lua "$@"
+      ;;
+    lua-harness)
+      shift
+      run_lua_harness "$@"
       ;;
     ruby|rb)
       shift

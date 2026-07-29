@@ -1,3 +1,4 @@
+-- Lua 课程与 harness 共用的最小断言库；它是测试基础设施，不计入课程知识。
 local assertions = {}
 local assertion_count = 0
 local temporary_count = 0

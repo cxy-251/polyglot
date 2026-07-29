@@ -855,12 +855,15 @@ check_lua_projects() {
   local -a seen_domains=()
 
   for required_file in \
-    languages/lua/support/assertions.lua \
-    languages/lua/support/c_api.lua \
+    harness/lua/support/assertions.lua \
+    harness/lua/support/c_api.lua \
     languages/lua/fixtures/modules/course_sample.lua \
-    languages/lua/c_api/Makefile \
-    languages/lua/c_api/polyglot_lua_host.c \
-    languages/lua/c_api/polyglot_native.c; do
+    harness/lua/c_api/Makefile \
+    harness/lua/c_api/polyglot_lua_host.c \
+    harness/lua/c_api/polyglot_native.c \
+    harness/lua/tests/test_environment_isolation.lua \
+    harness/lua/tests/test_native_build.lua \
+    harness/lua/tests/test_runtime_contract.lua; do
     if [[ ! -f "$required_file" ]]; then
       report_failure "缺少 Lua runner、module 或 C API 工程文件: $required_file"
     fi
@@ -929,7 +932,7 @@ check_lua_projects() {
     'function assertions.raises' \
     'function assertions.with_cleanup' \
     'function assertions.done'; do
-    if ! grep -Fq "$required_file" languages/lua/support/assertions.lua; then
+    if ! grep -Fq "$required_file" harness/lua/support/assertions.lua; then
       report_failure "Lua 最小断言库缺少能力: $required_file"
     fi
   done
@@ -944,7 +947,7 @@ check_lua_projects() {
   for required_file in \
     '-std=c11' '-Wall' '-Wextra' '-Wpedantic' '-Werror' \
     polyglot_lua_host polyglot_native.so; do
-    if ! grep -Fq -- "$required_file" languages/lua/c_api/Makefile; then
+    if ! grep -Fq -- "$required_file" harness/lua/c_api/Makefile; then
       report_failure "Lua C API 工程缺少严格构建设置: $required_file"
     fi
   done
@@ -952,7 +955,7 @@ check_lua_projects() {
   build_root="$(mktemp -d /tmp/polyglot-lua-structure.XXXXXX)"
   if ! make \
     --no-print-directory \
-    -C languages/lua/c_api \
+    -C harness/lua/c_api \
     LUA_HOME=/opt/polyglot/lua-5.5.0 \
     BUILD_DIR="$build_root" \
     all >/dev/null; then

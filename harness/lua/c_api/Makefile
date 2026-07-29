@@ -1,3 +1,4 @@
+# 该工程验证锁定头文件、静态库和动态模块的集成边界，不计入 Lua 课程文件数。
 LUA_HOME ?= /opt/polyglot/lua-5.5.0
 BUILD_DIR ?= /tmp/polyglot-lua-c-api
 CC ?= cc

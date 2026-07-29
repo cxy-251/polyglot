@@ -1,3 +1,4 @@
+/* 可执行的 Lua C API fixture；Lua 课程通过小型主题测试解释这里的公开契约。 */
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
