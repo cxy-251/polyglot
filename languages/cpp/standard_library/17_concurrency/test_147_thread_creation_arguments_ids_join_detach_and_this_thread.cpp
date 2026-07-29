@@ -170,7 +170,6 @@ TEST(ThisThreadUtilities, SleepFunctionsAreCheckedWithoutDependingOnWallClockTim
     std::this_thread::sleep_for(std::chrono::milliseconds{1});
     std::this_thread::sleep_until(std::chrono::steady_clock::time_point{});
   });
-  SUCCEED();
 
   // sleep_for 至少阻塞请求的相对时长，sleep_until 等到指定时钟的截止点，但调度会
   // 让实际返回更晚。测试只验证签名而不真正 sleep，避免把机器负载变成随机失败。

@@ -111,7 +111,6 @@ TEST(Attributes, FeatureTestReportsWhetherAnAttributeIsRecognized) {
   static_assert(__has_cpp_attribute(nodiscard) >= 201603L);
   static_assert(__has_cpp_attribute(maybe_unused) >= 201603L);
 #endif
-  SUCCEED();
 
   // __has_cpp_attribute 可在预处理阶段做兼容封装，结果表示实现声称支持的标准版本。
   // 未识别属性通常会被忽略并可能告警，因此仍要在目标工具链的严格警告模式下验证。

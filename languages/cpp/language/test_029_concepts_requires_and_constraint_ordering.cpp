@@ -133,7 +133,6 @@ TEST(RequiresClause, CanReferToDependentTypesWithoutTriggeringAHardError) {
   static_assert(HasUnsignedDifference<CounterLike>);
   static_assert(!HasUnsignedDifference<int>);
   static_assert(!HasUnsignedDifference<std::vector<int>>);
-  SUCCEED();
 
   // requirement 按词法顺序检查，前面的 type requirement 失败后不会继续形成后面的嵌套
   // 类型。这种短路使“没有 difference_type”成为 false，而不是 hard error。
@@ -141,7 +140,6 @@ TEST(RequiresClause, CanReferToDependentTypesWithoutTriggeringAHardError) {
 
 TEST(ConceptSemantics, CompilerChecksSyntaxButSomeMeaningRemainsAContract) {
   static_assert(std::copyable<int>);
-  SUCCEED();
 
   // 标准 concept 常含 equality-preserving、稳定性或复杂度等语义要求，编译器通常只能
   // 检查表达式是否存在和类型是否匹配。谎报 operator== 语义仍可能通过语法约束，随后

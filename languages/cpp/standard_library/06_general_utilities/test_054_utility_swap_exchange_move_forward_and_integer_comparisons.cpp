@@ -179,7 +179,6 @@ TEST(AsConst, SelectsConstAccessWithoutCopyingOrAcceptingATemporary) {
   EXPECT_EQ(&std::as_const(buffer), &buffer);
   static_assert(
       std::is_same_v<decltype(std::as_const(buffer)), const QualifiedBuffer&>);
-  SUCCEED();
 
   // as_const 返回同一对象的 const T&，用来选 const overload 而不复制对象。
   // 它的 const rvalue overload 被删除，避免将临时对象包装成看似可长期持有的引用。
@@ -197,7 +196,6 @@ TEST(IntegerComparisons, SignedAndUnsignedValuesAreComparedMathematically) {
   static_assert(std::in_range<unsigned int>(1));
   static_assert(!std::in_range<unsigned int>(-1));
   static_assert(!std::in_range<signed char>(1'000));
-  SUCCEED();
 
   // 普通 -1 < 1u 会先把 -1 转为很大的 unsigned，cmp_less 系列则按数学
   // 值比较并避免符号转换陷阱。这些 API 只接受标准整数类型，不是任意数字类的通用比较器。

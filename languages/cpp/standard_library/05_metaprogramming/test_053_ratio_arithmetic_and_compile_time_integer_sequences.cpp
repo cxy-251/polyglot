@@ -50,7 +50,6 @@ TEST(Ratio, NormalizesTheSignAndGreatestCommonDivisor) {
   static_assert(Negative::den == 4);
   static_assert(BothNegative::num == 2);
   static_assert(BothNegative::den == 3);
-  SUCCEED();
 
   // ratio 总把分母规范为正数，并用最大公约数约分，所以等价写法有统一的
   // num/den。分母为 0 不是运行期异常，而是模板实例化时的不合法程序。
@@ -70,7 +69,6 @@ TEST(Ratio, ArithmeticProducesANewCanonicalRatioType) {
   static_assert(std::ratio_equal_v<Quotient, std::ratio<2, 3>>);
   static_assert(std::ratio_less_v<OneSixth, OneThird>);
   static_assert(std::ratio_greater_equal_v<Sum, OneThird>);
-  SUCCEED();
 
   // ratio_add 等产生新类型，不执行运行期算术。实现会尽量在计算中约分，
   // 但若最终分子或分母无法由 intmax_t 表示，程序仍在编译期不合法。
@@ -114,7 +112,6 @@ TEST(IntegerSequence, FactoryAliasesGenerateZeroBasedHalfOpenSequences) {
       std::is_same_v<Integers, std::integer_sequence<int, 0, 1, 2, 3, 4>>);
   static_assert(std::is_same_v<Indexes, std::index_sequence<0, 1, 2, 3>>);
   static_assert(Empty::size() == 0);
-  SUCCEED();
 
   // make_integer_sequence<T, N> 生成 [0, N)，N 必须非负且能由 T 表示。
   // index_sequence 只是 value_type 固定为 size_t 的常用别名；N=0 产生空 pack。

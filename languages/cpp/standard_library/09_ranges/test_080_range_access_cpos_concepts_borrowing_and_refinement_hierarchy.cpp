@@ -172,7 +172,6 @@ TEST(RangeConcepts, RangeOnlyRequiresBeginAndEndWithAValidSentinelRelationship) 
   static_assert(std::ranges::range<access_examples::AdlRange>);
   static_assert(!std::ranges::range<int*>);
   static_assert(std::ranges::range<int[3]>);
-  SUCCEED();
 
   // range 不要求容器、size、相同首尾类型或所有权，只要求 begin 是
   // input_or_output_iterator，end 对它满足 sentinel_for。裸指针缺少独立的结束边界。
@@ -183,7 +182,6 @@ TEST(BorrowedRange, TemporaryAccessIsAllowedOnlyWhenIteratorsOutliveTheRangeObje
   static_assert(!std::ranges::borrowed_range<std::vector<int>>);
   static_assert(CanBeginTemporary<std::span<int>&&>);
   static_assert(!CanBeginTemporary<std::vector<int>&&>);
-  SUCCEED();
 
   // ranges::begin 拒绝非 borrowed 的临时 vector，避免立即产生悬空 iterator；span
   // iterator 指向外部存储，销毁 span 对象不影响它。borrowed 不会延长外部存储寿命。
@@ -194,7 +192,6 @@ TEST(ViewConcepts, ViewsAreCheapRangeObjectsWhileViewableRangeControlsAdaptation
   static_assert(!std::ranges::view<std::vector<int>>);
   static_assert(std::ranges::viewable_range<std::vector<int>&>);
   static_assert(std::ranges::viewable_range<std::span<int>>);
-  SUCCEED();
 
   // view 是可移动、默认语义为常数时间移动/销毁的 range；vector 拥有动态元素，不是 view。
   // viewable_range 判断对象能否安全交给 view adaptor，lvalue 容器通常通过 ref_view 包装。
@@ -208,7 +205,6 @@ TEST(RangeRefinements, TraversalConceptsFollowTheUnderlyingIteratorGuarantees) {
   static_assert(std::ranges::random_access_range<std::vector<int>>);
   static_assert(std::ranges::contiguous_range<std::vector<int>>);
   static_assert(!std::ranges::contiguous_range<std::deque<int>>);
-  SUCCEED();
 
   // range 层级直接组合 range 与 iterator_t<R> 的对应概念；它描述遍历能力和复杂度，
   // 不表示容器具体类型。算法可按最弱足够概念接收更多自定义 range。

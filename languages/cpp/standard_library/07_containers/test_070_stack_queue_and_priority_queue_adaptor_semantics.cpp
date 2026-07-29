@@ -117,7 +117,6 @@ TEST(ContainerAdaptors, DeliberatelyDoNotModelRanges) {
   static_assert(!std::ranges::range<std::stack<int>>);
   static_assert(!std::ranges::range<std::queue<int>>);
   static_assert(!std::ranges::range<std::priority_queue<int>>);
-  SUCCEED();
 
   // 适配器隐藏 iterator 是语义约束，不是缺失功能：遍历会允许调用者绕过 LIFO、FIFO
   // 或堆顶规则。需要遍历时应直接选择并拥有底层容器，而不是试图访问受保护成员 c。

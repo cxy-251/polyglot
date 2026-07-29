@@ -200,7 +200,6 @@ TEST(Span, BorrowedRangeStatusDoesNotMakeTemporaryOwnedStorageLiveLonger) {
       std::is_constructible_v<std::span<const int>, std::vector<int>&&>);
   static_assert(
       !std::is_constructible_v<std::span<int>, std::vector<int>&&>);
-  SUCCEED();
 
   // span 是 borrowed_range，因为移动 span 不会使其 iterator 失效；这不代表它延长
   // 底层容器寿命。span<const T> 可从临时 contiguous range 构造，但 full-expression 结束就悬空，不应存储。

@@ -91,7 +91,6 @@ TEST(TypeRelations, BaseOfDoesNotRequireAnAccessibleUnambiguousConversion) {
   static_assert(std::is_base_of_v<Root, AmbiguousDiamond>);
   static_assert(!std::is_convertible_v<AmbiguousDiamond*, Root*>);
   static_assert(std::is_convertible_v<LeftBranch*, Root*>);
-  SUCCEED();
 
   // is_same 要求精确相同，不会忽略 cv 或做转换。is_base_of 只查继承图，
   // 即使 Root 在菱形中出现两次也为 true；真正的指针转换却因歧义而不可用。
@@ -141,7 +140,6 @@ TEST(CallableTraits, InvokeResultAndNothrowQueriesDescribeTheSelectedCall) {
   static_assert(
       std::is_nothrow_invocable_r_v<long, Scale, const Calculator&, int>);
   static_assert(!std::is_nothrow_invocable_v<Label, const Calculator&>);
-  SUCCEED();
 
   // invoke_result 只在对应 INVOKE 表达式成立时提供 type；盲目访问无效调用的
   // ::type 会编译失败。先用 is_invocable 或 requires 筛选，再在有效分支提取结果。
@@ -153,7 +151,6 @@ TEST(LogicalTraits, ConjunctionAndDisjunctionShortCircuitInstantiation) {
   static_assert(std::negation_v<std::false_type>);
   static_assert(std::conjunction_v<>);
   static_assert(!std::disjunction_v<>);
-  SUCCEED();
 
   // conjunction 遇到第一个 false 就停止，disjunction 遇到第一个 true 就停止；
   // 因此 MissingValueMember 没有 value 也不会被实例化。这与先形成所有表达式的普通布尔 fold 不同。
@@ -165,7 +162,6 @@ TEST(LogicalTraits, CompositeConditionsCanDriveARealCompileTimePolicy) {
   static_assert(
       std::string_view{transfer_strategy<MoveOnlyThrowingMove>()} == "move");
   static_assert(std::string_view{transfer_strategy<std::string>()} == "move");
-  SUCCEED();
 
   // 类似 vector 重定位的策略常把多个 trait 组合：移动不抛时优先移动；
   // 移动可抛且可复制时为了异常保证选复制；若根本不可复制，则只能接受移动的风险。
@@ -183,7 +179,6 @@ TEST(LayoutRelations, CompareLayoutWithoutClaimingTheTypesAreIdentical) {
       std::is_corresponding_member(&SourceLayout::score, &TargetLayout::value));
   static_assert(
       !std::is_corresponding_member(&SourceLayout::id, &TargetLayout::value));
-  SUCCEED();
 
   // layout-compatible 允许两个不同的 standard-layout 类型共享布局形状，
   // corresponding_member 进一步比较成员在 common initial sequence 中的位置。

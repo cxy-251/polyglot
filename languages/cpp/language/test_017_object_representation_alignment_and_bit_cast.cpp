@@ -77,12 +77,16 @@ TEST(ObjectRepresentation, BitCastCopiesBitsWithoutAliasViolations) {
 }
 
 TEST(ObjectRepresentation, EndianReportsTheOrderOfScalarBytes) {
+  constexpr std::uint32_t value = 0x0102'0304U;
+  const auto bytes = std::bit_cast<std::array<std::uint8_t, 4>>(value);
+
   if constexpr (std::endian::native == std::endian::little) {
-    SUCCEED() << "little endian implementation";
+    EXPECT_EQ(bytes, (std::array<std::uint8_t, 4>{4, 3, 2, 1}));
   } else if constexpr (std::endian::native == std::endian::big) {
-    SUCCEED() << "big endian implementation";
+    EXPECT_EQ(bytes, (std::array<std::uint8_t, 4>{1, 2, 3, 4}));
   } else {
-    SUCCEED() << "mixed endian implementation";
+    EXPECT_NE(std::endian::native, std::endian::little);
+    EXPECT_NE(std::endian::native, std::endian::big);
   }
 
   // std::endian 报告实现的标量字节顺序，不会自动转换数据。网络和文件格式仍应显式

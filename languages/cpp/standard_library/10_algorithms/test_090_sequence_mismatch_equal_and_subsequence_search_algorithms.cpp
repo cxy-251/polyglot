@@ -198,7 +198,6 @@ TEST(SearchResult, TemporaryOwnedHaystackProducesADanglingSubrangeMarker) {
 
   static_assert(std::is_same_v<decltype(result), std::ranges::dangling>);
   (void)result;
-  SUCCEED();
 
   // search 返回的两条 iterator 都属于第一路 haystack；临时 owning string 销毁后不安全，
   // 所以结果整体变成 dangling。第二路 pattern 的寿命不决定返回类型。

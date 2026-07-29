@@ -89,7 +89,6 @@ TEST(VariableTemplates, RecursivePartialSpecializationComputesPointerDepth) {
   static_assert(pointer_depth<int> == 0);
   static_assert(pointer_depth<int*> == 1);
   static_assert(pointer_depth<int***> == 3);
-  SUCCEED();
 
   // variable template 也能 partial specialize。每层 T* specialization 去掉一层指针，
   // 直到 primary template 提供递归基例。
@@ -112,7 +111,6 @@ TEST(Specialization, DeclarationMustAppearBeforeAUseThatWouldInstantiatePrimary)
 
   // explicit specialization 必须在每个会导致隐式实例化的首次使用之前可见。先实例化
   // primary 再声明 specialization 是 ill-formed，不能依赖链接器替换已经生成的代码。
-  SUCCEED();
 }
 
 }  // namespace

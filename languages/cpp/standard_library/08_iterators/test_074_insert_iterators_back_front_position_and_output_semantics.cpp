@@ -96,7 +96,6 @@ TEST(InsertIterators, TheyAreWritableOutputIteratorsButNotReadableIterators) {
   static_assert(std::output_iterator<Position, int>);
   static_assert(!std::input_iterator<Back>);
   static_assert(!std::indirectly_readable<Back>);
-  SUCCEED();
 
   // 它们的 value_type/reference 常为 void，*out 不代表一个可读取元素；只应出现在
   // 算法输出端。把“可解引用表达式存在”误当成“可读”会写出错误的泛型约束。

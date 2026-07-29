@@ -195,7 +195,6 @@ TEST(SynchronizationPrimitiveProperties, ObjectsAreSharedButNotCopyableHandles) 
   static_assert(!std::is_copy_constructible_v<std::barrier<>>);
   static_assert(!std::is_move_constructible_v<std::latch>);
   static_assert(!std::is_move_constructible_v<std::barrier<>>);
-  SUCCEED();
 
   // 这些对象通常由引用共享；析构时仍有等待者或并发成员调用会破坏生命周期前置
   // 条件。RAII 只管理对象寿命，不会自动让后台线程停止等待。

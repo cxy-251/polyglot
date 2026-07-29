@@ -131,7 +131,6 @@ TEST(BitConstraints, PowerAndCountFunctionsAcceptUnsignedIntegerTypesOnly) {
   static_assert(PopcountCallable<unsigned long long>);
   static_assert(!PopcountCallable<long long>);
 
-  SUCCEED();
 
   // 使用 unsigned 让移位、旋转和位宽具有明确模数与位数；不能把 signed 负数的表示细节
   // 直接交给这些受约束模板。
@@ -231,7 +230,6 @@ TEST(IntegerUtilities, ConstexprAndNoexceptRemainSeparateQuestions) {
 #if defined(__GLIBCXX__)
   EXPECT_TRUE(noexcept(std::gcd(18, 12)));
 #else
-  SUCCEED();
 #endif
 }
 

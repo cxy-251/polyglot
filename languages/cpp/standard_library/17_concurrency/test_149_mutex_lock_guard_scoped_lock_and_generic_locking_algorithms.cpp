@@ -171,7 +171,6 @@ TEST(LockTags, TagsSelectProtocolsButCarryNoRuntimeOwnershipEvidence) {
   static_assert(std::is_empty_v<std::try_to_lock_t>);
   static_assert(std::is_empty_v<std::adopt_lock_t>);
   static_assert(!std::is_same_v<std::defer_lock_t, std::try_to_lock_t>);
-  SUCCEED();
 
   // defer_lock、try_to_lock、adopt_lock 是重载选择标签，不记录具体 mutex 的状态。
   // 解锁未拥有的 mutex、递归锁普通 mutex、销毁仍被拥有的 mutex 都不可用测试执行。

@@ -130,7 +130,6 @@ TEST(Any, MoveResetAndSwapTransferOrEndTheContainedLifetime) {
 TEST(Any, StoredValuesMustBeCopyConstructibleEvenForAMoveOnlyAnyVariable) {
   static_assert(std::is_constructible_v<std::any, std::string>);
   static_assert(!std::is_constructible_v<std::any, std::unique_ptr<int>>);
-  SUCCEED();
 
   // any 自身提供复制操作，因此存入的类型必须 CopyConstructible；只会移动
   // 某一个 any 变量也不能绕过这一类型约束。移动专属所有权应用 variant 或其他明确接口建模。

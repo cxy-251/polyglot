@@ -121,7 +121,6 @@ TEST(VariableTemplates, ACompileTimeValueCanBeParameterizedByType) {
     char bytes[64];
   };
   static_assert(!small_object<Large>);
-  SUCCEED();
 
   // inline constexpr variable template 为每个 specialization 提供一个编译期变量，
   // 常用于 traits 的 `_v` 形式；inline 避免头文件多翻译单元定义冲突。

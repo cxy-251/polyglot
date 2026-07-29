@@ -167,11 +167,7 @@ TEST(Conversions, ExplicitOperatorsRequireAnIntentionalConversion) {
   static_assert(!std::is_convertible_v<ExplicitNumber, int>);
   EXPECT_EQ(static_cast<int>(number), 7);
 
-  if (number) {
-    SUCCEED();
-  } else {
-    FAIL() << "explicit operator bool participates in a condition";
-  }
+  EXPECT_TRUE(number);
 
   // explicit 转换运算符不会参与普通隐式转换，但 explicit operator bool 仍可用于条件
   // 的 contextual conversion。这样既支持 if，又避免对象意外进入整数算术。

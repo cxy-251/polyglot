@@ -110,7 +110,6 @@ TEST(IntegralConstant, ExposesAValueAsBothATypeAndAConstantExpression) {
   static_assert(Four{}() == 4);
   static_assert(static_cast<int>(Four{}) == 4);
   static_assert(std::bool_constant<(Four::value % 2 == 0)>::value);
-  SUCCEED();
 
   // integral_constant 把值放入类型，同时提供 value、转换运算符和 operator()。
   // 因此 trait 结果既能参与模板继承与重载，也能像普通 constexpr 值一样使用。
@@ -134,7 +133,6 @@ TEST(TypeCategories, PrimaryTraitsDistinguishLanguageTypesNotLibraryWrappers) {
   static_assert(std::is_enum_v<State>);
   static_assert(std::is_union_v<NumberStorage>);
   static_assert(std::is_class_v<MemberOwner>);
-  SUCCEED();
 
   // primary category 描述语言类型系统，不按“看起来像容器”分类。std::array
   // 是 class type 而非 array type；函数类型与指向函数的指针也是两个不同类别。
@@ -157,7 +155,6 @@ TEST(TypeCategories, MemberPointersAndCompositeCategoriesHavePreciseBoundaries) 
   static_assert(!std::is_object_v<int&>);
   static_assert(std::is_compound_v<MemberOwner>);
   static_assert(std::is_reference_v<const int&>);
-  SUCCEED();
 
   // pointer-to-member 需要配合对象才能访问，不是普通地址，所以 is_pointer 为
   // false。is_object 也不是“所有可声明的类型”：void、引用和函数都不是对象类型。
@@ -176,7 +173,6 @@ TEST(ArrayTraits, BoundednessRankAndExtentPreserveArrayShape) {
   static_assert(std::extent_v<OpenRows, 0> == 0);
   static_assert(std::extent_v<OpenRows, 1> == 3);
   static_assert(std::rank_v<int*> == 0);
-  SUCCEED();
 
   // 未知第一维的数组仍是 unbounded array，extent 用 0 表示未知边界；
   // 这不等于空数组。已退化成 T* 后维度信息已丢失，rank 只能得到 0。
@@ -206,7 +202,6 @@ TEST(TypeProperties, SignednessAndUniqueRepresentationsAreFormalProperties) {
   static_assert(std::is_unsigned_v<unsigned int>);
   static_assert(std::is_unsigned_v<bool>);
   static_assert(std::has_unique_object_representations_v<unsigned char>);
-  SUCCEED();
 
   // is_unsigned 按标准算术语义分类，所以 bool 也是 unsigned；这不代表它
   // 适合计数。has_unique_object_representations 为 true 表示相同值不会有两种对象表示，
@@ -221,7 +216,6 @@ TEST(TypeProperties, EmptyPolymorphicAbstractAndFinalDescribeSeparateFacts) {
   static_assert(!std::is_abstract_v<Concrete>);
   static_assert(std::is_final_v<Concrete>);
   static_assert(std::has_virtual_destructor_v<PolymorphicBase>);
-  SUCCEED();
 
   // empty 只表示没有非静态数据等状态，独立对象仍要有可区分地址。polymorphic、
   // abstract 和 final 是正交属性：有虚函数不等于不能实例化，final 也不等于不可复制。
@@ -254,7 +248,6 @@ TEST(OperationTraits, NothrowAndTrivialVariantsExpressOptimizationContracts) {
   static_assert(std::is_nothrow_destructible_v<PlainRecord>);
   static_assert(std::is_swappable_v<throwing_swap_example::Value>);
   static_assert(!std::is_nothrow_swappable_v<throwing_swap_example::Value>);
-  SUCCEED();
 
   // “操作存在”与“操作不抛异常”是两层信息。容器扩容等通用代码常依据
   // nothrow move 决定能否安全移动；不应因为 move constructor 可编译就假定强异常保证。
@@ -265,7 +258,6 @@ TEST(PropertyQueries, AlignmentIsACompileTimePropertyOfTheType) {
   static_assert(std::alignment_of_v<CacheLineValue> == 64);
   static_assert(CompleteType<CacheLineValue>);
   static_assert(!CompleteType<Incomplete>);
-  SUCCEED();
 
   // 部分 type property trait 对未完整类型有前置条件：若补全类型可能改变结果，
   // 提前实例化 trait 可导致未定义行为而非可检测的 false。这里先用 sizeof 约束完整性。

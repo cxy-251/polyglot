@@ -104,7 +104,6 @@ TEST(IteratorTraits, ClassicTraitsDescribeTheAssociatedTypes) {
 
   static_assert(std::is_same_v<std::iterator_traits<int*>::value_type, int>);
   static_assert(std::is_same_v<std::iterator_traits<int*>::pointer, int*>);
-  SUCCEED();
 
   // iterator_traits 统一访问用户迭代器与原生指针的关联类型。difference_type 必须能表示
   // 同一序列中两个迭代器的距离；不要用无符号 size_type 替代它。
@@ -119,7 +118,6 @@ TEST(IteratorTraits, Cpp20AliasesObserveDereferenceAndIterMoveSeparately) {
   static_assert(
       std::is_same_v<std::iter_rvalue_reference_t<Iterator>, std::unique_ptr<int>&&>);
   static_assert(std::is_same_v<std::iter_difference_t<Iterator>, std::ptrdiff_t>);
-  SUCCEED();
 
   // iter_value_t 是逻辑值类型，iter_reference_t 来自 *it，iter_rvalue_reference_t
   // 来自 ranges::iter_move(it)。代理迭代器中这三者不必是 T、T&、T&& 的简单组合。
@@ -143,7 +141,6 @@ TEST(IteratorConcepts, StandardIteratorsFormARefinementHierarchy) {
 
   static_assert(std::contiguous_iterator<Contiguous>);
   static_assert(std::random_access_iterator<Contiguous>);
-  SUCCEED();
 
   // 每一层增加语义和复杂度保证：forward 可多遍读取，bidirectional 可 --，random
   // access 可常数时间跳转，contiguous 还保证地址与偏移和真实连续存储一致。
@@ -172,7 +169,6 @@ TEST(IndirectConcepts, ReadabilityAndWritabilityDescribeOperationsThroughAnItera
   static_assert(!std::indirectly_writable<Readonly, int>);
   static_assert(std::indirectly_writable<Output, int>);
   static_assert(!std::indirectly_readable<Output>);
-  SUCCEED();
 
   // output iterator 可写但没有可读值，const_iterator 可读但不可写。算法用间接概念
   // 表达 `*it` 上的真实需求，通常比只检查 iterator_category 更准确。

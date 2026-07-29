@@ -80,7 +80,8 @@ TEST(CTimeClock, ClockReportsProcessCpuTimeOrTheDocumentedFailureValue) {
         static_cast<double>(second - first) / CLOCKS_PER_SEC;
     EXPECT_GE(cpu_seconds, 0.0);
   } else {
-    SUCCEED() << "该实现本次无法取得进程 CPU 时间";
+    EXPECT_TRUE(first == static_cast<std::clock_t>(-1) ||
+                second == static_cast<std::clock_t>(-1));
   }
 
   // clock 测量实现定义 epoch 起的进程 CPU 时间，不是墙钟时间；失败返回 clock_t(-1)。

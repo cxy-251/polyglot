@@ -90,7 +90,6 @@ TEST(Metafunctions, IntegralConstantCarriesAValueInAType) {
   static_assert(std::is_base_of_v<std::integral_constant<std::size_t, 120>,
                                   TemplateFactorial<5>>);
   static_assert(constexpr_factorial(5) == 120);
-  SUCCEED();
 
   // 传统 TMP 用 specialization 提供递归基例，并把结果放进类型。能用普通 constexpr
   // 函数表达的数值算法通常更易读；类型变换才是模板 metafunction 的主要价值。
@@ -103,7 +102,6 @@ TEST(TypeLists, PartialSpecializationCanDecomposeAndTransformATypeSequence) {
   static_assert(ListSize<Source>::value == 3);
   static_assert(std::is_same_v<typename Front<Source>::type, int>);
   static_assert(std::is_same_v<Pointers, TypeList<int*, double*, std::string*>>);
-  SUCCEED();
 
   // TypeList 本身不存对象，只把类型 pack 包装成可 partial specialize 的形状。Front 对
   // 空列表没有定义，调用方若需要友好失败，应另加 constraint 或检测层。
@@ -112,7 +110,6 @@ TEST(TypeLists, PartialSpecializationCanDecomposeAndTransformATypeSequence) {
 TEST(LazyMetafunctions, UnselectedBranchDoesNotInstantiateAnInvalidTail) {
   static_assert(!LazyAll<std::false_type, HasNoValueMember>::value);
   static_assert(LazyAll<std::true_type, std::true_type>::value);
-  SUCCEED();
 
   // 第一个条件为 false 时 conditional_t 选择 false_type，LazyAll<HasNoValueMember>
   // 不被实例化。模板元编程的惰性选择可保护昂贵或本来无效的后续计算。

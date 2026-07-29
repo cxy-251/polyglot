@@ -87,7 +87,6 @@ TEST(IndirectOrdering, EqualityAndOrderingConceptsCarrySemanticLaws) {
       std::indirect_equivalence_relation<std::ranges::equal_to, Iterator, Iterator>);
   static_assert(
       std::indirect_strict_weak_order<std::ranges::less, Iterator, Iterator>);
-  SUCCEED();
 
   // equivalence_relation 要求自反/对称/传递，strict_weak_order 要求严格弱序；这些规律
   // 无法仅靠 requires 验证。一个能返回 bool 但顺序不传递的比较器仍会导致算法失去保证。
@@ -157,7 +156,6 @@ TEST(AlgorithmRequirements, SwappableComparableAndPermutableComposeSmallerConcep
                 std::ranges::equal_to>);
   static_assert(std::permutable<Mutable>);
   static_assert(!std::permutable<Readonly>);
-  SUCCEED();
 
   // permutable 组合 forward_iterator、indirectly_movable_storable 与
   // indirectly_swappable；它表达“可在原 range 内重排”，const_iterator 因不可写而失败。
@@ -186,7 +184,6 @@ TEST(AlgorithmRequirements, SortableDescribesElementOperationsNotTraversalCatego
   static_assert(std::sortable<VectorIterator, std::ranges::less, decltype(&Record::score)>);
   static_assert(std::sortable<ListIterator>);
   static_assert(!std::random_access_iterator<ListIterator>);
-  SUCCEED();
 
   // sortable 只组合 permutable 与投影后的 strict weak order；它本身不要求 random
   // access。ranges::sort 的函数签名会额外要求 random_access_iterator，所以 list

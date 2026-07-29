@@ -124,7 +124,6 @@ TEST(DeletedFunctions, ADeletedBestMatchMakesTheCallIllFormed) {
   static_assert(!ConsumableToken<double>);
 
   consume_token(Token{7});
-  SUCCEED();
 
   // = delete 的函数仍参与重载解析；如果它是最佳匹配，调用在编译期失败，而不会退回
   // 较差的 Token 转换候选。删除重载适合阻止危险的隐式转换。

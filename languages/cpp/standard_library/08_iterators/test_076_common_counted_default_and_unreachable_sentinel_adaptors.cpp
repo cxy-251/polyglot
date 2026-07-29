@@ -136,7 +136,6 @@ TEST(DefaultSentinel, TheSingleStatelessObjectCarriesNoRangeSpecificData) {
   static_assert(std::is_empty_v<std::default_sentinel_t>);
   static_assert(
       std::is_same_v<decltype(std::default_sentinel), const std::default_sentinel_t>);
-  SUCCEED();
 
   // default_sentinel 本身不保存地址、长度或回调；具体 iterator 定义如何与它比较。
   // 所以它不能单独描述任意 range 的 end，只是一个共享的标签对象。

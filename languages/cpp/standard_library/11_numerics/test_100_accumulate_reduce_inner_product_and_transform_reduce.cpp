@@ -18,6 +18,7 @@
 #include <execution>
 #include <functional>
 #include <numeric>
+#include <ranges>
 #include <string>
 #include <type_traits>
 #include <vector>
@@ -224,8 +225,12 @@ TEST(ParallelReduce, HostLibcxxIndexingGapDoesNotChangeTheGccBaseline) {
 
 #endif
 
-TEST(NumericAlgorithms, Cpp20DoesNotProvideRangesCounterparts) {
-  SUCCEED();
+TEST(NumericAlgorithms, IteratorPairsRemainTheCxx20RangeWorkflow) {
+  const std::array<int, 4> values{1, 2, 3, 4};
+
+  EXPECT_EQ(
+      std::accumulate(std::ranges::begin(values), std::ranges::end(values), 0),
+      10);
 
   // C++20 的 accumulate/reduce/scan 等只提供 iterator 接口，没有 std::ranges 版本；
   // 不要因其他算法已有 ranges CPO 就臆造 std::ranges::accumulate。可传 begin/end，或

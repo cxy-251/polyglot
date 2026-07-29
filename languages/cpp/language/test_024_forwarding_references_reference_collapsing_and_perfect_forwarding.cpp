@@ -90,7 +90,6 @@ TEST(PerfectForwarding, ConditionalNoexceptMirrorsTheSelectedConstruction) {
 
   auto value = make_object<NothrowValue>(1);
   (void)value;
-  SUCCEED();
 
   // 转发包装若无条件省略 noexcept，会让容器等调用者错失异常保证；无条件写 noexcept
   // 又可能在底层抛出时 terminate。条件规范应反映实际表达式或 type trait。
@@ -111,7 +110,6 @@ TEST(PerfectForwarding, SomeExpressionsDoNotProvideADeducibleType) {
   // make_object<std::vector<int>>({1, 2, 3}) 不能从裸 braced-init-list 推导 Arguments；
   // 转发重载函数名也缺少唯一类型，bit-field 不能绑定 forwarding reference。
   // 这类调用需要显式 initializer_list、先选择函数指针重载，或传递可寻址副本。
-  SUCCEED();
 }
 
 }  // namespace

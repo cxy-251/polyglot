@@ -171,7 +171,6 @@ TEST(BorrowedAliases, TheyTurnUnsafeTemporaryResultsIntoDanglingTypes) {
   static_assert(std::is_same_v<LvalueIterator, std::vector<int>::iterator>);
   static_assert(std::is_same_v<TemporaryIterator, std::ranges::dangling>);
   static_assert(std::is_same_v<TemporarySubrange, std::ranges::dangling>);
-  SUCCEED();
 
   // borrowed_* aliases 让泛型返回类型在安全时保留 iterator/subrange，不安全的临时
   // owning range 则变成不可解引用的 dangling 标记，阻止误用悬空结果。

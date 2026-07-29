@@ -83,7 +83,6 @@ TEST(CommonCategory, ChoosesTheWeakestCategoryAllInputsCanRepresent) {
 
   static_assert(std::is_same_v<StrongAndWeak, std::weak_ordering>);
   static_assert(std::is_same_v<StrongAndPartial, std::partial_ordering>);
-  SUCCEED();
 
   // 组合成员比较时，整体只能承诺所有成员共同满足的最弱 category。含浮点成员的默认
   // spaceship 因而通常返回 partial_ordering，不能擅自提升成 strong_ordering。

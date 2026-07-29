@@ -72,7 +72,6 @@ TEST(CvQualifiers, VolatileDoesNotProvideThreadSynchronization) {
 
   // volatile 要求实现保留特定可观察访问，主要用于内存映射设备和信号交互。它不提供
   // 原子性、线程间 happens-before 或复合操作互斥；并发共享数据必须使用 atomic 或锁。
-  SUCCEED();
 }
 
 TEST(Casts, StaticCastExpressesKnownLanguageConversions) {
@@ -126,7 +125,6 @@ TEST(Casts, NamedCastsMakeTheIntentAuditable) {
 
   // C 风格 `(Target)value` 会依次尝试 const_cast、static_cast、reinterpret_cast 等组合，
   // 审阅者难以看出实际采用哪条危险路径。C++ named cast 把转换类别暴露在源码和搜索中。
-  SUCCEED();
 }
 
 }  // namespace

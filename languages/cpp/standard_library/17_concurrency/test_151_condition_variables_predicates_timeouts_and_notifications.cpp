@@ -258,7 +258,6 @@ TEST(ConditionVariableProperties, NativeHandleExistsButItsMeaningIsImplementatio
   Condition condition;
   [[maybe_unused]] Condition::native_handle_type handle =
       condition.native_handle();
-  SUCCEED();
 
   // native_handle_type 及其值都由实现定义，只适合明确依赖平台 API 的适配层。
   // 析构前必须确保已无阻塞 waiter；通知过但尚在竞争 mutex 的线程不再阻塞于 cv。

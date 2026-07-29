@@ -173,7 +173,6 @@ TEST(Noexcept, OperatorAndTraitsObserveTheExceptionSpecification) {
   using NoThrowPointer = void (*)() noexcept;
   NoThrowPointer function = guaranteed_no_throw;
   function();
-  SUCCEED();
 
   // C++17 起 noexcept 属于函数类型的一部分；不抛函数指针可以转换到可能抛的类型，
   // 反向不行。若 noexcept 函数仍让异常逃出，运行时调用 terminate，而不是普通传播。

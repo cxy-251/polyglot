@@ -60,7 +60,6 @@ TEST(CvAndReferenceTransformations, OnlyTopLevelQualifiersAreChanged) {
   static_assert(std::is_same_v<std::add_rvalue_reference_t<int>, int&&>);
   static_assert(std::is_same_v<std::add_rvalue_reference_t<int&>, int&>);
   static_assert(std::is_same_v<std::add_const_t<int&>, int&>);
-  SUCCEED();
 
   // remove_cv 只移除顶层 cv：const int* 的 const 修饰所指对象，不会被移除；
   // int* const 的 const 修饰指针本身。对引用 add_const 无效，add_rvalue_reference
@@ -91,7 +90,6 @@ TEST(ArrayAndPointerTransformations, EachTraitChangesOneDeclaratorLayer) {
   static_assert(std::is_same_v<std::remove_pointer_t<const int* const>, const int>);
   static_assert(std::is_same_v<std::add_pointer_t<int&>, int*>);
   static_assert(std::is_same_v<std::add_pointer_t<void>, void*>);
-  SUCCEED();
 
   // remove_extent 只剔除最外层数组，remove_all_extents 才递归到元素类型。
   // remove_pointer 同时去掉指针自身的 cv，但保留 pointee 的 const。这些 trait
@@ -109,7 +107,6 @@ TEST(Decay, ArraysAndFunctionsLoseShapeWhileRemoveCvrefPreservesIt) {
   static_assert(
       std::is_same_v<std::decay_t<FunctionReference>, int (*)(const char*)>);
   static_assert(std::is_same_v<decltype(&parse_number), int (*)(const char*)>);
-  SUCCEED();
 
   // remove_cvref 只移除引用和顶层 cv，所以保留数组长度与函数签名。decay
   // 模拟按值传参：数组变指针、函数变函数指针，其他类型再移除 cvref。
@@ -131,7 +128,6 @@ TEST(SelectionTraits, ConditionalAndEnableIfProduceTypesRatherThanValues) {
 
   static_assert(std::is_same_v<Enabled, Identifier>);
   static_assert(sizeof(Identifier) >= sizeof(std::uint32_t));
-  SUCCEED();
 
   // conditional 在两个已给定的类型中选一个；enable_if<false> 则根本没有 type。
   // 后者适合 SFINAE 接口兼容，C++20 新代码的可读性通常优先 requires/concept。
@@ -145,7 +141,6 @@ TEST(CommonTypes, ValueAndReferenceMeetingPointsServeDifferentAlgorithms) {
   static_assert(std::is_same_v<ReferenceCommon, const int&>);
   static_assert(std::is_convertible_v<int&, ReferenceCommon>);
   static_assert(std::is_convertible_v<const int&, ReferenceCommon>);
-  SUCCEED();
 
   // common_type 通常经过 decay，适合产生一个独立结果值；common_reference 尝试
   // 保留可共享的引用语义。泛型算法需要写回输入时，不能一律用 common_type。
@@ -173,7 +168,6 @@ TEST(ReferenceUnwrapping, ReferenceWrapperIsRecognizedBeforeOrAfterDecay) {
 TEST(VoidT, MapsAnyWellFormedTypeListToVoidForDetection) {
   static_assert(HasValueType<WithValueType>::value);
   static_assert(!HasValueType<WithoutValueType>::value);
-  SUCCEED();
 
   // void_t 的结果永远是 void，价值在于它的模板实参必须先成功形成类型。
   // 失败时 partial specialization 被 SFINAE 移除，回退到 false_type；现代公共接口可用 requires 表达。
@@ -187,7 +181,6 @@ TEST(LegacyAlignedStorage, ProvidesSizeAndAlignmentButDoesNotStartALifetime) {
   static_assert(alignof(DoubleStorage) >= alignof(double));
   static_assert(sizeof(NumberUnionStorage) >= sizeof(double));
   static_assert(alignof(NumberUnionStorage) >= alignof(double));
-  SUCCEED();
 
   // aligned_storage/aligned_union 只提供尺寸与对齐充足的类型，不会自动创建
   // 目标对象。它们在 C++23 已废弃；新代码通常用 alignas(T) std::byte[]

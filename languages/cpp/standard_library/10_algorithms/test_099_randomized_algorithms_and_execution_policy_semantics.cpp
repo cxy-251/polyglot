@@ -20,6 +20,7 @@
 #include <numeric>
 #include <random>
 #include <ranges>
+#include <stdexcept>
 #include <type_traits>
 #include <vector>
 
@@ -146,6 +147,15 @@ TEST(RandomizedTesting, SeededEngineSeparatesReproductionFromEntropyAcquisition)
 
 #if defined(__GLIBCXX__)
 
+void RunThrowingPolicyAlgorithm() {
+  std::array<int, 1> values{1};
+  std::for_each(
+      std::execution::seq,
+      values.begin(),
+      values.end(),
+      [](int) { throw std::runtime_error{"policy failure"}; });
+}
+
 TEST(ExecutionPolicies, StandardPolicyObjectsAreRecognizedByTheTrait) {
   static_assert(std::is_execution_policy_v<
                 std::remove_cvref_t<decltype(std::execution::seq)>>);
@@ -156,7 +166,6 @@ TEST(ExecutionPolicies, StandardPolicyObjectsAreRecognizedByTheTrait) {
   static_assert(std::is_execution_policy_v<
                 std::remove_cvref_t<decltype(std::execution::unseq)>>);
 
-  SUCCEED();
 
   // C++20 有 seq、par、par_unseq、unseq；它们选择允许的执行与向量化约束，不承诺
   // 某次调用一定创建线程或获得加速，实现可以退化为串行执行。
@@ -257,12 +266,12 @@ TEST(UnsequencedPolicy, ItAllowsVectorizationWithoutPromisingParallelThreads) {
   // 的副作用仍不能互相依赖。
 }
 
-TEST(ExecutionPolicies, ThrowingCallbacksAreDocumentedWithoutExecutingTermination) {
-  SUCCEED();
+TEST(ExecutionPolicies, ThrowingCallbackTerminatesThePolicyAlgorithmProcess) {
+  EXPECT_DEATH(RunThrowingPolicyAlgorithm(), ".*");
 
   // 对标准 execution policy 的算法调用，若元素函数抛出异常，标准要求调用
-  // std::terminate；这不能用普通 EXPECT_THROW 验证。实际代码应让回调不抛，或在回调
-  // 内捕获并通过并发安全通道报告错误；本仓库不执行会终止整个测试进程的示例。
+  // std::terminate；普通 EXPECT_THROW 无法捕获。death test 把终止限制在子进程，
+  // 生产代码则应让回调不抛，或在回调内捕获并通过并发安全通道报告错误。
 }
 
 #else

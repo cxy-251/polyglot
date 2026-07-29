@@ -75,7 +75,6 @@ TEST(TypeRelationships, SameAsIsSymmetricAndDerivedFromRequiresAccessibleConvers
 
   static_assert(std::is_base_of_v<Base, PrivateDerived>);
   static_assert(!std::derived_from<PrivateDerived, Base>);
-  SUCCEED();
 
   // derived_from 不只问“Base 是否出现在继承图中”，还要求 public 且无歧义的派生到基类
   // 指针转换。is_base_of 对 private 继承仍为 true，两者不能在接口约束中随意互换。
@@ -98,7 +97,6 @@ TEST(CommonTypes, CommonReferenceAndCommonTypeDescribeDifferentMeetingPoints) {
   static_assert(std::same_as<std::common_reference_t<int&, const int&>, const int&>);
   static_assert(std::common_with<int, double>);
   static_assert(std::same_as<std::common_type_t<int, double>, double>);
-  SUCCEED();
 
   // common_reference_with 关注保留引用语义的共同引用；common_with 还要求 common_type 的
   // 对称性和相关转换。泛型算法若要写回对象，不能只把所有输入衰减成 common_type。
@@ -113,7 +111,6 @@ TEST(ArithmeticConcepts, BoolIsIntegralAndAlsoMeetsUnsignedIntegralDefinition) {
   static_assert(std::integral<bool>);
   static_assert(!std::signed_integral<bool>);
   static_assert(std::unsigned_integral<bool>);
-  SUCCEED();
 
   // unsigned_integral 定义为 integral 且非 signed_integral，所以 bool 也满足。若算法需要
   // 可计数的无符号整数，应额外排除 bool，不能把 concept 名称当作领域语义保证。
@@ -158,7 +155,6 @@ TEST(ObjectConcepts, ConstructionConceptsFormAUsefulCapabilityLattice) {
   static_assert(!std::copyable<MoveOnly>);
   static_assert(std::move_constructible<std::unique_ptr<int>>);
   static_assert(!std::copy_constructible<std::unique_ptr<int>>);
-  SUCCEED();
 
   // movable 还要求对象可 move-assign 和 swappable，不等同于只有 move constructor。
   // copyable 进一步要求多种 const/非 const 复制形式；应选最小真实能力，避免过度约束 API。

@@ -70,23 +70,18 @@ TEST(AllView, AllTypeAliasDescribesTheNormalizedAdaptorResult) {
 
   static_assert(std::is_same_v<LvalueAll, std::ranges::ref_view<Container>>);
   static_assert(std::is_same_v<SpanAll, std::span<int>>);
-  SUCCEED();
 
   // all_t<R> 等价于 decltype(views::all(declval<R>()))，便于其他 view 在类型层统一保存
   // 上游 range，而不必自己重复 view/ref 包装选择逻辑。
 }
 
 TEST(AllView, TemporaryOwnedRangeAcceptanceDependsOnAppliedStandardRepair) {
-  constexpr bool accepts_temporary_vector = CanAll<std::vector<int>&&>;
-
-  if constexpr (accepts_temporary_vector) {
-    SUCCEED() << "implementation has an owning all-view path";
-  } else {
-    SUCCEED() << "implementation follows the original C++20 viewable_range restriction";
-  }
+  [[maybe_unused]] constexpr bool accepts_temporary_vector =
+      CanAll<std::vector<int>&&>;
 
   // 原始 N4861 的 viewable_range 拒绝非 borrowed 的临时 vector；后续标准修订增加拥有型
-  // 包装，部分实现会回溯。这里用表达式检测保留两条有效实现路径，不按编译器版本猜测。
+  // 包装，部分实现会回溯。这里的 requires 表达式是能力检测，不按编译器版本猜测，
+  // 也不通过构造兼容包装伪造当前实现尚未提供的路径。
 }
 
 TEST(RangeAdaptorObjects, PipeSyntaxPassesTheLeftRangeIntoTheAdaptor) {

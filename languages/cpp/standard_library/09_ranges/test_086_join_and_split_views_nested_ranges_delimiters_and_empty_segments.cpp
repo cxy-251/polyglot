@@ -92,16 +92,12 @@ TEST(JoinView, PrvalueInnerRangeSupportDependsOnAppliedStandardRepair) {
                    std::views::transform([](int value) {
                      return std::vector<int>{value, value * 10};
                    });
-  constexpr bool supports_prvalue_inner = CanJoin<decltype(generated)>;
-
-  if constexpr (supports_prvalue_inner) {
-    SUCCEED() << "implementation accepts prvalue inner ranges";
-  } else {
-    SUCCEED() << "implementation follows the original C++20 lvalue-inner restriction";
-  }
+  [[maybe_unused]] constexpr bool supports_prvalue_inner =
+      CanJoin<decltype(generated)>;
 
   // 原始 C++20 join_view 对 prvalue inner range 的支持有限，后续缺陷修订增加内部缓存；
-  // 实现可能回溯。表达式检测记录能力，不能假定 transform 生成临时容器总能直接 join。
+  // 实现可能回溯。requires 表达式记录真实能力，不能假定 transform 生成临时容器总能
+  // 直接 join，也不为缺失能力建立假适配层。
 }
 
 TEST(SplitView, ElementDelimiterProducesSubrangesWithoutTheDelimiter) {

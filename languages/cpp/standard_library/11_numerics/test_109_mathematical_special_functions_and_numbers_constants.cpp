@@ -26,7 +26,6 @@ constexpr double kTolerance = 1e-11;
 
 TEST(MathSpecialFunctions, FeatureTestMacroAdvertisesTheCxx17Facility) {
   static_assert(__cpp_lib_math_special_functions >= 201603L);
-  SUCCEED();
 
   // 特殊函数在 C++17 进入标准库。它们不是普通 <cmath> 基础函数的必然扩展；旧工具链
   // 应通过特性宏检测，而不是等到链接阶段才发现缺失。

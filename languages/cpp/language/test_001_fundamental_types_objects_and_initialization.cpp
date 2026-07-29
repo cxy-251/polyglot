@@ -234,7 +234,6 @@ TEST(Initialization, EmptyBracesAvoidTheMostVexingParse) {
 
   EmptyMarker actual_object{};
   static_assert(std::is_same_v<decltype(actual_object), EmptyMarker>);
-  SUCCEED();
 }
 
 }  // namespace

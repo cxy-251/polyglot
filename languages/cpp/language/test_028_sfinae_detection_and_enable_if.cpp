@@ -77,7 +77,6 @@ struct Opaque {};
 TEST(DetectionIdiom, VoidTTurnsAMissingNestedTypeIntoFalse) {
   static_assert(has_value_type_v<std::vector<int>>);
   static_assert(!has_value_type_v<int>);
-  SUCCEED();
 
   // void_t 的参数若能替换便得到 void，从而选择 partial specialization。若 int 没有
   // value_type，替换失败只移除该候选，不会让整个翻译单元报错。
@@ -106,7 +105,6 @@ TEST(Declval, FormsExpressionsWithoutConstructingAnObject) {
 
   static_assert(std::is_same_v<Expression, std::size_t>);
   static_assert(std::is_same_v<decltype(std::declval<int&&>()), int&&>);
-  SUCCEED();
 
   // declval 只有声明，不能在 evaluated context 调用；它专门在 decltype、requires 等
   // 不求值环境中伪造指定值类别，因而不要求类型可默认构造。
@@ -123,7 +121,6 @@ TEST(OverloadPriority, TriesCapabilitiesFromMostSpecificToFallback) {
 
 TEST(SfinaeBoundary, OnlyFailuresInTheImmediateContextAreSubstitutionFailures) {
   static_assert(!has_value_type_v<Opaque>);
-  SUCCEED();
 
   // SFINAE 只保护函数类型、模板参数等 immediate context。若候选已经选中后，其函数体
   // 实例化才访问不存在的成员，那是普通 hard error，不能期待 fallback 重载接管。

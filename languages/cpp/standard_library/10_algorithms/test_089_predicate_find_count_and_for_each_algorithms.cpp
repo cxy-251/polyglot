@@ -226,7 +226,6 @@ TEST(RangesFind, TemporaryOwnedRangeReturnsDanglingInsteadOfAnInvalidIterator) {
 
   static_assert(std::is_same_v<decltype(result), std::ranges::dangling>);
   (void)result;
-  SUCCEED();
 
   // 算法确实完成查找，但临时 vector 在 full-expression 末销毁；borrowed_iterator_t
   // 把返回类型变为 dangling。需要 iterator 时先命名 owning range。
