@@ -30,5 +30,11 @@ language 进行完整文件级语义审计和课程重构。审计后的课程�
   本地 gem/C extension fixture 和 5 个工程验证移入 `harness/ruby/`。
 - Ruby 验证通过：74 个纵向文件、72 个横向文件、10 个 family、完整 concepts、
   `ruby-harness`、`list-concepts`、`doctor`、结构门禁和 `git diff --check`。
-- 当前审计语言为 Lua。唯一下一步是逐文件审查 Lua 的 table、metatable、coroutine、
-  GC 与 C API，并先将 runner、环境隔离和 C 构建工程从语言课程识别到 harness 层。
+- Lua 已完成文件级审计：纵向课程由审计前 128 个文件重构为 61 个，编号范围
+  `002`–`122` 且保留稳定空缺；49 个横向 topic 使用 66 个 Lua 文件；runner、环境隔离、
+  C host/module fixture 和 3 个工程验证移入 `harness/lua/`。
+- Lua 验证通过：61 个纵向文件、66 个横向文件、10 个 family、完整 concepts、
+  `lua-harness`、`list-concepts`、`doctor`、结构门禁和 `git diff --check`。
+- 当前审计语言为 R。唯一下一步是逐文件审查 lazy promise、vector recycling、S3/S4、
+  condition/restart、NSE 与 package workflow，并先将环境隔离、本地 package 和 C/Fortran
+  构建工程从语言课程识别到 harness 层。
