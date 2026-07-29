@@ -1,5 +1,6 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
+# Repository-local harness fixture executable.
 
 require "polyglot_ruby_fixture"
 

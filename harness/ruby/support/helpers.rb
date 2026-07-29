@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+# Harness process and temporary-resource support; this file is not a course unit.
 
 require "fileutils"
 require "open3"
@@ -14,14 +15,14 @@ module PolyglotRubyHelpers
     path
   end
 
-  def ruby_command(*arguments, stdin_data: "")
+  def ruby_command(*arguments, stdin_data: "", environment: {})
     command = [
       RbConfig.ruby,
       "--disable-did_you_mean",
       "--disable-error_highlight",
       *arguments
     ]
-    stdout, stderr, status = Open3.capture3(*command, stdin_data:)
+    stdout, stderr, status = Open3.capture3(environment, *command, stdin_data:)
     [stdout, stderr, status]
   end
 

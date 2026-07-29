@@ -18,6 +18,7 @@ Usage:
   ./tools/run-in-container.sh r [test files...]
   ./tools/run-in-container.sh lua [test files...]
   ./tools/run-in-container.sh ruby [test files...]
+  ./tools/run-in-container.sh ruby-harness [test files...]
   ./tools/run-in-container.sh concept NN_family/NN_topic
   ./tools/run-in-container.sh family NN_family
   ./tools/run-in-container.sh concepts
@@ -661,7 +662,7 @@ check_ruby_version() {
 
 build_ruby_c_extension() {
   local build_directory="$1"
-  local source_directory="$ROOT/languages/ruby/c_extension"
+  local source_directory="$ROOT/harness/ruby/c_extension"
   need_cmd cc
   need_cmd make
   mkdir -p "$build_directory"
@@ -681,6 +682,7 @@ run_ruby_files() {
   local test_sandbox
   local test_file
   local default_gem_directory
+  local requires_native_extension=false
 
   if [[ ${#test_files[@]} -eq 0 ]]; then
     echo "$label 没有发现 Ruby 测试文件。" >&2
@@ -689,7 +691,17 @@ run_ruby_files() {
 
   mkdir -p "$sandbox_root"
   run_sandbox="$(mktemp -d "$sandbox_root/run.XXXXXX")"
-  build_ruby_c_extension "$run_sandbox/c-extension"
+  for test_file in "${test_files[@]}"; do
+    if grep -Fq 'require "polyglot_native"' "$test_file"; then
+      requires_native_extension=true
+      break
+    fi
+  done
+  if [[ "$requires_native_extension" == true ]]; then
+    build_ruby_c_extension "$run_sandbox/c-extension"
+  else
+    mkdir -p "$run_sandbox/c-extension"
+  fi
   default_gem_directory="$(
     ruby -rrubygems -e 'print Gem.default_dir'
   )"
@@ -738,7 +750,7 @@ run_ruby_files() {
         --disable-did_you_mean \
         --disable-error_highlight \
         -W:no-experimental \
-        -I "$ROOT/languages/ruby/support" \
+        -I "$ROOT/harness/ruby/support" \
         -I "$run_sandbox/c-extension" \
         -cw \
         "$test_file" >/dev/null; then
@@ -777,7 +789,7 @@ run_ruby_files() {
         --disable-error_highlight \
         -W:deprecated \
         -W:no-experimental \
-        -I "$ROOT/languages/ruby/support" \
+        -I "$ROOT/harness/ruby/support" \
         -I "$run_sandbox/c-extension" \
         "$test_file"; then
       echo "Ruby 测试失败: $test_file" >&2
@@ -806,6 +818,26 @@ run_ruby() {
   run_ruby_files \
     "Ruby vertical course" \
     "${POLYGLOT_RUBY_COURSE_ROOT:-/tmp/polyglot-ruby-course}" \
+    "${test_files[@]}"
+}
+
+run_ruby_harness() {
+  check_ruby_version
+  local -a test_files=()
+  if [[ $# -gt 0 ]]; then
+    test_files=("$@")
+  else
+    mapfile -d '' test_files < <(
+      find harness/ruby/tests \
+        -maxdepth 1 \
+        -type f \
+        -name 'test_*.rb' \
+        -print0 | sort -z
+    )
+  fi
+  run_ruby_files \
+    "Ruby harness and integration" \
+    "${POLYGLOT_RUBY_HARNESS_ROOT:-/tmp/polyglot-ruby-harness}" \
     "${test_files[@]}"
 }
 
@@ -1488,6 +1520,10 @@ main() {
     ruby|rb)
       shift
       run_ruby "$@"
+      ;;
+    ruby-harness)
+      shift
+      run_ruby_harness "$@"
       ;;
     concept)
       shift

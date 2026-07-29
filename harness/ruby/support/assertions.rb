@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+# Harness assertion support; this file is not part of the Ruby curriculum.
 
 module PolyglotAssertions
   class << self

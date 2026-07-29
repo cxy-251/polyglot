@@ -1008,17 +1008,17 @@ check_ruby_projects() {
   local -a seen_domains=()
 
   for required_file in \
-    languages/ruby/support/assertions.rb \
-    languages/ruby/support/helpers.rb \
-    languages/ruby/support/package_helpers.rb \
-    languages/ruby/gem_fixture/polyglot_ruby_fixture/polyglot_ruby_fixture.gemspec \
-    languages/ruby/gem_fixture/polyglot_ruby_fixture/lib/polyglot_ruby_fixture.rb \
-    languages/ruby/gem_fixture/polyglot_ruby_fixture/lib/polyglot_ruby_fixture/version.rb \
-    languages/ruby/gem_fixture/polyglot_ruby_fixture/exe/polyglot-ruby-fixture \
-    languages/ruby/gem_fixture/polyglot_ruby_fixture/Rakefile \
-    languages/ruby/c_extension/extconf.rb \
-    languages/ruby/c_extension/polyglot_native.c \
-    languages/ruby/c_extension/Rakefile; do
+    harness/ruby/support/assertions.rb \
+    harness/ruby/support/helpers.rb \
+    harness/ruby/support/package_helpers.rb \
+    harness/ruby/gem_fixture/polyglot_ruby_fixture/polyglot_ruby_fixture.gemspec \
+    harness/ruby/gem_fixture/polyglot_ruby_fixture/lib/polyglot_ruby_fixture.rb \
+    harness/ruby/gem_fixture/polyglot_ruby_fixture/lib/polyglot_ruby_fixture/version.rb \
+    harness/ruby/gem_fixture/polyglot_ruby_fixture/exe/polyglot-ruby-fixture \
+    harness/ruby/gem_fixture/polyglot_ruby_fixture/Rakefile \
+    harness/ruby/c_extension/extconf.rb \
+    harness/ruby/c_extension/polyglot_native.c \
+    harness/ruby/c_extension/Rakefile; do
     if [[ ! -f "$required_file" ]]; then
       report_failure "缺少 Ruby runner、gem fixture 或 C Extension 文件: $required_file"
     fi
@@ -1081,18 +1081,18 @@ check_ruby_projects() {
     fi
   done
   for required_file in '-std=c11' '-Wall' '-Wextra' '-Werror'; do
-    if ! grep -Fq -- "$required_file" languages/ruby/c_extension/extconf.rb; then
+    if ! grep -Fq -- "$required_file" harness/ruby/c_extension/extconf.rb; then
       report_failure "Ruby C Extension 缺少严格构建设置: $required_file"
     fi
   done
   if grep -Eq '#include[[:space:]]+[<\"]ruby/internal/' \
-    languages/ruby/c_extension/polyglot_native.c; then
+    harness/ruby/c_extension/polyglot_native.c; then
     report_failure "Ruby C Extension 不得依赖 CRuby private/internal 头文件"
   fi
 
   if ! ruby -rrubygems -e '
     specification = Gem::Specification.load(
-      "languages/ruby/gem_fixture/polyglot_ruby_fixture/polyglot_ruby_fixture.gemspec"
+      "harness/ruby/gem_fixture/polyglot_ruby_fixture/polyglot_ruby_fixture.gemspec"
     )
     abort "invalid gem fixture" unless
       specification&.name == "polyglot_ruby_fixture" &&
@@ -1105,7 +1105,7 @@ check_ruby_projects() {
   build_root="$(mktemp -d /tmp/polyglot-ruby-structure.XXXXXX)"
   if ! (
     cd "$build_root"
-    ruby "$ROOT/languages/ruby/c_extension/extconf.rb" >/dev/null
+    ruby "$ROOT/harness/ruby/c_extension/extconf.rb" >/dev/null
     make >/dev/null
   ); then
     report_failure "Ruby C Extension 无法使用公共头文件严格编译"

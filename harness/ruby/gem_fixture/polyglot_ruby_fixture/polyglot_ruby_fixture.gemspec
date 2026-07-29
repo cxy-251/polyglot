@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+# Repository-local harness fixture; this is not a Ruby course file.
 
 Gem::Specification.new do |specification|
   specification.name = "polyglot_ruby_fixture"

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+# Repository-local harness fixture library.
 
 require_relative "polyglot_ruby_fixture/version"
 

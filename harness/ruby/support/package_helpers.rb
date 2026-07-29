@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+# Harness-only helpers for repository-local Ruby package workflows.
 
 require "fileutils"
 require "open3"

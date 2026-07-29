@@ -1,3 +1,4 @@
+/* Repository-local native harness fixture; this source is not a course unit. */
 #include <ruby.h>
 #include <ruby/thread.h>
 
