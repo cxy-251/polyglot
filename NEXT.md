@@ -1,6 +1,6 @@
 # Next task
 
-Status: `in_progress`
+Status: `complete`
 
 ## Goal
 
@@ -35,13 +35,14 @@ Status: `in_progress`
 - RubyGems guides：`https://guides.rubygems.org/`
 - Bundler manual：`https://bundler.io/man/`
 
-## Current progress
+## Completion
 
-- 已核对 Lua 完成基线、附件锁定范围、官方资料、Docker 架构和现有构建工具。
-- 正在建立 CRuby 4.0.6 bootstrap、精确版本检查、独立进程 runner、断言库和
-  C Extension 骨架。
-
-## Handoff
-
-当前唯一下一步：完成并验证 CRuby 4.0.6 工具链与最小测试骨架；不得在实际验证前记录
-课程或横向通过数字，也不得在全部闭环前将状态改为 `complete`。
+- 官方 CRuby 4.0.6 已按锁定 SHA-256 构建到 `/opt/polyglot/ruby-4.0.6`；幂等 bootstrap、
+  `doctor` 精确版本检查、RubyGems 4.0.16、Bundler 4.0.16 和 Rake 13.3.1 均通过。
+- Ruby 纵向课程为连续 `001`–`128`，共 128 个独立测试文件，实际结果 `128/128` 通过；
+  离线 source gem、Bundler path/frozen、Rake、RDoc 和 C Extension 构建加载工作流包含在全量结果中。
+- Ruby 横向实现覆盖 `49/49 topics`，镜像现有局部 stem，共 `73/73` 个测试入口通过；单 topic、
+  10 个 family 和九门语言的 `./tools/run.sh concepts` 全部通过。
+- `./tools/run.sh list-concepts`、`./tools/run.sh doctor`、`./tools/run.sh check`、Unicode
+  120 字符行宽检查和 `git diff --check` 全部通过；runner、active language 状态、文档和结构门禁
+  已统一接入 Ruby。

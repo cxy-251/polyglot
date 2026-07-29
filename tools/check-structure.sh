@@ -31,7 +31,7 @@ PY
 }
 
 check_active_language_state() {
-  local expected_active="python cpp nodejs go rust julia r lua"
+  local expected_active="python cpp nodejs go rust julia r lua ruby"
   local configured_active="${ACTIVE_LANGUAGES[*]}"
   local configured_planned="${PLANNED_LANGUAGES[*]}"
   local project_active
@@ -112,6 +112,12 @@ check_test_path() {
     lua:languages/lua/standard_library/*/test_[0-9][0-9][0-9]_*.lua)
       ;;
     lua:languages/lua/tooling_and_runtime/*/test_[0-9][0-9][0-9]_*.lua)
+      ;;
+    ruby:languages/ruby/language/*/test_[0-9][0-9][0-9]_*.rb)
+      ;;
+    ruby:languages/ruby/standard_library/*/test_[0-9][0-9][0-9]_*.rb)
+      ;;
+    ruby:languages/ruby/tooling_and_runtime/*/test_[0-9][0-9][0-9]_*.rb)
       ;;
     *)
       report_failure "$language 测试位于未声明路径: $path"
@@ -446,6 +452,9 @@ check_concepts() {
           lua)
             extension=lua
             ;;
+          ruby)
+            extension=rb
+            ;;
         esac
 
         language_directory="$topic/$language"
@@ -473,6 +482,7 @@ check_concepts() {
       local julia_stems
       local r_stems
       local lua_stems
+      local ruby_stems
       python_stems=$(
         find "$topic/python" -maxdepth 1 -type f -name 'test_[0-9][0-9]_*.py' \
           -exec basename {} .py \; | sort
@@ -497,6 +507,10 @@ check_concepts() {
         find "$topic/lua" -maxdepth 1 -type f -name 'test_[0-9][0-9]_*.lua' \
           -exec basename {} .lua \; | sort
       )
+      ruby_stems=$(
+        find "$topic/ruby" -maxdepth 1 -type f -name 'test_[0-9][0-9]_*.rb' \
+          -exec basename {} .rb \; | sort
+      )
       if [[ "$python_stems" != "$go_stems" ]]; then
         report_failure "$topic 的 Go 子问题文件没有镜像既有测试结构"
       fi
@@ -512,6 +526,9 @@ check_concepts() {
       if [[ "$python_stems" != "$lua_stems" ]]; then
         report_failure "$topic 的 Lua 子问题文件没有镜像既有测试结构"
       fi
+      if [[ "$python_stems" != "$ruby_stems" ]]; then
+        report_failure "$topic 的 Ruby 子问题文件没有镜像既有测试结构"
+      fi
 
       for child in "$topic"/*; do
         if [[ ! -d "$child" ]]; then
@@ -519,7 +536,7 @@ check_concepts() {
         fi
         child_name="${child##*/}"
         case "$child_name" in
-          python|cpp|nodejs|go|rust|julia|r|lua)
+          python|cpp|nodejs|go|rust|julia|r|lua|ruby)
             ;;
           *)
             report_failure "$topic 包含未知语言目录: $child_name"
@@ -541,6 +558,7 @@ check_concepts() {
   local julia_test_count
   local r_test_count
   local lua_test_count
+  local ruby_test_count
   total_topic_count=$(
     find concepts -mindepth 2 -maxdepth 2 -type d -name '[0-9][0-9]_*' -print | wc -l
   )
@@ -553,6 +571,9 @@ check_concepts() {
   lua_test_count=$(
     find concepts -type f -path '*/lua/test_[0-9][0-9]_*.lua' -print | wc -l
   )
+  ruby_test_count=$(
+    find concepts -type f -path '*/ruby/test_[0-9][0-9]_*.rb' -print | wc -l
+  )
   if ((total_topic_count != 49)); then
     report_failure "横向层需要 49 个 topic，实际为 $total_topic_count"
   fi
@@ -564,6 +585,9 @@ check_concepts() {
   fi
   if ((lua_test_count != 73)); then
     report_failure "Lua 横向层需要 73 个测试入口，实际为 $lua_test_count"
+  fi
+  if ((ruby_test_count != 73)); then
+    report_failure "Ruby 横向层需要 73 个测试入口，实际为 $ruby_test_count"
   fi
 }
 
@@ -1149,6 +1173,170 @@ check_lua_projects() {
   rm -rf "$build_root"
 }
 
+check_ruby_projects() {
+  local required_file
+  local actual_version
+  local actual_engine
+  local domain
+  local domain_name
+  local domain_number
+  local domain_index
+  local domain_count=0
+  local expected_domain
+  local ruby_test_count
+  local cover_count
+  local build_root
+  local -a seen_domains=()
+
+  for required_file in \
+    languages/ruby/support/assertions.rb \
+    languages/ruby/support/helpers.rb \
+    languages/ruby/support/package_helpers.rb \
+    languages/ruby/gem_fixture/polyglot_ruby_fixture/polyglot_ruby_fixture.gemspec \
+    languages/ruby/gem_fixture/polyglot_ruby_fixture/lib/polyglot_ruby_fixture.rb \
+    languages/ruby/gem_fixture/polyglot_ruby_fixture/lib/polyglot_ruby_fixture/version.rb \
+    languages/ruby/gem_fixture/polyglot_ruby_fixture/exe/polyglot-ruby-fixture \
+    languages/ruby/gem_fixture/polyglot_ruby_fixture/Rakefile \
+    languages/ruby/c_extension/extconf.rb \
+    languages/ruby/c_extension/polyglot_native.c \
+    languages/ruby/c_extension/Rakefile; do
+    if [[ ! -f "$required_file" ]]; then
+      report_failure "缺少 Ruby runner、gem fixture 或 C Extension 文件: $required_file"
+    fi
+  done
+
+  for required_file in ruby gem bundle rake cc make; do
+    if ! command -v "$required_file" >/dev/null 2>&1; then
+      report_failure "ohdev 中缺少 Ruby 工具链命令: $required_file"
+      return
+    fi
+  done
+
+  actual_version="$(ruby --disable-gems -e 'print RUBY_VERSION')"
+  actual_engine="$(ruby --disable-gems -e 'print RUBY_ENGINE')"
+  if [[ "$actual_version" != 4.0.6 ]] || [[ "$actual_engine" != ruby ]]; then
+    report_failure "Ruby 工具链需要 CRuby 4.0.6，实际为 $actual_engine $actual_version"
+  fi
+  if [[ ! -f /opt/polyglot/ruby-4.0.6/include/ruby-4.0.0/ruby.h ]]; then
+    report_failure "Ruby 4.0.6 公共 C Extension 头文件不完整"
+  fi
+
+  for required_file in \
+    '837d299e8f7ddf2be31a229a7a7e019d354979825117989acb3b32b1a9be262a'; do
+    if ! grep -Fq "$required_file" sources.lock || \
+      ! grep -Fq "$required_file" tools/bootstrap-language-toolchains-in-container.sh; then
+      report_failure "Ruby source lock 或 bootstrap 缺少锁定值: $required_file"
+    fi
+  done
+  if ! grep -Fq 'https://cache.ruby-lang.org/pub/ruby/4.0/ruby-4.0.6.tar.gz' sources.lock || \
+    ! grep -Fq 'https://cache.ruby-lang.org/pub/ruby/4.0/' \
+      tools/bootstrap-language-toolchains-in-container.sh; then
+    report_failure "Ruby source lock 或 bootstrap 缺少官方归档 URL"
+  fi
+
+  while IFS= read -r -d '' domain; do
+    domain_name="${domain##*/}"
+    domain_number="${domain_name%%_*}"
+    domain_index=$((10#$domain_number))
+    domain_count=$((domain_count + 1))
+    if [[ -n "${seen_domains[$domain_index]:-}" ]]; then
+      report_failure "Ruby 问题域编号 $domain_number 重复: ${seen_domains[$domain_index]} 与 $domain"
+    else
+      seen_domains[$domain_index]="$domain"
+    fi
+  done < <(
+    find \
+      languages/ruby/language \
+      languages/ruby/standard_library \
+      languages/ruby/tooling_and_runtime \
+      -mindepth 1 \
+      -maxdepth 1 \
+      -type d \
+      -name '[0-9][0-9]_*' \
+      -print0 | sort -z
+  )
+  if ((domain_count != 16)); then
+    report_failure "Ruby 纵向课程需要 16 个问题域，实际为 $domain_count"
+  fi
+  for ((expected_domain = 1; expected_domain <= 16; expected_domain += 1)); do
+    if [[ -z "${seen_domains[$expected_domain]:-}" ]]; then
+      printf -v domain_number '%02d' "$expected_domain"
+      report_failure "Ruby 纵向课程缺少问题域 $domain_number"
+    fi
+  done
+
+  ruby_test_count=$(
+    find languages/ruby -type f -name 'test_[0-9][0-9][0-9]_*.rb' -print | wc -l
+  )
+  if ((ruby_test_count != 128)); then
+    report_failure "Ruby 纵向课程需要 128 个测试文件，实际为 $ruby_test_count"
+  fi
+  cover_count=$(
+    grep -h 'polyglot-covers:' \
+      languages/ruby/{language,standard_library,tooling_and_runtime}/*/test_*.rb |
+      sed 's/^.*polyglot-covers:[[:space:]]*//' |
+      sort -u |
+      wc -l
+  )
+  if ((cover_count != 128)); then
+    report_failure "Ruby 纵向课程需要 128 个唯一 polyglot-covers，实际为 $cover_count"
+  fi
+
+  for required_file in \
+    RUBYOPT RUBYLIB GEM_HOME GEM_PATH GEMRC BUNDLE_GEMFILE BUNDLE_PATH \
+    BUNDLE_APP_CONFIG HOME TMPDIR POLYGLOT_RUBY_TEST_TMP POLYGLOT_RUBY_EXTENSION_DIR; do
+    if ! grep -Fq -- "$required_file" tools/run-in-container.sh; then
+      report_failure "Ruby runner 缺少环境隔离设置: $required_file"
+    fi
+  done
+  for required_file in '-std=c11' '-Wall' '-Wextra' '-Werror'; do
+    if ! grep -Fq -- "$required_file" languages/ruby/c_extension/extconf.rb; then
+      report_failure "Ruby C Extension 缺少严格构建设置: $required_file"
+    fi
+  done
+  if grep -Eq '#include[[:space:]]+[<\"]ruby/internal/' \
+    languages/ruby/c_extension/polyglot_native.c; then
+    report_failure "Ruby C Extension 不得依赖 CRuby private/internal 头文件"
+  fi
+
+  if ! ruby -rrubygems -e '
+    specification = Gem::Specification.load(
+      "languages/ruby/gem_fixture/polyglot_ruby_fixture/polyglot_ruby_fixture.gemspec"
+    )
+    abort "invalid gem fixture" unless
+      specification&.name == "polyglot_ruby_fixture" &&
+      specification.version.to_s == "0.1.0" &&
+      specification.executables == ["polyglot-ruby-fixture"]
+  '; then
+    report_failure "Ruby gem fixture 无法由锁定 RubyGems 解析"
+  fi
+
+  build_root="$(mktemp -d /tmp/polyglot-ruby-structure.XXXXXX)"
+  if ! (
+    cd "$build_root"
+    ruby "$ROOT/languages/ruby/c_extension/extconf.rb" >/dev/null
+    make >/dev/null
+  ); then
+    report_failure "Ruby C Extension 无法使用公共头文件严格编译"
+  elif ! ruby -I "$build_root" -rpolyglot_native -e '
+    abort "invalid native release" unless PolyglotNative::RELEASE == "CRuby 4.0.6"
+    abort "invalid native result" unless PolyglotNative.add(20, 22) == 42
+  '; then
+    report_failure "Ruby C Extension 无法从受控 build path 加载"
+  fi
+  rm -rf "$build_root"
+
+  if ! ruby -e '
+    ENV["POLYGLOT_RUBY_STATE_PROBE"] = "child"
+    Object.const_set(:PolyglotRubyStateProbe, true)
+  ' || ! ruby -e '
+    abort if ENV.key?("POLYGLOT_RUBY_STATE_PROBE")
+    abort if Object.const_defined?(:PolyglotRubyStateProbe, false)
+  '; then
+    report_failure "Ruby 独立解释器进程状态隔离探针失败"
+  fi
+}
+
 check_unicode_line_lengths() {
   local -a checked_files=()
   local path
@@ -1213,6 +1401,9 @@ for active_language in "${ACTIVE_LANGUAGES[@]}"; do
     lua)
       check_language lua lua
       ;;
+    ruby)
+      check_language ruby rb
+      ;;
     *)
       report_failure "缺少 active language 结构检查实现: $active_language"
       ;;
@@ -1224,6 +1415,7 @@ check_rust_workspaces
 check_julia_projects
 check_r_projects
 check_lua_projects
+check_ruby_projects
 check_unicode_line_lengths
 
 if ((failure_count > 0)); then

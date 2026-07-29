@@ -1,15 +1,15 @@
 {
-  "schema_version": 8,
+  "schema_version": 9,
   "project": "polyglot-concepts-by-example",
   "mission": "Compare how languages solve shared problems through readable, executable tests.",
   "architecture": "dual-axis",
-  "phase": "eight-language-curriculum-reviewed",
+  "phase": "nine-language-curriculum-reviewed",
   "current_milestone": null,
-  "active_language_count": 8,
+  "active_language_count": 9,
   "concept_curriculum_complete": true,
   "content_review_complete": true,
   "reviewed_topic_count": 49,
-  "reviewed_language_implementation_count": 392,
+  "reviewed_language_implementation_count": 441,
   "continuation_source": "NEXT.md",
   "source_lock": "sources.lock",
   "legacy_tip": "662e0d1",
@@ -25,7 +25,8 @@
         "./tools/run.sh rust",
         "./tools/run.sh julia",
         "./tools/run.sh r",
-        "./tools/run.sh lua"
+        "./tools/run.sh lua",
+        "./tools/run.sh ruby"
       ],
       "verified_results": {
         "python": {
@@ -63,6 +64,11 @@
           "skipped": 0
         },
         "lua": {
+          "test_files": 128,
+          "passed": 128,
+          "skipped": 0
+        },
+        "ruby": {
           "test_files": 128,
           "passed": 128,
           "skipped": 0
@@ -119,6 +125,11 @@
           "skipped": 0
         },
         "lua": {
+          "test_files": 73,
+          "passed": 73,
+          "skipped": 0
+        },
+        "ruby": {
           "test_files": 73,
           "passed": 73,
           "skipped": 0
@@ -190,6 +201,14 @@
       "course_root": "languages/lua",
       "test_framework": "repository-local assertions in isolated Lua processes",
       "validate": "./tools/run.sh lua"
+    },
+    {
+      "id": "ruby",
+      "name": "Ruby",
+      "status": "verified",
+      "course_root": "languages/ruby",
+      "test_framework": "repository-local assertions in isolated CRuby processes",
+      "validate": "./tools/run.sh ruby"
     }
   ],
   "policies": {

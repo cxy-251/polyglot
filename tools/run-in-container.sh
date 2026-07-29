@@ -204,6 +204,9 @@ doctor() {
       lua)
         doctor_lua
         ;;
+      ruby)
+        doctor_ruby
+        ;;
       *)
         echo "doctor 缺少 active language 检查实现: $language" >&2
         exit 2
@@ -734,6 +737,7 @@ run_ruby_files() {
       ruby \
         --disable-did_you_mean \
         --disable-error_highlight \
+        -W:no-experimental \
         -I "$ROOT/languages/ruby/support" \
         -I "$run_sandbox/c-extension" \
         -cw \
@@ -772,6 +776,7 @@ run_ruby_files() {
         --disable-did_you_mean \
         --disable-error_highlight \
         -W:deprecated \
+        -W:no-experimental \
         -I "$ROOT/languages/ruby/support" \
         -I "$run_sandbox/c-extension" \
         "$test_file"; then
@@ -973,6 +978,25 @@ run_concept_lua() {
   fi
 }
 
+run_concept_ruby() {
+  local concept_name="$1"
+  local -a ruby_test_files=()
+  if [[ -d "concepts/$concept_name/ruby" ]]; then
+    mapfile -d '' ruby_test_files < <(
+      find "concepts/$concept_name/ruby" \
+        -maxdepth 1 \
+        -type f \
+        -name 'test_[0-9][0-9]_*.rb' \
+        -print0 | sort -z
+    )
+    check_ruby_version
+    run_ruby_files \
+      "$concept_name / Ruby" \
+      "${POLYGLOT_RUBY_CONCEPT_ROOT:-/tmp/polyglot-ruby-concepts}" \
+      "${ruby_test_files[@]}"
+  fi
+}
+
 run_concept() {
   local concept_name="${1:-}"
   local language
@@ -1128,6 +1152,24 @@ run_family_lua() {
   fi
 }
 
+run_family_ruby() {
+  local family_name="$1"
+  local -a ruby_test_files=()
+  mapfile -d '' ruby_test_files < <(
+    find "concepts/$family_name" \
+      -type f \
+      -path '*/ruby/test_[0-9][0-9]_*.rb' \
+      -print0 | sort -z
+  )
+  if [[ ${#ruby_test_files[@]} -gt 0 ]]; then
+    check_ruby_version
+    run_ruby_files \
+      "$family_name / Ruby" \
+      "${POLYGLOT_RUBY_CONCEPT_ROOT:-/tmp/polyglot-ruby-concepts}" \
+      "${ruby_test_files[@]}"
+  fi
+}
+
 run_all_concepts_python() {
   local -a python_test_files=()
   mapfile -d '' python_test_files < <(
@@ -1254,6 +1296,23 @@ run_all_concepts_lua() {
   fi
 }
 
+run_all_concepts_ruby() {
+  local -a ruby_test_files=()
+  mapfile -d '' ruby_test_files < <(
+    find concepts \
+      -type f \
+      -path '*/ruby/test_[0-9][0-9]_*.rb' \
+      -print0 | sort -z
+  )
+  if [[ ${#ruby_test_files[@]} -gt 0 ]]; then
+    check_ruby_version
+    run_ruby_files \
+      "all concepts / Ruby" \
+      "${POLYGLOT_RUBY_CONCEPT_ROOT:-/tmp/polyglot-ruby-concepts}" \
+      "${ruby_test_files[@]}"
+  fi
+}
+
 run_concept_language() {
   run_concept_scope_for_language concept "$1" "$2"
 }
@@ -1352,6 +1411,9 @@ list_concepts() {
             ;;
           lua)
             extension=lua
+            ;;
+          ruby)
+            extension=rb
             ;;
         esac
         if [[ ! -d "$topic_directory/$language" ]]; then
