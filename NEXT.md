@@ -63,7 +63,14 @@ language 进行完整文件级语义审计和课程重构。审计后的课程�
 - Node.js 验证通过：900 个纵向测试、248 个横向测试、49 个精确 topic、10 个 family、
   完整 concepts、35 个 harness 测试、`list-concepts`、`doctor`、结构门禁和
   `git diff --check`。
-- 当前审计语言为 C++。唯一下一步是逐文件审查 value category/lifetime、模板与约束、
-  exception/RAII、iterator invalidation、concurrency/memory model、filesystem、modules、
-  ABI/FFI 与编译期诊断边界，并先将 CMake/GoogleTest/runner 和构建工程验证从语言课程
-  识别到 `harness/cpp/`。
+- C++ 已完成文件级审计：160 个纵向课程文件均为独立的语言或标准库教学单元，编号
+  `001`–`160`；49 个横向 topic 使用 70 个 C++ 文件；CMake/GoogleTest 工程、锁定
+  C++20/GCC 构建契约和 1 个工程验证移入 `harness/cpp/`。审计删除空 `SUCCEED()`
+  包装，补成真实 endian、execution-policy 终止和 C++20 numeric workflow 断言。
+- C++ 验证通过：`1409 passed, 15 skipped` 的 1424 个纵向测试、240 个横向测试、
+  49 个精确 topic、10 个 family、完整 concepts、1 个 harness 测试、`list-concepts`、
+  `doctor`、结构门禁和 `git diff --check`。
+- 当前审计语言为 Python。唯一下一步是逐文件审查 data model、descriptor/MRO、iterator/
+  generator、exception/context manager、asyncio/concurrency、import/package、typing/runtime
+  reflection、stdlib I/O 与 C API 边界，并先将 pytest 配置、runner、bootstrap、环境隔离
+  和仓库工程验证从语言课程识别到 `harness/python/`。
