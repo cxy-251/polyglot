@@ -10,6 +10,8 @@ usage() {
 Usage:
   ./tools/run-in-container.sh doctor [planned]
   ./tools/run-in-container.sh python [pytest arguments...]
+  ./tools/run-in-container.sh python-harness [pytest arguments...]
+  ./tools/run-in-container.sh python-concepts [pytest arguments...]
   ./tools/run-in-container.sh cpp [ctest arguments...]
   ./tools/run-in-container.sh cpp-harness [ctest arguments...]
   ./tools/run-in-container.sh cpp-concepts [ctest arguments...]
@@ -229,13 +231,43 @@ doctor() {
   fi
 }
 
-run_python() {
+run_python_files() (
   need_cmd python3
+  local run_root
+  run_root="$(mktemp -d /tmp/polyglot-python-run.XXXXXX)"
+  trap 'rm -rf -- "$run_root"' EXIT
+  mkdir -p "$run_root/home"
+
+  HOME="$run_root/home" \
+    PYTHONNOUSERSITE=1 \
+    PYTHONPYCACHEPREFIX="$run_root/pycache" \
+    python3 -m pytest \
+      -p no:cacheprovider \
+      --import-mode=importlib \
+      "$@"
+)
+
+run_python() {
   if [[ $# -eq 0 || "$1" == -* ]]; then
-    python3 -m pytest languages/python "$@"
+    run_python_files languages/python "$@"
   else
-    python3 -m pytest "$@"
+    run_python_files "$@"
   fi
+}
+
+run_python_harness() {
+  run_python_files harness/python/tests "$@"
+}
+
+run_python_concepts() {
+  local -a test_files=()
+  mapfile -d '' test_files < <(
+    find concepts \
+      -type f \
+      -path '*/python/test_[0-9][0-9]_*.py' \
+      -print0 | sort -z
+  )
+  run_python_files "${test_files[@]}" "$@"
 }
 
 run_cpp_layer() {
@@ -1146,9 +1178,8 @@ run_concept_python() {
       echo "概念缺少 Python 测试: $concept_name" >&2
       exit 1
     fi
-    need_cmd python3
     printf '\n== %s / Python ==\n' "$concept_name"
-    python3 -m pytest --import-mode=importlib "${test_files[@]}"
+    run_python_files "${test_files[@]}"
   fi
 }
 
@@ -1292,9 +1323,8 @@ run_family_python() {
   )
 
   if [[ ${#python_test_files[@]} -gt 0 ]]; then
-    need_cmd python3
     printf '\n== %s / Python ==\n' "$family_name"
-    python3 -m pytest --import-mode=importlib "${python_test_files[@]}"
+    run_python_files "${python_test_files[@]}"
   fi
 }
 
@@ -1443,9 +1473,8 @@ run_all_concepts_python() {
   )
 
   if [[ ${#python_test_files[@]} -gt 0 ]]; then
-    need_cmd python3
     printf '\n== all concepts / Python ==\n'
-    python3 -m pytest --import-mode=importlib "${python_test_files[@]}"
+    run_python_files "${python_test_files[@]}"
   fi
 }
 
@@ -1719,6 +1748,14 @@ main() {
     python|py)
       shift
       run_python "$@"
+      ;;
+    python-harness)
+      shift
+      run_python_harness "$@"
+      ;;
+    python-concepts)
+      shift
+      run_python_concepts "$@"
       ;;
     cpp|c++)
       shift

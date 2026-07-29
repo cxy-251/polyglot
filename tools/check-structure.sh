@@ -605,6 +605,23 @@ check_cpp_project() {
   fi
 }
 
+check_python_project() {
+  local harness_test="harness/python/tests/test_01_runtime_and_runner_contract.py"
+  if [[ ! -f "$harness_test" ]]; then
+    report_failure "缺少 Python harness 文件: $harness_test"
+  elif ! grep -Fq '# polyglot-harness:' "$harness_test"; then
+    report_failure "Python harness 测试缺少 polyglot-harness"
+  fi
+  if ! grep -Fq 'python-harness)' tools/run-in-container.sh || \
+    ! grep -Fq 'python-concepts)' tools/run-in-container.sh; then
+    report_failure "Python runner 缺少 harness 或独立横向入口"
+  fi
+  if ! grep -Fq 'PYTHONNOUSERSITE=1' tools/run-in-container.sh || \
+    ! grep -Fq 'PYTHONPYCACHEPREFIX=' tools/run-in-container.sh; then
+    report_failure "Python runner 缺少用户 site 或 bytecode cache 隔离"
+  fi
+}
+
 check_rust_workspaces() {
   local required_file
   local metadata
@@ -1250,6 +1267,7 @@ for active_language in "${ACTIVE_LANGUAGES[@]}"; do
   esac
 done
 check_concepts
+check_python_project
 check_cpp_project
 check_nodejs_projects
 check_go_workspace
