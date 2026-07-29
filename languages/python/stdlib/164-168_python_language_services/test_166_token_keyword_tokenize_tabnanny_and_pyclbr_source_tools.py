@@ -35,6 +35,7 @@
 # polyglot-covers: python.pyclbr.static-no-execution python.pyclbr.errors
 
 import io
+import importlib
 import keyword
 import pyclbr
 import tabnanny
@@ -466,6 +467,7 @@ def test_pyclbr_surfaces_missing_modules_and_source_syntax_errors(tmp_path):
         "def broken(:\n    pass\n",
         encoding="utf-8",
     )
+    importlib.invalidate_caches()
     with pytest.raises(SyntaxError):
         pyclbr.readmodule_ex("broken_outline", [str(tmp_path)])
     # pyclbr 不执行源码，但仍依赖 ast.parse，

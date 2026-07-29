@@ -518,7 +518,8 @@ def test_find_spec_imports_parent_when_resolving_a_dotted_name(tmp_path, monkeyp
         assert "polyglot_spec_parent.child" not in sys.modules
 
 
-def test_cache_path_helpers_encode_tag_and_optimization_without_touching_disk(tmp_path):
+def test_cache_path_helpers_encode_tag_and_optimization_without_touching_disk(tmp_path, monkeypatch):
+    monkeypatch.setattr(sys, "pycache_prefix", None)
     source = tmp_path / "package" / "module.py"
     ordinary = Path(util.cache_from_source(source))
     optimized = Path(util.cache_from_source(source, optimization=2))

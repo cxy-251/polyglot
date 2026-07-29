@@ -38,6 +38,7 @@ from pathlib import Path
 import py_compile
 import re
 import struct
+import sys
 
 import pytest
 
@@ -62,7 +63,8 @@ def cache_path(source, optimization=None):
     )
 
 
-def test_py_compile_uses_the_tagged_cache_path_and_returns_it(tmp_path):
+def test_py_compile_uses_the_tagged_cache_path_and_returns_it(tmp_path, monkeypatch):
+    monkeypatch.setattr(sys, "pycache_prefix", None)
     source = tmp_path / "answer.py"
     source.write_text("answer = 6 * 7\n", encoding="utf-8")
     expected = importlib.util.cache_from_source(str(source))
@@ -204,7 +206,8 @@ def test_source_date_epoch_changes_only_the_default_invalidation_mode(
     # 环境变量只选择默认值；显式 invalidation_mode 始终优先。
 
 
-def test_optimization_levels_change_asserts_docstrings_and_cache_names(tmp_path):
+def test_optimization_levels_change_asserts_docstrings_and_cache_names(tmp_path, monkeypatch):
+    monkeypatch.setattr(sys, "pycache_prefix", None)
     source = tmp_path / "optimized.py"
     source.write_text(
         '"""module documentation"""\n'

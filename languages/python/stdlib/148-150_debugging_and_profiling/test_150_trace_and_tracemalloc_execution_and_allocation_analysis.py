@@ -156,7 +156,7 @@ def test_ignoremods_and_ignoredirs_filter_traced_modules():
     module_filtered = trace.Trace(
         count=1,
         trace=0,
-        ignoremods=(__name__,),
+        ignoremods=(Path(__file__).stem,),
     )
     module_filtered.runfunc(trace_workload, 2)
     assert counts_for_current_file(module_filtered.results()) == {}

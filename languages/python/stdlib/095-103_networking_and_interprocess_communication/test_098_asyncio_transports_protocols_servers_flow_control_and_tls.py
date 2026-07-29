@@ -34,10 +34,8 @@ import shlex
 import sys
 import pytest
 import ssl
-from test_100_ssl_complete_context_bio_socket_verification_and_sessions import CERTIFICATE_PEM
-from test_100_ssl_complete_context_bio_socket_verification_and_sessions import (
-    write_test_certificate,
-)
+from languages.python.support.tls_fixture import CERTIFICATE_PEM
+from languages.python.support.tls_fixture import write_test_certificate
 
 class RecordingProtocol(asyncio.Protocol):
     def __init__(self, loop):

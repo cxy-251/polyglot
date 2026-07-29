@@ -40,6 +40,7 @@ PyPA 工具链。
 # polyglot-covers: python.distutils.errors
 
 import warnings
+import sys
 
 with warnings.catch_warnings():
     warnings.filterwarnings(
@@ -481,7 +482,8 @@ def test_boolean_shell_word_and_variable_helpers_have_strict_boundaries():
         subst_vars("$missing", {})
 
 
-def test_path_platform_and_byte_compile_helpers_stay_inside_tmp_path(tmp_path):
+def test_path_platform_and_byte_compile_helpers_stay_inside_tmp_path(tmp_path, monkeypatch):
+    monkeypatch.setattr(sys, "pycache_prefix", None)
     assert convert_path("pkg/module.py").endswith(os.path.join("pkg", "module.py"))
     assert isinstance(get_platform(), str)
     assert get_platform()
