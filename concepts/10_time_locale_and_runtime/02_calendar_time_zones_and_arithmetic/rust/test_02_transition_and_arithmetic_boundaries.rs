@@ -6,7 +6,7 @@
 // 共同问题：DST gap/fold 如何影响本地时间；“一天”是 calendar unit 还是固定 24 小时。
 // 对照观察：std has no timezone database or DST transition resolver；86,400 seconds is only fixed Duration, not local day.
 
-use polyglot_rust_course::assert_compile_fails;
+use polyglot_rust_harness::assert_compile_fails;
 use std::time::Duration;
 
 #[test]

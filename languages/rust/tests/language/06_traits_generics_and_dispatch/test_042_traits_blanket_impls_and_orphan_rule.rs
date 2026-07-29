@@ -1,6 +1,6 @@
 // polyglot-covers: rust.traits.blanket_impl_orphan_rule
 
-use polyglot_rust_course::assert_compile_fails;
+use polyglot_rust_harness::assert_compile_fails;
 
 trait Label {
     fn label(&self) -> String;

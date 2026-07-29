@@ -1,6 +1,6 @@
 // polyglot-covers: rust.modeling.non_exhaustive_boundary
 
-use polyglot_rust_course::assert_compile_fails;
+use polyglot_rust_harness::assert_compile_fails;
 
 #[test]
 fn external_non_exhaustive_enums_require_a_wildcard_arm() {

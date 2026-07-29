@@ -6,7 +6,7 @@
 // 共同问题：成员从实例、类型还是动态 fallback 查找；property read/write 是否运行代码。
 // 对照观察：Rust field/method lookup 静态解析并含 autoderef；没有动态 attribute/property hook。
 
-use polyglot_rust_course::assert_compile_fails;
+use polyglot_rust_harness::assert_compile_fails;
 
 struct Counter {
     value: i32,

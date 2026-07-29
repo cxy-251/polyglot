@@ -572,8 +572,12 @@ check_rust_workspaces() {
   for required_file in \
     Cargo.toml \
     Cargo.lock \
-    languages/rust/Cargo.toml \
-    languages/rust/tests/course.rs \
+    harness/rust/runner/Cargo.toml \
+    harness/rust/runner/build.rs \
+    harness/rust/runner/tests/course.rs \
+    harness/rust/runner/tests/harness.rs \
+    harness/rust/runner/src/lib.rs \
+    harness/rust/runner/src/bin/course_probe.rs \
     concepts/Cargo.toml \
     concepts/Cargo.lock \
     concepts/tests/concepts.rs; do
@@ -620,8 +624,8 @@ check_rust_workspaces() {
   )
   if ! metadata=$(cargo metadata --manifest-path Cargo.toml --no-deps --format-version 1); then
     report_failure "根 Cargo.toml 无法被 Cargo 解析"
-  elif [[ "$metadata" != *'"name":"polyglot-rust-course"'* ]]; then
-    report_failure "根 Cargo workspace 缺少 languages/rust package"
+  elif [[ "$metadata" != *'"name":"polyglot-rust-harness"'* ]]; then
+    report_failure "根 Cargo workspace 缺少 harness/rust/runner package"
   fi
   if ! metadata=$(
     cargo metadata --manifest-path concepts/Cargo.toml --no-deps --format-version 1
@@ -638,17 +642,10 @@ check_rust_workspaces() {
     report_failure "Rust 横向概念文件未通过 rustfmt"
   fi
 
-  while IFS= read -r -d '' path; do
-    relative_path="${path#languages/rust/tests/}"
-    directory_path="${relative_path%/*}/"
-    file_name="${relative_path##*/}"
-    if ! grep -Fq "\"$directory_path\"" languages/rust/tests/course.rs || \
-      ! grep -Fq "\"$file_name\"" languages/rust/tests/course.rs; then
-      report_failure "Rust 纵向测试未接入 Cargo 聚合入口: $path"
-    fi
-  done < <(
-    find languages/rust -type f -name 'test_[0-9][0-9][0-9]_*.rs' -print0 | sort -z
-  )
+  if ! grep -Fq 'languages/rust' harness/rust/runner/build.rs || \
+    ! grep -Fq 'test_' harness/rust/runner/build.rs; then
+    report_failure "Rust harness build.rs 未按稳定 test_NNN 前缀发现纵向课程"
+  fi
   while IFS= read -r -d '' path; do
     relative_path="${path#concepts/}"
     directory_path="../${relative_path%/*}/"

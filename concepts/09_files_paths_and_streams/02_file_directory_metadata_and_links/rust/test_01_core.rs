@@ -6,7 +6,7 @@
 // 共同问题：文件与目录元数据如何取得；链接本身和目标怎样区分；资源如何可靠关闭。
 // 对照观察：metadata follows symlink, symlink_metadata inspects link entry；File closes by Drop，IO errors remain explicit.
 
-use polyglot_rust_course::unique_temp_directory;
+use polyglot_rust_harness::unique_temp_directory;
 use std::fs;
 
 #[test]

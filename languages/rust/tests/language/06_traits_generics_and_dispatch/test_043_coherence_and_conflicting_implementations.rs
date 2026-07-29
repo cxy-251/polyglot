@@ -1,6 +1,6 @@
 // polyglot-covers: rust.traits.coherence_conflicts
 
-use polyglot_rust_course::assert_compile_fails;
+use polyglot_rust_harness::assert_compile_fails;
 
 #[test]
 fn overlapping_implementations_are_rejected_before_dispatch() {

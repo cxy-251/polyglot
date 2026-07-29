@@ -6,7 +6,7 @@
 // 共同问题：pattern 怎样编译与匹配；capture 和全局搜索是否携带 mutable cursor state。
 // 对照观察：Rust std 没有 regex engine；str 的 literal/pattern 搜索返回 fresh iterator，不保存 lastIndex 状态。
 
-use polyglot_rust_course::assert_compile_fails;
+use polyglot_rust_harness::assert_compile_fails;
 
 #[test]
 fn comparison() {

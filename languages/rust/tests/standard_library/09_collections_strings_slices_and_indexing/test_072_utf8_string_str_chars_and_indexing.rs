@@ -1,6 +1,6 @@
 // polyglot-covers: rust.text.utf8_string_str_indexing
 
-use polyglot_rust_course::assert_compile_fails;
+use polyglot_rust_harness::assert_compile_fails;
 
 #[test]
 fn string_lengths_are_bytes_and_chars_iterate_unicode_scalar_values() {

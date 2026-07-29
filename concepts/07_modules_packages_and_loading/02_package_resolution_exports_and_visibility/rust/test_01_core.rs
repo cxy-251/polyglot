@@ -18,7 +18,7 @@ fn comparison() {
     assert!(output.status.success());
     let metadata = String::from_utf8(output.stdout).unwrap();
     assert!(metadata.contains("\"name\":\"polyglot-rust-concepts\""));
-    assert!(metadata.contains("polyglot-rust-course"));
+    assert!(metadata.contains("polyglot-rust-harness"));
     assert!(std::hint::black_box(
         polyglot_rust_concepts::STANDARD_LIBRARY_ONLY
     ));

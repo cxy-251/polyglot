@@ -12,5 +12,5 @@ fn main() {
         }
         return;
     }
-    println!("polyglot-rust-course");
+    println!("polyglot-rust-harness");
 }

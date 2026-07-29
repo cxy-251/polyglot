@@ -6,7 +6,7 @@
 // 共同问题：typed view 需要哪些 alignment/lifetime 条件；buffer resize 后旧 view 是否有效。
 // 对照观察：safe Rust 不把 arbitrary bytes 隐式重解释为 typed slice；borrow checker 阻止 view 存活时 resize。
 
-use polyglot_rust_course::assert_compile_fails;
+use polyglot_rust_harness::assert_compile_fails;
 
 #[test]
 fn comparison() {

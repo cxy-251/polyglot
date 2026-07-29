@@ -6,7 +6,7 @@
 // 共同问题：加载失败是否污染缓存；能否运行时重试、重新加载或动态选择模块。
 // 对照观察：missing module 是 build error，不产生 runtime cache entry；std 没有通用 import retry/reload/dlopen API。
 
-use polyglot_rust_course::assert_compile_fails;
+use polyglot_rust_harness::assert_compile_fails;
 
 #[test]
 fn comparison() {

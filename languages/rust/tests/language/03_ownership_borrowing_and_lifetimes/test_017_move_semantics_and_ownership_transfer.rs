@@ -1,6 +1,6 @@
 // polyglot-covers: rust.ownership.move_transfer
 
-use polyglot_rust_course::assert_compile_fails;
+use polyglot_rust_harness::assert_compile_fails;
 
 fn length_and_return(value: String) -> (usize, String) {
     (value.len(), value)

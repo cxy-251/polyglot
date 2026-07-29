@@ -6,7 +6,7 @@
 // 共同问题：区域数据缺失如何失败；进程级 locale/zone 状态是否会隐式改变 API。
 // 对照观察：std exposes no Locale/Zone object to load；format/parse behavior does not consult process locale variables.
 
-use polyglot_rust_course::assert_compile_fails;
+use polyglot_rust_harness::assert_compile_fails;
 
 #[test]
 fn comparison() {

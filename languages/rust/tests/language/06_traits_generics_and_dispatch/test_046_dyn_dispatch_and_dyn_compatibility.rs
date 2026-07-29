@@ -1,6 +1,6 @@
 // polyglot-covers: rust.traits.dyn_dispatch_compatibility
 
-use polyglot_rust_course::assert_compile_fails;
+use polyglot_rust_harness::assert_compile_fails;
 
 trait Speak {
     fn speak(&self) -> &'static str;

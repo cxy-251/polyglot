@@ -7,7 +7,7 @@ publish = false
 autotests = false
 
 [dependencies]
-polyglot-rust-course = { path = "../languages/rust" }
+polyglot-rust-harness = { path = "../harness/rust/runner" }
 
 [workspace]
 resolver = "3"
@@ -18,4 +18,3 @@ path = "src/lib.rs"
 [[test]]
 name = "concepts"
 path = "tests/concepts.rs"
-

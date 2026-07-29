@@ -1,6 +1,6 @@
 // polyglot-covers: rust.ownership.pin_movement_boundary
 
-use polyglot_rust_course::assert_compile_fails;
+use polyglot_rust_harness::assert_compile_fails;
 use std::marker::PhantomPinned;
 
 struct Immovable {

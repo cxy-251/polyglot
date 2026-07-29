@@ -7,7 +7,7 @@
 // 对照观察：std SystemTime is an instant on wall timeline without calendar/zone fields；
 // Duration addition is fixed elapsed time.
 
-use polyglot_rust_course::assert_compile_fails;
+use polyglot_rust_harness::assert_compile_fails;
 use std::time::{Duration, UNIX_EPOCH};
 
 #[test]

@@ -1,8 +1,8 @@
-//! Rust 纵向课程的共享测试设施。
+//! Rust 课程与集成测试的 runner 支持设施，不计入语言课程。
 //!
 //! ```
-//! assert_eq!(polyglot_rust_course::checked_double(21), Some(42));
-//! assert_eq!(polyglot_rust_course::checked_double(u32::MAX), None);
+//! assert_eq!(polyglot_rust_harness::checked_double(21), Some(42));
+//! assert_eq!(polyglot_rust_harness::checked_double(u32::MAX), None);
 //! ```
 
 use std::fs;
@@ -16,12 +16,12 @@ use std::task::{Context, Poll, Wake, Waker};
 
 static NEXT_TEMP_ID: AtomicU64 = AtomicU64::new(0);
 
-/// 展示标准库 checked arithmetic 的小型公共 API，也为 doc test 提供稳定入口。
+/// 为 Cargo target、doc test 与 process fixture 提供可观察的最小公共 API。
 pub fn checked_double(value: u32) -> Option<u32> {
     value.checked_mul(2)
 }
 
-/// 使用锁定 `rustc` 编译独立源码，让编译期非法语义由真实诊断验证。
+/// 使用锁定 `rustc` 编译独立源码，让编译期非法语义由真实编译结果验证。
 pub fn compile_source(source: &str) -> Output {
     let directory = unique_temp_directory("compile");
     let source_path = directory.join("main.rs");
@@ -39,7 +39,7 @@ pub fn compile_source(source: &str) -> Output {
     output
 }
 
-/// 验证源码确实被编译器拒绝，并要求诊断包含指定的稳定概念词。
+/// 验证源码确实被编译器拒绝；短诊断片段只定位预期规则，不锁定完整文本。
 pub fn assert_compile_fails(source: &str, diagnostic_fragments: &[&str]) {
     let output = compile_source(source);
     assert!(!output.status.success(), "source unexpectedly compiled");

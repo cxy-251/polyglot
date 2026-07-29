@@ -1,6 +1,6 @@
 // polyglot-covers: rust.io.environment_cwd_isolation
 
-use polyglot_rust_course::unique_temp_directory;
+use polyglot_rust_harness::unique_temp_directory;
 use std::fs;
 use std::process::Command;
 

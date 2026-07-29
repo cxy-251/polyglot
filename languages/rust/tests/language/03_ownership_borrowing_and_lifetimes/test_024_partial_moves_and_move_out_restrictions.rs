@@ -1,6 +1,6 @@
 // polyglot-covers: rust.ownership.partial_move_restrictions
 
-use polyglot_rust_course::assert_compile_fails;
+use polyglot_rust_harness::assert_compile_fails;
 
 struct Record {
     name: String,

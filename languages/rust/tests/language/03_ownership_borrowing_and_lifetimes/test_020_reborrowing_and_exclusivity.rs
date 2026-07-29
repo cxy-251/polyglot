@@ -1,6 +1,6 @@
 // polyglot-covers: rust.ownership.reborrow_exclusivity
 
-use polyglot_rust_course::assert_compile_fails;
+use polyglot_rust_harness::assert_compile_fails;
 
 fn increment(value: &mut i32) {
     *value += 1;

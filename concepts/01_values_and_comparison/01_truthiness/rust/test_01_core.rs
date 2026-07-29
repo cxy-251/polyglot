@@ -6,7 +6,7 @@
 // 共同问题：条件接受哪些值；零值、空集合和自定义值能否隐式决定真假。
 // 对照观察：Rust 条件必须是 bool，没有 truthiness protocol，逻辑运算也只产生 bool。
 
-use polyglot_rust_course::assert_compile_fails;
+use polyglot_rust_harness::assert_compile_fails;
 
 #[test]
 fn comparison() {

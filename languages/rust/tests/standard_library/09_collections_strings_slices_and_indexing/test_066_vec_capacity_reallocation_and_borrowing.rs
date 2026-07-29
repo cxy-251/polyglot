@@ -1,6 +1,6 @@
 // polyglot-covers: rust.collections.vec_capacity_reallocation
 
-use polyglot_rust_course::assert_compile_fails;
+use polyglot_rust_harness::assert_compile_fails;
 
 #[test]
 fn vec_growth_preserves_values_while_borrowing_prevents_stale_references() {

@@ -6,7 +6,7 @@
 // 共同问题：解析元数据是否执行模块代码；发现 package 与运行初始化能否分离。
 // 对照观察：`cargo metadata` resolves manifests without compiling/running crate code or build script output.
 
-use polyglot_rust_course::unique_temp_directory;
+use polyglot_rust_harness::unique_temp_directory;
 use std::fs;
 use std::process::Command;
 

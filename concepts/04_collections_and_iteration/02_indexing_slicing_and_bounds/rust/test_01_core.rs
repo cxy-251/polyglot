@@ -6,7 +6,7 @@
 // 共同问题：索引和切片如何解释负数、越界与边界；结果是 view 还是 copy。
 // 对照观察：usize 索引无负数；`[]` 越界 panic，`get` 返回 Option，slice 是借用 view。
 
-use polyglot_rust_course::assert_compile_fails;
+use polyglot_rust_harness::assert_compile_fails;
 
 #[test]
 fn comparison() {

@@ -1,6 +1,6 @@
 // polyglot-covers: rust.io.files_metadata_temp_directory
 
-use polyglot_rust_course::unique_temp_directory;
+use polyglot_rust_harness::unique_temp_directory;
 use std::fs::{self, File};
 use std::io::Write;
 

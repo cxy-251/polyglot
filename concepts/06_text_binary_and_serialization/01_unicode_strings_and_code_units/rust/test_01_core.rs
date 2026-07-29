@@ -6,7 +6,7 @@
 // 共同问题：字符串长度按 bytes、code units、code points 还是 graphemes；如何迭代与索引。
 // 对照观察：String/str 是 UTF-8，len 是 bytes，char 是 Unicode scalar value；std 不提供 grapheme segmentation。
 
-use polyglot_rust_course::assert_compile_fails;
+use polyglot_rust_harness::assert_compile_fails;
 
 #[test]
 fn comparison() {

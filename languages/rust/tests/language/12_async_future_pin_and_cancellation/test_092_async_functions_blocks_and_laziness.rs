@@ -1,6 +1,6 @@
 // polyglot-covers: rust.async.functions_blocks_laziness
 
-use polyglot_rust_course::block_on;
+use polyglot_rust_harness::block_on;
 use std::cell::Cell;
 
 async fn doubled(value: i32) -> i32 {

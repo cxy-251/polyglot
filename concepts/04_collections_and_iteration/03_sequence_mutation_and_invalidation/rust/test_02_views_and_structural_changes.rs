@@ -6,7 +6,7 @@
 // 共同问题：view 是否共享底层数据；结构变化后旧 view 是否仍有效；生命周期如何限制修改。
 // 对照观察：slice 共享 storage；NLL 在 view 最后一次使用后结束借用，之前 reallocating mutation 非法。
 
-use polyglot_rust_course::assert_compile_fails;
+use polyglot_rust_harness::assert_compile_fails;
 
 #[test]
 fn comparison() {

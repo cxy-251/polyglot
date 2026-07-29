@@ -6,7 +6,7 @@
 // 共同问题：异步工作何时开始；调用方如何等待并取得值或错误；结果能否重复读取。
 // 对照观察：async 调用只构造 lazy Future；executor poll/await 取得一次 Output，std 不提供全功能 runtime。
 
-use polyglot_rust_course::block_on;
+use polyglot_rust_harness::block_on;
 
 async fn parse_and_double(text: &str) -> Result<i32, std::num::ParseIntError> {
     let value = text.parse::<i32>()?;

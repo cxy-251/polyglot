@@ -1,6 +1,6 @@
 // polyglot-covers: rust.async.result_propagation_join
 
-use polyglot_rust_course::block_on;
+use polyglot_rust_harness::block_on;
 use std::future::Future;
 use std::pin::Pin;
 use std::task::{Context, Poll};

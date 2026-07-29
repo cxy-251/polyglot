@@ -6,7 +6,7 @@
 // 共同问题：遍历时能否修改序列；结构变化如何影响 iterator/reference；哪些修改仍安全。
 // 对照观察：borrow checker 在编译期阻止持有迭代借用时结构修改；`iter_mut` 允许逐元素修改。
 
-use polyglot_rust_course::assert_compile_fails;
+use polyglot_rust_harness::assert_compile_fails;
 
 #[test]
 fn comparison() {

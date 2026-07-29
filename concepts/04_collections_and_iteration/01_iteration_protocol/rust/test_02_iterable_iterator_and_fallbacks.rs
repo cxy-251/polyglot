@@ -6,7 +6,7 @@
 // 共同问题：iterable 与 iterator 是否分离；缺少正式协议时会不会回退到索引；重复遍历是否独立。
 // 对照观察：Rust 显式区分 `IntoIterator` 与 `Iterator`，不会把只实现 Index 的类型当 iterable。
 
-use polyglot_rust_course::assert_compile_fails;
+use polyglot_rust_harness::assert_compile_fails;
 
 #[test]
 fn comparison() {

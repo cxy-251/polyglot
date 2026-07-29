@@ -1,6 +1,6 @@
 // polyglot-covers: rust.concurrency.send_sync_static
 
-use polyglot_rust_course::assert_compile_fails;
+use polyglot_rust_harness::assert_compile_fails;
 use std::sync::{Arc, Mutex};
 
 fn assert_send_sync<T: Send + Sync>() {}

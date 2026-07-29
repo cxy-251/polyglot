@@ -7,7 +7,7 @@
 // 对照观察：Path/PathBuf preserve components lexically；
 // canonicalize queries filesystem and resolves symlinks，URL is separate.
 
-use polyglot_rust_course::unique_temp_directory;
+use polyglot_rust_harness::unique_temp_directory;
 use std::fs;
 use std::path::{Component, Path};
 

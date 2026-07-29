@@ -6,7 +6,7 @@
 // 共同问题：相等比较是值、身份还是转换后的结果；哪些值不能安全比较。
 // 对照观察：`PartialEq` 决定可比类型，`Eq` 表示自反契约；Rust 不做跨类型数值强制转换。
 
-use polyglot_rust_course::assert_compile_fails;
+use polyglot_rust_harness::assert_compile_fails;
 
 #[derive(Debug, PartialEq, Eq)]
 struct Key(i32);

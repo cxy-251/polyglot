@@ -6,7 +6,7 @@
 // 共同问题：timeout 资源由谁释放；子任务能否与父取消隔离；取消原因如何保留。
 // 对照观察：std channel/socket timeouts are blocking boundaries；async timeout/shield/task ownership need an executor design.
 
-use polyglot_rust_course::assert_compile_fails;
+use polyglot_rust_harness::assert_compile_fails;
 use std::sync::mpsc;
 use std::time::Duration;
 

@@ -1,10 +1,11 @@
 [package]
-name = "polyglot-rust-course"
+name = "polyglot-rust-harness"
 version = "0.1.0"
 edition.workspace = true
 rust-version.workspace = true
 publish = false
 autotests = false
+build = "build.rs"
 
 [features]
 default = []
@@ -22,3 +23,6 @@ test = false
 name = "course"
 path = "tests/course.rs"
 
+[[test]]
+name = "harness"
+path = "tests/harness.rs"

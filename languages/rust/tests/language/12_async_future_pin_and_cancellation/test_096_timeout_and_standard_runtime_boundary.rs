@@ -1,6 +1,6 @@
 // polyglot-covers: rust.async.timeout_runtime_boundary
 
-use polyglot_rust_course::assert_compile_fails;
+use polyglot_rust_harness::assert_compile_fails;
 use std::sync::mpsc;
 use std::time::Duration;
 

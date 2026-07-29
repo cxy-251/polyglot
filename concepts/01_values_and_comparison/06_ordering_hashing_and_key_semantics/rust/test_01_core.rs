@@ -6,7 +6,7 @@
 // 共同问题：排序依据什么顺序；哈希键需要哪些契约；特殊数值怎样影响查找。
 // 对照观察：NaN 只有 `PartialOrd`；HashMap key 必须同时满足 `Eq + Hash`，浮点不能直接作键。
 
-use polyglot_rust_course::assert_compile_fails;
+use polyglot_rust_harness::assert_compile_fails;
 
 #[test]
 fn comparison() {

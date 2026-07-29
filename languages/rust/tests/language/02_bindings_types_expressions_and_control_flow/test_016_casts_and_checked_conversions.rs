@@ -1,6 +1,6 @@
 // polyglot-covers: rust.language.casts_checked_conversions
 
-use polyglot_rust_course::assert_compile_fails;
+use polyglot_rust_harness::assert_compile_fails;
 
 #[test]
 fn as_has_explicit_numeric_semantics_while_try_from_checks_range() {

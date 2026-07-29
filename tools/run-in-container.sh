@@ -983,10 +983,23 @@ run_rust() {
   check_rust_version
   local target_directory="${POLYGLOT_RUST_COURSE_TARGET_DIR:-/tmp/polyglot-rust-course-target}"
   printf '\n== Rust vertical course ==\n'
-  CARGO_TARGET_DIR="$target_directory" cargo fmt --all --check
+  CARGO_TARGET_DIR="$target_directory" cargo fmt --manifest-path Cargo.toml --all --check
   CARGO_TARGET_DIR="$target_directory" \
-    cargo clippy --workspace --all-targets --all-features -- -D warnings
-  CARGO_TARGET_DIR="$target_directory" cargo test --workspace "$@"
+    cargo clippy --manifest-path Cargo.toml --test course --all-features -- -D warnings
+  CARGO_TARGET_DIR="$target_directory" \
+    cargo test --manifest-path Cargo.toml --test course "$@"
+}
+
+run_rust_harness() {
+  check_rust_version
+  local target_directory="${POLYGLOT_RUST_HARNESS_TARGET_DIR:-/tmp/polyglot-rust-harness-target}"
+  printf '\n== Rust harness and integration ==\n'
+  CARGO_TARGET_DIR="$target_directory" cargo fmt --manifest-path Cargo.toml --all --check
+  CARGO_TARGET_DIR="$target_directory" \
+    cargo clippy --manifest-path Cargo.toml --all-targets --all-features -- -D warnings
+  CARGO_TARGET_DIR="$target_directory" \
+    cargo test --manifest-path Cargo.toml --test harness "$@"
+  CARGO_TARGET_DIR="$target_directory" cargo test --manifest-path Cargo.toml --doc
 }
 
 run_go() {
@@ -1642,6 +1655,10 @@ main() {
     rust|rs)
       shift
       run_rust "$@"
+      ;;
+    rust-harness)
+      shift
+      run_rust_harness "$@"
       ;;
     julia|jl)
       shift
