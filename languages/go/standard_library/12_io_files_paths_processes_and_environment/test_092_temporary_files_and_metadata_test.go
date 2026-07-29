@@ -1,10 +1,12 @@
-// polyglot-covers: go.os.temporary-files-and-metadata
+// polyglot-covers: go.files.metadata-and-abstract-filesystems
 package ioworkflows_test
 
 import (
+	"io/fs"
 	"os"
 	"path/filepath"
 	"testing"
+	"testing/fstest"
 )
 
 func TestTemporaryFileLifecycleAndMetadata(t *testing.T) {
@@ -23,5 +25,16 @@ func TestTemporaryFileLifecycleAndMetadata(t *testing.T) {
 	info, err := os.Stat(path)
 	if err != nil || info.Size() != 4 || !info.Mode().IsRegular() {
 		t.Fatalf("Stat 返回跟随链接后的 FileInfo: %+v %v", info, err)
+	}
+}
+
+func TestFSAlgorithmsWorkAgainstAbstractFilesystem(t *testing.T) {
+	files := fstest.MapFS{
+		"docs/readme.txt": {Data: []byte("course")},
+		"docs/notes.md":   {Data: []byte("notes")},
+	}
+	matches, err := fs.Glob(files, "docs/*.txt")
+	if err != nil || len(matches) != 1 || matches[0] != "docs/readme.txt" {
+		t.Fatalf("io/fs 使用 slash 分隔的相对路径，可测试真实磁盘之外的实现: %v %v", matches, err)
 	}
 }

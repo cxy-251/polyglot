@@ -1,4 +1,4 @@
-// polyglot-covers: go.io.reader-writer-partial-operations
+// polyglot-covers: go.io.reader-writer-copy-and-partial-operations
 package ioworkflows_test
 
 import (
@@ -67,5 +67,16 @@ func TestCopyRejectsBrokenWriterContracts(t *testing.T) {
 	count, err = io.Copy(invalidCountWriter{}, io.LimitReader(strings.NewReader("abc"), 3))
 	if err == nil {
 		t.Fatalf("Writer 不得报告超过输入长度的 n；io.Copy 拒绝无效结果: %d", count)
+	}
+}
+
+func TestCopyStreamsUntilEOF(t *testing.T) {
+	var destination bytes.Buffer
+	count, err := io.Copy(&destination, strings.NewReader("stream"))
+	if err != nil || count != 6 || destination.String() != "stream" {
+		t.Fatalf("io.Copy 连接 Reader 与 Writer，并报告已复制 byte 数: %d %q %v", count, &destination, err)
+	}
+	if _, err := destination.WriteString("-buffered"); err != nil {
+		t.Fatal(err)
 	}
 }

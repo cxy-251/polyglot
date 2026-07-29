@@ -1,4 +1,4 @@
-// polyglot-covers: go.serialization.cycles-aliases-gob-trust
+// polyglot-covers: go.serialization.aliasing-graphs-gob-and-trust-boundaries
 package serialization_test
 
 import (
@@ -11,6 +11,16 @@ import (
 type cycleNode struct {
 	Value int
 	Next  *cycleNode
+}
+
+func TestSubsliceAliasesUntilExplicitCopy(t *testing.T) {
+	source := []byte{1, 2, 3}
+	view := source[1:]
+	clone := append([]byte(nil), view...)
+	view[0] = 9
+	if source[1] != 9 || clone[0] != 2 {
+		t.Fatal("subslice 是共享 view；显式 copy/append 到新 slice 才隔离所有权")
+	}
 }
 
 func TestSerializationHasGraphAndTrustBoundaries(t *testing.T) {

@@ -1,4 +1,4 @@
-// polyglot-covers: go.packages.namespace-exports-import-aliases
+// polyglot-covers: go.packages.namespace-exports-internal-and-import-identity
 package packagesmodules_test
 
 import (
@@ -16,4 +16,5 @@ func TestPackageQualifiedNamesAndCapitalizationControlAccess(t *testing.T) {
 	if secret.Exported == "" || secret.HiddenLength() == 0 {
 		t.Fatal("首字母大写标识符可跨 package 访问，未导出状态只能通过导出 API 观察")
 	}
+	// internal package 只允许其父目录树内的 importer；v2+ module 通常以 `/vN` 进入 import identity。
 }

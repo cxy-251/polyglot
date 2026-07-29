@@ -1,4 +1,4 @@
-// polyglot-covers: go.errors.wrapping-is-join
+// polyglot-covers: go.errors.wrapping-joining-and-cleanup-failures
 package errorscleanup_test
 
 import (
@@ -6,6 +6,14 @@ import (
 	"fmt"
 	"testing"
 )
+
+var errOperation = errors.New("operation failed")
+var errCleanup = errors.New("cleanup failed")
+
+func operationWithCleanupFailure() (err error) {
+	defer func() { err = errors.Join(err, errCleanup) }()
+	return errOperation
+}
 
 func TestJoinPreservesMultipleErrorIdentities(t *testing.T) {
 	first := errors.New("first")
@@ -17,5 +25,12 @@ func TestJoinPreservesMultipleErrorIdentities(t *testing.T) {
 	}
 	if errors.Join(nil, nil) != nil {
 		t.Fatal("全部输入为 nil 时 Join 返回 nil")
+	}
+}
+
+func TestCleanupMustExplicitlyPreserveOriginalError(t *testing.T) {
+	err := operationWithCleanupFailure()
+	if !errors.Is(err, errOperation) || !errors.Is(err, errCleanup) {
+		t.Fatal("defer 没有自动异常聚合协议；实现必须显式 Join 或选择覆盖策略")
 	}
 }

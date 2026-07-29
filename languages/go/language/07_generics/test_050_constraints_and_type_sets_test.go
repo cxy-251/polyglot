@@ -1,4 +1,4 @@
-// polyglot-covers: go.generics.constraints-and-type-sets
+// polyglot-covers: go.generics.constraints-unions-and-approximation
 package generics_test
 
 import "testing"
@@ -7,12 +7,26 @@ type signedInteger interface {
 	~int | ~int32 | ~int64
 }
 
+type distance int
+
+type addable interface {
+	~int | ~string
+}
+
+func addValues[T addable](left, right T) T { return left + right }
+
 func genericSum[T signedInteger](values []T) T {
 	var total T
 	for _, value := range values {
 		total += value
 	}
 	return total
+}
+
+func TestTildeIncludesDefinedTypesWithMatchingUnderlyingType(t *testing.T) {
+	if addValues(distance(2), distance(3)) != 5 || addValues("go", "pher") != "gopher" {
+		t.Fatal("~int 包含底层类型为 int 的 defined type；union 合并允许的 type terms")
+	}
 }
 
 func TestConstraintPermitsOnlyItsTypeSetOperations(t *testing.T) {

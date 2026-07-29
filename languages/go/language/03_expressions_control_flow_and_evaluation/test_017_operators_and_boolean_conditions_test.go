@@ -1,4 +1,4 @@
-// polyglot-covers: go.expressions.operators-and-bool-conditions
+// polyglot-covers: go.control.boolean-operators-if-and-switch
 package controlflow_test
 
 import "testing"
@@ -13,5 +13,23 @@ func TestOperatorsPreserveTypedSemantics(t *testing.T) {
 	condition := true
 	if !condition {
 		t.Fatal("if 条件必须具有 bool 类型；数字和容器没有隐式真假转换")
+	}
+}
+
+func TestIfAndSwitchMayOwnShortDeclarations(t *testing.T) {
+	classification := ""
+	if value := 7; value%2 == 1 {
+		classification = "odd"
+	}
+	switch length := len(classification); {
+	case length == 0:
+		t.Fatal("应有分类")
+	case length < 4:
+		classification += "-short"
+	default:
+		classification += "-long"
+	}
+	if classification != "odd-short" {
+		t.Fatalf("switch 默认不 fallthrough: %q", classification)
 	}
 }
