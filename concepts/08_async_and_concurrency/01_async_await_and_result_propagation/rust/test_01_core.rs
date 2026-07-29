@@ -1,7 +1,7 @@
 // polyglot-family: async_and_concurrency
 // polyglot-concept: async_await_and_result_propagation
 // polyglot-related: languages/rust/tests/language/12_async_future_pin_and_cancellation/
-// polyglot-related+: test_092_async_functions_blocks_and_laziness.rs
+// polyglot-related+: test_092_async_laziness_and_executor_contract.rs
 //
 // 共同问题：异步工作何时开始；调用方如何等待并取得值或错误；结果能否重复读取。
 // 对照观察：async 调用只构造 lazy Future；executor poll/await 取得一次 Output，std 不提供全功能 runtime。

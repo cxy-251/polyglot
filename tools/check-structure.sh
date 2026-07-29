@@ -580,6 +580,7 @@ check_rust_workspaces() {
     harness/rust/runner/src/bin/course_probe.rs \
     concepts/Cargo.toml \
     concepts/Cargo.lock \
+    concepts/build.rs \
     concepts/tests/concepts.rs; do
     if [[ ! -f "$required_file" ]]; then
       report_failure "缺少 Rust Cargo workspace 文件: $required_file"
@@ -646,17 +647,9 @@ check_rust_workspaces() {
     ! grep -Fq 'test_' harness/rust/runner/build.rs; then
     report_failure "Rust harness build.rs 未按稳定 test_NNN 前缀发现纵向课程"
   fi
-  while IFS= read -r -d '' path; do
-    relative_path="${path#concepts/}"
-    directory_path="../${relative_path%/*}/"
-    file_name="${relative_path##*/}"
-    if ! grep -Fq "\"$directory_path\"" concepts/tests/concepts.rs || \
-      ! grep -Fq "\"$file_name\"" concepts/tests/concepts.rs; then
-      report_failure "Rust 横向测试未接入 Cargo 聚合入口: $path"
-    fi
-  done < <(
-    find concepts -type f -path '*/rust/test_[0-9][0-9]_*.rs' -print0 | sort -z
-  )
+  if ! grep -Fq 'rust' concepts/build.rs || ! grep -Fq 'test_' concepts/build.rs; then
+    report_failure "concepts/build.rs 未按实际 Rust 局部文件生成横向聚合入口"
+  fi
 }
 
 check_julia_projects() {

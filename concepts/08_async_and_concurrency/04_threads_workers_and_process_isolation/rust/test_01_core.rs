@@ -1,7 +1,7 @@
 // polyglot-family: async_and_concurrency
 // polyglot-concept: threads_workers_and_process_isolation
 // polyglot-related: languages/rust/tests/standard_library/
-// polyglot-related+: 11_threads_channels_and_memory_model/test_081_thread_spawn_join_and_scope.rs
+// polyglot-related+: 11_threads_channels_and_memory_model/test_081_thread_lifetimes_send_and_sync.rs
 //
 // 共同问题：并发任务映射到线程还是进程；共享哪些内存；隔离边界由谁提供。
 // 对照观察：std::thread is an OS thread sharing process memory under Send/Sync；Command creates process isolation.

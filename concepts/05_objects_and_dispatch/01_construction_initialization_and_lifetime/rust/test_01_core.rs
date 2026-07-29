@@ -1,7 +1,7 @@
 // polyglot-family: objects_and_dispatch
 // polyglot-concept: construction_initialization_and_lifetime
 // polyglot-related: languages/rust/tests/language/04_structs_enums_patterns_and_modeling/
-// polyglot-related+: test_025_named_tuple_and_unit_structs.rs
+// polyglot-related+: test_025_struct_and_enum_data_modeling.rs
 //
 // 共同问题：对象怎样分配并初始化；失败构造是否留下实例；生命周期结束由谁决定。
 // 对照观察：struct literal/associated function 返回完整值；`Result<Self,E>` 失败不产生 Self，Drop 由 ownership 决定。

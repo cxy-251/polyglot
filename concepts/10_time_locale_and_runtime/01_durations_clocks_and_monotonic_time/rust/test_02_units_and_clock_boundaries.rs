@@ -1,7 +1,7 @@
 // polyglot-family: time_locale_and_runtime
 // polyglot-concept: durations_clocks_and_monotonic_time
 // polyglot-related: languages/rust/tests/tooling_and_runtime/
-// polyglot-related+: 15_time_runtime_reflection_and_unsafe/test_114_system_time_and_wall_clock_boundaries.rs
+// polyglot-related+: 15_time_runtime_reflection_and_unsafe/test_113_duration_monotonic_and_wall_clocks.rs
 //
 // 共同问题：序列化是否保留 monotonic 信息；不同 clock 的值能否直接混用；精度与单位如何转换。
 // 对照观察：Instant has no serializable epoch and cannot mix with SystemTime；Duration conversions make units explicit.

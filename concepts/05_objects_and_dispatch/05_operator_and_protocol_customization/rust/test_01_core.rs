@@ -1,7 +1,7 @@
 // polyglot-family: objects_and_dispatch
 // polyglot-concept: operator_and_protocol_customization
 // polyglot-related: languages/rust/tests/language/06_traits_generics_and_dispatch/
-// polyglot-related+: test_044_associated_types_constants_and_default_methods.rs
+// polyglot-related+: test_044_associated_items_static_dispatch_and_disambiguation.rs
 //
 // 共同问题：运算符和内建协议能否由用户类型定制；返回类型和反向分派怎样决定。
 // 对照观察：operator maps to traits such as Add；impl 明确 lhs/rhs/output，Rust 不做运行时 reflected fallback。

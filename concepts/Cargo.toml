@@ -5,6 +5,7 @@ edition = "2024"
 rust-version = "1.97.1"
 publish = false
 autotests = false
+build = "build.rs"
 
 [dependencies]
 polyglot-rust-harness = { path = "../harness/rust/runner" }

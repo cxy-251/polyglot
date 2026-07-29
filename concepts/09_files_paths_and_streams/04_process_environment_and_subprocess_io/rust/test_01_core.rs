@@ -1,7 +1,7 @@
 // polyglot-family: files_paths_and_streams
 // polyglot-concept: process_environment_and_subprocess_io
 // polyglot-related: languages/rust/tests/standard_library/
-// polyglot-related+: 13_io_files_paths_processes_and_networking/test_102_command_stdio_and_exit_status.rs
+// polyglot-related+: 13_io_files_paths_processes_and_networking/test_101_process_environment_cwd_stdio_and_status.rs
 //
 // 共同问题：环境和 cwd 是进程全局还是调用局部；子进程 stdio、退出状态与取消如何表达。
 // 对照观察：Command owns child-specific env/cwd/stdio；

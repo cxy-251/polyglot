@@ -1,7 +1,7 @@
 // polyglot-family: functions_and_calls
 // polyglot-concept: closures_capture_and_lifetime
 // polyglot-related: languages/rust/tests/language/05_functions_closures_and_iterators/
-// polyglot-related+: test_034_closure_capture_modes.rs
+// polyglot-related+: test_033_function_items_pointers_and_closure_capture.rs
 //
 // 共同问题：闭包捕获值还是变量；被捕获状态能否跨调用存活；循环变量是否共享。
 // 对照观察：Rust 从用法推导 borrow/mutable borrow/move capture；move closure 可拥有跨作用域状态。

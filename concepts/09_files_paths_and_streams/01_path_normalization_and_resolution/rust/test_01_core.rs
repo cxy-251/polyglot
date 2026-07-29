@@ -1,7 +1,7 @@
 // polyglot-family: files_paths_and_streams
 // polyglot-concept: path_normalization_and_resolution
 // polyglot-related: languages/rust/tests/standard_library/
-// polyglot-related+: 13_io_files_paths_processes_and_networking/test_100_path_pathbuf_and_platform_boundaries.rs
+// polyglot-related+: 13_io_files_paths_processes_and_networking/test_099_files_paths_and_metadata.rs
 //
 // 共同问题：路径清理是词法还是访问文件系统；相对路径以什么基准解析；URL 是否属于文件路径。
 // 对照观察：Path/PathBuf preserve components lexically；

@@ -1,7 +1,7 @@
 // polyglot-family: collections_and_iteration
 // polyglot-concept: generators_laziness_and_early_termination
 // polyglot-related: languages/rust/tests/language/05_functions_closures_and_iterators/
-// polyglot-related+: test_040_iterator_capabilities_and_early_termination.rs
+// polyglot-related+: test_039_iterator_conversion_capabilities_and_termination.rs
 //
 // 共同问题：提前停止时生产者如何清理；如何委托子序列；能否向暂停生成器发送值。
 // 对照观察：drop iterator 清理 captured state；flat_map/flatten 委托，stable Iterator 没有 send/close protocol。

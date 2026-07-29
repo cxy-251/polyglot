@@ -1002,6 +1002,18 @@ run_rust_harness() {
   CARGO_TARGET_DIR="$target_directory" cargo test --manifest-path Cargo.toml --doc
 }
 
+run_rust_concepts() {
+  check_rust_version
+  local target_directory="${POLYGLOT_RUST_CONCEPT_TARGET_DIR:-/tmp/polyglot-rust-concepts-target}"
+  printf '\n== Rust horizontal concepts ==\n'
+  CARGO_TARGET_DIR="$target_directory" \
+    cargo fmt --manifest-path concepts/Cargo.toml --all --check
+  CARGO_TARGET_DIR="$target_directory" \
+    cargo clippy --manifest-path concepts/Cargo.toml --all-targets -- -D warnings
+  CARGO_TARGET_DIR="$target_directory" \
+    cargo test --manifest-path concepts/Cargo.toml --test concepts "$@"
+}
+
 run_go() {
   check_go_version
   printf '\n== Go vertical course ==\n'
@@ -1659,6 +1671,10 @@ main() {
     rust-harness)
       shift
       run_rust_harness "$@"
+      ;;
+    rust-concepts)
+      shift
+      run_rust_concepts "$@"
       ;;
     julia|jl)
       shift

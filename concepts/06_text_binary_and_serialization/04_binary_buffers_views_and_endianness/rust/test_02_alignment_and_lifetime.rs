@@ -1,7 +1,7 @@
 // polyglot-family: text_binary_and_serialization
 // polyglot-concept: binary_buffers_views_and_endianness
-// polyglot-related: languages/rust/tests/tooling_and_runtime/
-// polyglot-related+: 15_time_runtime_reflection_and_unsafe/test_117_size_alignment_and_repr.rs
+// polyglot-related: languages/rust/tests/language/
+// polyglot-related+: 04_structs_enums_patterns_and_modeling/test_031_discriminants_repr_and_layout_boundaries.rs
 //
 // 共同问题：typed view 需要哪些 alignment/lifetime 条件；buffer resize 后旧 view 是否有效。
 // 对照观察：safe Rust 不把 arbitrary bytes 隐式重解释为 typed slice；borrow checker 阻止 view 存活时 resize。

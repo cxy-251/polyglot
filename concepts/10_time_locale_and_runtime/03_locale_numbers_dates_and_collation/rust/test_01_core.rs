@@ -1,7 +1,7 @@
 // polyglot-family: time_locale_and_runtime
 // polyglot-concept: locale_numbers_dates_and_collation
-// polyglot-related: languages/rust/tests/tooling_and_runtime/
-// polyglot-related+: 15_time_runtime_reflection_and_unsafe/test_115_timezone_calendar_and_locale_absence.rs
+// polyglot-related: languages/rust/tests/standard_library/
+// polyglot-related+: 14_formatting_parsing_binary_and_serialization/test_105_formatting_traits_and_typed_parsing.rs
 //
 // 共同问题：数字、日期与排序是否受 locale 影响；默认 locale 来自哪里。
 // 对照观察：format/parse and str Ord are locale-independent；std has no general locale-aware number/date/collation API.
@@ -14,4 +14,6 @@ fn comparison() {
     let mut values = ["z", "ä", "a"];
     values.sort();
     assert_eq!(values, ["a", "z", "ä"]);
+    // Rust std formatting, parsing and Ord do not consult a mutable process locale.
+    // Locale-aware data and collation require an explicit non-std facility.
 }

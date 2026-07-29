@@ -6,9 +6,9 @@ version = 4
 name = "polyglot-rust-concepts"
 version = "0.1.0"
 dependencies = [
- "polyglot-rust-course",
+ "polyglot-rust-harness",
 ]
 
 [[package]]
-name = "polyglot-rust-course"
+name = "polyglot-rust-harness"
 version = "0.1.0"

@@ -1,7 +1,7 @@
 // polyglot-family: time_locale_and_runtime
 // polyglot-concept: durations_clocks_and_monotonic_time
 // polyglot-related: languages/rust/tests/tooling_and_runtime/
-// polyglot-related+: 15_time_runtime_reflection_and_unsafe/test_113_duration_instant_and_checked_arithmetic.rs
+// polyglot-related+: 15_time_runtime_reflection_and_unsafe/test_113_duration_monotonic_and_wall_clocks.rs
 //
 // 共同问题：duration 的单位与范围是什么；时间点相减使用 wall clock 还是 monotonic clock。
 // 对照观察：Duration is nonnegative seconds/nanos；Instant is monotonic opaque process clock, SystemTime is wall clock.

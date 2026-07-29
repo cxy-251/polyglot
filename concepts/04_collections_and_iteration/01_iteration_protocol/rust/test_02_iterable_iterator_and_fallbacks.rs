@@ -1,7 +1,7 @@
 // polyglot-family: collections_and_iteration
 // polyglot-concept: iteration_protocol
 // polyglot-related: languages/rust/tests/language/05_functions_closures_and_iterators/
-// polyglot-related+: test_040_iterator_capabilities_and_early_termination.rs
+// polyglot-related+: test_039_iterator_conversion_capabilities_and_termination.rs
 //
 // 共同问题：iterable 与 iterator 是否分离；缺少正式协议时会不会回退到索引；重复遍历是否独立。
 // 对照观察：Rust 显式区分 `IntoIterator` 与 `Iterator`，不会把只实现 Index 的类型当 iterable。

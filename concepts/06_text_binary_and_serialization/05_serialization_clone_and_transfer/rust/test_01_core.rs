@@ -1,7 +1,7 @@
 // polyglot-family: text_binary_and_serialization
 // polyglot-concept: serialization_clone_and_transfer
 // polyglot-related: languages/rust/tests/standard_library/
-// polyglot-related+: 14_formatting_parsing_binary_and_serialization/test_112_manual_codec_and_trust_boundary.rs
+// polyglot-related+: 14_formatting_parsing_binary_and_serialization/test_110_codec_schema_and_trust_boundaries.rs
 //
 // 共同问题：clone、serialization 与跨边界 transfer 是否保留 type、alias、cycle 和 identity。
 // 对照观察：Clone 是类型自定义的进程内 duplication；Rc clone 保留 alias，String clone 独立；std 无通用 serializer。

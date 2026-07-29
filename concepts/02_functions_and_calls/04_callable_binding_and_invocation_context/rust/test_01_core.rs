@@ -1,7 +1,7 @@
 // polyglot-family: functions_and_calls
 // polyglot-concept: callable_binding_and_invocation_context
 // polyglot-related: languages/rust/tests/language/05_functions_closures_and_iterators/
-// polyglot-related+: test_033_function_items_and_function_pointers.rs
+// polyglot-related+: test_033_function_items_pointers_and_closure_capture.rs
 //
 // 共同问题：可调用值是否绑定接收者；提取方法后调用上下文如何决定。
 // 对照观察：`Type::method` 是显式 receiver 首参的 function item；closure 才能捕获并绑定实例。

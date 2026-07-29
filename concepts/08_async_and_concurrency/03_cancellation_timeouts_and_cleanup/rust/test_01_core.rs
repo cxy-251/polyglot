@@ -1,11 +1,11 @@
 // polyglot-family: async_and_concurrency
 // polyglot-concept: cancellation_timeouts_and_cleanup
 // polyglot-related: languages/rust/tests/language/12_async_future_pin_and_cancellation/
-// polyglot-related+: test_095_cancellation_by_drop_and_cleanup.rs
+// polyglot-related+: test_095_drop_stops_polling_and_runs_cleanup.rs
 //
 // 共同问题：取消如何传递；阻塞工作怎样退出；取消路径是否仍执行清理。
-// 对照观察：dropping an incomplete Future is cancellation；Drop cleans owned state；
-// cooperative work needs an explicit signal.
+// 对照观察：drop stops future polling and cleans owned state；external work needs its own
+// cancellation protocol，cooperative work needs an explicit signal.
 
 use std::future::Future;
 use std::pin::Pin;
@@ -34,4 +34,5 @@ fn comparison() {
     let cleaned = Arc::new(AtomicBool::new(false));
     drop(Pending(Arc::clone(&cleaned)));
     assert!(cleaned.load(Ordering::SeqCst));
+    // This proves local state cleanup, not cancellation of work already submitted elsewhere.
 }

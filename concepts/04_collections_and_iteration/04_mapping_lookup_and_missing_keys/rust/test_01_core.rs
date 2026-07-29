@@ -1,7 +1,7 @@
 // polyglot-family: collections_and_iteration
 // polyglot-concept: mapping_lookup_and_missing_keys
 // polyglot-related: languages/rust/tests/standard_library/
-// polyglot-related+: 09_collections_strings_slices_and_indexing/test_068_hash_map_entry_and_missing_keys.rs
+// polyglot-related+: 09_collections_strings_slices_and_indexing/test_068_hash_and_ordered_map_semantics.rs
 //
 // 共同问题：缺失键返回值、默认值还是异常；读取是否插入；如何原子地查询并更新。
 // 对照观察：`get` 返回 Option 且不插入；Index 缺失 panic；Entry 组合 lookup 与 mutation。
