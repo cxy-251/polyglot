@@ -7,7 +7,10 @@
 // 对照观察：Go slice 没有 iterator 对象；append 可能更换 backing array，因此必须使用返回值。
 package sequence_mutation_and_invalidation
 
-import "testing"
+import (
+	"slices"
+	"testing"
+)
 
 func TestAppendMayDetachOneSliceFromAnother(t *testing.T) {
 	base := []int{1, 2}
@@ -27,5 +30,19 @@ func TestAppendMayDetachOneSliceFromAnother(t *testing.T) {
 	}
 	if visited != 2 {
 		t.Fatal("slice range 在开始时复制 header，循环次数不随 append 增长")
+	}
+}
+
+func TestFullSliceExpressionControlsStructuralSharing(t *testing.T) {
+	values := []int{3, 1, 2}
+	view := values[:2:2]
+	slices.Sort(view)
+	if !slices.Equal(values, []int{1, 3, 2}) {
+		t.Fatalf("原地 sort 通过 view 修改共享元素: %v", values)
+	}
+	extended := append(view, 9)
+	extended[0] = 7
+	if values[0] != 1 {
+		t.Fatal("capacity 被限制后 append 分配，后续修改不再回写原数组")
 	}
 }

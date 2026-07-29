@@ -1,7 +1,7 @@
 // polyglot-family: async_and_concurrency
 // polyglot-concept: cancellation_timeouts_and_cleanup
 // polyglot-related: languages/go/standard_library/
-// polyglot-related+: 10_goroutines_channels_select_and_context/test_078_context_deadlines_and_values_test.go
+// polyglot-related+: 10_goroutines_channels_select_and_context/test_077_select_and_explicit_cancellation_test.go
 //
 // 共同问题：timeout 资源由谁释放；子任务能否与父取消隔离；取消原因如何保留。
 // 对照观察：创建 deadline 的调用方应调用 cancel；WithoutCancel 可屏蔽父取消，但也移除 Done/deadline。

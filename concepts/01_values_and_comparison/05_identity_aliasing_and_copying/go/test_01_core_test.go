@@ -1,7 +1,7 @@
 // polyglot-family: values_and_comparison
 // polyglot-concept: identity_aliasing_and_copying
 // polyglot-related: languages/go/language/
-// polyglot-related+: 05_arrays_slices_maps_strings_and_runes/test_034_slice_header_length_and_capacity_test.go
+// polyglot-related+: 05_arrays_slices_maps_strings_and_runes/test_033_array_value_semantics_test.go
 //
 // 共同问题：赋值复制什么；哪些值仍共享底层状态；身份如何显式观察。
 // 对照观察：Go 一切赋值都复制值，但 pointer、slice、map 等复制后的描述符仍可指向共享状态。

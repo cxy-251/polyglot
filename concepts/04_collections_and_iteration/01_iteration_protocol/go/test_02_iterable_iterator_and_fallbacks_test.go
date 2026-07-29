@@ -1,6 +1,6 @@
 // polyglot-family: collections_and_iteration
 // polyglot-concept: iteration_protocol
-// polyglot-related: languages/go/language/07_generics/test_056_generic_algorithms_and_containers_test.go
+// polyglot-related: languages/go/language/07_generics/test_054_generic_method_boundaries_test.go
 //
 // 共同问题：用户类型如何参与迭代；是否区分 iterable 与 iterator；提前停止如何反馈给生产者。
 // 对照观察：Go 没有隐式迭代方法 fallback；range-over-function 使用 iter.Seq 的 yield bool 协议。

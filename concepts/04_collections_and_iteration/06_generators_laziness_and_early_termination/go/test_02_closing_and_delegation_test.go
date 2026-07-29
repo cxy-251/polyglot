@@ -1,6 +1,6 @@
 // polyglot-family: collections_and_iteration
 // polyglot-concept: generators_laziness_and_early_termination
-// polyglot-related: languages/go/language/07_generics/test_056_generic_algorithms_and_containers_test.go
+// polyglot-related: languages/go/language/07_generics/test_054_generic_method_boundaries_test.go
 //
 // 共同问题：拉取式迭代怎样停止后台生产；一个生成器如何组合或委托给另一个。
 // 对照观察：iter.Pull 返回显式 stop，调用方应 defer；组合 Seq 需逐项转发 yield 的停止信号。

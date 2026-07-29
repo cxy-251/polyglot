@@ -1,7 +1,7 @@
 // polyglot-family: async_and_concurrency
 // polyglot-concept: threads_workers_and_process_isolation
 // polyglot-related: languages/go/standard_library/
-// polyglot-related+: 11_sync_atomic_and_memory_model/test_088_happens_before_and_publication_test.go
+// polyglot-related+: 11_sync_atomic_and_memory_model/test_087_typed_atomics_and_compare_swap_test.go
 //
 // 共同问题：并发任务映射到线程还是进程；共享哪些内存；隔离边界由谁提供。
 // 对照观察：goroutine 由 runtime 多路复用到 OS threads，并共享 Go heap；它不是 worker/process 隔离。

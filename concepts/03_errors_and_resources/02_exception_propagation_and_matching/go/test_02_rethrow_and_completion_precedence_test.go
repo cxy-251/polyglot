@@ -1,7 +1,7 @@
 // polyglot-family: errors_and_resources
 // polyglot-concept: exception_propagation_and_matching
 // polyglot-related: languages/go/language/
-// polyglot-related+: 08_errors_panic_recover_and_cleanup/test_064_return_panic_and_defer_interaction_test.go
+// polyglot-related+: 08_errors_panic_recover_and_cleanup/test_060_panic_and_recover_position_test.go
 //
 // 共同问题：重新传播是否保留原失败；清理期间再次失败时哪个 completion 胜出。
 // 对照观察：recover 后 `panic(value)` 可重抛；panic 展开期间新的 panic 会替代正在传播的值。

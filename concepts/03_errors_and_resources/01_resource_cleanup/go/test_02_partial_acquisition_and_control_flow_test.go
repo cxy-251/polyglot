@@ -1,7 +1,7 @@
 // polyglot-family: errors_and_resources
 // polyglot-concept: resource_cleanup
 // polyglot-related: languages/go/language/
-// polyglot-related+: 08_errors_panic_recover_and_cleanup/test_062_partial_acquisition_test.go
+// polyglot-related+: 08_errors_panic_recover_and_cleanup/test_061_deferred_cleanup_order_test.go
 //
 // 共同问题：部分取得资源后失败怎样收尾；清理错误与原始错误冲突时保留什么。
 // 对照观察：Go 只 defer 已成功取得的资源；清理失败不会自动聚合，必须显式组合 error。

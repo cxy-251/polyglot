@@ -28,3 +28,14 @@ func TestStandardFormattingAndOrderingAreLocaleIndependent(t *testing.T) {
 		t.Fatalf("string 顺序是 byte 字典序，不是语言学 collation: %v", names)
 	}
 }
+
+func TestZoneAvailabilityIsAnExplicitRuntimeCapability(t *testing.T) {
+	if _, err := time.LoadLocation("Invalid/Polyglot_Zone"); err == nil {
+		t.Fatal("未知 zone name 返回 error，而非静默回退到本地时区")
+	}
+	fixed := time.FixedZone("explicit", 90*60)
+	_, offset := time.Date(2026, 1, 1, 0, 0, 0, 0, fixed).Zone()
+	if offset != 90*60 {
+		t.Fatal("FixedZone 不依赖外部 tzdata，但只表达固定 offset")
+	}
+}

@@ -1,7 +1,7 @@
 // polyglot-family: collections_and_iteration
 // polyglot-concept: indexing_slicing_and_bounds
 // polyglot-related: languages/go/language/
-// polyglot-related+: 05_arrays_slices_maps_strings_and_runes/test_036_copy_full_slice_and_overlap_test.go
+// polyglot-related+: 05_arrays_slices_maps_strings_and_runes/test_035_append_reallocation_test.go
 //
 // 共同问题：索引单位是什么；slice 边界是否包含终点；越界与负索引如何失败。
 // 对照观察：Go slice 使用半开区间并在运行时检查；string 索引返回 byte，负索引没有特殊含义。

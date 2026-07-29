@@ -1,7 +1,7 @@
 // polyglot-family: objects_and_dispatch
 // polyglot-concept: member_attribute_lookup_and_properties
 // polyglot-related: languages/go/language/
-// polyglot-related+: 06_structs_methods_embedding_and_interfaces/test_042_embedding_and_field_promotion_test.go
+// polyglot-related+: 06_structs_methods_embedding_and_interfaces/test_041_struct_values_and_layout_boundary_test.go
 //
 // 共同问题：成员名称如何解析；读取或赋值能否触发用户代码；缺失成员怎样失败。
 // 对照观察：Go selector 在编译期解析字段与 method，embedding 可提升名称；语言没有动态 property hook。

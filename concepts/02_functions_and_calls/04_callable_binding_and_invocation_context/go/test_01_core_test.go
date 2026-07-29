@@ -1,7 +1,7 @@
 // polyglot-family: functions_and_calls
 // polyglot-concept: callable_binding_and_invocation_context
 // polyglot-related: languages/go/language/
-// polyglot-related+: 04_functions_closures_defer_and_calls/test_030_method_values_and_expressions_test.go
+// polyglot-related+: 04_functions_closures_defer_and_calls/test_028_function_values_and_higher_order_calls_test.go
 //
 // 共同问题：可调用值是否绑定接收者；提取方法后调用上下文如何决定。
 // 对照观察：Go method value 绑定 receiver，method expression 则把 receiver 变成显式首参。

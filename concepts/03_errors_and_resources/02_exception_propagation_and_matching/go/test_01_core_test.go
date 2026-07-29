@@ -1,7 +1,7 @@
 // polyglot-family: errors_and_resources
 // polyglot-concept: exception_propagation_and_matching
 // polyglot-related: languages/go/language/
-// polyglot-related+: 08_errors_panic_recover_and_cleanup/test_058_typed_errors_and_errors_as_test.go
+// polyglot-related+: 08_errors_panic_recover_and_cleanup/test_057_error_values_and_sentinels_test.go
 //
 // 共同问题：失败如何跨调用传播；调用方按身份还是类型匹配；未处理失败如何终止。
 // 对照观察：Go 的预期失败是显式 error 值，不存在独立 exception hierarchy；panic 用于异常控制流。

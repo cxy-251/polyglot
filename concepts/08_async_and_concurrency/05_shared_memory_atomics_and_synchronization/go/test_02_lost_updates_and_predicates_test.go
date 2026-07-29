@@ -1,7 +1,7 @@
 // polyglot-family: async_and_concurrency
 // polyglot-concept: shared_memory_atomics_and_synchronization
 // polyglot-related: languages/go/standard_library/
-// polyglot-related+: 11_sync_atomic_and_memory_model/test_085_cond_and_predicate_loop_test.go
+// polyglot-related+: 11_sync_atomic_and_memory_model/test_083_waitgroup_and_go_test.go
 //
 // 共同问题：read-modify-write 怎样丢更新；条件通知能否代替状态 predicate。
 // 对照观察：Go mutex 必须覆盖整个复合操作；Cond 的 Signal 只是提示，等待方始终循环检查 predicate。

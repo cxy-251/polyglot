@@ -1,6 +1,6 @@
 // polyglot-family: collections_and_iteration
 // polyglot-concept: generators_laziness_and_early_termination
-// polyglot-related: languages/go/language/07_generics/test_056_generic_algorithms_and_containers_test.go
+// polyglot-related: languages/go/language/07_generics/test_054_generic_method_boundaries_test.go
 //
 // 共同问题：序列何时开始生产；提前停止是否通知生产者；状态能否重复迭代。
 // 对照观察：iter.Seq 是接受 yield callback 的函数；调用或 range 时才执行，yield false 表示停止。

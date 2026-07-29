@@ -1,7 +1,7 @@
 // polyglot-family: collections_and_iteration
 // polyglot-concept: mapping_lookup_and_missing_keys
 // polyglot-related: languages/go/language/
-// polyglot-related+: 05_arrays_slices_maps_strings_and_runes/test_038_map_lookup_delete_and_clear_test.go
+// polyglot-related+: 05_arrays_slices_maps_strings_and_runes/test_037_nil_empty_slices_and_clear_test.go
 //
 // 共同问题：查找缺失键返回什么；默认值是否写回；键类型受到什么限制。
 // 对照观察：Go 单值查找返回元素零值，comma-ok 才区分缺失；查找本身不插入键。

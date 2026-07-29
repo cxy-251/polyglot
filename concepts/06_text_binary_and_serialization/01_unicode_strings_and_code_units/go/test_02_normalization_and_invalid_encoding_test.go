@@ -1,7 +1,7 @@
 // polyglot-family: text_binary_and_serialization
 // polyglot-concept: unicode_strings_and_code_units
 // polyglot-related: languages/go/standard_library/13_text_formatting_parsing_and_regex/
-// polyglot-related+: test_102_unicode_categories_and_normalization_boundary_test.go
+// polyglot-related+: test_101_strings_bytes_and_builders_test.go
 //
 // 共同问题：规范等价字符串是否自动相等；无效编码怎样检测与迭代。
 // 对照观察：Go 不自动 normalization；string 可保存无效 UTF-8，range 将坏序列解码为 RuneError。
