@@ -1,22 +1,20 @@
 {
-  "schema_version": 9,
+  "schema_version": 10,
   "project": "polyglot-concepts-by-example",
   "mission": "Compare how languages solve shared problems through readable, executable tests.",
-  "architecture": "dual-axis",
-  "phase": "nine-language-curriculum-reviewed",
-  "current_milestone": null,
+  "architecture": "language-concept-harness",
+  "phase": "nine-language-semantic-audit",
+  "current_milestone": "ruby",
   "active_language_count": 9,
-  "concept_curriculum_complete": true,
-  "content_review_complete": true,
-  "reviewed_topic_count": 49,
-  "reviewed_language_implementation_count": 441,
+  "concept_curriculum_complete": false,
+  "content_review_complete": false,
   "continuation_source": "NEXT.md",
   "source_lock": "sources.lock",
   "legacy_tip": "662e0d1",
   "layers": {
     "language_courses": {
       "root": "languages",
-      "purpose": "complete vertical learning paths",
+      "purpose": "language semantics, standard libraries, and real development workflows",
       "validate": [
         "./tools/run.sh python -q --timeout=30 -W error",
         "./tools/run.sh cpp",
@@ -28,7 +26,7 @@
         "./tools/run.sh lua",
         "./tools/run.sh ruby"
       ],
-      "verified_results": {
+      "pre_audit_execution_snapshot": {
         "python": {
           "passed": 5025,
           "skipped": 39
@@ -81,9 +79,9 @@
       "family_pattern": "NN_family",
       "topic_pattern": "NN_topic",
       "test_pattern": "test_NN_name",
-      "family_count": 10,
-      "topic_count": 49,
-      "multi_file_topic_count": 24,
+      "pre_audit_family_count": 10,
+      "pre_audit_topic_count": 49,
+      "pre_audit_multi_file_topic_count": 24,
       "fixed_topic_total": false,
       "precreate_empty_families": false,
       "allow_multiple_test_files_per_language": true,
@@ -91,7 +89,7 @@
       "validate_family": "./tools/run.sh family NN_family",
       "validate_all": "./tools/run.sh concepts",
       "list": "./tools/run.sh list-concepts",
-      "verified_results": {
+      "pre_audit_execution_snapshot": {
         "python": {
           "test_files": 73,
           "passed": 252
@@ -135,13 +133,19 @@
           "skipped": 0
         }
       }
+    },
+    "harness_and_integration": {
+      "root": "harness",
+      "purpose": "toolchains, runners, bootstrap, version locks, environment isolation, and build integration",
+      "counts_toward_language_curriculum": false,
+      "shared_runner_root": "tools"
     }
   },
   "languages": [
     {
       "id": "python",
       "name": "Python",
-      "status": "verified",
+      "status": "active",
       "course_root": "languages/python",
       "test_framework": "pytest",
       "validate": "./tools/run.sh python -q --timeout=30 -W error"
@@ -149,7 +153,7 @@
     {
       "id": "cpp",
       "name": "C++",
-      "status": "verified",
+      "status": "active",
       "course_root": "languages/cpp",
       "test_framework": "GoogleTest via CMake/CTest",
       "validate": "./tools/run.sh cpp"
@@ -157,7 +161,7 @@
     {
       "id": "nodejs",
       "name": "Node.js",
-      "status": "verified",
+      "status": "active",
       "course_root": "languages/nodejs",
       "test_framework": "node:test",
       "validate": "./tools/run.sh nodejs"
@@ -165,7 +169,7 @@
     {
       "id": "go",
       "name": "Go",
-      "status": "verified",
+      "status": "active",
       "course_root": "languages/go",
       "test_framework": "testing",
       "validate": "./tools/run.sh go"
@@ -173,7 +177,7 @@
     {
       "id": "rust",
       "name": "Rust",
-      "status": "verified",
+      "status": "active",
       "course_root": "languages/rust",
       "test_framework": "libtest via cargo test",
       "validate": "./tools/run.sh rust"
@@ -181,7 +185,7 @@
     {
       "id": "julia",
       "name": "Julia",
-      "status": "verified",
+      "status": "active",
       "course_root": "languages/julia",
       "test_framework": "Test standard library",
       "validate": "./tools/run.sh julia"
@@ -189,7 +193,7 @@
     {
       "id": "r",
       "name": "R",
-      "status": "verified",
+      "status": "active",
       "course_root": "languages/r",
       "test_framework": "base stopifnot() in isolated Rscript processes",
       "validate": "./tools/run.sh r"
@@ -197,7 +201,7 @@
     {
       "id": "lua",
       "name": "Lua",
-      "status": "verified",
+      "status": "active",
       "course_root": "languages/lua",
       "test_framework": "repository-local assertions in isolated Lua processes",
       "validate": "./tools/run.sh lua"
@@ -205,22 +209,26 @@
     {
       "id": "ruby",
       "name": "Ruby",
-      "status": "verified",
+      "status": "active",
       "course_root": "languages/ruby",
       "test_framework": "repository-local assertions in isolated CRuby processes",
       "validate": "./tools/run.sh ruby"
     }
   ],
   "policies": {
-    "complete_courses_stay_in_languages": true,
+    "language_courses_exclude_harness_checks": true,
     "concepts_are_independent_minimal_tests": true,
-    "force_all_active_languages_per_concept": true,
+    "force_all_active_languages_per_concept": false,
+    "minimum_languages_per_concept": 2,
+    "concept_file_counts_may_differ_by_language": true,
+    "concept_file_stems_may_differ_by_language": true,
+    "course_numbers_are_stable_and_unique": true,
+    "course_number_gaps_are_allowed": true,
+    "related_paths_are_structural_links_not_semantic_proof": true,
+    "content_review_requires_file_level_semantic_audit": true,
     "move_course_files_into_concepts": false,
-    "standard_library_paths_preserved": true,
     "new_topics_prefer_existing_families": true,
-    "new_languages_prefer_existing_topics": true,
-    "new_active_languages_require_complete_course": true,
-    "active_languages_cover_all_topics": true,
+    "language_expansion_frozen": true,
     "doctor_defaults_to_active_languages": true,
     "planned_language_checks_are_optional": true,
     "single_current_task": true,

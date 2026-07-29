@@ -42,7 +42,7 @@ check_active_language_state() {
     report_failure "稳定 active language 集合错误: $configured_active"
   fi
 
-  project_active=$(project_language_ids verified)
+  project_active=$(project_language_ids active)
   project_planned=$(project_language_ids planned_paused)
   project_active_count=$(
     python3 -c 'import json; print(json.load(open("project.json"))["active_language_count"])'
@@ -59,6 +59,38 @@ check_active_language_state() {
   fi
 
   printf 'active languages: %s\n' "$configured_active"
+}
+
+check_audit_contract() {
+  if [[ ! -f harness/README.md ]]; then
+    report_failure "缺少 harness 层契约: harness/README.md"
+  fi
+
+  if ! python3 <<'PY'
+import json
+
+with open("project.json", encoding="utf-8") as project_file:
+    project = json.load(project_file)
+
+if project.get("architecture") != "language-concept-harness":
+    raise SystemExit("project.json 未声明 language-concept-harness 三层结构")
+
+if project.get("phase") == "nine-language-semantic-audit":
+    if project.get("content_review_complete") is not False:
+        raise SystemExit("语义审计期间 content_review_complete 必须为 false")
+    if project.get("concept_curriculum_complete") is not False:
+        raise SystemExit("语义审计期间 concept_curriculum_complete 必须为 false")
+    for stale_key in ("reviewed_topic_count", "reviewed_language_implementation_count"):
+        if stale_key in project:
+            raise SystemExit(f"语义审计期间不得保留 {stale_key}")
+
+harness = project.get("layers", {}).get("harness_and_integration", {})
+if harness.get("counts_toward_language_curriculum") is not False:
+    raise SystemExit("harness 不得计入语言课程完成度")
+PY
+  then
+    report_failure "project.json 未满足语义审计与 harness 分层契约"
+  fi
 }
 
 check_test_path() {
@@ -138,6 +170,7 @@ check_language() {
   local filename
   local number
   local number_index
+  local minimum=1000
   local maximum=0
   local count=0
   local -a seen_paths=()
@@ -174,24 +207,16 @@ check_language() {
     fi
 
     count=$((count + 1))
+    if ((number_index < minimum)); then
+      minimum=$number_index
+    fi
     if ((number_index > maximum)); then
       maximum=$number_index
     fi
   done
 
-  local expected
-  for ((expected = 1; expected <= maximum; expected += 1)); do
-    printf -v number '%03d' "$expected"
-    if [[ -z "${seen_paths[$expected]:-}" ]]; then
-      report_failure "$language 缺少连续测试编号 $number"
-    fi
-  done
-
-  if ((count != maximum)); then
-    report_failure "$language 文件数 $count 与最大连续编号 $maximum 不一致"
-  fi
-
-  printf '%s: %d 个测试文件，编号 001–%03d\n' "$language" "$count" "$maximum"
+  printf '%s: %d 个测试文件，编号 %03d–%03d（允许稳定空缺）\n' \
+    "$language" "$count" "$minimum" "$maximum"
 }
 
 check_concept_language() {
@@ -206,8 +231,6 @@ check_concept_language() {
   local filename
   local number
   local number_index
-  local maximum=0
-  local test_count=0
   local related_path
   local related_count
   local marker_count
@@ -254,15 +277,10 @@ check_concept_language() {
     number="${filename#test_}"
     number="${number%%_*}"
     number_index=$((10#$number))
-    test_count=$((test_count + 1))
-
     if [[ -n "${seen_numbers[$number_index]:-}" ]]; then
       report_failure "$language_directory 测试编号 $number 重复"
     else
       seen_numbers[$number_index]="$path"
-    fi
-    if ((number_index > maximum)); then
-      maximum=$number_index
     fi
 
     marker_count=$(
@@ -324,18 +342,6 @@ check_concept_language() {
     fi
   done
 
-  local expected
-  for ((expected = 1; expected <= maximum; expected += 1)); do
-    printf -v number '%02d' "$expected"
-    if [[ -z "${seen_numbers[$expected]:-}" ]]; then
-      report_failure "$language_directory 缺少连续测试编号 $number"
-    fi
-  done
-
-  if ((test_count != maximum)); then
-    report_failure "$language_directory 文件数 $test_count 与最大编号 $maximum 不一致"
-  fi
-
   for child in "$language_directory"/*; do
     if [[ ! -d "$child" ]]; then
       continue
@@ -360,14 +366,12 @@ check_concepts() {
   local family_number
   local family_index
   local family_slug
-  local expected_family_index=1
   local found_family=0
   local topic
   local topic_name
   local topic_number
   local topic_index
   local topic_slug
-  local expected_topic_index
   local topic_count
   local language
   local extension
@@ -375,6 +379,8 @@ check_concepts() {
   local language_count
   local child
   local child_name
+  local -a seen_family_numbers=()
+  local -a seen_topic_numbers=()
 
   for family in concepts/*; do
     if [[ ! -d "$family" ]]; then
@@ -395,14 +401,14 @@ check_concepts() {
     family_index=$((10#$family_number))
     family_slug="${family_name#*_}"
 
-    if ((family_index != expected_family_index)); then
-      printf -v family_number '%02d' "$expected_family_index"
-      report_failure "概念章节编号不连续，期望 $family_number，实际为 $family_name"
-      expected_family_index=$family_index
+    if [[ -n "${seen_family_numbers[$family_index]:-}" ]]; then
+      report_failure \
+        "概念章节编号 $family_number 重复: ${seen_family_numbers[$family_index]} 与 $family_name"
+    else
+      seen_family_numbers[$family_index]="$family_name"
     fi
-    expected_family_index=$((expected_family_index + 1))
 
-    expected_topic_index=1
+    seen_topic_numbers=()
     topic_count=0
     for topic in "$family"/*; do
       if [[ ! -d "$topic" ]]; then
@@ -418,12 +424,12 @@ check_concepts() {
       topic_index=$((10#$topic_number))
       topic_slug="${topic_name#*_}"
 
-      if ((topic_index != expected_topic_index)); then
-        printf -v topic_number '%02d' "$expected_topic_index"
-        report_failure "$family_name 主题编号不连续，期望 $topic_number，实际为 $topic_name"
-        expected_topic_index=$topic_index
+      if [[ -n "${seen_topic_numbers[$topic_index]:-}" ]]; then
+        report_failure \
+          "$family_name 主题编号 $topic_number 重复: ${seen_topic_numbers[$topic_index]} 与 $topic_name"
+      else
+        seen_topic_numbers[$topic_index]="$topic_name"
       fi
-      expected_topic_index=$((expected_topic_index + 1))
 
       language_count=0
       for language in "${ACTIVE_LANGUAGES[@]}"; do
@@ -459,7 +465,6 @@ check_concepts() {
 
         language_directory="$topic/$language"
         if [[ ! -d "$language_directory" ]]; then
-          report_failure "$topic 缺少 active language: $language"
           continue
         fi
 
@@ -472,62 +477,8 @@ check_concepts() {
           "$language_directory"
       done
 
-      if ((language_count != ${#ACTIVE_LANGUAGES[@]})); then
-        report_failure "$topic 需要 ${#ACTIVE_LANGUAGES[@]} 门 active language，实际为 $language_count"
-      fi
-
-      local python_stems
-      local go_stems
-      local rust_stems
-      local julia_stems
-      local r_stems
-      local lua_stems
-      local ruby_stems
-      python_stems=$(
-        find "$topic/python" -maxdepth 1 -type f -name 'test_[0-9][0-9]_*.py' \
-          -exec basename {} .py \; | sort
-      )
-      go_stems=$(
-        find "$topic/go" -maxdepth 1 -type f -name 'test_[0-9][0-9]_*_test.go' \
-          -exec basename {} _test.go \; | sort
-      )
-      rust_stems=$(
-        find "$topic/rust" -maxdepth 1 -type f -name 'test_[0-9][0-9]_*.rs' \
-          -exec basename {} .rs \; | sort
-      )
-      julia_stems=$(
-        find "$topic/julia" -maxdepth 1 -type f -name 'test_[0-9][0-9]_*.jl' \
-          -exec basename {} .jl \; | sort
-      )
-      r_stems=$(
-        find "$topic/r" -maxdepth 1 -type f -name 'test_[0-9][0-9]_*.R' \
-          -exec basename {} .R \; | sort
-      )
-      lua_stems=$(
-        find "$topic/lua" -maxdepth 1 -type f -name 'test_[0-9][0-9]_*.lua' \
-          -exec basename {} .lua \; | sort
-      )
-      ruby_stems=$(
-        find "$topic/ruby" -maxdepth 1 -type f -name 'test_[0-9][0-9]_*.rb' \
-          -exec basename {} .rb \; | sort
-      )
-      if [[ "$python_stems" != "$go_stems" ]]; then
-        report_failure "$topic 的 Go 子问题文件没有镜像既有测试结构"
-      fi
-      if [[ "$python_stems" != "$rust_stems" ]]; then
-        report_failure "$topic 的 Rust 子问题文件没有镜像既有测试结构"
-      fi
-      if [[ "$python_stems" != "$julia_stems" ]]; then
-        report_failure "$topic 的 Julia 子问题文件没有镜像既有测试结构"
-      fi
-      if [[ "$python_stems" != "$r_stems" ]]; then
-        report_failure "$topic 的 R 子问题文件没有镜像既有测试结构"
-      fi
-      if [[ "$python_stems" != "$lua_stems" ]]; then
-        report_failure "$topic 的 Lua 子问题文件没有镜像既有测试结构"
-      fi
-      if [[ "$python_stems" != "$ruby_stems" ]]; then
-        report_failure "$topic 的 Ruby 子问题文件没有镜像既有测试结构"
+      if ((language_count < 2)); then
+        report_failure "$topic 至少需要两门 active language 形成真实对照，实际为 $language_count"
       fi
 
       for child in "$topic"/*; do
@@ -554,41 +505,6 @@ check_concepts() {
     report_failure "没有发现 NN_family 格式的概念章节"
   fi
 
-  local total_topic_count
-  local julia_test_count
-  local r_test_count
-  local lua_test_count
-  local ruby_test_count
-  total_topic_count=$(
-    find concepts -mindepth 2 -maxdepth 2 -type d -name '[0-9][0-9]_*' -print | wc -l
-  )
-  julia_test_count=$(
-    find concepts -type f -path '*/julia/test_[0-9][0-9]_*.jl' -print | wc -l
-  )
-  r_test_count=$(
-    find concepts -type f -path '*/r/test_[0-9][0-9]_*.R' -print | wc -l
-  )
-  lua_test_count=$(
-    find concepts -type f -path '*/lua/test_[0-9][0-9]_*.lua' -print | wc -l
-  )
-  ruby_test_count=$(
-    find concepts -type f -path '*/ruby/test_[0-9][0-9]_*.rb' -print | wc -l
-  )
-  if ((total_topic_count != 49)); then
-    report_failure "横向层需要 49 个 topic，实际为 $total_topic_count"
-  fi
-  if ((julia_test_count != 73)); then
-    report_failure "Julia 横向层需要 73 个测试入口，实际为 $julia_test_count"
-  fi
-  if ((r_test_count != 73)); then
-    report_failure "R 横向层需要 73 个测试入口，实际为 $r_test_count"
-  fi
-  if ((lua_test_count != 73)); then
-    report_failure "Lua 横向层需要 73 个测试入口，实际为 $lua_test_count"
-  fi
-  if ((ruby_test_count != 73)); then
-    report_failure "Ruby 横向层需要 73 个测试入口，实际为 $ruby_test_count"
-  fi
 }
 
 check_go_workspace() {
@@ -652,9 +568,6 @@ check_rust_workspaces() {
   local domain_name
   local domain_number
   local domain_index
-  local domain_count=0
-  local expected_domain
-  local rust_test_count
   local -a seen_domains=()
   for required_file in \
     Cargo.toml \
@@ -689,7 +602,6 @@ check_rust_workspaces() {
     domain_name="${domain##*/}"
     domain_number="${domain_name%%_*}"
     domain_index=$((10#$domain_number))
-    domain_count=$((domain_count + 1))
     if [[ -n "${seen_domains[$domain_index]:-}" ]]; then
       report_failure "Rust 问题域编号 $domain_number 重复: ${seen_domains[$domain_index]} 与 $domain"
     else
@@ -706,22 +618,6 @@ check_rust_workspaces() {
       -name '[0-9][0-9]_*' \
       -print0 | sort -z
   )
-  if ((domain_count != 16)); then
-    report_failure "Rust 纵向课程需要 16 个问题域，实际为 $domain_count"
-  fi
-  for ((expected_domain = 1; expected_domain <= 16; expected_domain += 1)); do
-    if [[ -z "${seen_domains[$expected_domain]:-}" ]]; then
-      printf -v domain_number '%02d' "$expected_domain"
-      report_failure "Rust 纵向课程缺少问题域 $domain_number"
-    fi
-  done
-  rust_test_count=$(
-    find languages/rust/tests -type f -name 'test_[0-9][0-9][0-9]_*.rs' -print | wc -l
-  )
-  if ((rust_test_count < 120)); then
-    report_failure "Rust 纵向课程至少需要 120 个测试文件，实际为 $rust_test_count"
-  fi
-
   if ! metadata=$(cargo metadata --manifest-path Cargo.toml --no-deps --format-version 1); then
     report_failure "根 Cargo.toml 无法被 Cargo 解析"
   elif [[ "$metadata" != *'"name":"polyglot-rust-course"'* ]]; then
@@ -773,9 +669,6 @@ check_julia_projects() {
   local domain_name
   local domain_number
   local domain_index
-  local domain_count=0
-  local expected_domain
-  local julia_test_count
   local -a seen_domains=()
 
   for required_file in \
@@ -826,7 +719,6 @@ check_julia_projects() {
     domain_name="${domain##*/}"
     domain_number="${domain_name%%_*}"
     domain_index=$((10#$domain_number))
-    domain_count=$((domain_count + 1))
     if [[ -n "${seen_domains[$domain_index]:-}" ]]; then
       report_failure "Julia 问题域编号 $domain_number 重复: ${seen_domains[$domain_index]} 与 $domain"
     else
@@ -843,22 +735,6 @@ check_julia_projects() {
       -name '[0-9][0-9]_*' \
       -print0 | sort -z
   )
-  if ((domain_count != 16)); then
-    report_failure "Julia 纵向课程需要 16 个问题域，实际为 $domain_count"
-  fi
-  for ((expected_domain = 1; expected_domain <= 16; expected_domain += 1)); do
-    if [[ -z "${seen_domains[$expected_domain]:-}" ]]; then
-      printf -v domain_number '%02d' "$expected_domain"
-      report_failure "Julia 纵向课程缺少问题域 $domain_number"
-    fi
-  done
-
-  julia_test_count=$(
-    find languages/julia -type f -name 'test_[0-9][0-9][0-9]_*.jl' -print | wc -l
-  )
-  if ((julia_test_count != 128)); then
-    report_failure "Julia 纵向课程需要 128 个测试文件，实际为 $julia_test_count"
-  fi
 }
 
 check_r_projects() {
@@ -868,9 +744,6 @@ check_r_projects() {
   local domain_name
   local domain_number
   local domain_index
-  local domain_count=0
-  local expected_domain
-  local r_test_count
   local state_probe
   local state_output
   local -a seen_domains=()
@@ -923,7 +796,6 @@ check_r_projects() {
     domain_name="${domain##*/}"
     domain_number="${domain_name%%_*}"
     domain_index=$((10#$domain_number))
-    domain_count=$((domain_count + 1))
     if [[ -n "${seen_domains[$domain_index]:-}" ]]; then
       report_failure "R 问题域编号 $domain_number 重复: ${seen_domains[$domain_index]} 与 $domain"
     else
@@ -940,23 +812,6 @@ check_r_projects() {
       -name '[0-9][0-9]_*' \
       -print0 | sort -z
   )
-  if ((domain_count != 16)); then
-    report_failure "R 纵向课程需要 16 个问题域，实际为 $domain_count"
-  fi
-  for ((expected_domain = 1; expected_domain <= 16; expected_domain += 1)); do
-    if [[ -z "${seen_domains[$expected_domain]:-}" ]]; then
-      printf -v domain_number '%02d' "$expected_domain"
-      report_failure "R 纵向课程缺少问题域 $domain_number"
-    fi
-  done
-
-  r_test_count=$(
-    find languages/r -type f -name 'test_[0-9][0-9][0-9]_*.R' -print | wc -l
-  )
-  if ((r_test_count != 128)); then
-    report_failure "R 纵向课程需要 128 个测试文件，实际为 $r_test_count"
-  fi
-
   for required_file in R_LIBS_USER R_USER TMPDIR R_ENVIRON_USER R_PROFILE_USER \
     Rscript --vanilla; do
     if ! grep -Fq -- "$required_file" tools/run-in-container.sh; then
@@ -995,10 +850,6 @@ check_lua_projects() {
   local domain_name
   local domain_number
   local domain_index
-  local domain_count=0
-  local expected_domain
-  local lua_test_count
-  local cover_count
   local build_root
   local c_case
   local -a seen_domains=()
@@ -1055,7 +906,6 @@ check_lua_projects() {
     domain_name="${domain##*/}"
     domain_number="${domain_name%%_*}"
     domain_index=$((10#$domain_number))
-    domain_count=$((domain_count + 1))
     if [[ -n "${seen_domains[$domain_index]:-}" ]]; then
       report_failure "Lua 问题域编号 $domain_number 重复: ${seen_domains[$domain_index]} 与 $domain"
     else
@@ -1072,33 +922,6 @@ check_lua_projects() {
       -name '[0-9][0-9]_*' \
       -print0 | sort -z
   )
-  if ((domain_count != 16)); then
-    report_failure "Lua 纵向课程需要 16 个问题域，实际为 $domain_count"
-  fi
-  for ((expected_domain = 1; expected_domain <= 16; expected_domain += 1)); do
-    if [[ -z "${seen_domains[$expected_domain]:-}" ]]; then
-      printf -v domain_number '%02d' "$expected_domain"
-      report_failure "Lua 纵向课程缺少问题域 $domain_number"
-    fi
-  done
-
-  lua_test_count=$(
-    find languages/lua -type f -name 'test_[0-9][0-9][0-9]_*.lua' -print | wc -l
-  )
-  if ((lua_test_count != 128)); then
-    report_failure "Lua 纵向课程需要 128 个测试文件，实际为 $lua_test_count"
-  fi
-  cover_count=$(
-    grep -h 'polyglot-covers:' \
-      languages/lua/{language,standard_library,tooling_and_runtime}/*/test_*.lua |
-      sed 's/^.*polyglot-covers:[[:space:]]*//' |
-      sort -u |
-      wc -l
-  )
-  if ((cover_count != 128)); then
-    report_failure "Lua 纵向课程需要 128 个唯一 polyglot-covers，实际为 $cover_count"
-  fi
-
   for required_file in \
     'function assertions.equal' \
     'function assertions.same' \
@@ -1181,10 +1004,6 @@ check_ruby_projects() {
   local domain_name
   local domain_number
   local domain_index
-  local domain_count=0
-  local expected_domain
-  local ruby_test_count
-  local cover_count
   local build_root
   local -a seen_domains=()
 
@@ -1238,7 +1057,6 @@ check_ruby_projects() {
     domain_name="${domain##*/}"
     domain_number="${domain_name%%_*}"
     domain_index=$((10#$domain_number))
-    domain_count=$((domain_count + 1))
     if [[ -n "${seen_domains[$domain_index]:-}" ]]; then
       report_failure "Ruby 问题域编号 $domain_number 重复: ${seen_domains[$domain_index]} 与 $domain"
     else
@@ -1255,33 +1073,6 @@ check_ruby_projects() {
       -name '[0-9][0-9]_*' \
       -print0 | sort -z
   )
-  if ((domain_count != 16)); then
-    report_failure "Ruby 纵向课程需要 16 个问题域，实际为 $domain_count"
-  fi
-  for ((expected_domain = 1; expected_domain <= 16; expected_domain += 1)); do
-    if [[ -z "${seen_domains[$expected_domain]:-}" ]]; then
-      printf -v domain_number '%02d' "$expected_domain"
-      report_failure "Ruby 纵向课程缺少问题域 $domain_number"
-    fi
-  done
-
-  ruby_test_count=$(
-    find languages/ruby -type f -name 'test_[0-9][0-9][0-9]_*.rb' -print | wc -l
-  )
-  if ((ruby_test_count != 128)); then
-    report_failure "Ruby 纵向课程需要 128 个测试文件，实际为 $ruby_test_count"
-  fi
-  cover_count=$(
-    grep -h 'polyglot-covers:' \
-      languages/ruby/{language,standard_library,tooling_and_runtime}/*/test_*.rb |
-      sed 's/^.*polyglot-covers:[[:space:]]*//' |
-      sort -u |
-      wc -l
-  )
-  if ((cover_count != 128)); then
-    report_failure "Ruby 纵向课程需要 128 个唯一 polyglot-covers，实际为 $cover_count"
-  fi
-
   for required_file in \
     RUBYOPT RUBYLIB GEM_HOME GEM_PATH GEMRC BUNDLE_GEMFILE BUNDLE_PATH \
     BUNDLE_APP_CONFIG HOME TMPDIR POLYGLOT_RUBY_TEST_TMP POLYGLOT_RUBY_EXTENSION_DIR; do
@@ -1375,6 +1166,7 @@ check_unicode_line_lengths() {
 }
 
 check_active_language_state
+check_audit_contract
 for active_language in "${ACTIVE_LANGUAGES[@]}"; do
   case "$active_language" in
     python)
@@ -1423,5 +1215,6 @@ if ((failure_count > 0)); then
   exit 1
 fi
 
-printf '语言主线、概念章节与主题、关联标记、连续编号和 Unicode %d 字符行宽检查通过。\n' \
+printf '语言与概念路径、唯一编号、结构标记、引用完整性和 Unicode %d 字符行宽检查通过。\n' \
   "$MAX_LINE_LENGTH"
+printf '注意: 结构门禁不判断课程完整性、断言语义或 polyglot-related 的教学相关性。\n'
