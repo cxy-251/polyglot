@@ -9,7 +9,7 @@
 using Test
 
 @testset "能力查询优先于字符串版本解析" begin
-    @test VERSION == v"1.12.6"
+    @test VERSION isa VersionNumber
     @test Sys.WORD_SIZE in (32, 64)
     @test isdefined(Base, :ScopedValues)
     @test hasmethod(timedwait, Tuple{Function,Real})

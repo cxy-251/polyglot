@@ -13,8 +13,9 @@ using Base.Threads
     parent_pid = getpid()
     thread_result = fetch(Threads.@spawn (getpid(), Threads.threadid()))
     @test thread_result[1] == parent_pid
-    command = `$(Base.julia_cmd()) --startup-file=no --history-file=no -e "print(getpid())"`
+    command = `$(Base.julia_cmd()) --startup-file=no --history-file=no --project=@stdlib
+        --depwarn=error --check-bounds=yes --threads=1 --color=no -e "print(getpid())"`
     child_pid = parse(Int, read(command, String))
     @test child_pid != parent_pid
-    @test thread_result[2] in 1:Threads.nthreads()
+    @test 1 <= thread_result[2] <= Threads.maxthreadid()
 end

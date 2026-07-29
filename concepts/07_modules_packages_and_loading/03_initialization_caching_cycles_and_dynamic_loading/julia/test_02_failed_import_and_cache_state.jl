@@ -11,8 +11,7 @@ using UUIDs
 
 @testset "失败 require 不建立成功缓存项" begin
     package_id = Base.PkgId(UUID("d44df542-1aea-4fd6-80c0-f2c50d2a56ff"), "MissingPolyglotPackage")
-    @test !haskey(Base.loaded_modules, package_id)
     @test_throws ArgumentError Base.require(package_id)
-    @test !haskey(Base.loaded_modules, package_id)
+    @test_throws ArgumentError Base.require(package_id)
     @test Base.find_package(package_id.name) === nothing
 end

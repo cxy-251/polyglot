@@ -16,4 +16,10 @@ find_even(values) = findfirst(iseven, values)
     @test Union{Nothing,Int} === Union{Int,Nothing}
     @test something(nothing, 7) == 7
     @test_throws ArgumentError something(nothing)
+    @test_throws TypeError if 0
+        :unreachable
+    end
+    @test_throws TypeError if Int[]
+        :unreachable
+    end
 end

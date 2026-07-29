@@ -8,6 +8,7 @@
 
 using Test
 using Base.Threads
+using Serialization
 
 @testset "Channel 发布共享对象而文本传输只保留值" begin
     source = [1, 2]
@@ -16,7 +17,19 @@ using Base.Threads
     received = take!(channel)
     wait(producer)
     @test received === source
-    encoded = repr(source)
-    @test encoded == "[1, 2]"
-    @test encoded !== source
+    encoded = IOBuffer()
+    serialize(encoded, source)
+    script = """
+    using Serialization
+    values = deserialize(stdin)
+    push!(values, 3)
+    serialize(stdout, values)
+    """
+    command = `$(Base.julia_cmd()) --startup-file=no --history-file=no --project=@stdlib
+        --depwarn=error --check-bounds=yes --threads=1 --color=no -e $script`
+    transferred = read(pipeline(command; stdin = IOBuffer(take!(encoded))))
+    restored = deserialize(IOBuffer(transferred))
+    @test restored == [1, 2, 3]
+    @test source == [1, 2]
+    @test restored !== source
 end

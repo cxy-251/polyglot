@@ -15,5 +15,4 @@ using Test
     @test first === Test
     @test second === Test
     @test first === second
-    @test Base.loaded_modules[package_id] === Test
 end

@@ -9,19 +9,19 @@
 using Test
 
 @testset "do block 覆盖正常与异常退出" begin
-    path, stream = mktemp()
-    close(stream)
-    normal_stream = Ref{IO}()
-    open(path, "w") do io
-        normal_stream[] = io
-        write(io, "ok")
+    mktempdir(prefix = "polyglot-julia-") do directory
+        path = joinpath(directory, "value.txt")
+        normal_stream = Ref{IO}()
+        open(path, "w") do io
+            normal_stream[] = io
+            write(io, "ok")
+        end
+        @test !isopen(normal_stream[])
+        failing_stream = Ref{IO}()
+        @test_throws ErrorException open(path, "a") do io
+            failing_stream[] = io
+            error("stop")
+        end
+        @test !isopen(failing_stream[])
     end
-    @test !isopen(normal_stream[])
-    failing_stream = Ref{IO}()
-    @test_throws ErrorException open(path, "a") do io
-        failing_stream[] = io
-        error("stop")
-    end
-    @test !isopen(failing_stream[])
-    rm(path)
 end

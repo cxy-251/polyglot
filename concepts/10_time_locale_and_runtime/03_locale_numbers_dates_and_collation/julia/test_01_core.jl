@@ -4,7 +4,7 @@
 # polyglot-related+: test_051_interpolation_show_and_printf_formatting.jl
 #
 # 共同问题：数字、日期格式和文本排序是否隐式读取进程 locale。
-# 对照观察：Julia Printf/parse 使用程序指定格式，默认字符串排序不是 locale collation。
+# 对照观察：Printf/parse 使用程序指定格式，默认排序不是 locale collation；标准库没有 ICU Collator。
 
 using Test
 using Dates
@@ -15,4 +15,5 @@ using Printf
     @test parse(Float64, "1.5") == 1.5
     @test Date("2024-07-28", dateformat"yyyy-mm-dd") == Date(2024, 7, 28)
     @test sort(["ä", "z"]) == ["z", "ä"]
+    @test !isdefined(Base, :Collator)
 end
