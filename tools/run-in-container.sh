@@ -11,6 +11,7 @@ Usage:
   ./tools/run-in-container.sh doctor [planned]
   ./tools/run-in-container.sh python [pytest arguments...]
   ./tools/run-in-container.sh cpp [ctest arguments...]
+  ./tools/run-in-container.sh cpp-harness [ctest arguments...]
   ./tools/run-in-container.sh nodejs [node --test arguments or test files...]
   ./tools/run-in-container.sh nodejs-harness [node --test arguments...]
   ./tools/run-in-container.sh nodejs-concepts [node --test arguments...]
@@ -255,7 +256,7 @@ run_cpp_layer() {
   fi
 
   cmake \
-    -S languages/cpp \
+    -S harness/cpp \
     -B "$build_dir" \
     -DCMAKE_BUILD_TYPE=Debug \
     -DPOLYGLOT_TEST_LAYER="$layer" \
@@ -270,8 +271,13 @@ run_cpp_layer() {
 }
 
 run_cpp() {
-  local build_dir="${POLYGLOT_CPP_BUILD_DIR:-/tmp/polyglot-cpp-build}"
+  local build_dir="${POLYGLOT_CPP_BUILD_DIR:-/tmp/polyglot-cpp-course-build}"
   run_cpp_layer course "$build_dir" '^polyglot-language$' "$@"
+}
+
+run_cpp_harness() {
+  local build_dir="${POLYGLOT_CPP_HARNESS_BUILD_DIR:-/tmp/polyglot-cpp-harness-build}"
+  run_cpp_layer harness "$build_dir" '^polyglot-harness$' "$@"
 }
 
 check_nodejs_version() {
@@ -1144,7 +1150,7 @@ run_concept_cpp() {
   local concept_name="$1"
   if [[ -d "concepts/$concept_name/cpp" ]]; then
     printf '\n== %s / C++ ==\n' "$concept_name"
-    local build_dir="${POLYGLOT_CPP_CONCEPT_BUILD_DIR:-/tmp/polyglot-cpp-concepts-build}"
+    local build_dir="${POLYGLOT_CPP_CONCEPT_BUILD_DIR:-/tmp/polyglot-cpp-concepts-build-v2}"
     local concept_target="${concept_name//\//_}"
     run_cpp_layer concepts "$build_dir" '^polyglot-concept$' \
       -R "^concept_${concept_target}_"
@@ -1294,7 +1300,7 @@ run_family_cpp() {
     -print \
     -quit | grep -q .; then
     printf '\n== %s / C++ ==\n' "$family_name"
-    local build_dir="${POLYGLOT_CPP_CONCEPT_BUILD_DIR:-/tmp/polyglot-cpp-concepts-build}"
+    local build_dir="${POLYGLOT_CPP_CONCEPT_BUILD_DIR:-/tmp/polyglot-cpp-concepts-build-v2}"
     run_cpp_layer concepts "$build_dir" '^polyglot-concept$' \
       -R "^concept_${family_name}_"
   fi
@@ -1444,7 +1450,7 @@ run_all_concepts_cpp() {
     -print \
     -quit | grep -q .; then
     printf '\n== all concepts / C++ ==\n'
-    local build_dir="${POLYGLOT_CPP_CONCEPT_BUILD_DIR:-/tmp/polyglot-cpp-concepts-build}"
+    local build_dir="${POLYGLOT_CPP_CONCEPT_BUILD_DIR:-/tmp/polyglot-cpp-concepts-build-v2}"
     run_cpp_layer concepts "$build_dir" '^polyglot-concept$'
   fi
 }
@@ -1711,6 +1717,10 @@ main() {
     cpp|c++)
       shift
       run_cpp "$@"
+      ;;
+    cpp-harness)
+      shift
+      run_cpp_harness "$@"
       ;;
     nodejs|node|js)
       shift

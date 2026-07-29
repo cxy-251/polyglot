@@ -583,6 +583,27 @@ check_nodejs_projects() {
   done
 }
 
+check_cpp_project() {
+  local required_file
+  for required_file in \
+    harness/cpp/CMakeLists.txt \
+    harness/cpp/tests/test_01_build_contract.cpp; do
+    if [[ ! -f "$required_file" ]]; then
+      report_failure "缺少 C++ harness 文件: $required_file"
+    fi
+  done
+  if [[ -f languages/cpp/CMakeLists.txt ]]; then
+    report_failure "C++ CMake/GoogleTest 工程配置不得继续位于语言课程"
+  fi
+  if ! grep -Fq 'cpp-harness)' tools/run-in-container.sh; then
+    report_failure "C++ runner 缺少 harness 入口"
+  fi
+  if [[ -f harness/cpp/tests/test_01_build_contract.cpp ]] && \
+    ! grep -Fq '// polyglot-harness:' harness/cpp/tests/test_01_build_contract.cpp; then
+    report_failure "C++ harness 测试缺少 polyglot-harness"
+  fi
+}
+
 check_rust_workspaces() {
   local required_file
   local metadata
@@ -1228,6 +1249,7 @@ for active_language in "${ACTIVE_LANGUAGES[@]}"; do
   esac
 done
 check_concepts
+check_cpp_project
 check_nodejs_projects
 check_go_workspace
 check_rust_workspaces
