@@ -57,8 +57,8 @@ test('堆统计分别回答总量、空间和编译代码占用，字段集合�
   const spaces = getHeapSpaceStatistics();
   assert.ok(spaces.length > 0);
   assert.ok(spaces.every((space) => typeof space.space_name === 'string'));
+  assert.ok(spaces.every((space) => space.space_size >= 0));
   assert.ok(spaces.every((space) => space.space_used_size >= 0));
-  assert.ok(spaces.some((space) => space.space_name.includes('old_space')));
 
   const code = getHeapCodeStatistics();
   assert.ok(code.code_and_metadata_size > 0);
@@ -69,7 +69,7 @@ test('堆统计分别回答总量、空间和编译代码占用，字段集合�
   assert.equal(cppHeap.detail_level, 'brief');
   assert.ok(cppHeap.committed_size_bytes >= cppHeap.used_size_bytes);
   assert.deepEqual(cppHeap.space_statistics, []);
-  // 空间名称、顺序和可用空间都由 V8 版本决定；监控代码应看字段而不是固定数组下标。
+  // 空间名称、数量和顺序都由 V8 版本决定；监控代码应消费字段，不应要求 old_space 等当前名称。
 });
 
 test('cachedDataVersionTag 是当前 V8、启动 flags 与 CPU 能力共同决定的无符号标签', () => {

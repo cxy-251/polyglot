@@ -24,7 +24,7 @@ import { pathToFileURL } from 'node:url';
 test('process 元数据描述当前 Node 构建、可执行文件与进程身份', () => {
   assert.equal(process.version, `v${process.versions.node}`);
   assert.equal(process.release.name, 'node');
-  assert.equal(typeof process.release.lts, 'string');
+  assert.ok(process.release.lts === undefined || typeof process.release.lts === 'string');
   assert.equal(typeof process.platform, 'string');
   assert.equal(typeof process.arch, 'string');
   assert.equal(typeof process.features.inspector, 'boolean');
@@ -35,6 +35,8 @@ test('process 元数据描述当前 Node 构建、可执行文件与进程身份
   assert.ok(Number.isInteger(process.pid) && process.pid > 0);
   assert.ok(Number.isInteger(process.ppid) && process.ppid >= 0);
   assert.equal(typeof process.title, 'string');
+
+  // release.lts 只在 LTS 发布中出现；不能把字段缺失解释为“不是 Node”。
 
   assert.ok(process.allowedNodeEnvironmentFlags.has('--trace-warnings'));
   // Set 会把下划线和部分 --flag=value 形式规范化，适合验证 NODE_OPTIONS 白名单。
