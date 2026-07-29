@@ -1,5 +1,5 @@
-// polyglot-covers: go.testing.subtests-tempdir-setenv-cleanup
-package toolchaintesting_test
+// polyglot-harness: go.subtests_fixtures_and_cleanup
+package goharness_test
 
 import (
 	"os"

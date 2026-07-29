@@ -1,5 +1,5 @@
-// polyglot-covers: go.testing.run-selection-cache-count
-package toolchaintesting_test
+// polyglot-harness: go.run_selection_cache_and_count
+package goharness_test
 
 import (
 	"os/exec"

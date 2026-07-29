@@ -1,4 +1,4 @@
-package toolchaintesting
+package goharness
 
 const ExportedLabel = "course"
 

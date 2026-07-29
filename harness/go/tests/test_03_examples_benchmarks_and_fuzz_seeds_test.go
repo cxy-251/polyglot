@@ -1,11 +1,11 @@
-// polyglot-covers: go.testing.examples-benchmarks-fuzz-seeds
-package toolchaintesting_test
+// polyglot-harness: go.examples_benchmarks_and_fuzz_seeds
+package goharness_test
 
 import (
 	"fmt"
 	"testing"
 
-	course "polyglot.local/go-course/tooling_and_runtime/01_toolchain_source_and_testing"
+	course "polyglot.local/go-course/tests"
 )
 
 func ExampleAdd() {

@@ -13,6 +13,8 @@ Usage:
   ./tools/run-in-container.sh cpp [ctest arguments...]
   ./tools/run-in-container.sh nodejs [node --test arguments or test files...]
   ./tools/run-in-container.sh go [go test arguments...]
+  ./tools/run-in-container.sh go-harness [go test arguments...]
+  ./tools/run-in-container.sh go-concepts [go test arguments...]
   ./tools/run-in-container.sh rust [cargo test arguments...]
   ./tools/run-in-container.sh julia [test files...]
   ./tools/run-in-container.sh r [test files...]
@@ -75,7 +77,8 @@ doctor_go() {
   printf 'go: '
   go version
   printf 'go env: '
-  go env GOOS GOARCH GOROOT GOWORK | paste -sd ' ' -
+  GOWORK="$ROOT/harness/go/go.work" \
+    go env GOOS GOARCH GOROOT GOWORK | paste -sd ' ' -
   printf 'gofmt: '
   command -v gofmt
   printf 'go vet: '
@@ -1018,9 +1021,34 @@ run_go() {
   check_go_version
   printf '\n== Go vertical course ==\n'
   (
-    cd languages/go
-    go test -count=1 "$@" ./...
-    go vet ./...
+    local course_root
+    course_root="$(mktemp -d /tmp/polyglot-go-course.XXXXXX)"
+    trap 'rm -rf "$course_root"' EXIT
+    cp -R languages/go/. "$course_root/"
+    cp harness/go/go.mod "$course_root/go.mod"
+    cd "$course_root"
+    GOWORK=off go test -count=1 "$@" ./...
+    GOWORK=off go vet ./...
+  )
+}
+
+run_go_harness() {
+  check_go_version
+  printf '\n== Go harness and integration ==\n'
+  (
+    cd harness/go
+    GOWORK=off go test -count=1 "$@" ./...
+    GOWORK=off go vet ./...
+  )
+}
+
+run_go_concepts() {
+  check_go_version
+  printf '\n== Go horizontal concepts ==\n'
+  (
+    cd concepts
+    GOWORK=off go test -count=1 "$@" ./...
+    GOWORK=off go vet ./...
   )
 }
 
@@ -1031,7 +1059,7 @@ run_concept_go() {
     printf '\n== %s / Go ==\n' "$concept_name"
     (
       cd concepts
-      go test -count=1 "./$concept_name/go"
+      GOWORK=off go test -count=1 "./$concept_name/go"
     )
   fi
 }
@@ -1663,6 +1691,14 @@ main() {
     go|golang)
       shift
       run_go "$@"
+      ;;
+    go-harness)
+      shift
+      run_go_harness "$@"
+      ;;
+    go-concepts)
+      shift
+      run_go_concepts "$@"
       ;;
     rust|rs)
       shift

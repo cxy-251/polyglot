@@ -1,5 +1,5 @@
-// polyglot-covers: go.build.constraints
-package toolchaintesting_test
+// polyglot-harness: go.build_constraints
+package goharness_test
 
 import (
 	"go/build"

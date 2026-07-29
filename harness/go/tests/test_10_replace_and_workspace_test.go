@@ -1,8 +1,9 @@
-// polyglot-covers: go.modules.replace-and-workspace
-package packagesmodules_test
+// polyglot-harness: go.replace_and_workspace
+package goharness_test
 
 import (
 	"encoding/json"
+	"os"
 	"os/exec"
 	"path/filepath"
 	"runtime"
@@ -11,9 +12,10 @@ import (
 
 func TestWorkspaceSelectsBothLocalModules(t *testing.T) {
 	_, filename, _, _ := runtime.Caller(0)
-	root := filepath.Clean(filepath.Join(filepath.Dir(filename), "..", "..", "..", ".."))
+	root := filepath.Clean(filepath.Join(filepath.Dir(filename), ".."))
 	command := exec.Command("go", "work", "edit", "-json")
 	command.Dir = root
+	command.Env = append(os.Environ(), "GOWORK="+filepath.Join(root, "go.work"))
 	output, err := command.Output()
 	if err != nil {
 		t.Fatal(err)

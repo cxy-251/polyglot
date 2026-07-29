@@ -1,5 +1,5 @@
-// polyglot-covers: go.modules.path-and-go-mod
-package packagesmodules_test
+// polyglot-harness: go.module_path_and_go_mod
+package goharness_test
 
 import (
 	"os"
@@ -14,7 +14,7 @@ func TestGoModDeclaresModuleIdentityAndLanguageVersion(t *testing.T) {
 	if !ok {
 		t.Fatal("无法定位课程文件")
 	}
-	moduleFile := filepath.Clean(filepath.Join(filepath.Dir(filename), "..", "..", "go.mod"))
+	moduleFile := filepath.Clean(filepath.Join(filepath.Dir(filename), "..", "go.mod"))
 	content, err := os.ReadFile(moduleFile)
 	if err != nil {
 		t.Fatal(err)

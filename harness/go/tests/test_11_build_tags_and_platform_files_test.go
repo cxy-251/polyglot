@@ -1,5 +1,5 @@
-// polyglot-covers: go.build.tags-and-platform-files
-package packagesmodules_test
+// polyglot-harness: go.build_tags_and_platform_files
+package goharness_test
 
 import (
 	"go/build"

@@ -1,5 +1,5 @@
-// polyglot-covers: go.command.list-and-env
-package toolchaintesting_test
+// polyglot-harness: go.list_and_env
+package goharness_test
 
 import (
 	"os/exec"

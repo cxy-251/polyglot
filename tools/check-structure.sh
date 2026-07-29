@@ -510,7 +510,7 @@ check_concepts() {
 check_go_workspace() {
   local required_file
   local workspace_json
-  for required_file in go.work languages/go/go.mod concepts/go.mod; do
+  for required_file in harness/go/go.work harness/go/go.mod concepts/go.mod; do
     if [[ ! -f "$required_file" ]]; then
       report_failure "缺少 Go module/workspace 文件: $required_file"
     fi
@@ -523,20 +523,20 @@ check_go_workspace() {
   if [[ "$(go env GOVERSION)" != go1.26.5 ]]; then
     report_failure "Go 工具链不是锁定的 go1.26.5"
   fi
-  if ! workspace_json=$(go work edit -json); then
-    report_failure "go.work 无法被 Go 工具链解析"
+  if ! workspace_json=$(GOWORK="$ROOT/harness/go/go.work" go work edit -json); then
+    report_failure "harness/go/go.work 无法被 Go 工具链解析"
   else
-    for required_file in "./languages/go" "./concepts"; do
+    for required_file in "." "../../concepts"; do
       if ! grep -Fq "\"DiskPath\": \"$required_file\"" <<<"$workspace_json"; then
-        report_failure "go.work 缺少 workspace module: $required_file"
+        report_failure "harness/go/go.work 缺少 workspace module: $required_file"
       fi
     done
   fi
   if ! (
-    cd languages/go
-    go mod edit -json >/dev/null
+    cd harness/go
+    GOWORK=off go mod edit -json >/dev/null
   ); then
-    report_failure "languages/go/go.mod 无法被 Go 工具链解析"
+    report_failure "harness/go/go.mod 无法被 Go 工具链解析"
   fi
   if ! (
     cd concepts
@@ -547,7 +547,7 @@ check_go_workspace() {
 
   local unformatted
   unformatted=$(
-    find languages/go concepts \
+    find languages/go concepts harness/go \
       -type f \
       -name '*.go' \
       -print0 | xargs -0 gofmt -l

@@ -1,10 +1,10 @@
-// polyglot-covers: go.testing.internal-and-external-packages
-package toolchaintesting_test
+// polyglot-harness: go.internal_and_external_test_packages
+package goharness_test
 
 import (
 	"testing"
 
-	course "polyglot.local/go-course/tooling_and_runtime/01_toolchain_source_and_testing"
+	course "polyglot.local/go-course/tests"
 )
 
 func TestExternalPackageUsesOnlyExportedAPI(t *testing.T) {

@@ -3,6 +3,6 @@ go 1.26.0
 toolchain go1.26.5
 
 use (
-	./concepts
-	./languages/go
+	.
+	../../concepts
 )

@@ -1,5 +1,5 @@
-// polyglot-covers: go.runtime.version-architecture-capabilities
-package runtimeintrospection_test
+// polyglot-harness: go.runtime_version_and_capabilities
+package goharness_test
 
 import (
 	"runtime"

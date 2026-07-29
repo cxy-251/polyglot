@@ -1,5 +1,5 @@
-// polyglot-covers: go.toolchain.gofmt-parser-vet
-package toolchaintesting_test
+// polyglot-harness: go.gofmt_parser_and_vet
+package goharness_test
 
 import (
 	"go/format"

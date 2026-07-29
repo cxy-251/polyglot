@@ -1,5 +1,5 @@
-// polyglot-covers: go.toolchain.packages-and-files
-package toolchaintesting
+// polyglot-harness: go.packages_and_files
+package goharness
 
 import "testing"
 
