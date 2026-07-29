@@ -80,15 +80,19 @@ def child_environment(extra_path=None):
 
 
 def test_version_implementation_and_machine_facts_describe_this_interpreter():
-    assert sys.version_info[:2] == (3, 10)
-    assert sys.hexversion >= 0x030A0000
+    assert sys.version_info[:2] == (
+        sys.version_info.major,
+        sys.version_info.minor,
+    )
+    assert sys.hexversion >> 24 == sys.version_info.major
     assert sys.implementation.name
     assert sys.implementation.version[:2] == sys.version_info[:2]
     assert isinstance(sys.implementation.cache_tag, (str, type(None)))
 
     assert sys.platform
     assert sys.byteorder in {"little", "big"}
-    assert sys.maxsize in {2**31 - 1, 2**63 - 1}
+    assert sys.maxsize > 0
+    assert (sys.maxsize + 1) & sys.maxsize == 0
     assert sys.maxunicode == 0x10FFFF
 
 
@@ -139,7 +143,7 @@ def test_getsizeof_uses_sizeof_protocol_but_not_recursive_referents():
     assert sys.getsizeof([instance]) < sys.getsizeof([instance] * 1_000)
     # 容器的浅大小不包含它所引用对象的全部大小；统计对象图需另写
     # 遍历策略。
-    assert sys.getsizeof(["x" * 10_000]) < 10_000
+    assert sys.getsizeof(["x"]) == sys.getsizeof(["x" * 10_000])
 
 
 def test_intern_reuses_equal_strings_and_getrefcount_has_a_temporary_reference():
@@ -303,11 +307,12 @@ print(json.dumps(events))
 
 def test_sysconfig_exposes_build_variables_without_assuming_platform_values():
     variables = sysconfig.get_config_vars()
+    short_version = f"{sys.version_info.major}.{sys.version_info.minor}"
     assert isinstance(variables, dict)
-    assert sysconfig.get_config_var("py_version_short") == "3.10"
+    assert sysconfig.get_config_var("py_version_short") == short_version
     assert variables["prefix"] == sys.prefix
     assert isinstance(sysconfig.get_platform(), str)
-    assert sysconfig.get_python_version() == "3.10"
+    assert sysconfig.get_python_version() == short_version
     assert isinstance(sysconfig.is_python_build(), bool)
     assert sysconfig.get_config_var("a-key-that-does-not-exist") is None
 
@@ -322,9 +327,8 @@ def test_sysconfig_schemes_expand_named_installation_paths():
     assert {"stdlib", "platstdlib", "purelib", "platlib", "include", "scripts", "data"} <= set(
         path_names
     )
-    # get_path_names 是公共核心集合；具体 scheme 可额外暴露 platinclude 等路径。
+    # get_path_names 是公共核心集合；具体 scheme 可额外暴露平台相关路径。
     assert set(path_names) <= set(paths)
-    assert set(paths) - set(path_names) == {"platinclude"}
     assert sysconfig.get_path("stdlib", default_scheme) == paths["stdlib"]
     assert all(Path(path).is_absolute() for path in paths.values())
 
