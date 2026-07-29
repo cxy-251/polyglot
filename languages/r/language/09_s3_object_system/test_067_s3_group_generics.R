@@ -23,3 +23,7 @@ stopifnot(
     identical(first == new_distance(c(1, 9)), c(TRUE, FALSE)),
     identical(sum(first, second), 10)
 )
+
+# Ops 会同时考虑两个操作数的方法，Summary 通过 ... 接收多个对象；不支持的 .Generic 必须显式失败。
+unsupported <- tryCatch(first * second, error = identity)
+stopifnot(inherits(unsupported, "error"))

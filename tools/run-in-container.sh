@@ -494,9 +494,54 @@ run_r_files() {
   printf '%s: %d 个 R 测试文件通过。\n' "$label" "${#test_files[@]}"
 }
 
+prepare_r_assets() {
+  local asset_root="$1"
+  local need_package="$2"
+  local need_native="$3"
+  mkdir -p "$asset_root/library" "$asset_root/tmp" "$asset_root/user"
+
+  if [[ "$need_package" == 1 ]]; then
+    POLYGLOT_R_PACKAGE_LIBRARY="$(
+      R_LIBS_USER="$asset_root/library" \
+        R_USER="$asset_root/user" \
+        TMPDIR="$asset_root/tmp" \
+        R_ENVIRON_USER=/dev/null \
+        R_PROFILE_USER=/dev/null \
+        Rscript --vanilla -e '
+          source("harness/r/support/package_helpers.R")
+          root <- file.path(commandArgs(trailingOnly = TRUE)[[1L]], "package")
+          dir.create(root)
+          cat(install_polyglot_package(root)$library)
+        ' "$asset_root"
+    )"
+    export POLYGLOT_R_PACKAGE_LIBRARY
+  fi
+
+  if [[ "$need_native" == 1 ]]; then
+    POLYGLOT_R_NATIVE_LIBRARY="$(
+      R_LIBS_USER="$asset_root/library" \
+        R_USER="$asset_root/user" \
+        TMPDIR="$asset_root/tmp" \
+        R_ENVIRON_USER=/dev/null \
+        R_PROFILE_USER=/dev/null \
+        Rscript --vanilla -e '
+          source("harness/r/support/native_helpers.R")
+          root <- file.path(commandArgs(trailingOnly = TRUE)[[1L]], "native")
+          dir.create(root)
+          cat(build_polyglot_native(root))
+        ' "$asset_root"
+    )"
+    export POLYGLOT_R_NATIVE_LIBRARY
+  fi
+}
+
 run_r() {
   check_r_version
   local -a test_files=()
+  local test_file
+  local need_package=0
+  local need_native=0
+  local asset_root=""
   if [[ $# -gt 0 ]]; then
     test_files=("$@")
   else
@@ -507,10 +552,30 @@ run_r() {
         -print0 | sort -z
     )
   fi
+  for test_file in "${test_files[@]}"; do
+    if grep -Fq "POLYGLOT_R_PACKAGE_LIBRARY" "$test_file"; then
+      need_package=1
+    fi
+    if grep -Fq "POLYGLOT_R_NATIVE_LIBRARY" "$test_file"; then
+      need_native=1
+    fi
+  done
+  if [[ "$need_package" == 1 || "$need_native" == 1 ]]; then
+    asset_root="$(mktemp -d /tmp/polyglot-r-course-assets.XXXXXX)"
+    POLYGLOT_R_COURSE_ASSET_ROOT="$asset_root"
+    export POLYGLOT_R_COURSE_ASSET_ROOT
+    trap 'rm -rf "$POLYGLOT_R_COURSE_ASSET_ROOT"' EXIT
+    prepare_r_assets "$asset_root" "$need_package" "$need_native"
+  fi
   run_r_files \
     "R vertical course" \
     "${POLYGLOT_R_COURSE_ROOT:-/tmp/polyglot-r-course}" \
     "${test_files[@]}"
+  if [[ -n "$asset_root" ]]; then
+    rm -rf "$asset_root"
+    unset POLYGLOT_R_COURSE_ASSET_ROOT POLYGLOT_R_PACKAGE_LIBRARY POLYGLOT_R_NATIVE_LIBRARY
+    trap - EXIT
+  fi
 }
 
 run_r_harness() {

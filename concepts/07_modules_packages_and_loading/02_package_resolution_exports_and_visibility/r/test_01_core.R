@@ -1,7 +1,7 @@
 # polyglot-family: modules_packages_and_loading
 # polyglot-concept: package_resolution_exports_and_visibility
 # polyglot-related: languages/r/tooling_and_runtime/14_packages_namespaces_and_tools/
-# polyglot-related+: test_107_exports_internal_symbols_and_s3_registration.R
+# polyglot-related+: test_106_namespace_library_require_and_colon_operators.R
 #
 # 共同问题：package 怎样解析，公开与内部名称怎样区分。
 # 对照观察：`::` 只访问 NAMESPACE export；`:::` 可越过可见性边界，应仅用于准确说明内部机制。

@@ -1,7 +1,7 @@
 # polyglot-family: files_paths_and_streams
 # polyglot-concept: process_environment_and_subprocess_io
 # polyglot-related: languages/r/tooling_and_runtime/15_processes_parallel_and_runtime/
-# polyglot-related+: test_114_child_process_environment_and_working_directory.R
+# polyglot-related+: test_113_system2_output_error_and_exit_status.R
 #
 # 共同问题：子进程怎样继承环境、接收输入并返回 stdout、stderr 与退出码。
 # 对照观察：`system2` 显式传入 env 和参数；捕获输出向量的 status attribute 表达非零退出。

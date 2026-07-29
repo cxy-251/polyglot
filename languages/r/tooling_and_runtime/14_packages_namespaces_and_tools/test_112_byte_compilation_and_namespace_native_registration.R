@@ -1,14 +1,13 @@
-# polyglot-covers: r.tooling.byte-compilation-and-namespace-native-registration
+# polyglot-covers: r.tooling.byte-compilation-and-package-native-registration
 
 local({
-    source("languages/r/support/package_helpers.R", local = TRUE)
-    root <- tempfile("polyglot-r-package-native-")
-    dir.create(root)
-    on.exit(unlink(root, recursive = TRUE, force = TRUE), add = TRUE)
-    installed <- install_polyglot_package(root)
+    package_library <- normalizePath(
+        Sys.getenv("POLYGLOT_R_PACKAGE_LIBRARY"),
+        mustWork = TRUE
+    )
     namespace <- suppressMessages(loadNamespace(
         "polyglotrfixture",
-        lib.loc = installed$library
+        lib.loc = package_library
     ))
     on.exit(unloadNamespace("polyglotrfixture"), add = TRUE)
 
@@ -21,3 +20,5 @@ local({
         isNamespace(namespace)
     )
 })
+
+# cmpfun 保持函数接口；NAMESPACE 的 useDynLib 注册表把 R wrapper 绑定到已加载 native symbol。

@@ -1,7 +1,7 @@
 # polyglot-family: modules_packages_and_loading
 # polyglot-concept: modules_imports_linkage_and_live_bindings
 # polyglot-related: languages/r/language/06_scope_environments_and_call_frames/
-# polyglot-related+: test_042_environment_reference_semantics_and_locking.R
+# polyglot-related+: test_041_lexical_scoping_and_closure_state.R
 #
 # 共同问题：导出可变值后，使用者拿到别名还是快照。
 # 对照观察：environment export 保留引用身份；普通向量读取后呈现 copy-on-modify 值语义。

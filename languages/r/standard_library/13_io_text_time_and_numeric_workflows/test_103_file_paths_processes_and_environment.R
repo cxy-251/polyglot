@@ -1,4 +1,4 @@
-# polyglot-covers: r.standard-library.file-paths-processes-and-environment
+# polyglot-covers: r.standard-library.file-paths-metadata-and-content
 
 local({
     root <- tempfile("polyglot-r-files-")
@@ -9,17 +9,16 @@ local({
     dir.create(nested)
     path <- file.path(nested, "value.txt")
     writeLines("content", path, useBytes = TRUE)
-    output <- system2(
-        file.path(R.home("bin"), "Rscript"),
-        c("--vanilla", "-e", shQuote("cat(Sys.getenv('POLYGLOT_CHILD'))")),
-        stdout = TRUE,
-        env = "POLYGLOT_CHILD=isolated"
-    )
+    metadata <- file.info(path)
+    digest <- unname(tools::md5sum(path))
 
     stopifnot(
         identical(readLines(path, warn = FALSE), "content"),
         identical(normalizePath(dirname(path)), normalizePath(nested)),
-        identical(output, "isolated"),
-        identical(attr(output, "status", exact = TRUE), NULL)
+        isTRUE(metadata$isdir == FALSE),
+        identical(metadata$size, 8),
+        grepl("^[[:xdigit:]]{32}$", digest)
     )
 })
+
+# file.path 是词法组合；normalizePath 与 file.info 访问文件系统；md5sum 按文件字节计算内容摘要。

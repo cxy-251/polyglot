@@ -23,3 +23,19 @@ stopifnot(
     polyglot_route(left, 1L) == "left",
     polyglot_route(1L, right) == "right"
 )
+
+# 两个候选分别在不同参数上更具体时没有唯一最优方法；增加 exact signature 才能消除歧义。
+methods::setMethod(
+    "polyglot_route",
+    c("PolyglotLeft", "PolyglotRight"),
+    function(x, y) "exact"
+)
+stopifnot(
+    identical(polyglot_route(left, right), "exact"),
+    identical(
+        unname(as.character(
+            methods::selectMethod("polyglot_route", c("PolyglotLeft", "PolyglotRight"))@defined
+        )),
+        c("PolyglotLeft", "PolyglotRight")
+    )
+)

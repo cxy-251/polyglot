@@ -1,7 +1,7 @@
 # polyglot-family: collections_and_iteration
 # polyglot-concept: mapping_lookup_and_missing_keys
 # polyglot-related: languages/r/language/06_scope_environments_and_call_frames/
-# polyglot-related+: test_044_get_assign_exists_and_inherits_flags.R
+# polyglot-related+: test_041_lexical_scoping_and_closure_state.R
 #
 # 共同问题：键查找成功、缺失与默认值怎样区分。
 # 对照观察：named list 的 `$` 缺失返回 NULL，`[[` 可失败；environment 提供精确存在性检测。

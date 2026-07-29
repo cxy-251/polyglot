@@ -1,11 +1,8 @@
 # polyglot-covers: r.tooling.native-symbol-registration-and-lookup
 
 local({
-    source("languages/r/support/native_helpers.R", local = TRUE)
-    root <- tempfile("polyglot-r-native-")
-    dir.create(root)
-    on.exit(unlink(root, recursive = TRUE, force = TRUE), add = TRUE)
-    dll <- dyn.load(build_polyglot_native(root), local = TRUE, now = TRUE)
+    native_library <- normalizePath(Sys.getenv("POLYGLOT_R_NATIVE_LIBRARY"), mustWork = TRUE)
+    dll <- dyn.load(native_library, local = TRUE, now = TRUE)
     on.exit(dyn.unload(dll[["path"]]), add = TRUE)
     routines <- getDLLRegisteredRoutines(dll)
 
@@ -16,3 +13,5 @@ local({
         identical(routines$.Call$C_polyglot_double$numParameters, 1L)
     )
 })
+
+# 注册表固定入口名、接口种类与参数数量；关闭 dynamic lookup 可把符号暴露收窄为显式 API。

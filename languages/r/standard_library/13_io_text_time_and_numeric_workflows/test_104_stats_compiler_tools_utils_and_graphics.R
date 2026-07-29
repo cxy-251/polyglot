@@ -1,21 +1,26 @@
-# polyglot-covers: r.standard-library.stats-compiler-tools-utils-and-graphics
+# polyglot-covers: r.standard-library.noninteractive-graphics-device-lifecycle
 
 local({
     root <- tempfile("polyglot-r-stdlib-")
     dir.create(root)
     on.exit(unlink(root, recursive = TRUE, force = TRUE), add = TRUE)
 
-    model <- stats::lm(mpg ~ wt, data = datasets::mtcars)
-    compiled <- compiler::cmpfun(function(x) x + 1L)
     path <- file.path(root, "plot.pdf")
     grDevices::pdf(path)
-    on.exit(grDevices::dev.off(), add = TRUE)
-    graphics::plot(1:3, 1:3)
+    device <- grDevices::dev.cur()
+    closed <- FALSE
+    on.exit(if (!closed) grDevices::dev.off(device), add = TRUE)
+    graphics::plot(1:3, 1:3, type = "b")
+    grDevices::dev.off(device)
+    closed <- TRUE
+    header <- readBin(path, raw(), n = 4L)
 
     stopifnot(
-        length(stats::coef(model)) == 2L,
-        identical(compiled(1L), 2L),
-        grepl("^[[:xdigit:]]{32}$", unname(tools::md5sum(path))),
-        grepl("R version", utils::capture.output(sessionInfo())[1L], fixed = TRUE)
+        identical(names(device), "pdf"),
+        identical(rawToChar(header), "%PDF"),
+        file.info(path)$size > 4,
+        is.logical(capabilities("cairo"))
     )
 })
+
+# 非交互图形写入显式 device；关闭 device 才完成文件，cairo 等后端只做能力检测。

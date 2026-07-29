@@ -1,7 +1,7 @@
 # polyglot-family: collections_and_iteration
 # polyglot-concept: sorting_stability_and_custom_order
-# polyglot-related: languages/r/language/08_collection_workflows_and_tabular_data/
-# polyglot-related+: test_062_stable_order_rank_and_custom_keys.R
+# polyglot-related: languages/r/language/04_comparison_matching_and_ordering/
+# polyglot-related+: test_028_order_sort_rank_and_missing_placement.R
 #
 # 共同问题：排序是否稳定，如何指定 key、降序和缺失位置。
 # 对照观察：`order(method="radix")` 稳定返回索引，可组合多列 key 并显式放置 NA。

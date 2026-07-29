@@ -1,7 +1,7 @@
 # polyglot-family: objects_and_dispatch
 # polyglot-concept: introspection_reflection_and_runtime_type
 # polyglot-related: languages/r/language/02_values_types_and_special_values/
-# polyglot-related+: test_014_typeof_mode_storage_mode_and_class.R
+# polyglot-related+: test_012_raw_list_and_pairlist_boundaries.R
 #
 # 共同问题：运行时怎样观察底层类型、用户 class、成员和调用签名。
 # 对照观察：R 将 `typeof`、`class`、`mode` 与 attributes 分开；函数形式参数可由 `formals` 读取。

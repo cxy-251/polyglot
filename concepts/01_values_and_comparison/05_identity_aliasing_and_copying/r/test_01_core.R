@@ -1,7 +1,7 @@
 # polyglot-family: values_and_comparison
 # polyglot-concept: identity_aliasing_and_copying
 # polyglot-related: languages/r/language/07_vectors_recycling_and_subsetting/
-# polyglot-related+: test_055_environment_reference_and_vector_value_contrast.R
+# polyglot-related+: test_054_copy_on_modify_observable_value_semantics.R
 #
 # 共同问题：赋值后两个名字共享身份还是独立值；修改如何可见。
 # 对照观察：普通向量呈现 copy-on-modify 值语义；environment 保持可观察的引用别名。
