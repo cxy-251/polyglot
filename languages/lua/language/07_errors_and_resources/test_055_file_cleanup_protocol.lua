@@ -10,12 +10,13 @@ local guarded = setmetatable({file = resource}, {
     end,
 })
 
-local ok = pcall(function()
+local ok, failure = pcall(function()
     local handle <close> = guarded
     assert(handle.file:write("payload"))
     error("stop after write")
 end)
 t.falsey(ok)
+t.matches(failure, "stop after write")
 t.equal(io.type(resource), "closed file")
 
 local reader = assert(io.open(path, "r"))

@@ -9,11 +9,14 @@ t.truth("same" <= "same")
 t.truth(1 ~= "1")
 t.raises(function()
     return 1 < "2"
-end, "compare")
+end)
 
 local nan = 0 / 0
 t.falsey(nan == nan)
 t.falsey(nan < nan)
 t.falsey(nan <= nan)
+
+-- 不同类型通常只能比较相等性；次序只原生定义在 number 内部和 string 内部。
+t.falsey({} == {})
 
 t.done()

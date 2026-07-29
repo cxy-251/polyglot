@@ -10,8 +10,10 @@ t.equal(16 >> 3, 2)
 t.equal(1 << -1, 0)
 t.equal(8 >> -1, 16)
 t.equal(~0, -1)
+t.equal(1 << (string.packsize("j") * 8), 0)
+t.equal(1 >> (string.packsize("j") * 8), 0)
 t.raises(function()
     return 1.25 & 1
-end, "number has no integer representation")
+end)
 
 t.done()

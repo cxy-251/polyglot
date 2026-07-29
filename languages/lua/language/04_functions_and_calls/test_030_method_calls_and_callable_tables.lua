@@ -20,4 +20,8 @@ local callable = setmetatable({base = 40}, {
 t.equal(callable(2), 42)
 t.equal(type(callable), "table")
 
+local captured = table.pack(receiver:add(2))
+t.equal(captured.n, 1)
+t.equal(captured[1], 42)
+
 t.done()

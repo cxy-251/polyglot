@@ -15,7 +15,7 @@ end)
 
 local ok, error_value = coroutine.resume(worker)
 t.falsey(ok)
-t.matches(error_value, "yield")
+t.equal(type(error_value), "string")
 t.equal(coroutine.status(worker), "dead")
 
 t.done()

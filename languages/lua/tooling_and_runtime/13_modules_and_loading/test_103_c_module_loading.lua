@@ -6,13 +6,13 @@ package.loaded.polyglot_native = nil
 local native, loader_path = require("polyglot_native")
 t.equal(native.add(19, 23), 42)
 t.equal(type(loader_path), "string")
-t.matches(loader_path, "polyglot_native%.so")
+t.matches(loader_path, "polyglot_native")
 t.same(package.loaded.polyglot_native, native)
 
 local searcher = package.searchers[3]
 local loader, data = searcher("polyglot_native")
 t.equal(type(loader), "function")
-t.matches(data, "polyglot_native%.so")
+t.matches(data, "polyglot_native")
 
--- 动态模块由锁定解释器导出的 Lua C API 符号解析，不使用 LuaRocks 或系统 module。
+-- 动态库后缀和链接方式由平台决定；require 只依赖 package.cpath 与 luaopen_* 入口。
 t.done()

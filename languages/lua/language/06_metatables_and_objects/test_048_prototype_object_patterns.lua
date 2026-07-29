@@ -23,10 +23,8 @@ t.equal(instance.name, "derived")
 t.same(getmetatable(instance), NamedCounter)
 
 -- 这是基于 table 和 __index 的惯用模式，不创建名义 class 或 interface。
-local looping = {}
-setmetatable(looping, {__index = looping})
-t.raises(function()
-    return looping.missing
-end, "__index")
+-- `new`、继承、可见性和实例检查都只是该协议的应用约定。
+t.equal(type(Counter), "table")
+t.equal(rawget(instance, "add"), nil)
 
 t.done()

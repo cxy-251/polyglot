@@ -24,4 +24,9 @@ t.truth(first <= equivalent)
 t.truth(later > first)
 t.truth(later >= equivalent)
 
+local truthy_result = setmetatable({key = 1}, {
+    __eq = function() return "truthy" end,
+})
+t.truth(truthy_result == setmetatable({key = 2}, getmetatable(truthy_result)))
+
 t.done()
