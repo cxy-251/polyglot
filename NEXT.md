@@ -40,6 +40,11 @@ language 进行完整文件级语义审计和课程重构。审计后的课程�
   本地 package/native fixture 和 4 个工程验证移入 `harness/r/`。
 - R 验证通过：56 个纵向文件、67 个横向文件、10 个 family、完整 concepts、
   `r-harness`、`list-concepts`、`doctor`、结构门禁和 `git diff --check`。
-- 当前审计语言为 Julia。唯一下一步是逐文件审查 multiple dispatch、world age、
-  broadcasting、Task/Threads、Pkg 与 compiler observation，并先将 depot/project 隔离、
-  runner、版本与构建工程从语言课程识别到 harness 层。
+- Julia 已完成文件级审计：纵向课程由审计前 128 个文件重构为 71 个，编号范围
+  `002`–`127` 且保留稳定空缺；49 个横向 topic 使用 65 个 Julia 文件；锁定版本、
+  depot/project/runner 隔离、本地工程 fixture 和 2 个验证移入 `harness/julia/`。
+- Julia 验证通过：71 个纵向文件、65 个横向文件、10 个 family、完整 concepts、
+  `julia-harness`、`list-concepts`、`doctor`、结构门禁和 `git diff --check`。
+- 当前审计语言为 Rust。唯一下一步是逐文件审查 ownership/borrowing、trait coherence、
+  lifetimes、async/Future、Send/Sync、Cargo 与 unsafe，并先将 toolchain、Cargo runner、
+  编译失败 fixture 和工程配置从语言课程识别到 harness 层。
