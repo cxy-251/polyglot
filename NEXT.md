@@ -70,7 +70,13 @@ language 进行完整文件级语义审计和课程重构。审计后的课程�
 - C++ 验证通过：`1409 passed, 15 skipped` 的 1424 个纵向测试、240 个横向测试、
   49 个精确 topic、10 个 family、完整 concepts、1 个 harness 测试、`list-concepts`、
   `doctor`、结构门禁和 `git diff --check`。
-- 当前审计语言为 Python。唯一下一步是逐文件审查 data model、descriptor/MRO、iterator/
-  generator、exception/context manager、asyncio/concurrency、import/package、typing/runtime
-  reflection、stdlib I/O 与 C API 边界，并先将 pytest 配置、runner、bootstrap、环境隔离
-  和仓库工程验证从语言课程识别到 `harness/python/`。
+- Python 已完成文件级审计：178 个纵向课程文件均为独立的 language、builtins 或 stdlib
+  教学单元，编号 `001`–`178`；49 个横向 topic 使用 72 个 Python 文件；pytest 版本、
+  runner、用户目录/bytecode/cache 隔离和 2 个工程验证移入 `harness/python/`。审计消除了
+  跨测试模块依赖、默认 bytecode 目录假设、固定安装布局和精确工具链版本课程断言，并将
+  重复的运行时能力横向文件合并。
+- Python 验证通过：`5025 passed, 39 skipped` 的纵向课程、249 个横向测试、49 个精确
+  topic、10 个 family、完整 concepts、2 个 harness 测试、`list-concepts`、`doctor`、
+  结构门禁和 `git diff --check`。
+- 九门语言文件级审计均已完成。唯一下一步是汇总真实审计决策数量、恢复完成声明，执行
+  九门纵向课程、全部 harness、完整 concepts、`doctor planned`、结构门禁与工作树最终验证。
