@@ -3,7 +3,8 @@
 -- Observations: explicit cancellation ownership, pending resource lifetime, reverse unwind, and dead state.
 -- polyglot-family: async_and_concurrency
 -- polyglot-concept: cancellation_timeouts_and_cleanup
--- polyglot-related: languages/lua/language/08_coroutines_and_gc/test_061_coroutine_close_unwinds_resources.lua
+-- polyglot-related: languages/lua/language/08_coroutines_and_gc/
+-- polyglot-related+: test_060_coroutine_errors_wrap_and_explicit_close.lua
 
 local t = require("support.assertions")
 local events = {}
@@ -27,4 +28,8 @@ t.equal(#events, 1)
 t.equal(events[1].error, nil)
 t.equal(coroutine.status(worker), "dead")
 
+t.equal(rawget(coroutine, "timeout"), nil)
+t.equal(rawget(coroutine, "shield"), nil)
+
+-- coroutine.close 是显式撤销悬挂工作，不提供计时、抢占、shield 或 cancellation token。
 t.done()

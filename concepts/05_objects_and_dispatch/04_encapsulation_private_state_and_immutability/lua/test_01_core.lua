@@ -4,7 +4,7 @@
 -- polyglot-family: objects_and_dispatch
 -- polyglot-concept: encapsulation_private_state_and_immutability
 -- polyglot-related: languages/lua/standard_library/12_debug_and_introspection/
--- polyglot-related+: test_096_debug_library_privilege_boundary.lua
+-- polyglot-related+: test_093_registry_metatable_and_privilege_boundaries.lua
 
 local t = require("support.assertions")
 
@@ -27,9 +27,12 @@ local readonly = setmetatable({}, {
 })
 t.equal(readonly.answer, 42)
 t.raises(function() readonly.answer = 43 end, "read only")
+rawset(readonly, "answer", 43)
+t.equal(readonly.answer, 43)
 
 local mutable <const> = {value = 1}
 mutable.value = 2
 t.equal(mutable.value, 2)
 
+-- Proxy 只拦截缺失字段写入，rawset 可绕过；<const> 也只约束 binding，不冻结 table。
 t.done()

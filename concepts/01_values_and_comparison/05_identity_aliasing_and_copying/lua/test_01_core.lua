@@ -3,7 +3,8 @@
 -- Observations: rawequal, mutation visibility, shallow-copy boundaries, and value types.
 -- polyglot-family: values_and_comparison
 -- polyglot-concept: identity_aliasing_and_copying
--- polyglot-related: languages/lua/language/01_values_and_types/test_007_reference_identity.lua
+-- polyglot-related: languages/lua/language/01_values_and_types/
+-- polyglot-related+: test_006_binary_strings_objects_and_identity.lua
 
 local t = require("support.assertions")
 local original = {nested = {value = 1}}

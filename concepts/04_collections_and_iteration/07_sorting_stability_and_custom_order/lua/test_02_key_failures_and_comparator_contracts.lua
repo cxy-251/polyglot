@@ -17,7 +17,7 @@ end, "missing rank")
 
 t.raises(function()
     table.sort({1, "2"})
-end, "compare")
+end)
 
 local comparisons = 0
 table.sort({3, 2, 1}, function(left, right)

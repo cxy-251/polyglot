@@ -4,7 +4,7 @@
 -- polyglot-family: files_paths_and_streams
 -- polyglot-concept: streaming_buffering_and_backpressure
 -- polyglot-related: languages/lua/standard_library/11_io_os_and_processes/
--- polyglot-related+: test_085_buffering_flush_and_temporary_files.lua
+-- polyglot-related+: test_083_iterators_default_streams_buffering_and_ownership.lua
 
 local t = require("support.assertions")
 local file = assert(io.tmpfile())

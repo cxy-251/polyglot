@@ -3,7 +3,8 @@
 -- Observations: 1-based table access, nil misses, byte slicing, and absent native table slices.
 -- polyglot-family: collections_and_iteration
 -- polyglot-concept: indexing_slicing_and_bounds
--- polyglot-related: languages/lua/language/05_tables_and_iteration/test_035_sequences_borders_and_length.lua
+-- polyglot-related: languages/lua/language/05_tables_and_iteration/
+-- polyglot-related+: test_035_sequences_borders_holes_and_length.lua
 
 local t = require("support.assertions")
 local values = {"zero?", "one", "two"}

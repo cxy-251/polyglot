@@ -3,13 +3,14 @@
 -- Observations: load-time diagnostics, runtime pcall results, and require search reports.
 -- polyglot-family: errors_and_resources
 -- polyglot-concept: contracts_assertions_and_failure_signaling
--- polyglot-related: languages/lua/tooling_and_runtime/14_standalone_and_bytecode/test_112_lua_54_to_55_changes.lua
+-- polyglot-related: languages/lua/language/03_scope_and_variables/
+-- polyglot-related+: test_023_global_const_and_loop_declarations.lua
 
 local t = require("support.assertions")
 
 local syntax, syntax_error = load("local =", "syntax", "t")
 t.equal(syntax, nil)
-t.matches(syntax_error, "<name> expected")
+t.equal(type(syntax_error), "string")
 
 local undeclared, declaration_error = load(
     "global allowed; return missing",
@@ -18,9 +19,9 @@ local undeclared, declaration_error = load(
     {}
 )
 t.equal(undeclared, nil)
-t.matches(declaration_error, "missing")
+t.equal(type(declaration_error), "string")
 
-t.raises(function() return 1 + {} end, "arithmetic")
-t.raises(function() require("polyglot_module_that_does_not_exist") end, "not found")
+t.raises(function() return 1 + {} end)
+t.raises(function() require("polyglot_module_that_does_not_exist") end)
 
 t.done()

@@ -3,7 +3,8 @@
 -- Observations: yielded key/value pairs, hole termination, and unspecified mapping order.
 -- polyglot-family: collections_and_iteration
 -- polyglot-concept: iteration_protocol
--- polyglot-related: languages/lua/language/05_tables_and_iteration/test_037_next_pairs_and_unspecified_order.lua
+-- polyglot-related: languages/lua/language/05_tables_and_iteration/
+-- polyglot-related+: test_037_next_pairs_ipairs_and_mutation_boundaries.lua
 
 local t = require("support.assertions")
 

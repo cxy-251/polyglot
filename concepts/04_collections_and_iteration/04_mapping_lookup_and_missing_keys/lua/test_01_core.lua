@@ -3,7 +3,8 @@
 -- Observations: absence encoding, deletion, non-mutating fallback, and raw bypass.
 -- polyglot-family: collections_and_iteration
 -- polyglot-concept: mapping_lookup_and_missing_keys
--- polyglot-related: languages/lua/language/06_metatables_and_objects/test_041_index_fallbacks.lua
+-- polyglot-related: languages/lua/language/06_metatables_and_objects/
+-- polyglot-related+: test_041_index_newindex_and_raw_access.lua
 
 local t = require("support.assertions")
 local values = {present = false}

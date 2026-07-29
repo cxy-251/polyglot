@@ -3,7 +3,8 @@
 -- Observations: shifting positions, stale indices, fixed-range mutation, and sequence borders.
 -- polyglot-family: collections_and_iteration
 -- polyglot-concept: sequence_mutation_and_invalidation
--- polyglot-related: languages/lua/standard_library/10_tables_math_and_random/test_073_table_insert_remove_and_move.lua
+-- polyglot-related: languages/lua/standard_library/10_tables_math_and_random/
+-- polyglot-related+: test_073_table_sequence_mutation_packing_and_capacity_hints.lua
 
 local t = require("support.assertions")
 local values = {"a", "b", "c"}

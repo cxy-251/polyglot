@@ -3,7 +3,8 @@
 -- Observations: nil fill, truncation, named vararg table, and last-position adjustment.
 -- polyglot-family: functions_and_calls
 -- polyglot-concept: argument_passing
--- polyglot-related: languages/lua/language/04_functions_and_calls/test_029_named_vararg_table.lua
+-- polyglot-related: languages/lua/language/04_functions_and_calls/
+-- polyglot-related+: test_025_multiple_results_and_list_adjustment.lua
 
 local t = require("support.assertions")
 

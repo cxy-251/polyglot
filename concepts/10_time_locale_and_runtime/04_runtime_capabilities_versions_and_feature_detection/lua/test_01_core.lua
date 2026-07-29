@@ -4,7 +4,7 @@
 -- polyglot-family: time_locale_and_runtime
 -- polyglot-concept: runtime_capabilities_versions_and_feature_detection
 -- polyglot-related: languages/lua/tooling_and_runtime/14_standalone_and_bytecode/
--- polyglot-related+: test_109_runtime_version_and_configuration.lua
+-- polyglot-related+: test_109_public_runtime_feature_detection.lua
 
 local t = require("support.assertions")
 

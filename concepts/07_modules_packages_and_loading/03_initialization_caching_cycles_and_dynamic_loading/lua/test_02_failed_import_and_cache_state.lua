@@ -3,7 +3,8 @@
 -- Observations: failure is not cached, retries rerun, manual early cache entry, and shared cycle identity.
 -- polyglot-family: modules_packages_and_loading
 -- polyglot-concept: initialization_caching_cycles_and_dynamic_loading
--- polyglot-related: languages/lua/tooling_and_runtime/13_modules_and_loading/test_102_require_failures_and_cycles.lua
+-- polyglot-related: languages/lua/tooling_and_runtime/13_modules_and_loading/
+-- polyglot-related+: test_099_require_searchers_cache_failures_and_cycles.lua
 
 local t = require("support.assertions")
 local attempts = 0

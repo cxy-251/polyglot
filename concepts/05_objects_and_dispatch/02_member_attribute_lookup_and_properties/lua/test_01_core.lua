@@ -3,7 +3,8 @@
 -- Observations: lookup order, computed values, write interception, and bypass boundaries.
 -- polyglot-family: objects_and_dispatch
 -- polyglot-concept: member_attribute_lookup_and_properties
--- polyglot-related: languages/lua/language/06_metatables_and_objects/test_042_newindex_proxies_and_rawset.lua
+-- polyglot-related: languages/lua/language/06_metatables_and_objects/
+-- polyglot-related+: test_041_index_newindex_and_raw_access.lua
 
 local t = require("support.assertions")
 local storage = {width = 6, height = 7}

@@ -3,8 +3,8 @@
 -- Observations: cooperative same-state coroutines, independent C states, and absent standard worker API.
 -- polyglot-family: async_and_concurrency
 -- polyglot-concept: threads_workers_and_process_isolation
--- polyglot-related: languages/lua/tooling_and_runtime/16_advanced_c_api_and_compatibility/
--- polyglot-related+: test_123_multiple_state_isolation.lua
+-- polyglot-related: languages/lua/tooling_and_runtime/15_c_api_and_embedding/
+-- polyglot-related+: test_113_states_libraries_isolation_and_capabilities.lua
 
 local t = require("support.assertions")
 local c_api = require("support.c_api")

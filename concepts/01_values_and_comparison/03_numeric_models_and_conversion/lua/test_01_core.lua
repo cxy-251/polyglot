@@ -3,7 +3,8 @@
 -- Observations: math.type, mixed arithmetic, tonumber, math.tointeger, and wrapping.
 -- polyglot-family: values_and_comparison
 -- polyglot-concept: numeric_models_and_conversion
--- polyglot-related: languages/lua/language/01_values_and_types/test_003_integer_and_float_subtypes.lua
+-- polyglot-related: languages/lua/language/01_values_and_types/
+-- polyglot-related+: test_003_number_subtypes_range_and_special_values.lua
 
 local t = require("support.assertions")
 

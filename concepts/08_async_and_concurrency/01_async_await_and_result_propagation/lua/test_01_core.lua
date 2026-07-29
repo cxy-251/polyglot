@@ -3,7 +3,8 @@
 -- Observations: cooperative suspension, explicit result tuples, boolean status, and arbitrary errors.
 -- polyglot-family: async_and_concurrency
 -- polyglot-concept: async_await_and_result_propagation
--- polyglot-related: languages/lua/language/08_coroutines_and_gc/test_057_coroutine_resume_and_results.lua
+-- polyglot-related: languages/lua/language/08_coroutines_and_gc/
+-- polyglot-related+: test_057_coroutine_resume_status_and_value_exchange.lua
 
 local t = require("support.assertions")
 local worker = coroutine.create(function(input)

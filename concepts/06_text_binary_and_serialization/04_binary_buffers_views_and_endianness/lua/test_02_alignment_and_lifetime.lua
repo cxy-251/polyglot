@@ -3,7 +3,8 @@
 -- Observations: explicit packsize, padding, retained string ownership, and checked userdata closure.
 -- polyglot-family: text_binary_and_serialization
 -- polyglot-concept: binary_buffers_views_and_endianness
--- polyglot-related: languages/lua/tooling_and_runtime/15_c_api_and_embedding/test_119_userdata_user_values_and_gc.lua
+-- polyglot-related: languages/lua/tooling_and_runtime/15_c_api_and_embedding/
+-- polyglot-related+: test_119_userdata_external_strings_and_idempotent_cleanup.lua
 
 local t = require("support.assertions")
 

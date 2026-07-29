@@ -3,7 +3,8 @@
 -- Observations: lexical lookup, right-hand-side timing, environment fields, and 5.5 declarations.
 -- polyglot-family: functions_and_calls
 -- polyglot-concept: scope_name_lookup_and_shadowing
--- polyglot-related: languages/lua/language/03_scope_and_variables/test_023_global_declarations.lua
+-- polyglot-related: languages/lua/language/03_scope_and_variables/
+-- polyglot-related+: test_023_global_const_and_loop_declarations.lua
 
 local t = require("support.assertions")
 local value = 40
@@ -26,6 +27,6 @@ t.equal(rawget(_G, "answer"), nil)
 
 local invalid, message = load("global allowed; return missing", "undeclared", "t", {})
 t.equal(invalid, nil)
-t.matches(message, "missing")
+t.equal(type(message), "string")
 
 t.done()

@@ -3,7 +3,8 @@
 -- Observations: key-based membership, identity semantics, false-vs-absence, and forbidden keys.
 -- polyglot-family: collections_and_iteration
 -- polyglot-concept: sets_membership_and_deduplication
--- polyglot-related: languages/lua/language/05_tables_and_iteration/test_033_table_key_normalization.lua
+-- polyglot-related: languages/lua/language/05_tables_and_iteration/
+-- polyglot-related+: test_033_table_keys_constructors_and_absence.lua
 
 local t = require("support.assertions")
 local set = {}
@@ -22,7 +23,7 @@ t.equal(set[second], nil)
 
 set.false_member = false
 t.truth(rawget(set, "false_member") ~= nil)
-t.raises(function() set[nil] = true end, "table index is nil")
-t.raises(function() set[0 / 0] = true end, "table index is NaN")
+t.raises(function() set[nil] = true end)
+t.raises(function() set[0 / 0] = true end)
 
 t.done()

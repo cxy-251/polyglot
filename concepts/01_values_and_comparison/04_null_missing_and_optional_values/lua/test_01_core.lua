@@ -3,7 +3,8 @@
 -- Observations: type, rawget, membership encoding, and nil assignment.
 -- polyglot-family: values_and_comparison
 -- polyglot-concept: null_missing_and_optional_values
--- polyglot-related: languages/lua/language/05_tables_and_iteration/test_033_table_key_normalization.lua
+-- polyglot-related: languages/lua/language/01_values_and_types/
+-- polyglot-related+: test_002_values_truthiness_and_absence.lua
 
 local t = require("support.assertions")
 local values = {present_false = false, present_value = 42}

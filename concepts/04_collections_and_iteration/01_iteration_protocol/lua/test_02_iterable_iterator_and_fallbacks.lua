@@ -3,7 +3,8 @@
 -- Observations: explicit iterator/state/control values, closure state, and metamethod fallback.
 -- polyglot-family: collections_and_iteration
 -- polyglot-concept: iteration_protocol
--- polyglot-related: languages/lua/language/06_metatables_and_objects/test_046_len_concat_and_pairs_protocols.lua
+-- polyglot-related: languages/lua/language/06_metatables_and_objects/
+-- polyglot-related+: test_044_operator_and_iteration_metamethods.lua
 
 local t = require("support.assertions")
 

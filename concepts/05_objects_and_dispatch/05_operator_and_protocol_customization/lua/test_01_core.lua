@@ -3,11 +3,14 @@
 -- Observations: metamethod dispatch, raw bypass, returned values, and protocol-specific hooks.
 -- polyglot-family: objects_and_dispatch
 -- polyglot-concept: operator_and_protocol_customization
--- polyglot-related: languages/lua/language/06_metatables_and_objects/test_044_arithmetic_and_bitwise_metamethods.lua
+-- polyglot-related: languages/lua/language/06_metatables_and_objects/
+-- polyglot-related+: test_044_operator_and_iteration_metamethods.lua
 
 local t = require("support.assertions")
 local metatable = {}
-metatable.__add = function(left, right) return setmetatable({value = left.value + right.value}, metatable) end
+metatable.__add = function(left, right)
+    return setmetatable({value = left.value + right.value}, metatable)
+end
 metatable.__eq = function(left, right) return left.value == right.value end
 metatable.__len = function(value) return value.value end
 metatable.__call = function(value, increment) return value.value + increment end

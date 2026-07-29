@@ -3,7 +3,8 @@
 -- Observations: deterministic lost update, same-state sharing, absent atomics, and no parallel execution.
 -- polyglot-family: async_and_concurrency
 -- polyglot-concept: shared_memory_atomics_and_synchronization
--- polyglot-related: languages/lua/language/08_coroutines_and_gc/test_057_coroutine_resume_and_results.lua
+-- polyglot-related: languages/lua/language/08_coroutines_and_gc/
+-- polyglot-related+: test_057_coroutine_resume_status_and_value_exchange.lua
 
 local t = require("support.assertions")
 local shared = {value = 0}
@@ -22,6 +23,8 @@ t.truth(coroutine.resume(second))
 t.equal(shared.value, 1)
 
 t.equal(rawget(_G, "Atomics"), nil)
+t.equal(rawget(_G, "Mutex"), nil)
+t.equal(rawget(_G, "Condition"), nil)
 
 -- 这是显式 cooperative interleaving；Lua 标准语言没有 shared-memory thread 或 atomic API。
 t.done()

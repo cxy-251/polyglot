@@ -3,7 +3,8 @@
 -- Observations: explicit cause fields, arbitrary error values, and absence of native exception chaining.
 -- polyglot-family: errors_and_resources
 -- polyglot-concept: error_chaining_suppression_and_aggregation
--- polyglot-related: languages/lua/language/07_errors_and_resources/test_056_error_context_without_native_chaining.lua
+-- polyglot-related: languages/lua/language/07_errors_and_resources/
+-- polyglot-related+: test_049_error_values_protected_calls_and_context.lua
 
 local t = require("support.assertions")
 local function parse()

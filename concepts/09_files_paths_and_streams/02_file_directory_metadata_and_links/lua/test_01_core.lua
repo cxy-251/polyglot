@@ -3,7 +3,8 @@
 -- Observations: I/O through a link, command exit status, rename/remove, and missing stat API.
 -- polyglot-family: files_paths_and_streams
 -- polyglot-concept: file_directory_metadata_and_links
--- polyglot-related: languages/lua/standard_library/11_io_os_and_processes/test_087_environment_rename_and_remove.lua
+-- polyglot-related: languages/lua/standard_library/11_io_os_and_processes/
+-- polyglot-related+: test_087_environment_files_and_subprocess_capabilities.lua
 
 local t = require("support.assertions")
 local root = assert(os.getenv("POLYGLOT_LUA_TEST_TMP"))
@@ -29,4 +30,5 @@ t.truth(os.remove(renamed))
 t.truth(os.execute(string.format("rmdir %q", directory)))
 t.equal(rawget(os, "stat"), nil)
 
+-- mkdir、symlink 与 stat 不在 Lua 标准库中；这里的 shell 命令是锁定 POSIX 平台能力。
 t.done()

@@ -3,7 +3,8 @@
 -- Observations: caller-owned resume, explicit failure collection, deterministic close, and wrap propagation.
 -- polyglot-family: async_and_concurrency
 -- polyglot-concept: async_await_and_result_propagation
--- polyglot-related: languages/lua/language/08_coroutines_and_gc/test_060_wrap_propagates_and_closes_errors.lua
+-- polyglot-related: languages/lua/language/08_coroutines_and_gc/
+-- polyglot-related+: test_060_coroutine_errors_wrap_and_explicit_close.lua
 
 local t = require("support.assertions")
 local closed = 0

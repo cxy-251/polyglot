@@ -3,7 +3,8 @@
 -- Observations: Lua-pattern syntax, returned captures, stateless calls, and gmatch iterator state.
 -- polyglot-family: text_binary_and_serialization
 -- polyglot-concept: regular_expressions_and_state
--- polyglot-related: languages/lua/standard_library/09_strings_patterns_utf8/test_067_patterns_and_captures.lua
+-- polyglot-related: languages/lua/standard_library/09_strings_patterns_utf8/
+-- polyglot-related+: test_067_pattern_language_iteration_and_substitution.lua
 
 local t = require("support.assertions")
 

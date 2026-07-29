@@ -3,7 +3,8 @@
 -- Observations: shared upvalue identity, mutation visibility, lifetime, and factory isolation.
 -- polyglot-family: functions_and_calls
 -- polyglot-concept: closures_capture_and_lifetime
--- polyglot-related: languages/lua/language/03_scope_and_variables/test_020_shared_upvalues.lua
+-- polyglot-related: languages/lua/language/03_scope_and_variables/
+-- polyglot-related+: test_019_closure_upvalue_lifetime_and_sharing.lua
 
 local t = require("support.assertions")
 

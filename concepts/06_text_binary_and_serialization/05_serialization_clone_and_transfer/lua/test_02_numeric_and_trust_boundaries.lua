@@ -4,7 +4,7 @@
 -- polyglot-family: text_binary_and_serialization
 -- polyglot-concept: serialization_clone_and_transfer
 -- polyglot-related: languages/lua/tooling_and_runtime/14_standalone_and_bytecode/
--- polyglot-related+: test_108_bytecode_compilation_and_loading.lua
+-- polyglot-related+: test_107_luac_validation_and_bytecode_loading.lua
 
 local t = require("support.assertions")
 

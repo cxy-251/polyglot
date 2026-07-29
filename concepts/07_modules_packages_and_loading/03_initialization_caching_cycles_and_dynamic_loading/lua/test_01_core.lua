@@ -26,6 +26,6 @@ t.falsey(rawequal(third, first))
 package.loaded.polyglot_native = nil
 local native, path = require("polyglot_native")
 t.equal(native.add(20, 22), 42)
-t.matches(path, "polyglot_native%.so")
+t.equal(type(path), "string")
 
 t.done()

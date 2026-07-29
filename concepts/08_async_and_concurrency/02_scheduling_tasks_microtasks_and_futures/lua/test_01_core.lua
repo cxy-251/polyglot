@@ -3,7 +3,8 @@
 -- Observations: caller-controlled scheduling, run-until-yield behavior, FIFO only when implemented, and no microtasks.
 -- polyglot-family: async_and_concurrency
 -- polyglot-concept: scheduling_tasks_microtasks_and_futures
--- polyglot-related: languages/lua/language/08_coroutines_and_gc/test_059_yield_value_exchange.lua
+-- polyglot-related: languages/lua/language/08_coroutines_and_gc/
+-- polyglot-related+: test_057_coroutine_resume_status_and_value_exchange.lua
 
 local t = require("support.assertions")
 local events = {}
@@ -26,4 +27,6 @@ t.equal(table.concat(events, ","), "first:start,second:start,second:end,first:en
 t.equal(rawget(_G, "queueMicrotask"), nil)
 t.equal(rawget(_G, "Promise"), nil)
 
+-- Lua 没有标准 ready queue；执行顺序就是宿主调用 resume 的顺序，
+-- FIFO、优先级和新任务何时运行都必须由宿主 runtime 另行定义。
 t.done()

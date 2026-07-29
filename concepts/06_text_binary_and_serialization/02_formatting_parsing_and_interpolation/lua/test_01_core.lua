@@ -3,7 +3,8 @@
 -- Observations: string.format, round-trip quoting, tonumber, explicit conversion, and no interpolation syntax.
 -- polyglot-family: text_binary_and_serialization
 -- polyglot-concept: formatting_parsing_and_interpolation
--- polyglot-related: languages/lua/standard_library/09_strings_patterns_utf8/test_071_format_and_dumped_functions.lua
+-- polyglot-related: languages/lua/standard_library/09_strings_patterns_utf8/
+-- polyglot-related+: test_065_string_construction_bytes_and_formatting.lua
 
 local t = require("support.assertions")
 

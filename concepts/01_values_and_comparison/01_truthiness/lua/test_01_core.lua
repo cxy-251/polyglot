@@ -3,7 +3,8 @@
 -- Observations: branch selection, operand-returning and/or, and non-overridable truth.
 -- polyglot-family: values_and_comparison
 -- polyglot-concept: truthiness
--- polyglot-related: languages/lua/language/01_values_and_types/test_002_nil_boolean_and_truth.lua
+-- polyglot-related: languages/lua/language/01_values_and_types/
+-- polyglot-related+: test_002_values_truthiness_and_absence.lua
 
 local t = require("support.assertions")
 

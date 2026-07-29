@@ -3,7 +3,8 @@
 -- Observations: suspension retains resources, coroutine.close unwinds, and delegation is explicit.
 -- polyglot-family: collections_and_iteration
 -- polyglot-concept: generators_laziness_and_early_termination
--- polyglot-related: languages/lua/language/08_coroutines_and_gc/test_061_coroutine_close_unwinds_resources.lua
+-- polyglot-related: languages/lua/language/08_coroutines_and_gc/
+-- polyglot-related+: test_060_coroutine_errors_wrap_and_explicit_close.lua
 
 local t = require("support.assertions")
 local closed = false

@@ -1,6 +1,6 @@
 -- Common question: how are objects initialized, owned, finalized, and explicitly closed?
--- Inputs: factory-created tables, metatables, __close, __gc, and aliases.
--- Observations: explicit initialization, reference identity, deterministic close, and eventual finalization.
+-- Inputs: factory-created tables, metatables, __close, idempotent state, and aliases.
+-- Observations: explicit initialization, reference identity, deterministic close, and no constructor category.
 -- polyglot-family: objects_and_dispatch
 -- polyglot-concept: construction_initialization_and_lifetime
 -- polyglot-related: languages/lua/language/06_metatables_and_objects/test_048_prototype_object_patterns.lua

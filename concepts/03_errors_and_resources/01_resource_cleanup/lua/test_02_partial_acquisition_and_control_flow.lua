@@ -3,7 +3,8 @@
 -- Observations: declaration timing, reverse close order, partial ownership, and nil/false close values.
 -- polyglot-family: errors_and_resources
 -- polyglot-concept: resource_cleanup
--- polyglot-related: languages/lua/language/07_errors_and_resources/test_052_to_be_closed_normal_exit.lua
+-- polyglot-related: languages/lua/language/07_errors_and_resources/
+-- polyglot-related+: test_052_close_order_unwind_and_failure_precedence.lua
 
 local t = require("support.assertions")
 local events = {}

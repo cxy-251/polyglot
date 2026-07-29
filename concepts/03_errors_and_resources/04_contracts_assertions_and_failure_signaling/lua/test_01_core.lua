@@ -3,7 +3,8 @@
 -- Observations: returned arguments, raised identity, protected handling, and result protocols.
 -- polyglot-family: errors_and_resources
 -- polyglot-concept: contracts_assertions_and_failure_signaling
--- polyglot-related: languages/lua/language/07_errors_and_resources/test_049_error_values_and_assert.lua
+-- polyglot-related: languages/lua/language/07_errors_and_resources/
+-- polyglot-related+: test_049_error_values_protected_calls_and_context.lua
 
 local t = require("support.assertions")
 

@@ -3,7 +3,8 @@
 -- Observations: alias visibility, independent top-level structure, shallow-copy sharing, and no native views.
 -- polyglot-family: collections_and_iteration
 -- polyglot-concept: sequence_mutation_and_invalidation
--- polyglot-related: languages/lua/language/01_values_and_types/test_007_reference_identity.lua
+-- polyglot-related: languages/lua/language/01_values_and_types/
+-- polyglot-related+: test_006_binary_strings_objects_and_identity.lua
 
 local t = require("support.assertions")
 local source = {{value = 1}, {value = 2}, {value = 3}}

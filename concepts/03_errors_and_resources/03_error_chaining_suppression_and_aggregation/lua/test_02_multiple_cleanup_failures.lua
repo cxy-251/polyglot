@@ -3,7 +3,8 @@
 -- Observations: reverse cleanup order, current-error handoff, and explicit aggregation.
 -- polyglot-family: errors_and_resources
 -- polyglot-concept: error_chaining_suppression_and_aggregation
--- polyglot-related: languages/lua/language/07_errors_and_resources/test_054_close_failures_and_pending_cleanup.lua
+-- polyglot-related: languages/lua/language/07_errors_and_resources/
+-- polyglot-related+: test_052_close_order_unwind_and_failure_precedence.lua
 
 local t = require("support.assertions")
 local events = {}

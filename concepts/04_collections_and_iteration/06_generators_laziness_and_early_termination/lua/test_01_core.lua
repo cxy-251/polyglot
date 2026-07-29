@@ -3,7 +3,8 @@
 -- Observations: demand-driven calls, retained state, no background execution, and unconsumed values.
 -- polyglot-family: collections_and_iteration
 -- polyglot-concept: generators_laziness_and_early_termination
--- polyglot-related: languages/lua/language/08_coroutines_and_gc/test_059_yield_value_exchange.lua
+-- polyglot-related: languages/lua/language/08_coroutines_and_gc/
+-- polyglot-related+: test_057_coroutine_resume_status_and_value_exchange.lua
 
 local t = require("support.assertions")
 local produced = 0

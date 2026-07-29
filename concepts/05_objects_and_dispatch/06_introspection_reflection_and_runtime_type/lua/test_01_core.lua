@@ -3,7 +3,8 @@
 -- Observations: type granularity, protocol identity, debug metadata, and privilege boundary.
 -- polyglot-family: objects_and_dispatch
 -- polyglot-concept: introspection_reflection_and_runtime_type
--- polyglot-related: languages/lua/standard_library/12_debug_and_introspection/test_089_function_information.lua
+-- polyglot-related: languages/lua/standard_library/12_debug_and_introspection/
+-- polyglot-related+: test_089_function_local_and_upvalue_information.lua
 
 local t = require("support.assertions")
 
