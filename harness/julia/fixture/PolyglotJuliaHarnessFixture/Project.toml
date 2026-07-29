@@ -1,4 +1,4 @@
-name = "PolyglotJuliaCourse"
+name = "PolyglotJuliaHarnessFixture"
 uuid = "3f74011e-5aac-4ad9-87ef-d9a12f0f19d2"
 authors = ["Polyglot contributors"]
 version = "0.1.0"

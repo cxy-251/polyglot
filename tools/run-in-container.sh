@@ -428,8 +428,29 @@ run_julia() {
   fi
   run_julia_files \
     "Julia vertical course" \
-    "languages/julia" \
+    "@stdlib" \
     "${POLYGLOT_JULIA_COURSE_DEPOT:-/tmp/polyglot-julia-course-depot}" \
+    "${test_files[@]}"
+}
+
+run_julia_harness() {
+  check_julia_version
+  local -a test_files=()
+  if [[ $# -gt 0 ]]; then
+    test_files=("$@")
+  else
+    mapfile -d '' test_files < <(
+      find harness/julia/tests \
+        -maxdepth 1 \
+        -type f \
+        -name 'test_*.jl' \
+        -print0 | sort -z
+    )
+  fi
+  run_julia_files \
+    "Julia harness" \
+    "@stdlib" \
+    "${POLYGLOT_JULIA_HARNESS_DEPOT:-/tmp/polyglot-julia-harness-depot}" \
     "${test_files[@]}"
 }
 
@@ -1625,6 +1646,10 @@ main() {
     julia|jl)
       shift
       run_julia "$@"
+      ;;
+    julia-harness)
+      shift
+      run_julia_harness "$@"
       ;;
     r|R)
       shift

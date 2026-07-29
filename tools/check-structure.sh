@@ -672,8 +672,10 @@ check_julia_projects() {
   local -a seen_domains=()
 
   for required_file in \
-    languages/julia/Project.toml \
-    languages/julia/src/PolyglotJuliaCourse.jl \
+    harness/julia/fixture/PolyglotJuliaHarnessFixture/Project.toml \
+    harness/julia/fixture/PolyglotJuliaHarnessFixture/src/PolyglotJuliaHarnessFixture.jl \
+    harness/julia/tests/test_process_isolation.jl \
+    harness/julia/tests/test_runtime_and_project_contract.jl \
     concepts/Project.toml; do
     if [[ ! -f "$required_file" ]]; then
       report_failure "缺少 Julia 项目文件: $required_file"
@@ -711,7 +713,8 @@ check_julia_projects() {
             isempty(get(project, "deps", Dict())) ||
                 error("$path 的普通测试不得引入第三方 dependency")
         end
-      ' languages/julia/Project.toml concepts/Project.toml; then
+      ' harness/julia/fixture/PolyglotJuliaHarnessFixture/Project.toml \
+        concepts/Project.toml; then
     report_failure "Julia Project.toml 无法解析或不满足版本、依赖约束"
   fi
 
