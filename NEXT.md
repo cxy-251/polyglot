@@ -1,6 +1,6 @@
 # Next task
 
-Status: `in_progress`
+Status: `complete`
 
 ## Goal
 
@@ -78,5 +78,32 @@ language 进行完整文件级语义审计和课程重构。审计后的课程�
 - Python 验证通过：`5025 passed, 39 skipped` 的纵向课程、249 个横向测试、49 个精确
   topic、10 个 family、完整 concepts、2 个 harness 测试、`list-concepts`、`doctor`、
   结构门禁和 `git diff --check`。
-- 九门语言文件级审计均已完成。唯一下一步是汇总真实审计决策数量、恢复完成声明，执行
-  九门纵向课程、全部 harness、完整 concepts、`doctor planned`、结构门禁与工作树最终验证。
+- 九门语言文件级审计均已完成；完成声明已恢复，项目进入维护阶段。
+
+## Completion
+
+决策计数以审计开始前稳定编号为基准；“纠错”包含扩充和重命名，“横删”表示删除的重复
+横向入口。完整机器可读结果位于 `project.json`。
+
+| 语言 | 保留 | 纠错 | 合并 | 移动 | 删除 | 横删 | 纵向文件 | 横向文件 |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| Ruby | 23 | 51 | 44 | 9 | 1 | 1 | 74 | 72 |
+| Lua | 3 | 58 | 61 | 5 | 1 | 7 | 61 | 66 |
+| R | 8 | 48 | 63 | 9 | 0 | 6 | 56 | 67 |
+| Julia | 9 | 62 | 49 | 8 | 0 | 8 | 71 | 65 |
+| Rust | 13 | 47 | 49 | 8 | 11 | 6 | 60 | 67 |
+| Go | 14 | 51 | 51 | 12 | 0 | 9 | 65 | 64 |
+| Node.js | 100 | 3 | 0 | 4 | 0 | 3 | 103 | 70 |
+| C++ | 118 | 42 | 0 | 0 | 0 | 3 | 160 | 70 |
+| Python | 170 | 8 | 0 | 0 | 0 | 1 | 178 | 72 |
+
+最终纵向验证：Python `5025 passed, 39 skipped`；C++ `1409 passed, 15 skipped`；
+Node.js `900 passed`；Go `115 passed`；Rust `97 passed`；Julia `71/71`、R `56/56`、
+Lua `61/61`、Ruby `74/74` 个文件通过。横向层保留 10 个 family、49 个 topic、441 个
+已审语言实现和 613 个差异化测试入口；各语言横向验证、49 个精确 topic、10 个 family
+及完整 `concepts` 全部通过。
+
+九个 harness 全部通过：Python 2、C++ 1、Node.js 35、Go 15、Rust 7 加 1 个 doc test；
+Julia 2、R 4、Lua 3、Ruby 5 个文件或测试通过。`list-concepts`、`doctor`、
+`doctor planned`、结构门禁和 `git diff --check` 均通过；工具链与 runner 检查全部位于
+`harness/<language>/` 或 `tools/`，不计入纵向课程完成度。

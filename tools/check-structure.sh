@@ -83,6 +83,54 @@ if project.get("phase") == "nine-language-semantic-audit":
     for stale_key in ("reviewed_topic_count", "reviewed_language_implementation_count"):
         if stale_key in project:
             raise SystemExit(f"语义审计期间不得保留 {stale_key}")
+elif project.get("phase") == "maintenance":
+    if project.get("content_review_complete") is not True:
+        raise SystemExit("维护阶段 content_review_complete 必须为 true")
+    if project.get("concept_curriculum_complete") is not True:
+        raise SystemExit("维护阶段 concept_curriculum_complete 必须为 true")
+    if project.get("curriculum_reviewed") is not True:
+        raise SystemExit("维护阶段 curriculum_reviewed 必须为 true")
+    if project.get("reviewed_topic_count") != 49:
+        raise SystemExit("维护阶段 reviewed_topic_count 必须与已审计主题一致")
+    if project.get("reviewed_language_implementation_count") != 441:
+        raise SystemExit("维护阶段 reviewed_language_implementation_count 必须与审计结果一致")
+    audit = project.get("semantic_audit_result", {})
+    concept_result = audit.get("concepts", {})
+    if concept_result.get("topics") != project.get("reviewed_topic_count"):
+        raise SystemExit("语义审计 topic 结果与完成声明不一致")
+    if concept_result.get("reviewed_language_implementations") != 441:
+        raise SystemExit("语义审计语言实现结果与完成声明不一致")
+    if concept_result.get("test_files") != 613:
+        raise SystemExit("语义审计横向入口总数不是最终的 613")
+
+    pre_audit_files = {
+        "ruby": 128,
+        "lua": 128,
+        "r": 128,
+        "julia": 128,
+        "rust": 128,
+        "go": 128,
+        "nodejs": 107,
+        "cpp": 160,
+        "python": 178,
+    }
+    language_results = audit.get("languages", {})
+    if set(language_results) != set(pre_audit_files):
+        raise SystemExit("语义审计结果没有覆盖全部九门语言")
+    for language, pre_audit_count in pre_audit_files.items():
+        result = language_results[language]
+        decisions = sum(
+            result.get(key, -pre_audit_count)
+            for key in ("kept", "corrected", "merged", "moved", "deleted")
+        )
+        if decisions != pre_audit_count:
+            raise SystemExit(f"{language} 的文件级审计决策数与审计前课程不一致")
+        if result.get("kept", 0) + result.get("corrected", 0) != result.get("course_files"):
+            raise SystemExit(f"{language} 的保留课程数与最终课程数不一致")
+        if 73 - result.get("horizontal_deleted", -1000) != result.get("concept_files"):
+            raise SystemExit(f"{language} 的横向删除数与最终入口数不一致")
+else:
+    raise SystemExit("project.json phase 必须是语义审计或维护阶段")
 
 harness = project.get("layers", {}).get("harness_and_integration", {})
 if harness.get("counts_toward_language_curriculum") is not False:
