@@ -10,9 +10,14 @@ before <- unname(proc.time()[["elapsed"]])
 sum(seq_len(1000L))
 after <- unname(proc.time()[["elapsed"]])
 duration <- as.difftime(90, units = "secs")
+hours <- as.difftime(2, units = "hours")
+instant <- as.POSIXct("2026-01-01 00:00:00", tz = "UTC")
 
 stopifnot(
     after >= before,
     inherits(duration, "difftime"),
-    identical(as.numeric(duration, units = "secs"), 90)
+    identical(as.numeric(duration, units = "secs"), 90),
+    identical(as.numeric(hours, units = "mins"), 120),
+    identical(format(instant + hours, tz = "UTC"), "2026-01-01 02:00:00"),
+    inherits(instant, "POSIXct")
 )

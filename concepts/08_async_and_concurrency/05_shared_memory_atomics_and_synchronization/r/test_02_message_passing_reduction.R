@@ -3,8 +3,8 @@
 # polyglot-related: languages/r/tooling_and_runtime/15_processes_parallel_and_runtime/
 # polyglot-related+: test_115_psock_cluster_serialization_and_process_isolation.R
 #
-# 共同问题：共享更新怎样避免丢失，等待条件怎样重新检查。
-# 对照观察：PSOCK worker 各自更新副本，父进程显式归并结果；没有 condition-variable predicate API。
+# 共同问题：没有共享 heap 时怎样组合并发更新，等待条件是否有语言级协议。
+# 对照观察：PSOCK worker 返回独立 partial，父进程显式归并；base R 没有 condition-variable predicate API。
 
 local({
     cluster <- parallel::makePSOCKcluster(2L)

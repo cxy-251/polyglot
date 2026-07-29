@@ -10,5 +10,7 @@ stopifnot(
     identical(if (0) "yes" else "no", "no"),
     identical(if (1) "yes" else "no", "yes"),
     inherits(tryCatch(if (logical(0)) 1L, error = identity), "error"),
-    inherits(tryCatch(if (NA) 1L, error = identity), "error")
+    inherits(tryCatch(if (NA) 1L, error = identity), "error"),
+    inherits(tryCatch(if (c(TRUE, FALSE)) 1L, error = identity), "error"),
+    inherits(tryCatch(if ("text") 1L, error = identity), "error")
 )
