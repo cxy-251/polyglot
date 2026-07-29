@@ -23,8 +23,12 @@ language 进行完整文件级语义审计和课程重构。审计后的课程�
 ## Current stage
 
 - 已撤销 `content_review_complete`、`curriculum-reviewed` 和 reviewed implementation
-  等完成声明；审计前测试数字改为执行快照。
-- 正在重构项目规则和结构门禁：允许稳定编号空缺、不同语言使用不同横向组织方式，
-  删除固定文件数、固定问题域和 stem 镜像约束，并明确 `polyglot-related` 只提供路径完整性。
-- 当前审计语言为 Ruby，尚未开始课程文件修改。规则与门禁提交后，唯一下一步是从 block、
-  Proc、lambda、开放类、mixin 和 refinement 开始逐文件审计 Ruby。
+  等完成声明；规则与结构门禁已经允许稳定编号空缺和不同语言采用不同横向组织方式，
+  并明确 `polyglot-related` 的路径检查不能替代语义审查。
+- Ruby 已完成文件级审计：纵向课程由审计前 128 个文件重构为 74 个，编号范围
+  `002`–`120` 且保留稳定空缺；49 个横向 topic 使用 72 个 Ruby 文件；runner、隔离环境、
+  本地 gem/C extension fixture 和 5 个工程验证移入 `harness/ruby/`。
+- Ruby 验证通过：74 个纵向文件、72 个横向文件、10 个 family、完整 concepts、
+  `ruby-harness`、`list-concepts`、`doctor`、结构门禁和 `git diff --check`。
+- 当前审计语言为 Lua。唯一下一步是逐文件审查 Lua 的 table、metatable、coroutine、
+  GC 与 C API，并先将 runner、环境隔离和 C 构建工程从语言课程识别到 harness 层。
