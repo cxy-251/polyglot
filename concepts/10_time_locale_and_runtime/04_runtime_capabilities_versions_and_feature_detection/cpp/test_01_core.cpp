@@ -11,6 +11,7 @@
 
 #include <concepts>
 #include <string>
+#include <thread>
 #include <version>
 
 namespace {
@@ -44,11 +45,13 @@ TEST(RuntimeCapabilityConcept, RequiresExpressionChecksUsableInterface) {
   EXPECT_FALSE(int_has_size);
 }
 
-TEST(RuntimeCapabilityConcept, CompilerVersionDoesNotGuaranteeEveryLibraryFeature) {
-#ifdef __GNUC__
-  EXPECT_EQ(__GNUC__, 11);
+TEST(RuntimeCapabilityConcept, FeatureMacroAndUsableInterfaceAreBothChecked) {
+#ifdef __cpp_lib_jthread
+  static_assert(__cpp_lib_jthread >= 201911L);
+  std::jthread worker{[] {}};
+  EXPECT_TRUE(worker.joinable());
 #else
-  FAIL() << "sources.lock 锁定 GCC 11.4";
+  GTEST_SKIP() << "当前标准库未提供 jthread";
 #endif
 
   // 编译器、语言模式和标准库版本是三个维度；优先使用特性宏或 requires 检测具体接口。

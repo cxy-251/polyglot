@@ -12,6 +12,7 @@ Usage:
   ./tools/run-in-container.sh python [pytest arguments...]
   ./tools/run-in-container.sh cpp [ctest arguments...]
   ./tools/run-in-container.sh cpp-harness [ctest arguments...]
+  ./tools/run-in-container.sh cpp-concepts [ctest arguments...]
   ./tools/run-in-container.sh nodejs [node --test arguments or test files...]
   ./tools/run-in-container.sh nodejs-harness [node --test arguments...]
   ./tools/run-in-container.sh nodejs-concepts [node --test arguments...]
@@ -278,6 +279,11 @@ run_cpp() {
 run_cpp_harness() {
   local build_dir="${POLYGLOT_CPP_HARNESS_BUILD_DIR:-/tmp/polyglot-cpp-harness-build}"
   run_cpp_layer harness "$build_dir" '^polyglot-harness$' "$@"
+}
+
+run_cpp_concepts() {
+  local build_dir="${POLYGLOT_CPP_CONCEPT_BUILD_DIR:-/tmp/polyglot-cpp-concepts-build-v2}"
+  run_cpp_layer concepts "$build_dir" '^polyglot-concept$' "$@"
 }
 
 check_nodejs_version() {
@@ -1721,6 +1727,10 @@ main() {
     cpp-harness)
       shift
       run_cpp_harness "$@"
+      ;;
+    cpp-concepts)
+      shift
+      run_cpp_concepts "$@"
       ;;
     nodejs|node|js)
       shift

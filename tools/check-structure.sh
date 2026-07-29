@@ -595,8 +595,9 @@ check_cpp_project() {
   if [[ -f languages/cpp/CMakeLists.txt ]]; then
     report_failure "C++ CMake/GoogleTest 工程配置不得继续位于语言课程"
   fi
-  if ! grep -Fq 'cpp-harness)' tools/run-in-container.sh; then
-    report_failure "C++ runner 缺少 harness 入口"
+  if ! grep -Fq 'cpp-harness)' tools/run-in-container.sh || \
+    ! grep -Fq 'cpp-concepts)' tools/run-in-container.sh; then
+    report_failure "C++ runner 缺少 harness 或独立横向入口"
   fi
   if [[ -f harness/cpp/tests/test_01_build_contract.cpp ]] && \
     ! grep -Fq '// polyglot-harness:' harness/cpp/tests/test_01_build_contract.cpp; then

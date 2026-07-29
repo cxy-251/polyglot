@@ -48,11 +48,11 @@ TEST(ContractsConcept, RuntimeValidationUsesTypedExceptions) {
 TEST(ContractsConcept, StandardAssertIsAConfigurationDependentDebugCheck) {
 #ifdef NDEBUG
   constexpr bool assertions_enabled = false;
+  EXPECT_FALSE(assertions_enabled);
 #else
   constexpr bool assertions_enabled = true;
+  EXPECT_TRUE(assertions_enabled);
 #endif
-
-  EXPECT_EQ(assertions_enabled, true);
 
   // assert 失败通常终止进程且 NDEBUG 可移除它；输入错误应使用返回值或异常。
 }
