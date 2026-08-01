@@ -897,11 +897,15 @@ run_ruby_files() {
   local test_file
   local default_gem_directory
   local failure_count=0
+  local require_named_cases=0
   local requires_native_extension=false
 
   if [[ ${#test_files[@]} -eq 0 ]]; then
     echo "$label 没有发现 Ruby 测试文件。" >&2
     exit 1
+  fi
+  if [[ "$layer" == course || "$layer" == harness ]]; then
+    require_named_cases=1
   fi
 
   mkdir -p "$sandbox_root"
@@ -1001,6 +1005,7 @@ run_ruby_files() {
       POLYGLOT_RUBY_BUNDLE_HOME="$test_sandbox/bundle" \
       POLYGLOT_RUBY_EXTENSION_DIR="$run_sandbox/c-extension" \
       POLYGLOT_TEST_LAYER="$layer" \
+      POLYGLOT_REQUIRE_NAMED_CASES="$require_named_cases" \
       ruby \
         --disable-did_you_mean \
         --disable-error_highlight \

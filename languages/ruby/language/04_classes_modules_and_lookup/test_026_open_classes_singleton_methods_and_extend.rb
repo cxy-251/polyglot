@@ -19,7 +19,10 @@ class OpenClassFixture
     :added
   end
 end
-A.equal(:added, instance_created_before_reopen.added_later)
+
+A.case("reopening a class changes the existing class object and earlier instances") do
+  A.equal(:added, instance_created_before_reopen.added_later)
+end
 
 feature = Module.new do
   def feature
@@ -30,23 +33,27 @@ object = Object.new
 def object.only_here = :singleton
 object.extend(feature)
 
-other = Object.new
-A.equal([:singleton, :extended], [object.only_here, object.feature])
-A.falsey(other.respond_to?(:only_here))
-A.falsey(other.respond_to?(:feature))
-A.includes(object.singleton_class.ancestors, feature)
-A.same(object.singleton_class, class << object; self; end)
+A.case("singleton methods and extend alter only one object's singleton-class lookup") do
+  other = Object.new
+  A.equal([:singleton, :extended], [object.only_here, object.feature])
+  A.falsey(other.respond_to?(:only_here))
+  A.falsey(other.respond_to?(:feature))
+  A.includes(object.singleton_class.ancestors, feature)
+  A.same(object.singleton_class, class << object; self; end)
+end
 
-# 开放类修改当前进程的 class object；在子进程中重开 String 不会改变父进程。
-code = <<~'RUBY'
-  class String
-    def polyglot_marker = :child
-  end
-  print "ruby".polyglot_marker
-RUBY
-stdout, stderr, status = H.ruby_command("-e", code)
-A.truth(status.success?, stderr)
-A.equal("child", stdout)
-A.falsey("ruby".respond_to?(:polyglot_marker))
+A.case("an open-class patch is process-local rather than a persistent runtime change") do
+  code = <<~'RUBY'
+    class String
+      def polyglot_marker = :child
+    end
+    print "ruby".polyglot_marker
+  RUBY
+  stdout, stderr, status = H.ruby_command("-e", code)
+
+  A.truth(status.success?, stderr)
+  A.equal("child", stdout)
+  A.falsey("ruby".respond_to?(:polyglot_marker))
+end
 
 A.done

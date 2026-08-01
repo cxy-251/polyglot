@@ -6,26 +6,32 @@ require "polyglot_native"
 
 A = PolyglotAssertions
 
-A.equal("PolyglotNative::Box", PolyglotNative::Box.name)
-A.same(Object, PolyglotNative::Box.superclass)
-A.same(PolyglotNative::Box, PolyglotNative::Box.instance_method(:label).owner)
-A.nil_value(PolyglotNative::Box.instance_method(:append).source_location)
+A.case("TypedData publishes an ordinary Ruby class whose methods are C-defined") do
+  A.equal("PolyglotNative::Box", PolyglotNative::Box.name)
+  A.same(Object, PolyglotNative::Box.superclass)
+  A.same(PolyglotNative::Box, PolyglotNative::Box.instance_method(:label).owner)
+  A.nil_value(PolyglotNative::Box.instance_method(:append).source_location)
+end
 
-source = +"ruby"
-box = PolyglotNative::Box.new(source)
-source << "-caller"
-# fixture 在 initialize 中复制字符串，因此 C 持有值不与调用者的可变 String 共享。
-A.equal("ruby", box.label)
-A.equal(0, box.count)
-A.same(box, box.append("-native"))
-A.equal("ruby-native", box.label)
-A.equal(1, box.count)
+A.case("the native wrapper copies input and mutates only through its owning methods") do
+  source = +"ruby"
+  box = PolyglotNative::Box.new(source)
+  source << "-caller"
+  A.equal("ruby", box.label)
+  A.equal(0, box.count)
+  A.same(box, box.append("-native"))
+  A.equal("ruby-native", box.label)
+  A.equal(1, box.count)
+end
 
-GC.start
-GC.compact if GC.respond_to?(:compact)
-A.equal("ruby-native", box.label)
-A.equal(1, box.count)
-# label getter 返回副本；调用者不能绕过 native object 的所有权边界直接改内部 VALUE。
-A.falsey(box.label.equal?(box.label))
+A.case("marked TypedData survives GC and returns copies rather than its internal VALUE") do
+  box = PolyglotNative::Box.new(+"ruby")
+  box.append("-native")
+  GC.start
+  GC.compact if GC.respond_to?(:compact)
+  A.equal("ruby-native", box.label)
+  A.equal(1, box.count)
+  A.falsey(box.label.equal?(box.label))
+end
 
 A.done

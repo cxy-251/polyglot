@@ -27,17 +27,22 @@ dynamic_class = Class.new do
   end
 end
 
-object = dynamic_class.new
-A.equal(:private, object.public_value)
-A.raises(NoMethodError) { object.private_value }
-A.equal(:private, object.send(:private_value))
-A.raises(NoMethodError) { object.public_send(:private_value) }
-A.falsey(object.respond_to?(:private_value))
-A.truth(object.respond_to?(:private_value, true))
+A.case("private visibility constrains ordinary calls, public_send and reflection defaults") do
+  object = dynamic_class.new
+  A.equal(:private, object.public_value)
+  A.raises(NoMethodError) { object.private_value }
+  A.equal(:private, object.send(:private_value))
+  A.raises(NoMethodError) { object.public_send(:private_value) }
+  A.falsey(object.respond_to?(:private_value))
+  A.truth(object.respond_to?(:private_value, true))
+end
 
-A.equal([:dynamic_value, [1, 2]], object.dynamic_value(1, 2))
-A.truth(object.respond_to?(:dynamic_value))
-A.equal(:dynamic_value, object.method(:dynamic_value).name)
-A.raises(NoMethodError) { object.ordinary_missing }
+A.case("method_missing and respond_to_missing? must describe the same dynamic protocol") do
+  object = dynamic_class.new
+  A.equal([:dynamic_value, [1, 2]], object.dynamic_value(1, 2))
+  A.truth(object.respond_to?(:dynamic_value))
+  A.equal(:dynamic_value, object.method(:dynamic_value).name)
+  A.raises(NoMethodError) { object.ordinary_missing }
+end
 
 A.done

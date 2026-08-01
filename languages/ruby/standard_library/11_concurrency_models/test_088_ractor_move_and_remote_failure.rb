@@ -5,22 +5,24 @@ require "assertions"
 
 A = PolyglotAssertions
 
-moved = +"owned"
-move_worker = Ractor.new do
-  value = Ractor.receive
-  value << "-worker"
+A.case("move transfers ownership and makes the sender-side object inaccessible") do
+  moved = +"owned"
+  move_worker = Ractor.new do
+    value = Ractor.receive
+    value << "-worker"
+  end
+  move_worker.send(moved, move: true)
+  A.equal("owned-worker", move_worker.value)
+  A.raises(Ractor::MovedError) { moved.length }
 end
-move_worker.send(moved, move: true)
-A.equal("owned-worker", move_worker.value)
-A.raises(Ractor::MovedError) { moved.length }
 
-failing = Ractor.new do
-  Thread.current.report_on_exception = false
-  raise ArgumentError, "remote"
+A.case("a failing Ractor reports RemoteError at collection with the remote cause") do
+  failing = Ractor.new do
+    Thread.current.report_on_exception = false
+    raise ArgumentError, "remote"
+  end
+  remote = A.raises(Ractor::RemoteError) { failing.value }
+  A.same(ArgumentError, remote.cause.class)
+  A.equal("remote", remote.cause.message)
 end
-remote = A.raises(Ractor::RemoteError) { failing.value }
-A.same(ArgumentError, remote.cause.class)
-A.equal("remote", remote.cause.message)
-
-# Ractor 失败通过 RemoteError 在收集点传播；它不是 OS 子进程，fork 工作流另见进程课程。
 A.done

@@ -5,19 +5,23 @@ require "assertions"
 
 A = PolyglotAssertions
 
-result = catch(:done) do
-  [1, 2, 3].each do |value|
-    throw(:done, value * 10) if value == 2
+A.case("throw transfers a value to the matching catch while normal completion returns normally") do
+  result = catch(:done) do
+    [1, 2, 3].each do |value|
+      throw(:done, value * 10) if value == 2
+    end
+    :unreachable
   end
-  :unreachable
+  A.equal(20, result)
+  A.equal(:normal, catch(:unused) { :normal })
 end
 
-A.equal(20, result)
-A.equal(:normal, catch(:unused) { :normal })
-error = A.raises(UncaughtThrowError) { throw(:missing, 1) }
-A.equal(:missing, error.tag)
-A.equal(1, error.value)
-A.truth(error.is_a?(StandardError))
-A.falsey(UncaughtThrowError == RuntimeError)
+A.case("an unmatched tag becomes UncaughtThrowError with the original tag and value") do
+  error = A.raises(UncaughtThrowError) { throw(:missing, 1) }
+  A.equal(:missing, error.tag)
+  A.equal(1, error.value)
+  A.truth(error.is_a?(StandardError))
+  A.falsey(UncaughtThrowError == RuntimeError)
+end
 
 A.done

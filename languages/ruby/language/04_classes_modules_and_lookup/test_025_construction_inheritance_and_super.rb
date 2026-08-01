@@ -23,15 +23,19 @@ child = Class.new(base) do
   end
 end
 
-allocated = child.allocate
-A.truth(allocated.is_a?(child))
-A.nil_value(allocated.value)
+A.case("allocate creates an instance without running initialize") do
+  allocated = child.allocate
+  A.truth(allocated.is_a?(child))
+  A.nil_value(allocated.value)
+end
 
-initialized = child.new(42)
-A.equal(42, initialized.value)
-A.equal("child(42:child)", initialized.describe)
-A.equal("child(42:custom)", initialized.describe(suffix: "custom"))
-A.same(base, child.superclass)
-A.equal([child, base], child.ancestors.take(2))
+A.case("new initializes inherited state and super forwards the explicit keyword") do
+  initialized = child.new(42)
+  A.equal(42, initialized.value)
+  A.equal("child(42:child)", initialized.describe)
+  A.equal("child(42:custom)", initialized.describe(suffix: "custom"))
+  A.same(base, child.superclass)
+  A.equal([child, base], child.ancestors.take(2))
+end
 
 A.done

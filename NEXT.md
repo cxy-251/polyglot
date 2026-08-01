@@ -38,12 +38,22 @@ Status: `in_progress`
 
 ## Current stage
 
-- 已将项目阶段切换为 `behavioral-case-density-audit`，撤销课程与内容完成声明。
-- 已删除 `project.json` 中将 49 topics、441 implementations、613 files 和每语言历史
-  73 个入口当作当前完成事实的固定结果；结构门禁正在切换为动态完成契约。
-- 当前语言：Ruby。尚未完成任何语言的四阶段审计。
+- 已提交动态审计状态与结构门禁基础改造：`5611667 Reopen behavioral case-density audit`。
+- 已提交 Ruby 命名 case 报告器与 6 个 harness 文件迁移：
+  `4a9b701 Add Ruby named case reporting`；Ruby harness 全量 `6/6` 通过。
+- 当前语言：Ruby。74 个纵向课程文件已经全部改为可独立报告的命名 behavior case，
+  Ruby 纵向全量 `74/74` 通过；相关改动保存在当前课程审计提交中。
+- Ruby 横向概念尚未开始，现有 72 个入口均待审计；动态 `metrics` 入口尚未实现；
+  Lua、R、Julia、Rust、Go 均未开始。
 
 ## Handoff
 
-下一步唯一操作：完成动态审计状态与结构门禁基础提交，然后实现 Ruby 命名 case 报告器；
-在 Ruby 课程、概念、harness 全部具备可执行命名 case 并通过完整验证前，不开始 Lua。
+按用户要求暂停，保持 `in_progress`，不开始 Ruby 概念或后续语言。
+
+最后运行的组合命令是
+`./tools/run.sh ruby && ./tools/run.sh ruby-harness && ./tools/run.sh check && git diff --check`：
+Ruby 纵向 `74/74` 和 harness `6/6` 已完成并通过；命令在结构检查期间被主动中断，退出码
+为 `130`，因此结构门禁与 `git diff --check` 没有形成最终通过结论。
+
+恢复后的唯一下一步操作：运行 `./tools/run.sh check`，确认结构门禁后再决定是否继续
+Ruby 横向概念审计。

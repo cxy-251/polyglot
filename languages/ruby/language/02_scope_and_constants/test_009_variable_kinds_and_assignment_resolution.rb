@@ -17,17 +17,21 @@ class VariableKindsFixture
   end
 end
 
-A.equal([:local, :instance, :class_variable], VariableKindsFixture.new.values)
+A.case("method bodies distinguish local, instance and class-variable storage") do
+  A.equal([:local, :instance, :class_variable], VariableKindsFixture.new.values)
+end
 
 receiver = Object.new
 def receiver.token = :method
 
-result = receiver.instance_eval do
-  before_assignment = token
-  token = :local
-  [before_assignment, token, self.token]
+A.case("the parser decides local-variable status from assignment in the static scope") do
+  result = receiver.instance_eval do
+    before_assignment = token
+    token = :local
+    [before_assignment, token, self.token]
+  end
+  A.equal([:method, :local, :method], result)
 end
-A.equal([:method, :local, :method], result)
 
 holder_class = Class.new do
   attr_reader :value
@@ -42,8 +46,10 @@ holder_class = Class.new do
     value
   end
 end
-holder = holder_class.new
-A.equal(:local, holder.assign)
-A.equal(:setter, holder.value)
+A.case("a setter call requires an explicit receiver to differ from local assignment") do
+  holder = holder_class.new
+  A.equal(:local, holder.assign)
+  A.equal(:setter, holder.value)
+end
 
 A.done

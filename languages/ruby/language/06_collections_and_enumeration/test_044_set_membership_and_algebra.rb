@@ -6,13 +6,19 @@ require "set"
 
 A = PolyglotAssertions
 
-values = Set[1, 2, 2, 3]
-A.equal(3, values.size)
-A.truth(values.include?(2))
-A.equal(Set[2, 3], values & Set[2, 3, 4])
-A.equal(Set[1, 2, 3, 4], values | Set[4])
-A.equal(Set[1], values - Set[2, 3])
-A.truth(Set[1, 2].subset?(values))
-A.equal([1, 2, 3], values.to_a.sort)
+A.case("Set deduplicates members and exposes membership independently of order") do
+  values = Set[1, 2, 2, 3]
+  A.equal(3, values.size)
+  A.truth(values.include?(2))
+  A.equal([1, 2, 3], values.to_a.sort)
+end
+
+A.case("set algebra returns mathematical intersection, union and difference") do
+  values = Set[1, 2, 3]
+  A.equal(Set[2, 3], values & Set[2, 3, 4])
+  A.equal(Set[1, 2, 3, 4], values | Set[4])
+  A.equal(Set[1], values - Set[2, 3])
+  A.truth(Set[1, 2].subset?(values))
+end
 
 A.done

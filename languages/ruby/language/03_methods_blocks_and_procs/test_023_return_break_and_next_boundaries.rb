@@ -11,18 +11,25 @@ def proc_nonlocal_return
   :unreachable
 end
 
-lambda_return = -> { return :from_lambda }
-lambda_break = -> { break :from_lambda_break }
-next_values = [1, 2, 3].map do |value|
-  next :skipped if value.even?
-
-  value
+A.case("return is nonlocal in a Proc but local to a lambda") do
+  lambda_return = -> { return :from_lambda }
+  A.equal(:from_proc, proc_nonlocal_return)
+  A.equal(:from_lambda, lambda_return.call)
 end
 
-A.equal(:from_proc, proc_nonlocal_return)
-A.equal(:from_lambda, lambda_return.call)
-A.equal(:from_lambda_break, lambda_break.call)
-A.equal([1, :skipped, 3], next_values)
-A.raises(LocalJumpError) { proc { break :outside }.call }
+A.case("break is local to a lambda but requires an active yielding frame in a Proc") do
+  lambda_break = -> { break :from_lambda_break }
+  A.equal(:from_lambda_break, lambda_break.call)
+  A.raises(LocalJumpError) { proc { break :outside }.call }
+end
+
+A.case("next supplies the current block invocation result without ending iteration") do
+  next_values = [1, 2, 3].map do |value|
+    next :skipped if value.even?
+
+    value
+  end
+  A.equal([1, :skipped, 3], next_values)
+end
 
 A.done

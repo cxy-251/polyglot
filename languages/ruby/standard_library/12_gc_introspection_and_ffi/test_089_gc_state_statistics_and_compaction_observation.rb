@@ -5,28 +5,37 @@ require "assertions"
 
 A = PolyglotAssertions
 
-was_disabled = GC.disable
-GC.enable
-begin
-  before = GC.stat
-  objects = 50.times.map { |index| "value-#{index}" }
-  A.includes(before.keys, :count)
-  A.includes(before.keys, :heap_live_slots)
-  A.truth(before[:count].is_a?(Integer))
+A.case("GC.stat exposes counters and an explicit collection advances or preserves count") do
+  was_disabled = GC.disable
+  GC.enable
+  begin
+    before = GC.stat
+    A.includes(before.keys, :count)
+    A.includes(before.keys, :heap_live_slots)
+    A.truth(before[:count].is_a?(Integer))
 
-  GC.start(full_mark: true, immediate_sweep: true)
-  after = GC.stat
-  A.truth(after[:count] >= before[:count])
+    GC.start(full_mark: true, immediate_sweep: true)
+    after = GC.stat
+    A.truth(after[:count] >= before[:count])
+  ensure
+    was_disabled ? GC.disable : GC.enable
+  end
+end
 
-  # compact 的统计形状和移动策略属于锁定 CRuby 观察；对象引用保持有效才是 API 边界。
-  if GC.respond_to?(:compact)
+if GC.respond_to?(:compact)
+  A.case("CRuby compaction keeps live Ruby references valid") do
+    was_disabled = GC.disable
+    GC.enable
+    objects = 50.times.map { |index| "value-#{index}" }
     compact_result = GC.compact
     A.truth(compact_result.is_a?(Hash))
     A.equal("value-0", objects.first)
     A.equal("value-49", objects.last)
+  ensure
+    was_disabled ? GC.disable : GC.enable
   end
-ensure
-  was_disabled ? GC.disable : GC.enable
+else
+  A.skip("CRuby compaction keeps live Ruby references valid", "GC.compact unavailable")
 end
 
 A.done

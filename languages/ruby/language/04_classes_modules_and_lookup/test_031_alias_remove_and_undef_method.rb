@@ -31,10 +31,18 @@ undefining = Class.new(base) do
   undef_method :value
 end
 
-A.equal(:child, aliasing.new.value)
-A.equal(:base, aliasing.new.original_value)
-A.equal(:child, removing.new.value)
-A.raises(NoMethodError) { undefining.new.value }
-A.falsey(undefining.method_defined?(:value))
+A.case("alias_method captures the method entry visible when the alias is created") do
+  A.equal(:child, aliasing.new.value)
+  A.equal(:base, aliasing.new.original_value)
+end
+
+A.case("remove_method removes the local entry and reveals an ancestor implementation") do
+  A.equal(:child, removing.new.value)
+end
+
+A.case("undef_method installs a lookup barrier instead of revealing the ancestor") do
+  A.raises(NoMethodError) { undefining.new.value }
+  A.falsey(undefining.method_defined?(:value))
+end
 
 A.done

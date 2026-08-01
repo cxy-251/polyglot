@@ -43,27 +43,32 @@ scheduler_class = Class.new do
   end
 end
 
-A.nil_value(Fiber.scheduler)
-A.raises(RuntimeError) { Fiber.schedule {} }
-scheduler = scheduler_class.new
-begin
-  Fiber.set_scheduler(scheduler)
-  A.same(scheduler, Fiber.scheduler)
-  A.nil_value(Thread.new { Fiber.scheduler }.value)
-  scheduled = Fiber.schedule do
-    scheduler.events << :before_sleep
-    sleep(0)
-    scheduler.events << :after_sleep
-    :finished
-  end
-  A.falsey(scheduled.alive?)
-  A.includes(scheduler.events, :fiber)
-  A.includes(scheduler.events, [:sleep, 0])
-  A.includes(scheduler.events, :after_sleep)
-ensure
-  Fiber.set_scheduler(nil)
+A.case("Fiber.schedule requires a scheduler installed on the current thread") do
+  A.nil_value(Fiber.scheduler)
+  A.raises(RuntimeError) { Fiber.schedule {} }
 end
-A.nil_value(Fiber.scheduler)
-A.equal(:close, scheduler.events.last)
+
+A.case("a thread-local scheduler owns scheduled fibers, hooks and close cleanup") do
+  scheduler = scheduler_class.new
+  begin
+    Fiber.set_scheduler(scheduler)
+    A.same(scheduler, Fiber.scheduler)
+    A.nil_value(Thread.new { Fiber.scheduler }.value)
+    scheduled = Fiber.schedule do
+      scheduler.events << :before_sleep
+      sleep(0)
+      scheduler.events << :after_sleep
+      :finished
+    end
+    A.falsey(scheduled.alive?)
+    A.includes(scheduler.events, :fiber)
+    A.includes(scheduler.events, [:sleep, 0])
+    A.includes(scheduler.events, :after_sleep)
+  ensure
+    Fiber.set_scheduler(nil)
+  end
+  A.nil_value(Fiber.scheduler)
+  A.equal(:close, scheduler.events.last)
+end
 
 A.done

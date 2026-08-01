@@ -5,25 +5,30 @@ require "assertions"
 
 A = PolyglotAssertions
 
-# Ruby 的条件协议只把 false 和 nil 当作假；数值零和空容器并不参与“空值即假”的惯例。
-truthy_values = [0, 0.0, "", [], {}, :symbol]
-truthy_values.each { |value| A.equal(:truthy, value ? :truthy : :falsey) }
-A.equal(:falsey, false ? :truthy : :falsey)
-A.equal(:falsey, nil ? :truthy : :falsey)
+A.case("only false and nil are falsey in condition positions") do
+  # 数值零和空容器不参与“空值即假”的惯例。
+  truthy_values = [0, 0.0, "", [], {}, :symbol]
+  truthy_values.each { |value| A.equal(:truthy, value ? :truthy : :falsey) }
+  A.equal(:falsey, false ? :truthy : :falsey)
+  A.equal(:falsey, nil ? :truthy : :falsey)
+end
 
-A.same(NilClass, nil.class)
-A.same(TrueClass, true.class)
-A.same(FalseClass, false.class)
-A.same(Integer, 42.class)
-A.same(String, "ruby".class)
-A.truth(nil.nil?)
-A.falsey(false.nil?)
+A.case("core literal values have distinct classes and nil? is narrow") do
+  A.same(NilClass, nil.class)
+  A.same(TrueClass, true.class)
+  A.same(FalseClass, false.class)
+  A.same(Integer, 42.class)
+  A.same(String, "ruby".class)
+  A.truth(nil.nil?)
+  A.falsey(false.nil?)
+end
 
-# `&.` 只短路 nil，不短路 false；这与把二者都视为条件假值是不同的协议。
-A.nil_value(nil&.to_s)
-A.equal("false", false&.to_s)
-A.equal(:fallback, nil || :fallback)
-A.equal(:fallback, false || :fallback)
-A.equal(0, 0 || :fallback)
+A.case("safe navigation only short-circuits nil while || follows truthiness") do
+  A.nil_value(nil&.to_s)
+  A.equal("false", false&.to_s)
+  A.equal(:fallback, nil || :fallback)
+  A.equal(:fallback, false || :fallback)
+  A.equal(0, 0 || :fallback)
+end
 
 A.done
