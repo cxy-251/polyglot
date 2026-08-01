@@ -889,12 +889,14 @@ build_ruby_c_extension() {
 run_ruby_files() {
   local label="$1"
   local sandbox_root="$2"
-  shift 2
+  local layer="$3"
+  shift 3
   local -a test_files=("$@")
   local run_sandbox
   local test_sandbox
   local test_file
   local default_gem_directory
+  local failure_count=0
   local requires_native_extension=false
 
   if [[ ${#test_files[@]} -eq 0 ]]; then
@@ -968,8 +970,9 @@ run_ruby_files() {
         -cw \
         "$test_file" >/dev/null; then
       echo "Ruby 语法或 warning 检查失败: $test_file" >&2
-      rm -rf "$run_sandbox"
-      exit 1
+      failure_count=$((failure_count + 1))
+      rm -rf "$test_sandbox"
+      continue
     fi
     if ! env \
       -u RUBYOPT \
@@ -997,6 +1000,7 @@ run_ruby_files() {
       POLYGLOT_RUBY_GEM_HOME="$test_sandbox/gems" \
       POLYGLOT_RUBY_BUNDLE_HOME="$test_sandbox/bundle" \
       POLYGLOT_RUBY_EXTENSION_DIR="$run_sandbox/c-extension" \
+      POLYGLOT_TEST_LAYER="$layer" \
       ruby \
         --disable-did_you_mean \
         --disable-error_highlight \
@@ -1006,12 +1010,15 @@ run_ruby_files() {
         -I "$run_sandbox/c-extension" \
         "$test_file"; then
       echo "Ruby 测试失败: $test_file" >&2
-      rm -rf "$run_sandbox"
-      exit 1
+      failure_count=$((failure_count + 1))
     fi
     rm -rf "$test_sandbox"
   done
   rm -rf "$run_sandbox"
+  if ((failure_count > 0)); then
+    printf '%s: %d 个 Ruby 测试文件失败。\n' "$label" "$failure_count" >&2
+    return 1
+  fi
   printf '%s: %d 个 Ruby 测试文件通过。\n' "$label" "${#test_files[@]}"
 }
 
@@ -1031,6 +1038,7 @@ run_ruby() {
   run_ruby_files \
     "Ruby vertical course" \
     "${POLYGLOT_RUBY_COURSE_ROOT:-/tmp/polyglot-ruby-course}" \
+    course \
     "${test_files[@]}"
 }
 
@@ -1051,6 +1059,7 @@ run_ruby_harness() {
   run_ruby_files \
     "Ruby harness and integration" \
     "${POLYGLOT_RUBY_HARNESS_ROOT:-/tmp/polyglot-ruby-harness}" \
+    harness \
     "${test_files[@]}"
 }
 
@@ -1287,6 +1296,7 @@ run_concept_ruby() {
     run_ruby_files \
       "$concept_name / Ruby" \
       "${POLYGLOT_RUBY_CONCEPT_ROOT:-/tmp/polyglot-ruby-concepts}" \
+      concepts \
       "${ruby_test_files[@]}"
   fi
 }
@@ -1459,6 +1469,7 @@ run_family_ruby() {
     run_ruby_files \
       "$family_name / Ruby" \
       "${POLYGLOT_RUBY_CONCEPT_ROOT:-/tmp/polyglot-ruby-concepts}" \
+      concepts \
       "${ruby_test_files[@]}"
   fi
 }
@@ -1601,6 +1612,7 @@ run_all_concepts_ruby() {
     run_ruby_files \
       "all concepts / Ruby" \
       "${POLYGLOT_RUBY_CONCEPT_ROOT:-/tmp/polyglot-ruby-concepts}" \
+      concepts \
       "${ruby_test_files[@]}"
   fi
 }
