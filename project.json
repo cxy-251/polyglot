@@ -1,227 +1,34 @@
 {
-  "schema_version": 11,
+  "schema_version": 12,
   "project": "polyglot-concepts-by-example",
   "mission": "Compare how languages solve shared problems through readable, executable tests.",
   "architecture": "language-concept-harness",
-  "phase": "maintenance",
-  "current_milestone": null,
+  "phase": "behavioral-case-density-audit",
+  "current_milestone": "ruby",
   "active_language_count": 9,
-  "concept_curriculum_complete": true,
-  "content_review_complete": true,
-  "curriculum_reviewed": true,
-  "reviewed_topic_count": 49,
-  "reviewed_language_implementation_count": 441,
+  "concept_curriculum_complete": false,
+  "content_review_complete": false,
+  "curriculum_reviewed": false,
   "continuation_source": "NEXT.md",
   "source_lock": "sources.lock",
   "legacy_tip": "662e0d1",
-  "semantic_audit_result": {
-    "completed_on": "2026-07-29",
-    "decision_counting": {
-      "kept": "stable course IDs retained without content changes",
-      "corrected": "stable course IDs retained with expansion, correction, or rename",
-      "merged": "retired course IDs whose teaching question was absorbed by retained lessons",
-      "moved": "retired course IDs consolidated into harness coverage",
-      "deleted": "retired course IDs removed as obsolete or non-curricular",
-      "horizontal_deleted": "redundant horizontal test entries removed during topic review"
-    },
-    "languages": {
-      "ruby": {
-        "kept": 23,
-        "corrected": 51,
-        "merged": 44,
-        "moved": 9,
-        "deleted": 1,
-        "horizontal_deleted": 1,
-        "course_files": 74,
-        "course_range": "002-120",
-        "concept_files": 72,
-        "course_result": "74/74 files passed",
-        "concept_result": "72/72 files passed",
-        "harness_result": "5/5 files passed"
-      },
-      "lua": {
-        "kept": 3,
-        "corrected": 58,
-        "merged": 61,
-        "moved": 5,
-        "deleted": 1,
-        "horizontal_deleted": 7,
-        "course_files": 61,
-        "course_range": "002-122",
-        "concept_files": 66,
-        "course_result": "61/61 files passed",
-        "concept_result": "66/66 files passed",
-        "harness_result": "3/3 files passed"
-      },
-      "r": {
-        "kept": 8,
-        "corrected": 48,
-        "merged": 63,
-        "moved": 9,
-        "deleted": 0,
-        "horizontal_deleted": 6,
-        "course_files": 56,
-        "course_range": "009-126",
-        "concept_files": 67,
-        "course_result": "56/56 files passed",
-        "concept_result": "67/67 files passed",
-        "harness_result": "4/4 files passed"
-      },
-      "julia": {
-        "kept": 9,
-        "corrected": 62,
-        "merged": 49,
-        "moved": 8,
-        "deleted": 0,
-        "horizontal_deleted": 8,
-        "course_files": 71,
-        "course_range": "002-127",
-        "concept_files": 65,
-        "course_result": "71/71 files passed",
-        "concept_result": "65/65 files passed",
-        "harness_result": "2/2 files passed"
-      },
-      "rust": {
-        "kept": 13,
-        "corrected": 47,
-        "merged": 49,
-        "moved": 8,
-        "deleted": 11,
-        "horizontal_deleted": 6,
-        "course_files": 60,
-        "course_range": "009-124",
-        "concept_files": 67,
-        "course_result": "97 passed",
-        "concept_result": "67 passed",
-        "harness_result": "7 passed and 1 doc test passed"
-      },
-      "go": {
-        "kept": 14,
-        "corrected": 51,
-        "merged": 51,
-        "moved": 12,
-        "deleted": 0,
-        "horizontal_deleted": 9,
-        "course_files": 65,
-        "course_range": "009-127",
-        "concept_files": 64,
-        "course_result": "115 passed",
-        "concept_result": "71 passed",
-        "harness_result": "15 passed"
-      },
-      "nodejs": {
-        "kept": 100,
-        "corrected": 3,
-        "merged": 0,
-        "moved": 4,
-        "deleted": 0,
-        "horizontal_deleted": 3,
-        "course_files": 103,
-        "course_range": "001-107",
-        "concept_files": 70,
-        "course_result": "900 passed",
-        "concept_result": "248 passed",
-        "harness_result": "35 passed"
-      },
-      "cpp": {
-        "kept": 118,
-        "corrected": 42,
-        "merged": 0,
-        "moved": 0,
-        "deleted": 0,
-        "horizontal_deleted": 3,
-        "course_files": 160,
-        "course_range": "001-160",
-        "concept_files": 70,
-        "course_result": "1409 passed and 15 skipped",
-        "concept_result": "240 passed",
-        "harness_result": "1 passed"
-      },
-      "python": {
-        "kept": 170,
-        "corrected": 8,
-        "merged": 0,
-        "moved": 0,
-        "deleted": 0,
-        "horizontal_deleted": 1,
-        "course_files": 178,
-        "course_range": "001-178",
-        "concept_files": 72,
-        "course_result": "5025 passed and 39 skipped",
-        "concept_result": "249 passed",
-        "harness_result": "2 passed"
-      }
-    },
-    "concepts": {
-      "families": 10,
-      "topics": 49,
-      "reviewed_language_implementations": 441,
-      "test_files": 613,
-      "multi_file_topics": 24,
-      "mechanical_file_symmetry_required": false
-    }
+  "behavioral_case_density_audit": {
+    "baseline_commit": "3e18412",
+    "language_order": [
+      "ruby",
+      "lua",
+      "r",
+      "julia",
+      "rust",
+      "go"
+    ],
+    "current_language": "ruby",
+    "latest_complete_validation": null
   },
   "layers": {
     "language_courses": {
       "root": "languages",
-      "purpose": "language semantics, standard libraries, and real development workflows",
-      "validate": [
-        "./tools/run.sh python -q --timeout=30 -W error",
-        "./tools/run.sh cpp",
-        "./tools/run.sh nodejs",
-        "./tools/run.sh go",
-        "./tools/run.sh rust",
-        "./tools/run.sh julia",
-        "./tools/run.sh r",
-        "./tools/run.sh lua",
-        "./tools/run.sh ruby"
-      ],
-      "pre_audit_execution_snapshot": {
-        "python": {
-          "passed": 5025,
-          "skipped": 39
-        },
-        "cpp": {
-          "passed": 1409,
-          "skipped": 15
-        },
-        "nodejs": {
-          "passed": 935,
-          "skipped": 0
-        },
-        "go": {
-          "test_files": 128,
-          "passed": 133,
-          "skipped": 0
-        },
-        "rust": {
-          "test_files": 128,
-          "passed": 128,
-          "skipped": 0,
-          "ignored": 1,
-          "doc_tests_passed": 1
-        },
-        "julia": {
-          "test_files": 128,
-          "passed": 488,
-          "skipped": 0
-        },
-        "r": {
-          "test_files": 128,
-          "passed": 128,
-          "skipped": 0
-        },
-        "lua": {
-          "test_files": 128,
-          "passed": 128,
-          "skipped": 0
-        },
-        "ruby": {
-          "test_files": 128,
-          "passed": 128,
-          "skipped": 0
-        }
-      }
+      "purpose": "language semantics, standard libraries, and real development workflows"
     },
     "cross_language_concepts": {
       "root": "concepts",
@@ -229,60 +36,8 @@
       "family_pattern": "NN_family",
       "topic_pattern": "NN_topic",
       "test_pattern": "test_NN_name",
-      "pre_audit_family_count": 10,
-      "pre_audit_topic_count": 49,
-      "pre_audit_multi_file_topic_count": 24,
       "fixed_topic_total": false,
-      "precreate_empty_families": false,
-      "allow_multiple_test_files_per_language": true,
-      "validate_one": "./tools/run.sh concept NN_family/NN_topic",
-      "validate_family": "./tools/run.sh family NN_family",
-      "validate_all": "./tools/run.sh concepts",
-      "list": "./tools/run.sh list-concepts",
-      "pre_audit_execution_snapshot": {
-        "python": {
-          "test_files": 73,
-          "passed": 252
-        },
-        "cpp": {
-          "test_files": 73,
-          "passed": 249
-        },
-        "nodejs": {
-          "test_files": 73,
-          "passed": 255
-        },
-        "go": {
-          "test_files": 73,
-          "passed": 75,
-          "skipped": 0
-        },
-        "rust": {
-          "test_files": 73,
-          "passed": 73,
-          "skipped": 0
-        },
-        "julia": {
-          "test_files": 73,
-          "passed": 280,
-          "skipped": 0
-        },
-        "r": {
-          "test_files": 73,
-          "passed": 73,
-          "skipped": 0
-        },
-        "lua": {
-          "test_files": 73,
-          "passed": 73,
-          "skipped": 0
-        },
-        "ruby": {
-          "test_files": 73,
-          "passed": 73,
-          "skipped": 0
-        }
-      }
+      "allow_multiple_test_files_per_language": true
     },
     "harness_and_integration": {
       "root": "harness",
@@ -345,7 +100,7 @@
       "name": "R",
       "status": "active",
       "course_root": "languages/r",
-      "test_framework": "base stopifnot() in isolated Rscript processes",
+      "test_framework": "named cases with base assertions in isolated Rscript processes",
       "validate": "./tools/run.sh r"
     },
     {
@@ -353,7 +108,7 @@
       "name": "Lua",
       "status": "active",
       "course_root": "languages/lua",
-      "test_framework": "repository-local assertions in isolated Lua processes",
+      "test_framework": "repository-local named cases in isolated Lua processes",
       "validate": "./tools/run.sh lua"
     },
     {
@@ -361,7 +116,7 @@
       "name": "Ruby",
       "status": "active",
       "course_root": "languages/ruby",
-      "test_framework": "repository-local assertions in isolated CRuby processes",
+      "test_framework": "repository-local named cases in isolated CRuby processes",
       "validate": "./tools/run.sh ruby"
     }
   ],
@@ -376,6 +131,8 @@
     "course_number_gaps_are_allowed": true,
     "related_paths_are_structural_links_not_semantic_proof": true,
     "content_review_requires_file_level_semantic_audit": true,
+    "behavior_cases_require_stable_names": true,
+    "assertion_totals_require_runtime_instrumentation": true,
     "move_course_files_into_concepts": false,
     "new_topics_prefer_existing_families": true,
     "language_expansion_frozen": true,

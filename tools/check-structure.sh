@@ -75,62 +75,41 @@ with open("project.json", encoding="utf-8") as project_file:
 if project.get("architecture") != "language-concept-harness":
     raise SystemExit("project.json 未声明 language-concept-harness 三层结构")
 
-if project.get("phase") == "nine-language-semantic-audit":
-    if project.get("content_review_complete") is not False:
-        raise SystemExit("语义审计期间 content_review_complete 必须为 false")
-    if project.get("concept_curriculum_complete") is not False:
-        raise SystemExit("语义审计期间 concept_curriculum_complete 必须为 false")
+if project.get("phase") == "behavioral-case-density-audit":
+    for completion_key in (
+        "content_review_complete",
+        "concept_curriculum_complete",
+        "curriculum_reviewed",
+    ):
+        if project.get(completion_key) is not False:
+            raise SystemExit(f"行为案例密度审计期间 {completion_key} 必须为 false")
     for stale_key in ("reviewed_topic_count", "reviewed_language_implementation_count"):
         if stale_key in project:
-            raise SystemExit(f"语义审计期间不得保留 {stale_key}")
+            raise SystemExit(f"行为案例密度审计期间不得保留 {stale_key}")
+    audit = project.get("behavioral_case_density_audit", {})
+    if audit.get("baseline_commit") != "3e18412":
+        raise SystemExit("行为案例密度审计基线必须是 3e18412")
+    if audit.get("language_order") != ["ruby", "lua", "r", "julia", "rust", "go"]:
+        raise SystemExit("行为案例密度审计语言顺序错误")
+    if audit.get("current_language") not in audit["language_order"]:
+        raise SystemExit("行为案例密度审计当前语言不在固定顺序中")
+    if audit.get("latest_complete_validation") is not None:
+        raise SystemExit("未完成行为案例密度审计时不得记录最终验证结果")
 elif project.get("phase") == "maintenance":
-    if project.get("content_review_complete") is not True:
-        raise SystemExit("维护阶段 content_review_complete 必须为 true")
-    if project.get("concept_curriculum_complete") is not True:
-        raise SystemExit("维护阶段 concept_curriculum_complete 必须为 true")
-    if project.get("curriculum_reviewed") is not True:
-        raise SystemExit("维护阶段 curriculum_reviewed 必须为 true")
-    if project.get("reviewed_topic_count") != 49:
-        raise SystemExit("维护阶段 reviewed_topic_count 必须与已审计主题一致")
-    if project.get("reviewed_language_implementation_count") != 441:
-        raise SystemExit("维护阶段 reviewed_language_implementation_count 必须与审计结果一致")
-    audit = project.get("semantic_audit_result", {})
-    concept_result = audit.get("concepts", {})
-    if concept_result.get("topics") != project.get("reviewed_topic_count"):
-        raise SystemExit("语义审计 topic 结果与完成声明不一致")
-    if concept_result.get("reviewed_language_implementations") != 441:
-        raise SystemExit("语义审计语言实现结果与完成声明不一致")
-    if concept_result.get("test_files") != 613:
-        raise SystemExit("语义审计横向入口总数不是最终的 613")
-
-    pre_audit_files = {
-        "ruby": 128,
-        "lua": 128,
-        "r": 128,
-        "julia": 128,
-        "rust": 128,
-        "go": 128,
-        "nodejs": 107,
-        "cpp": 160,
-        "python": 178,
-    }
-    language_results = audit.get("languages", {})
-    if set(language_results) != set(pre_audit_files):
-        raise SystemExit("语义审计结果没有覆盖全部九门语言")
-    for language, pre_audit_count in pre_audit_files.items():
-        result = language_results[language]
-        decisions = sum(
-            result.get(key, -pre_audit_count)
-            for key in ("kept", "corrected", "merged", "moved", "deleted")
-        )
-        if decisions != pre_audit_count:
-            raise SystemExit(f"{language} 的文件级审计决策数与审计前课程不一致")
-        if result.get("kept", 0) + result.get("corrected", 0) != result.get("course_files"):
-            raise SystemExit(f"{language} 的保留课程数与最终课程数不一致")
-        if 73 - result.get("horizontal_deleted", -1000) != result.get("concept_files"):
-            raise SystemExit(f"{language} 的横向删除数与最终入口数不一致")
+    for completion_key in (
+        "content_review_complete",
+        "concept_curriculum_complete",
+        "curriculum_reviewed",
+    ):
+        if project.get(completion_key) is not True:
+            raise SystemExit(f"维护阶段 {completion_key} 必须为 true")
+    validation = project.get("behavioral_case_density_audit", {}).get(
+        "latest_complete_validation"
+    )
+    if not isinstance(validation, dict) or not validation.get("commit"):
+        raise SystemExit("维护阶段必须记录绑定 commit 的最近一次完整动态验证")
 else:
-    raise SystemExit("project.json phase 必须是语义审计或维护阶段")
+    raise SystemExit("project.json phase 必须是行为案例密度审计或维护阶段")
 
 harness = project.get("layers", {}).get("harness_and_integration", {})
 if harness.get("counts_toward_language_curriculum") is not False:
